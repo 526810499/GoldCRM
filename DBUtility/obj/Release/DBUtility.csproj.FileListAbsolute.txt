@@ -1,0 +1,7 @@
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\bin\Release\XHD.DBUtility.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\bin\Release\IBatisNet.Common.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\bin\Release\IBatisNet.DataMapper.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\bin\Release\MySql.Data.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\bin\Release\System.Data.SQLite.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\obj\Release\DBUtility.csprojResolveAssemblyReference.cache
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\obj\Release\XHD.DBUtility.dll

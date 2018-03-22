@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Config EndTag="RowBlank" HeaderIndex="0" DataIndex="1">
+  <Table Name="CRM_Contact" >
+    <Column ColumnName="id" HeaderText="id"  DefaultValue="NewGuid"  />
+    <Column ColumnName="C_name" HeaderText="姓名" DefaultValue="" Required="true" />
+    <Column ColumnName="C_sex" HeaderText="性别" DefaultValue="男" />
+    <Column ColumnName="C_birthday" HeaderText="生日" DefaultValue="" DataType="DateTime"/>
+    <Column ColumnName="C_department" HeaderText="部门" DefaultValue="" />
+    <Column ColumnName="C_position" HeaderText="职务" DefaultValue="" />
+    <Column ColumnName="C_tel" HeaderText="电话" DefaultValue="" />
+    <Column ColumnName="C_fax" HeaderText="传真" DefaultValue="" />
+    <Column ColumnName="C_mob" HeaderText="手机" DefaultValue="" />
+    <Column ColumnName="C_email" HeaderText="email" DefaultValue="" />
+    <Column ColumnName="C_QQ" HeaderText="QQ" DefaultValue="" />
+    <Column ColumnName="C_add" HeaderText="地址" DefaultValue="" />
+    <Column ColumnName="C_hobby" HeaderText="爱好" DefaultValue="" />
+    <Column ColumnName="C_remarks" HeaderText="备注" DefaultValue="" />
+    
+    <Column ColumnName="customer_id" HeaderText="客户名称" DefaultValue=""  CodeKey="customer_list"/>    
+
+    <Column ColumnName="create_id" HeaderText="创建人" DefaultValue="NewID" />
+    <Column ColumnName="create_time" HeaderText="创建时间" DefaultValue="NewTime" />
+  </Table>
+  <CodeTable Name ="CRM_Contact_codetable">
+    <table CodeName ="customer_list" TableName="CRM_Customer" PrimaryKey="id"  ReferenceColumn="cus_name" />
+  </CodeTable>
+</Config>

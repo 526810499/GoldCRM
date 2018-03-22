@@ -1,0 +1,18 @@
+F:\Visual Studio 2013\XHDCRM_Company\SMS\bin\Debug\XHD.SMS.dll.config
+F:\Visual Studio 2013\XHDCRM_Company\SMS\bin\Debug\XHD.SMS.dll
+F:\Visual Studio 2013\XHDCRM_Company\SMS\bin\Debug\XHD.SMS.pdb
+F:\Visual Studio 2013\XHDCRM_Company\SMS\obj\Debug\SMS.csprojResolveAssemblyReference.cache
+F:\Visual Studio 2013\XHDCRM_Company\SMS\obj\Debug\XHD.SMS.dll
+F:\Visual Studio 2013\XHDCRM_Company\SMS\obj\Debug\XHD.SMS.pdb
+F:\Visual Studio 2013\XHDCRM_Saas\SMS\bin\Debug\XHD.SMS.dll.config
+F:\Visual Studio 2013\XHDCRM_Saas\SMS\bin\Debug\XHD.SMS.dll
+F:\Visual Studio 2013\XHDCRM_Saas\SMS\bin\Debug\XHD.SMS.pdb
+F:\Visual Studio 2013\XHDCRM_Saas\SMS\obj\Debug\SMS.csprojResolveAssemblyReference.cache
+F:\Visual Studio 2013\XHDCRM_Saas\SMS\obj\Debug\XHD.SMS.dll
+F:\Visual Studio 2013\XHDCRM_Saas\SMS\obj\Debug\XHD.SMS.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\SMS\bin\Debug\XHD.SMS.dll.config
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\SMS\bin\Debug\XHD.SMS.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\SMS\bin\Debug\XHD.SMS.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\SMS\obj\Debug\XHD.SMS.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\SMS\obj\Debug\XHD.SMS.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\SMS\obj\Debug\SMS.csprojResolveAssemblyReference.cache

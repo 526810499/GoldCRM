@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Config EndTag="RowBlank" HeaderIndex="0" DataIndex="1">
+  <Table Name="CRM_Customer" >
+    <Column ColumnName="id" HeaderText="id"  DefaultValue="NewGuid"  />
+    <Column ColumnName="cus_name" HeaderText="客户" DefaultValue="" Required="true" />
+    <Column ColumnName="cus_add" HeaderText="地址" DefaultValue="" />
+    <Column ColumnName="cus_tel" HeaderText="电话" DefaultValue="" />
+    <Column ColumnName="cus_fax" HeaderText="传真" DefaultValue="" />
+    <Column ColumnName="cus_website" HeaderText="网站" DefaultValue="" />
+    <Column ColumnName="DesCripe" HeaderText="描述" DefaultValue="" />
+    <Column ColumnName="Remarks" HeaderText="备注" DefaultValue="" />
+    <Column ColumnName="isPrivate" HeaderText="公私" DefaultValue="0"  />
+    <Column ColumnName="isDelete" HeaderText="是否删除" DefaultValue="0"  />   
+    
+    
+    <Column ColumnName="cus_industry_id" HeaderText="行业" DefaultValue="" CodeKey="cus_industry" />
+    <Column ColumnName="cus_type_id" HeaderText="客户类型" DefaultValue=""  CodeKey="cus_type"/>
+    <Column ColumnName="cus_level_id" HeaderText="客户级别" DefaultValue=""  CodeKey="cus_level"/>
+    <Column ColumnName="cus_source_id" HeaderText="客户来源" DefaultValue=""  CodeKey="cus_source"/>
+    <Column ColumnName="emp_id" HeaderText="员工" DefaultValue="" CodeKey="cus_emp"/>
+
+    <Column ColumnName="create_id" HeaderText="创建人" DefaultValue="NewID"  />
+    <Column ColumnName="create_time" HeaderText="创建时间" DefaultValue="NewTime" />
+  </Table>
+  <CodeTable Name ="CRM_Customer_codetable">
+    <table CodeName ="cus_industry" TableName="Sys_Param" PrimaryKey="id"  ReferenceColumn="params_name" Condition="params_type = 'cus_industry'"/>
+    <table CodeName ="cus_type" TableName="Sys_Param" PrimaryKey="id"  ReferenceColumn="params_name" Condition="params_type = 'cus_type'"/>
+    <table CodeName ="cus_level" TableName="Sys_Param" PrimaryKey="id"  ReferenceColumn="params_name" Condition="params_type = 'cus_level'"/>
+    <table CodeName ="cus_source" TableName="Sys_Param" PrimaryKey="id"  ReferenceColumn="params_name" Condition="params_type = 'cus_source'"/>
+
+    <table CodeName ="cus_emp" TableName="hr_employee" PrimaryKey="id"  ReferenceColumn="name"/>
+  </CodeTable>
+</Config>

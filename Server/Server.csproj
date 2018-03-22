@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D35C3AC8-FA65-4499-B415-A2B6B5CD4CAB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>XHD.Server</RootNamespace>
+    <AssemblyName>XHD.Server</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FluentScheduler">
+      <HintPath>G:\下载\360\FluentSchedulerDemo2010\FluentSchedulerDemo2010\bin\Debug\FluentScheduler.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI">
+      <HintPath>..\..\..\Cmj.DataExchange\Cmj.DataExchange\bin\Debug\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenPop, Version=2.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\OpenPop.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="XHD.BLL">
+      <HintPath>..\BLL\bin\Debug\XHD.BLL.dll</HintPath>
+    </Reference>
+    <Reference Include="XHD.Common">
+      <HintPath>..\Common\bin\Debug\XHD.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="XHD.Controller">
+      <HintPath>..\Lib\XHD.Controller.dll</HintPath>
+    </Reference>
+    <Reference Include="XHD.DBUtility, Version=3.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DBUtility\bin\Debug\XHD.DBUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="XHD.Excel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Excel\bin\Debug\XHD.Excel.dll</HintPath>
+    </Reference>
+    <Reference Include="XHD.Model, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Model\bin\Debug\XHD.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="XHD.SMS">
+      <HintPath>..\SMS\bin\Debug\XHD.SMS.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CRM_Contact.cs" />
+    <Compile Include="CRM_contract.cs" />
+    <Compile Include="CRM_contract_atta.cs" />
+    <Compile Include="CRM_Customer.cs" />
+    <Compile Include="CRM_follow.cs" />
+    <Compile Include="Finance_Invoice.cs" />
+    <Compile Include="Finance_Receivable.cs" />
+    <Compile Include="Finance_Receive.cs" />
+    <Compile Include="hr_department.cs" />
+    <Compile Include="hr_employee.cs" />
+    <Compile Include="hr_position.cs" />
+    <Compile Include="hr_post.cs" />
+    <Compile Include="install.cs" />
+    <Compile Include="login.cs" />
+    <Compile Include="MSG_Task.cs" />
+    <Compile Include="MSG_Task_follow.cs" />
+    <Compile Include="m_base.cs" />
+    <Compile Include="m_calendar.cs" />
+    <Compile Include="m_contact.cs" />
+    <Compile Include="m_customer.cs" />
+    <Compile Include="m_follow.cs" />
+    <Compile Include="m_log.cs" />
+    <Compile Include="m_login.cs" />
+    <Compile Include="m_news.cs" />
+    <Compile Include="m_note.cs" />
+    <Compile Include="m_notice.cs" />
+    <Compile Include="m_order.cs" />
+    <Compile Include="m_params.cs" />
+    <Compile Include="m_personal.cs" />
+    <Compile Include="m_product.cs" />
+    <Compile Include="m_receivable.cs" />
+    <Compile Include="Personal_Calendar.cs" />
+    <Compile Include="Personal_notes.cs" />
+    <Compile Include="Personal_queckmenu.cs" />
+    <Compile Include="Product.cs" />
+    <Compile Include="Product_category.cs" />
+    <Compile Include="public_news.cs" />
+    <Compile Include="public_notice.cs" />
+    <Compile Include="Reports_CRM.cs" />
+    <Compile Include="Sale_order.cs" />
+    <Compile Include="Sale_order_details.cs" />
+    <Compile Include="SMS.cs" />
+    <Compile Include="SMS_Helper.cs" />
+    <Compile Include="Sys_App.cs" />
+    <Compile Include="Sys_base.cs" />
+    <Compile Include="Sys_Button.cs" />
+    <Compile Include="Sys_City.cs" />
+    <Compile Include="Sys_data_authority.cs" />
+    <Compile Include="Sys_info.cs" />
+    <Compile Include="Sys_log.cs" />
+    <Compile Include="Sys_Menu.cs" />
+    <Compile Include="Sys_Param.cs" />
+    <Compile Include="Sys_Provinces.cs" />
+    <Compile Include="Sys_role.cs" />
+    <Compile Include="Sys_role_emp.cs" />
+    <Compile Include="toolbar.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sys_log_Err.cs" />
+    <Compile Include="Tool_batch.cs" />
+    <Compile Include="upload.cs" />
+    <Compile Include="xhd_Service.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

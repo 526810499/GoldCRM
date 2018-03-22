@@ -1,0 +1,178 @@
+F:\Visual Studio 2013\XHD\BLL\obj\Debug\BLL.csprojResolveAssemblyReference.cache
+F:\Visual Studio 2013\XHD\BLL\bin\Debug\XHD.BLL.dll
+F:\Visual Studio 2013\XHD\BLL\bin\Debug\XHD.BLL.pdb
+F:\Visual Studio 2013\XHD\BLL\bin\Debug\XHD.Common.dll
+F:\Visual Studio 2013\XHD\BLL\bin\Debug\XHD.DAL.dll
+F:\Visual Studio 2013\XHD\BLL\bin\Debug\XHD.Model.dll
+F:\Visual Studio 2013\XHD\BLL\bin\Debug\Newtonsoft.Json.Net35.dll
+F:\Visual Studio 2013\XHD\BLL\bin\Debug\OpenSmtp.dll
+F:\Visual Studio 2013\XHD\BLL\bin\Debug\Excel.dll
+F:\Visual Studio 2013\XHD\BLL\bin\Debug\COM.Excel.dll
+F:\Visual Studio 2013\XHD\BLL\bin\Debug\XHD.DBUtility.dll
+F:\Visual Studio 2013\XHD\BLL\bin\Debug\IBatisNet.DataMapper.dll
+F:\Visual Studio 2013\XHD\BLL\bin\Debug\IBatisNet.Common.dll
+F:\Visual Studio 2013\XHD\BLL\bin\Debug\XHD.Common.pdb
+F:\Visual Studio 2013\XHD\BLL\bin\Debug\XHD.Model.pdb
+F:\Visual Studio 2013\XHD\BLL\bin\Debug\XHD.DAL.pdb
+F:\Visual Studio 2013\XHD\BLL\bin\Debug\XHD.DBUtility.pdb
+F:\Visual Studio 2013\XHD\BLL\obj\Debug\XHD.BLL.dll
+F:\Visual Studio 2013\XHD\BLL\obj\Debug\XHD.BLL.pdb
+F:\Visual Studio 2013\XHDCRM_Company\BLL\bin\Debug\XHD.BLL.dll
+F:\Visual Studio 2013\XHDCRM_Company\BLL\bin\Debug\XHD.BLL.pdb
+F:\Visual Studio 2013\XHDCRM_Company\BLL\bin\Debug\XHD.Common.dll
+F:\Visual Studio 2013\XHDCRM_Company\BLL\bin\Debug\XHD.DAL.dll
+F:\Visual Studio 2013\XHDCRM_Company\BLL\bin\Debug\XHD.Model.dll
+F:\Visual Studio 2013\XHDCRM_Company\BLL\bin\Debug\OpenSmtp.dll
+F:\Visual Studio 2013\XHDCRM_Company\BLL\bin\Debug\Excel.dll
+F:\Visual Studio 2013\XHDCRM_Company\BLL\bin\Debug\COM.Excel.dll
+F:\Visual Studio 2013\XHDCRM_Company\BLL\bin\Debug\Newtonsoft.Json.Net35.dll
+F:\Visual Studio 2013\XHDCRM_Company\BLL\bin\Debug\XHD.DBUtility.dll
+F:\Visual Studio 2013\XHDCRM_Company\BLL\bin\Debug\IBatisNet.DataMapper.dll
+F:\Visual Studio 2013\XHDCRM_Company\BLL\bin\Debug\IBatisNet.Common.dll
+F:\Visual Studio 2013\XHDCRM_Company\BLL\bin\Debug\MySql.Data.dll
+F:\Visual Studio 2013\XHDCRM_Company\BLL\bin\Debug\XHD.Common.pdb
+F:\Visual Studio 2013\XHDCRM_Company\BLL\bin\Debug\XHD.Model.pdb
+F:\Visual Studio 2013\XHDCRM_Company\BLL\bin\Debug\XHD.DAL.pdb
+F:\Visual Studio 2013\XHDCRM_Company\BLL\bin\Debug\XHD.DBUtility.pdb
+F:\Visual Studio 2013\XHDCRM_Company\BLL\obj\Debug\BLL.csprojResolveAssemblyReference.cache
+F:\Visual Studio 2013\XHDCRM_Company\BLL\obj\Debug\XHD.BLL.dll
+F:\Visual Studio 2013\XHDCRM_Company\BLL\obj\Debug\XHD.BLL.pdb
+F:\Visual Studio 2013\XHDCRM_Enterprise\BLL\obj\Debug\BLL.csprojResolveAssemblyReference.cache
+F:\Visual Studio 2013\XHDCRM_Enterprise\BLL\obj\Debug\XHD.BLL.dll
+F:\Visual Studio 2013\XHDCRM_Enterprise\BLL\obj\Debug\XHD.BLL.pdb
+F:\Visual Studio 2013\XHDCRM_Enterprise\BLL\bin\Debug\XHD.BLL.dll
+F:\Visual Studio 2013\XHDCRM_Enterprise\BLL\bin\Debug\XHD.BLL.pdb
+F:\Visual Studio 2013\XHDCRM_Enterprise\BLL\bin\Debug\XHD.Common.dll
+F:\Visual Studio 2013\XHDCRM_Enterprise\BLL\bin\Debug\XHD.DAL.dll
+F:\Visual Studio 2013\XHDCRM_Enterprise\BLL\bin\Debug\XHD.Model.dll
+F:\Visual Studio 2013\XHDCRM_Enterprise\BLL\bin\Debug\OpenSmtp.dll
+F:\Visual Studio 2013\XHDCRM_Enterprise\BLL\bin\Debug\Excel.dll
+F:\Visual Studio 2013\XHDCRM_Enterprise\BLL\bin\Debug\COM.Excel.dll
+F:\Visual Studio 2013\XHDCRM_Enterprise\BLL\bin\Debug\Newtonsoft.Json.Net35.dll
+F:\Visual Studio 2013\XHDCRM_Enterprise\BLL\bin\Debug\XHD.DBUtility.dll
+F:\Visual Studio 2013\XHDCRM_Enterprise\BLL\bin\Debug\IBatisNet.DataMapper.dll
+F:\Visual Studio 2013\XHDCRM_Enterprise\BLL\bin\Debug\IBatisNet.Common.dll
+F:\Visual Studio 2013\XHDCRM_Enterprise\BLL\bin\Debug\MySql.Data.dll
+F:\Visual Studio 2013\XHDCRM_Enterprise\BLL\bin\Debug\XHD.Common.pdb
+F:\Visual Studio 2013\XHDCRM_Enterprise\BLL\bin\Debug\XHD.Model.pdb
+F:\Visual Studio 2013\XHDCRM_Enterprise\BLL\bin\Debug\XHD.DAL.pdb
+F:\Visual Studio 2013\XHDCRM_Enterprise\BLL\bin\Debug\XHD.DBUtility.pdb
+F:\Visual Studio 2013\XHDCRM_Saas\BLL\bin\Debug\XHD.BLL.dll
+F:\Visual Studio 2013\XHDCRM_Saas\BLL\bin\Debug\XHD.BLL.pdb
+F:\Visual Studio 2013\XHDCRM_Saas\BLL\bin\Debug\XHD.Common.dll
+F:\Visual Studio 2013\XHDCRM_Saas\BLL\bin\Debug\XHD.DAL.dll
+F:\Visual Studio 2013\XHDCRM_Saas\BLL\bin\Debug\XHD.Model.dll
+F:\Visual Studio 2013\XHDCRM_Saas\BLL\bin\Debug\OpenSmtp.dll
+F:\Visual Studio 2013\XHDCRM_Saas\BLL\bin\Debug\Excel.dll
+F:\Visual Studio 2013\XHDCRM_Saas\BLL\bin\Debug\COM.Excel.dll
+F:\Visual Studio 2013\XHDCRM_Saas\BLL\bin\Debug\Newtonsoft.Json.Net35.dll
+F:\Visual Studio 2013\XHDCRM_Saas\BLL\bin\Debug\XHD.DBUtility.dll
+F:\Visual Studio 2013\XHDCRM_Saas\BLL\bin\Debug\IBatisNet.DataMapper.dll
+F:\Visual Studio 2013\XHDCRM_Saas\BLL\bin\Debug\IBatisNet.Common.dll
+F:\Visual Studio 2013\XHDCRM_Saas\BLL\bin\Debug\MySql.Data.dll
+F:\Visual Studio 2013\XHDCRM_Saas\BLL\bin\Debug\XHD.Common.pdb
+F:\Visual Studio 2013\XHDCRM_Saas\BLL\bin\Debug\XHD.Model.pdb
+F:\Visual Studio 2013\XHDCRM_Saas\BLL\bin\Debug\XHD.DAL.pdb
+F:\Visual Studio 2013\XHDCRM_Saas\BLL\bin\Debug\XHD.DBUtility.pdb
+F:\Visual Studio 2013\XHDCRM_Saas\BLL\obj\Debug\BLL.csprojResolveAssemblyReference.cache
+F:\Visual Studio 2013\XHDCRM_Saas\BLL\obj\Debug\XHD.BLL.dll
+F:\Visual Studio 2013\XHDCRM_Saas\BLL\obj\Debug\XHD.BLL.pdb
+F:\Visual Studio 2013\XHDCRM_Pro\BLL\bin\Debug\XHD.BLL.dll
+F:\Visual Studio 2013\XHDCRM_Pro\BLL\bin\Debug\XHD.BLL.pdb
+F:\Visual Studio 2013\XHDCRM_Pro\BLL\bin\Debug\XHD.Common.dll
+F:\Visual Studio 2013\XHDCRM_Pro\BLL\bin\Debug\XHD.DAL.dll
+F:\Visual Studio 2013\XHDCRM_Pro\BLL\bin\Debug\XHD.Model.dll
+F:\Visual Studio 2013\XHDCRM_Pro\BLL\bin\Debug\OpenSmtp.dll
+F:\Visual Studio 2013\XHDCRM_Pro\BLL\bin\Debug\Excel.dll
+F:\Visual Studio 2013\XHDCRM_Pro\BLL\bin\Debug\COM.Excel.dll
+F:\Visual Studio 2013\XHDCRM_Pro\BLL\bin\Debug\Newtonsoft.Json.Net35.dll
+F:\Visual Studio 2013\XHDCRM_Pro\BLL\bin\Debug\XHD.DBUtility.dll
+F:\Visual Studio 2013\XHDCRM_Pro\BLL\bin\Debug\IBatisNet.DataMapper.dll
+F:\Visual Studio 2013\XHDCRM_Pro\BLL\bin\Debug\IBatisNet.Common.dll
+F:\Visual Studio 2013\XHDCRM_Pro\BLL\bin\Debug\MySql.Data.dll
+F:\Visual Studio 2013\XHDCRM_Pro\BLL\bin\Debug\XHD.Common.pdb
+F:\Visual Studio 2013\XHDCRM_Pro\BLL\bin\Debug\XHD.Model.pdb
+F:\Visual Studio 2013\XHDCRM_Pro\BLL\bin\Debug\XHD.DAL.pdb
+F:\Visual Studio 2013\XHDCRM_Pro\BLL\bin\Debug\XHD.DBUtility.pdb
+F:\Visual Studio 2013\XHDCRM_Pro\BLL\obj\Debug\BLL.csprojResolveAssemblyReference.cache
+F:\Visual Studio 2013\XHDCRM_Pro\BLL\obj\Debug\XHD.BLL.dll
+F:\Visual Studio 2013\XHDCRM_Pro\BLL\obj\Debug\XHD.BLL.pdb
+F:\Visual Studio 2013\XHDCRM_Open\BLL\bin\Debug\XHD.BLL.dll
+F:\Visual Studio 2013\XHDCRM_Open\BLL\bin\Debug\XHD.BLL.pdb
+F:\Visual Studio 2013\XHDCRM_Open\BLL\bin\Debug\XHD.Common.dll
+F:\Visual Studio 2013\XHDCRM_Open\BLL\bin\Debug\XHD.DAL.dll
+F:\Visual Studio 2013\XHDCRM_Open\BLL\bin\Debug\XHD.Model.dll
+F:\Visual Studio 2013\XHDCRM_Open\BLL\bin\Debug\OpenSmtp.dll
+F:\Visual Studio 2013\XHDCRM_Open\BLL\bin\Debug\Excel.dll
+F:\Visual Studio 2013\XHDCRM_Open\BLL\bin\Debug\COM.Excel.dll
+F:\Visual Studio 2013\XHDCRM_Open\BLL\bin\Debug\Newtonsoft.Json.Net35.dll
+F:\Visual Studio 2013\XHDCRM_Open\BLL\bin\Debug\XHD.DBUtility.dll
+F:\Visual Studio 2013\XHDCRM_Open\BLL\bin\Debug\IBatisNet.DataMapper.dll
+F:\Visual Studio 2013\XHDCRM_Open\BLL\bin\Debug\IBatisNet.Common.dll
+F:\Visual Studio 2013\XHDCRM_Open\BLL\bin\Debug\MySql.Data.dll
+F:\Visual Studio 2013\XHDCRM_Open\BLL\bin\Debug\XHD.Common.pdb
+F:\Visual Studio 2013\XHDCRM_Open\BLL\bin\Debug\XHD.Model.pdb
+F:\Visual Studio 2013\XHDCRM_Open\BLL\bin\Debug\XHD.DAL.pdb
+F:\Visual Studio 2013\XHDCRM_Open\BLL\bin\Debug\XHD.DBUtility.pdb
+F:\Visual Studio 2013\XHDCRM_Open\BLL\obj\Debug\BLL.csprojResolveAssemblyReference.cache
+F:\Visual Studio 2013\XHDCRM_Open\BLL\obj\Debug\XHD.BLL.dll
+F:\Visual Studio 2013\XHDCRM_Open\BLL\obj\Debug\XHD.BLL.pdb
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\BLL\bin\Debug\XHD.BLL.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\BLL\bin\Debug\XHD.BLL.pdb
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\BLL\bin\Debug\XHD.Common.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\BLL\bin\Debug\XHD.DAL.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\BLL\bin\Debug\XHD.Model.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\BLL\bin\Debug\OpenSmtp.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\BLL\bin\Debug\Excel.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\BLL\bin\Debug\COM.Excel.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\BLL\bin\Debug\Newtonsoft.Json.Net35.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\BLL\bin\Debug\XHD.DBUtility.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\BLL\bin\Debug\IBatisNet.DataMapper.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\BLL\bin\Debug\IBatisNet.Common.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\BLL\bin\Debug\MySql.Data.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\BLL\bin\Debug\XHD.Common.pdb
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\BLL\bin\Debug\XHD.Model.pdb
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\BLL\bin\Debug\XHD.DAL.pdb
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\BLL\bin\Debug\XHD.DBUtility.pdb
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\BLL\obj\Debug\BLL.csprojResolveAssemblyReference.cache
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\BLL\obj\Debug\XHD.BLL.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\BLL\obj\Debug\XHD.BLL.pdb
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\BLL\bin\Debug\XHD.BLL.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\BLL\bin\Debug\XHD.BLL.pdb
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\BLL\bin\Debug\XHD.Common.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\BLL\bin\Debug\XHD.DAL.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\BLL\bin\Debug\XHD.Model.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\BLL\bin\Debug\OpenSmtp.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\BLL\bin\Debug\Excel.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\BLL\bin\Debug\COM.Excel.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\BLL\bin\Debug\Newtonsoft.Json.Net35.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\BLL\bin\Debug\XHD.DBUtility.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\BLL\bin\Debug\IBatisNet.DataMapper.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\BLL\bin\Debug\IBatisNet.Common.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\BLL\bin\Debug\MySql.Data.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\BLL\bin\Debug\XHD.Common.pdb
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\BLL\bin\Debug\XHD.Model.pdb
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\BLL\bin\Debug\XHD.DAL.pdb
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\BLL\bin\Debug\XHD.DBUtility.pdb
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\BLL\obj\Debug\BLL.csprojResolveAssemblyReference.cache
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\BLL\obj\Debug\XHD.BLL.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\BLL\obj\Debug\XHD.BLL.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\obj\Debug\BLL.csprojResolveAssemblyReference.cache
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\bin\Debug\XHD.BLL.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\bin\Debug\XHD.BLL.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\bin\Debug\XHD.Common.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\bin\Debug\XHD.DAL.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\bin\Debug\XHD.Model.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\bin\Debug\OpenSmtp.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\bin\Debug\Excel.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\bin\Debug\COM.Excel.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\bin\Debug\Newtonsoft.Json.Net35.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\bin\Debug\XHD.DBUtility.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\bin\Debug\IBatisNet.DataMapper.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\bin\Debug\IBatisNet.Common.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\bin\Debug\System.Data.SQLite.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\bin\Debug\MySql.Data.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\bin\Debug\XHD.Model.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\bin\Debug\XHD.DAL.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\obj\Debug\XHD.BLL.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\obj\Debug\XHD.BLL.pdb

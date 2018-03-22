@@ -1,0 +1,17 @@
+F:\Visual Studio 2013\XHDCRM_Company\Service\bin\Debug\XHD.Service.dll.config
+F:\Visual Studio 2013\XHDCRM_Company\Service\bin\Debug\XHD.Service.dll
+F:\Visual Studio 2013\XHDCRM_Company\Service\bin\Debug\XHD.Service.pdb
+F:\Visual Studio 2013\XHDCRM_Company\Service\obj\Debug\Service.csprojResolveAssemblyReference.cache
+F:\Visual Studio 2013\XHDCRM_Company\Service\obj\Debug\XHD.Service.dll
+F:\Visual Studio 2013\XHDCRM_Company\Service\obj\Debug\XHD.Service.pdb
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\Service\bin\Debug\XHD.Service.dll.config
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\Service\bin\Debug\XHD.Service.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\Service\bin\Debug\XHD.Service.pdb
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\Service\obj\Debug\Service.csprojResolveAssemblyReference.cache
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\Service\obj\Debug\XHD.Service.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\Service\obj\Debug\XHD.Service.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Service\bin\Debug\XHD.Service.dll.config
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Service\bin\Debug\XHD.Service.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Service\bin\Debug\XHD.Service.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Service\obj\Debug\XHD.Service.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Service\obj\Debug\XHD.Service.pdb

@@ -1,0 +1,5 @@
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Service\bin\Release\XHD.Service.dll.config
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Service\bin\Release\XHD.Service.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Service\bin\Release\XHD.Service.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Service\obj\Release\XHD.Service.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Service\obj\Release\XHD.Service.pdb

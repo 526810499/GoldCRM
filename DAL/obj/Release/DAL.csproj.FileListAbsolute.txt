@@ -1,0 +1,16 @@
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Release\XHD.DAL.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Release\XHD.Common.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Release\XHD.DBUtility.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Release\XHD.Model.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Release\OpenSmtp.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Release\Excel.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Release\COM.Excel.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Release\Newtonsoft.Json.Net35.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Release\IBatisNet.DataMapper.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Release\IBatisNet.Common.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Release\System.Data.SQLite.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Release\MySql.Data.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Release\XHD.Common.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Release\XHD.DBUtility.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\obj\Release\DAL.csprojResolveAssemblyReference.cache
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\obj\Release\XHD.DAL.dll

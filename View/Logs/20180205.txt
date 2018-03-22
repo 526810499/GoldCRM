@@ -1,0 +1,56 @@
+2018/2/5 13:12:03 > System.Web.HttpException (0x80004005): “F:/临时文件/个人项目/CRM/XHDCRM2/XHDCRM2/View/conn.config”是物理路径，但应为虚拟路径。
+   在 System.Web.Util.UrlPath.CheckValidVirtualPath(String path)
+   在 System.Web.Util.UrlPath.Combine(String appPath, String basepath, String relative)
+   在 System.Web.VirtualPath.Combine(VirtualPath relativePath)
+   在 System.Web.HttpRequest.MapPath(VirtualPath virtualPath, VirtualPath baseVirtualDir, Boolean allowCrossAppMapping)
+   在 System.Web.HttpServerUtility.MapPath(String path)
+   在 XHD.Server.install.CheckConfig(String webconfigfile) 位置 F:\Visual Studio 2013\XHDCRM\XHDCRM2\Server\install.cs:行号 181
+2018/2/5 13:12:03 > System.Web.HttpException (0x80004005): “F:/临时文件/个人项目/CRM/XHDCRM2/XHDCRM2/View/Web.config”是物理路径，但应为虚拟路径。
+   在 System.Web.Util.UrlPath.CheckValidVirtualPath(String path)
+   在 System.Web.Util.UrlPath.Combine(String appPath, String basepath, String relative)
+   在 System.Web.VirtualPath.Combine(VirtualPath relativePath)
+   在 System.Web.HttpRequest.MapPath(VirtualPath virtualPath, VirtualPath baseVirtualDir, Boolean allowCrossAppMapping)
+   在 System.Web.HttpServerUtility.MapPath(String path)
+   在 XHD.Server.install.CheckConfig(String webconfigfile) 位置 F:\Visual Studio 2013\XHDCRM\XHDCRM2\Server\install.cs:行号 181
+2018/2/5 13:12:12 > System.Web.HttpException (0x80004005): “F:/临时文件/个人项目/CRM/XHDCRM2/XHDCRM2/View/conn.config”是物理路径，但应为虚拟路径。
+   在 System.Web.Util.UrlPath.CheckValidVirtualPath(String path)
+   在 System.Web.Util.UrlPath.Combine(String appPath, String basepath, String relative)
+   在 System.Web.VirtualPath.Combine(VirtualPath relativePath)
+   在 System.Web.HttpRequest.MapPath(VirtualPath virtualPath, VirtualPath baseVirtualDir, Boolean allowCrossAppMapping)
+   在 System.Web.HttpServerUtility.MapPath(String path)
+   在 XHD.Server.install.CheckConfig(String webconfigfile) 位置 F:\Visual Studio 2013\XHDCRM\XHDCRM2\Server\install.cs:行号 181
+2018/2/5 13:12:12 > System.Web.HttpException (0x80004005): “F:/临时文件/个人项目/CRM/XHDCRM2/XHDCRM2/View/Web.config”是物理路径，但应为虚拟路径。
+   在 System.Web.Util.UrlPath.CheckValidVirtualPath(String path)
+   在 System.Web.Util.UrlPath.Combine(String appPath, String basepath, String relative)
+   在 System.Web.VirtualPath.Combine(VirtualPath relativePath)
+   在 System.Web.HttpRequest.MapPath(VirtualPath virtualPath, VirtualPath baseVirtualDir, Boolean allowCrossAppMapping)
+   在 System.Web.HttpServerUtility.MapPath(String path)
+   在 XHD.Server.install.CheckConfig(String webconfigfile) 位置 F:\Visual Studio 2013\XHDCRM\XHDCRM2\Server\install.cs:行号 181
+2018/2/5 17:17:06 > System.Web.HttpException (0x80004005): “F:/临时文件/个人项目/CRM/XHDCRM2/XHDCRM2/View/conn.config”是物理路径，但应为虚拟路径。
+   在 System.Web.Util.UrlPath.CheckValidVirtualPath(String path)
+   在 System.Web.Util.UrlPath.Combine(String appPath, String basepath, String relative)
+   在 System.Web.VirtualPath.Combine(VirtualPath relativePath)
+   在 System.Web.HttpRequest.MapPath(VirtualPath virtualPath, VirtualPath baseVirtualDir, Boolean allowCrossAppMapping)
+   在 System.Web.HttpServerUtility.MapPath(String path)
+   在 XHD.Server.install.CheckConfig(String webconfigfile) 位置 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\install.cs:行号 181
+2018/2/5 17:17:07 > System.Web.HttpException (0x80004005): “F:/临时文件/个人项目/CRM/XHDCRM2/XHDCRM2/View/Web.config”是物理路径，但应为虚拟路径。
+   在 System.Web.Util.UrlPath.CheckValidVirtualPath(String path)
+   在 System.Web.Util.UrlPath.Combine(String appPath, String basepath, String relative)
+   在 System.Web.VirtualPath.Combine(VirtualPath relativePath)
+   在 System.Web.HttpRequest.MapPath(VirtualPath virtualPath, VirtualPath baseVirtualDir, Boolean allowCrossAppMapping)
+   在 System.Web.HttpServerUtility.MapPath(String path)
+   在 XHD.Server.install.CheckConfig(String webconfigfile) 位置 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\install.cs:行号 181
+2018/2/5 17:17:10 > System.Web.HttpException (0x80004005): “F:/临时文件/个人项目/CRM/XHDCRM2/XHDCRM2/View/conn.config”是物理路径，但应为虚拟路径。
+   在 System.Web.Util.UrlPath.CheckValidVirtualPath(String path)
+   在 System.Web.Util.UrlPath.Combine(String appPath, String basepath, String relative)
+   在 System.Web.VirtualPath.Combine(VirtualPath relativePath)
+   在 System.Web.HttpRequest.MapPath(VirtualPath virtualPath, VirtualPath baseVirtualDir, Boolean allowCrossAppMapping)
+   在 System.Web.HttpServerUtility.MapPath(String path)
+   在 XHD.Server.install.CheckConfig(String webconfigfile) 位置 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\install.cs:行号 181
+2018/2/5 17:17:10 > System.Web.HttpException (0x80004005): “F:/临时文件/个人项目/CRM/XHDCRM2/XHDCRM2/View/Web.config”是物理路径，但应为虚拟路径。
+   在 System.Web.Util.UrlPath.CheckValidVirtualPath(String path)
+   在 System.Web.Util.UrlPath.Combine(String appPath, String basepath, String relative)
+   在 System.Web.VirtualPath.Combine(VirtualPath relativePath)
+   在 System.Web.HttpRequest.MapPath(VirtualPath virtualPath, VirtualPath baseVirtualDir, Boolean allowCrossAppMapping)
+   在 System.Web.HttpServerUtility.MapPath(String path)
+   在 XHD.Server.install.CheckConfig(String webconfigfile) 位置 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\install.cs:行号 181

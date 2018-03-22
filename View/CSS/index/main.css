@@ -1,0 +1,55 @@
+﻿
+body, html { padding: 0; margin: 0; overflow: hidden;background:#eaeef5; }
+#header { background-color: #02b9e3; height: 54px; }
+
+.right { float: right; }
+
+.logoContent { float: left; width: 400px;  line-height: 50px; padding-left: 10px; }
+    .logoContent span { font-size: x-large; color: white; }
+.navright { float: right; color: white; width: 255px; line-height: 50px; padding-right: 10px; }
+    .navright .item { position: relative; float: right; cursor: pointer; }
+    .navright .line { width: 20px; text-align: center; height: 30px; }
+    .navright a { color: white; }
+.l-accordion-panel { border: none; }
+.l-layout-center { border-top: none; }
+
+#portrait { width: 40px; height: 40px; position: relative; float: left; border-radius: 100%; border: 1px solid #ddd; background: #fff; line-height: 50px; margin-top: 5px; }
+.userover { background-color: #8FD2EC; color: #fff; }
+.user { position: relative; float: left; top: 0; }
+
+.l-userinfo-panel { border: 1px solid #BED5F3; padding: 1px; background: #ffffff; position: absolute; z-index: 9000; width: 150px; display: none; box-shadow: 0 3px 10px rgba(0,0,0,0.3); }
+    .l-userinfo-panel:before { position: absolute; top: -7px; left: 65px; display: inline-block; border-right: 7px dashed transparent; border-bottom: 7px solid #BED5F3; border-left: 7px dashed transparent; border-bottom-color: rgba(0,0,0,0.2); content: ''; }
+    .l-userinfo-panel::after { position: absolute; top: -6px; left: 64px; display: inline-block; border-right: 8px dashed transparent; border-bottom: 8px solid #fff; border-left: 8px dashed transparent; content: ''; }
+.userinfolist { margin-left: 2px; margin-right: 2px; margin-top: 2px; text-align: left; color: #000; padding: 0; }
+    .userinfolist li { height: 30px; line-height: 30px; padding-left: 24px; display: block; position: relative; cursor: pointer; text-align: left; }
+        .userinfolist li span { margin-left: 10px; }
+        .userinfolist li img { position: absolute; left: 4px; top: 8px; width: 16px; height: 16px; }
+        .userinfolist li.over, .menulist li.selected { border: 1px solid #99bbe8; background: #caddf5; }
+.l-accordion-header-inner { font-weight: bolder; }
+
+ul { padding: 0; }
+.l-accordion-content > ul > li { display: block; margin: 0 0 1px 0px; padding: 0; border: 0px; line-height: 30px;vertical-align:middle; }
+    .l-accordion-content > ul > li.active > a, #sidebar > ul > li > a:hover, #sidebar > ul > li:hover > a { background: #4a8bc2; }
+    .l-accordion-content > ul > li.active > a { border: none; }
+    .l-accordion-content > ul > li > a { color: #333 !important;vertical-align:middle; }
+    .l-accordion-content > ul > li > a { display: block; position: relative; margin: 0; border: 0px; text-decoration: none; font-size: 12px; text-align: left; padding: 2px 15px; }
+        .l-accordion-content > ul > li > a:hover { color: #fff !important; background: #02b9e3; }
+
+.l-accordion-content ul > li > a .arrow { float: right; margin-top: 12px; margin-right: 0px; width: 0; height: 0; border-left: 4px solid #A0A0A0; border-top: 4px solid transparent; border-bottom: 4px solid transparent; }
+
+
+a, a:hover { text-shadow: none !important; cursor: pointer; }
+.l-accordion-content > ul > li > ul.sub { margin-bottom: 0 !important; }
+.l-accordion-content > ul > li > ul.sub { display: none; list-style: none; clear: both; margin: 0px; }
+.l-accordion-content ul { margin-top: 1px !important; width: 100%; }
+
+.l-accordion-content > ul > li > ul.sub > li > a { color: #333; }
+.l-accordion-content > ul > li > ul.sub > li > a { display: block; position: relative; padding: 10px 10px 10px 40px; text-decoration: none; text-shadow: 0 1px 1px #000; font-size: 12px; font-weight: normal; line-height: normal; }
+    .l-accordion-content > ul > li > ul.sub > li > a:hover { color: #fff !important; background: #02b9e3; }
+.l-accordion-content > ul > li > ul.sub > li > img { margin-right: 3px; }
+
+.l-layout-bottom { line-height: 25px; }
+.foot-right { float:right; padding-right:5px;}
+.foot-center { margin:0 auto;width:200px; }
+
+.menuicon { margin-top:5px; }

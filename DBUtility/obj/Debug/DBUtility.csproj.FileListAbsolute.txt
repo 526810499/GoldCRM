@@ -1,0 +1,35 @@
+C:\Users\Administrator\Documents\Visual Studio 2012\Projects\XHD\DBUtility\bin\Debug\XHD.DBUtility.dll
+C:\Users\Administrator\Documents\Visual Studio 2012\Projects\XHD\DBUtility\bin\Debug\XHD.DBUtility.pdb
+C:\Users\Administrator\Documents\Visual Studio 2012\Projects\XHD\DBUtility\bin\Debug\IBatisNet.Common.dll
+C:\Users\Administrator\Documents\Visual Studio 2012\Projects\XHD\DBUtility\bin\Debug\IBatisNet.DataMapper.dll
+C:\Users\Administrator\Documents\Visual Studio 2012\Projects\XHD\DBUtility\bin\Debug\MySql.Data.dll
+C:\Users\Administrator\Documents\Visual Studio 2012\Projects\XHD\DBUtility\bin\Debug\System.Data.SQLite.DLL
+C:\Users\Administrator\Documents\Visual Studio 2012\Projects\XHD\DBUtility\obj\Debug\DBUtility.csprojResolveAssemblyReference.cache
+C:\Users\Administrator\Documents\Visual Studio 2012\Projects\XHD\DBUtility\obj\Debug\XHD.DBUtility.dll
+C:\Users\Administrator\Documents\Visual Studio 2012\Projects\XHD\DBUtility\obj\Debug\XHD.DBUtility.pdb
+F:\VS 2010\XHD\DBUtility\bin\Debug\XHD.DBUtility.pdb
+F:\VS 2010\XHD\DBUtility\obj\Debug\DBUtility.csprojResolveAssemblyReference.cache
+F:\VS 2010\XHD\DBUtility\obj\Debug\XHD.DBUtility.dll
+F:\VS 2010\XHD\DBUtility\obj\Debug\XHD.DBUtility.pdb
+F:\VS 2010\XHDcrm\DBUtility\bin\Debug\XHD.DBUtility.pdb
+F:\VS 2010\XHDcrm\DBUtility\obj\Debug\DBUtility.csprojResolveAssemblyReference.cache
+F:\VS 2010\XHDcrm\DBUtility\obj\Debug\XHD.DBUtility.dll
+F:\VS 2010\XHDcrm\DBUtility\obj\Debug\XHD.DBUtility.pdb
+F:\Visual Studio 2013\XHD\DBUtility\bin\Debug\XHD.DBUtility.dll
+F:\Visual Studio 2013\XHD\DBUtility\bin\Debug\XHD.DBUtility.pdb
+F:\Visual Studio 2013\XHD\DBUtility\obj\Debug\DBUtility.csprojResolveAssemblyReference.cache
+F:\Visual Studio 2013\XHD\DBUtility\obj\Debug\XHD.DBUtility.dll
+F:\Visual Studio 2013\XHD\DBUtility\obj\Debug\XHD.DBUtility.pdb
+F:\Visual Studio 2013\XHDCRM_Company\DBUtility\bin\Debug\XHD.DBUtility.dll
+F:\Visual Studio 2013\XHDCRM_Company\DBUtility\bin\Debug\XHD.DBUtility.pdb
+F:\Visual Studio 2013\XHDCRM_Company\DBUtility\obj\Debug\DBUtility.csprojResolveAssemblyReference.cache
+F:\Visual Studio 2013\XHDCRM_Company\DBUtility\obj\Debug\XHD.DBUtility.dll
+F:\Visual Studio 2013\XHDCRM_Company\DBUtility\obj\Debug\XHD.DBUtility.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\bin\Debug\XHD.DBUtility.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\bin\Debug\XHD.DBUtility.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\bin\Debug\IBatisNet.Common.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\bin\Debug\IBatisNet.DataMapper.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\bin\Debug\MySql.Data.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\bin\Debug\System.Data.SQLite.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\obj\Debug\XHD.DBUtility.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\obj\Debug\XHD.DBUtility.pdb

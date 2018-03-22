@@ -1,0 +1,47 @@
+﻿
+/* -----------------------
+   * tab *
+* ----------------------- */
+.l-tab-links { position: relative; height: 31px; width: 100%; overflow: hidden; margin-bottom: -1px; }
+.l-tab-links-left { position: absolute; top: 0px; left: 0; width: 17px; height: 31px; overflow: hidden; background: #fff url(../images/dateeditor/icon-prev.gif) 0px 8px no-repeat; z-index: 13; cursor: pointer; border: 1px solid #ccc; }
+.l-tab-links-right { position: absolute; top: 0px; right: 0; width: 17px; height: 31px; overflow: hidden; background: #fff url(../images/dateeditor/icon-next.gif) 0px 8px no-repeat; z-index: 13; cursor: pointer; border: 1px solid #ccc; }
+.l-tab-links-left-over { background: #eee url(../images/dateeditor/icon-prev.gif) 0px 8px no-repeat; }
+.l-tab-links-right-over { background: #eee url(../images/dateeditor/icon-next.gif) 0px 8px no-repeat; }
+.l-tab-links-left-invalid { background-position: -34px 0px; }
+.l-tab-links-right-invalid { background-position: -85px 0px; }
+
+.l-tab-links ul { list-style: none; margin: 0; padding: 0; width: 9999px; height: 34px; overflow: hidden; position: absolute; top: 0; left: 0; background:#d2e2f2 ;}
+.l-tab-links li { float: left; padding: 0; margin-left: 2px; height: 31px; line-height: 31px; cursor: pointer; position: relative; overflow: hidden; border: 1px solid #99bbe8; border-top-left-radius: 2px; border-top-right-radius: 2px; font-weight: bold; text-shadow: 1px 1px 1px #fff; color: #333; }
+	.l-tab-links li.l-selected { border: 1px solid #99bbe8; background: #f4f4f4; }
+	.l-tab-links li a { display: block; margin-left: 6px; margin-right: 25px; }
+.l-tab-links-item-left { }
+.l-tab-links-item-right { }
+.l-tab-links-item-close { width: 11px; height: 11px; overflow: hidden; position: absolute; top: 4px; right: 5px; z-index: 12; background: url(../images/icon/icon-close.gif); cursor: pointer; }
+.l-tab-links-item-close-over { background: url(../images/icon/icon-close-over.gif); }
+
+.l-tab-content { margin: 0 auto; padding: 0; border: none; width: 100%; border-top: 1px solid #99bbe8; background: #f4f4f4; }
+.l-tab-content-item { width: 100%; overflow: hidden; }
+	.l-tab-content-item iframe { width: 100%; height: 100%; border: none; }
+/* -----------------------
+   * easytab *
+* ----------------------- */
+.l-easytab { padding: 0px; position: relative; }
+	.l-easytab ul { margin: 0; padding: 0; list-style: none; position: absolute; top: 0px; left: 0px; z-index: 101; }
+	.l-easytab .l-easytab-header { padding-left: 3px; }
+		.l-easytab .l-easytab-header li { float: left; margin-left: 2px; }
+			.l-easytab .l-easytab-header li span { display: block; line-height: 22px; height: 22px; padding-left: 8px; padding-right: 8px; background: url('../images/controls/bg-tab-title.gif') repeat-x; color: #333; text-decoration: none; border: 1px solid #AECAF0; color: #283B56; }
+				.l-easytab .l-easytab-header li span.l-over { background: url('../images/controls/bg-tab-title-over.gif') repeat-x; border: 1px solid #DAB364; cursor: pointer; }
+				.l-easytab .l-easytab-header li span.l-selected { background: none; background: white; border-top: 3px solid #FFBD69; height: 20px; color: #355686; border-left: 1px solid #DAB364; border-right: 1px solid #DAB364; border-bottom: 1px solid white; }
+	.l-easytab .l-easytab-panelbox { border: 1px solid #AECAF0; clear: left; position: absolute; top: 23px; padding: 4px; z-index: 100; }
+
+.l-tab-switch { position: absolute; top: 1px; right: 0; width: 17px; height: 23px; overflow: hidden; background: url(../images/icon/icon-sort-desc.gif); z-index: 13; cursor: pointer; display: none; }
+.l-tab-itemswitch { width: 26px; border-top-right-radius: 3px; }
+.l-tab-links .l-tab-itemswitch a { width: 7px; height: 4px; line-height: 4px; background: url(../images/icon/icon-sort-desc.gif) 0px 0px; position: absolute; left: 50%; top: 50%; margin-left: -4px; margin-top: -2px; }
+.l-tab-switchable .l-tab-links-right { right: 18px; }
+.l-tab-switchable .l-tab-switch { display: block; }
+.l-tab-windowsswitch { border: 1px solid #BED5F3; padding: 1px; background: #ffffff; position: absolute; z-index: 9900;border-radius: 0 0 4px 4px;box-shadow:3px 3px 10px rgba(0,0,0,0.3) }
+	.l-tab-windowsswitch a { display: block; text-decoration: none; height: 24px; line-height: 24px; border: 1px solid #fff; color: #333; padding: 0 5px; width: 80px; overflow: hidden; margin: 1px; }
+		.l-tab-windowsswitch a:hover { border: 1px solid #d3d3d3; background: #f9f9f9; }
+		.l-tab-windowsswitch a.selected { border: 1px solid #B9D2F2; background: #CADDF5; }
+
+

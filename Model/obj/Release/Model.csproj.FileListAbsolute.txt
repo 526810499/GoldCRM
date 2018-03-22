@@ -1,0 +1,9 @@
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Model\bin\Release\XHD.Model.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Model\bin\Release\XHD.Common.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Model\bin\Release\OpenSmtp.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Model\bin\Release\Excel.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Model\bin\Release\COM.Excel.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Model\bin\Release\Newtonsoft.Json.Net35.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Model\bin\Release\XHD.Common.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Model\obj\Release\Model.csprojResolveAssemblyReference.cache
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Model\obj\Release\XHD.Model.dll

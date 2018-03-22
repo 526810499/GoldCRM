@@ -1,0 +1,63 @@
+C:\Users\Administrator\Documents\Visual Studio 2012\Projects\XHD\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
+C:\Users\Administrator\Documents\Visual Studio 2012\Projects\XHD\Common\bin\Debug\XHD.Common.dll
+C:\Users\Administrator\Documents\Visual Studio 2012\Projects\XHD\Common\bin\Debug\XHD.Common.pdb
+C:\Users\Administrator\Documents\Visual Studio 2012\Projects\XHD\Common\bin\Debug\COM.Excel.dll
+C:\Users\Administrator\Documents\Visual Studio 2012\Projects\XHD\Common\bin\Debug\Excel.dll
+C:\Users\Administrator\Documents\Visual Studio 2012\Projects\XHD\Common\bin\Debug\Newtonsoft.Json.Net35.dll
+C:\Users\Administrator\Documents\Visual Studio 2012\Projects\XHD\Common\bin\Debug\OpenSmtp.dll
+C:\Users\Administrator\Documents\Visual Studio 2012\Projects\XHD\Common\bin\Debug\OWC10Chart.dll
+C:\Users\Administrator\Documents\Visual Studio 2012\Projects\XHD\Common\obj\Debug\XHD.Common.dll
+C:\Users\Administrator\Documents\Visual Studio 2012\Projects\XHD\Common\obj\Debug\XHD.Common.pdb
+F:\VS 2010\XHD\Common\bin\Debug\XHD.Common.pdb
+F:\VS 2010\XHD\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
+F:\VS 2010\XHD\Common\obj\Debug\XHD.Common.dll
+F:\VS 2010\XHD\Common\obj\Debug\XHD.Common.pdb
+F:\VS 2010\XHDcrm\Common\bin\Debug\XHD.Common.pdb
+F:\VS 2010\XHDcrm\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
+F:\VS 2010\XHDcrm\Common\obj\Debug\XHD.Common.dll
+F:\VS 2010\XHDcrm\Common\obj\Debug\XHD.Common.pdb
+F:\VS 2010\XHDcrm\Common\bin\Debug\XHD.Common.dll
+F:\Visual Studio 2013\XHD\Common\bin\Debug\XHD.Common.dll
+F:\Visual Studio 2013\XHD\Common\bin\Debug\XHD.Common.pdb
+F:\Visual Studio 2013\XHD\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
+F:\Visual Studio 2013\XHD\Common\obj\Debug\XHD.Common.dll
+F:\Visual Studio 2013\XHD\Common\obj\Debug\XHD.Common.pdb
+F:\Visual Studio 2013\XHDCRM_Company\Common\bin\Debug\XHD.Common.dll
+F:\Visual Studio 2013\XHDCRM_Company\Common\bin\Debug\XHD.Common.pdb
+F:\Visual Studio 2013\XHDCRM_Company\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
+F:\Visual Studio 2013\XHDCRM_Company\Common\obj\Debug\XHD.Common.dll
+F:\Visual Studio 2013\XHDCRM_Company\Common\obj\Debug\XHD.Common.pdb
+F:\Visual Studio 2013\XHDCRM_Enterprise\Common\bin\Debug\XHD.Common.dll
+F:\Visual Studio 2013\XHDCRM_Enterprise\Common\bin\Debug\XHD.Common.pdb
+F:\Visual Studio 2013\XHDCRM_Enterprise\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
+F:\Visual Studio 2013\XHDCRM_Enterprise\Common\obj\Debug\XHD.Common.dll
+F:\Visual Studio 2013\XHDCRM_Enterprise\Common\obj\Debug\XHD.Common.pdb
+F:\Visual Studio 2013\XHDCRM_Saas\Common\bin\Debug\XHD.Common.dll
+F:\Visual Studio 2013\XHDCRM_Saas\Common\bin\Debug\XHD.Common.pdb
+F:\Visual Studio 2013\XHDCRM_Saas\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
+F:\Visual Studio 2013\XHDCRM_Saas\Common\obj\Debug\XHD.Common.dll
+F:\Visual Studio 2013\XHDCRM_Saas\Common\obj\Debug\XHD.Common.pdb
+F:\Visual Studio 2013\XHDCRM_Open\Common\bin\Debug\XHD.Common.dll
+F:\Visual Studio 2013\XHDCRM_Open\Common\bin\Debug\XHD.Common.pdb
+F:\Visual Studio 2013\XHDCRM_Open\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
+F:\Visual Studio 2013\XHDCRM_Open\Common\obj\Debug\XHD.Common.dll
+F:\Visual Studio 2013\XHDCRM_Open\Common\obj\Debug\XHD.Common.pdb
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\Common\bin\Debug\XHD.Common.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\Common\bin\Debug\XHD.Common.pdb
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\Common\obj\Debug\XHD.Common.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM_2.0\Common\obj\Debug\XHD.Common.pdb
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\Common\bin\Debug\XHD.Common.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\Common\bin\Debug\XHD.Common.pdb
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\Common\obj\Debug\XHD.Common.dll
+F:\Visual Studio 2013\XHDCRM\XHDCRM2\Common\obj\Debug\XHD.Common.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\bin\Debug\XHD.Common.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\bin\Debug\XHD.Common.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\bin\Debug\COM.Excel.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\bin\Debug\Excel.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\bin\Debug\Newtonsoft.Json.Net35.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\bin\Debug\OpenSmtp.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\bin\Debug\OWC10Chart.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\obj\Debug\XHD.Common.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\obj\Debug\XHD.Common.pdb
