@@ -11,14 +11,14 @@ namespace XHD.Common
 
         public static string DataTableToJSON(DataTable dt)
         {
-            if(dt.Rows.Count==0) return @"{""Rows"":[],""Total"":0}";
+            if (dt.Rows.Count == 0) return @"{""Rows"":[],""Total"":0}";
             try
             {
                 string rowsjson = JsonConvert.SerializeObject(dt, new DataTableConverter());
                 string json = @"{""Rows"":" + rowsjson + @",""Total"":""" + dt.Rows.Count + @"""}";
                 return json;
             }
-            catch 
+            catch
             {
                 return @"{""Rows"":[],""Total"":0}";
             }
@@ -26,14 +26,14 @@ namespace XHD.Common
 
         public static string DataTableToJSON1(DataTable dt, string Total)
         {
-            if (dt.Rows.Count == 0) return @"{""Rows"":[],""Total"":0}";
+            if (dt == null || dt.Rows.Count == 0) return @"{""Rows"":[],""Total"":0}";
             try
             {
                 string rowsjson = JsonConvert.SerializeObject(dt, new DataTableConverter());
                 string json = @"{""Rows"":" + rowsjson + @",""Total"":""" + Total + @"""}";
                 return json;
             }
-            catch 
+            catch
             {
                 return @"{""Rows"":[],""Total"":0}";
             }
@@ -52,7 +52,7 @@ namespace XHD.Common
                 string rowsjson = JsonConvert.SerializeObject(dt, new DataTableConverter());
                 return rowsjson;
             }
-            catch 
+            catch
             {
                 return "[]";
             }

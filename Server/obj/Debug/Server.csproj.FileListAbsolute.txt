@@ -279,7 +279,6 @@ F:\Visual Studio 2013\XHDCRM\XHDCRM2\Server\obj\Debug\Server.csprojResolveAssemb
 F:\Visual Studio 2013\XHDCRM\XHDCRM2\Server\obj\Debug\XHD.Server.dll
 F:\Visual Studio 2013\XHDCRM\XHDCRM2\Server\obj\Debug\XHD.Server.pdb
 F:\Visual Studio 2013\XHDCRM\XHDCRM2\Server\bin\Debug\XHD.Service.dll
-F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\XHD.Server.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\XHD.Server.pdb
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\XHD.BLL.dll
@@ -305,5 +304,6 @@ F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\XHD.Excel.pdb
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\XHD.Model.pdb
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\XHD.SMS.pdb
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\XHD.DAL.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\obj\Debug\XHD.Server.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\obj\Debug\XHD.Server.pdb

@@ -67,16 +67,15 @@
             });
             $("#maingrid2").ligerGrid({
                 columns: [
-                    //{ display: 'ID', name: 'Btn_id', width: 150 },
-                    { display: '名称', name: 'Btn_name' },
+                    { display: 'ID', name: 'Btn_id', width: 350 },
+                    { display: '名称', name: 'Btn_name', width: 150 },
                     { display: '菜单ID', name: 'Menu_id', width: 150 },
-                    { display: '菜单名称', name: 'Menu_name' },
                     {
                         display: '图标', name: 'Btn_icon', width: 50, render: function (item) {
                             return "<img src='../../" + item.Btn_icon + "' style='width:16px;height:16px;margin-top:3px;'/>"
                         }
                     },
-                    { display: '响应事件', name: 'Btn_handler', width: 200 },
+                    { display: '响应事件', name: 'Btn_handler', width: 100 },
                     { display: '排序', name: 'Btn_order', width: 60 }
 
                 ],

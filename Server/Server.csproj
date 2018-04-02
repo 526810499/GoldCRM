@@ -64,7 +64,8 @@
     <Reference Include="XHD.Common">
       <HintPath>..\Common\bin\Debug\XHD.Common.dll</HintPath>
     </Reference>
-    <Reference Include="XHD.Controller">
+    <Reference Include="XHD.Controller, Version=1.0.0.614, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\XHD.Controller.dll</HintPath>
     </Reference>
     <Reference Include="XHD.DBUtility, Version=3.5.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -119,7 +120,10 @@
     <Compile Include="Personal_notes.cs" />
     <Compile Include="Personal_queckmenu.cs" />
     <Compile Include="Product.cs" />
+    <Compile Include="Product_allot.cs" />
     <Compile Include="Product_category.cs" />
+    <Compile Include="Product_supplier.cs" />
+    <Compile Include="Product_warehouse.cs" />
     <Compile Include="public_news.cs" />
     <Compile Include="public_notice.cs" />
     <Compile Include="Reports_CRM.cs" />

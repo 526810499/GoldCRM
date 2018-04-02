@@ -13,7 +13,7 @@ namespace XHD.Server
     {
         public static BLL.Sys_Menu menu = new BLL.Sys_Menu();
         public static Model.Sys_Menu model = new Model.Sys_Menu();
-
+        public static BLL.Sys_Button btn = new BLL.Sys_Button();
         public HttpContext Context;
         public string emp_id;
         public string emp_name;
@@ -160,6 +160,43 @@ namespace XHD.Server
             {
                 menu.Add(model);
             }
+        }
+
+        //del
+        public string del(string menuid)
+        {
+            string id = PageValidate.InputText(menuid, 50);
+
+            if (string.IsNullOrWhiteSpace(id)) return XhdResult.Error("参数错误！").ToString();
+
+            DataSet ds = menu.GetList($"Menu_id = '{id}' ");
+            if (ds.Tables[0].Rows.Count < 1)
+                return XhdResult.Error("系统错误，无数据！").ToString();
+
+            if (uid != "admin")
+            {
+                //controll auth
+                var getauth = new GetAuthorityByUid();
+                bool candel = getauth.GetBtnAuthority(emp_id.ToString(), "B7265173-AB71-44BF-827F-C3B66F81DD51");
+                if (!candel)
+                    return XhdResult.Error("权限不够！").ToString();
+            }
+
+
+
+            bool isdel = menu.Delete(id);
+            if (!isdel) return XhdResult.Error("系统错误，删除失败！").ToString();
+            btn.DeleteByMenUID(id);
+            string UserID = emp_id;
+            string UserName = emp_name;
+            string IPStreet = request.UserHostAddress;
+            string EventID = id;
+            string EventTitle = $"【{ds.Tables[0].Rows[0]["Menu_id"].ToString()}】" + ds.Tables[0].Rows[0]["Menu_name"].ToString();
+            string EventType = "参数删除";
+
+            Syslog.Add_log(UserID, UserName, IPStreet, EventTitle, EventType, EventID, null);
+
+            return XhdResult.Success().ToString();
         }
     }
 }

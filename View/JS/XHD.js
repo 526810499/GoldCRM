@@ -121,8 +121,7 @@ Date.prototype.format = function (format) //author: meizz
     return format;
 };
 //获取参数
-
-function getparastr(strname) {
+function getparastr(strname,defaults) {
     var hrefstr, pos, parastr, para, tempstr;
     hrefstr = window.location.href;
     pos = hrefstr.indexOf("?");
@@ -136,6 +135,7 @@ function getparastr(strname) {
             return tempstr.substring(pos + 1);
         }
     }
+    if (defaults != undefined) { return defaults; }
     return null;
 }
 
@@ -697,6 +697,33 @@ function f_openWindow(url, title, width, height, onOK, zindex, showmax) {
     
     activeDialog = top.jQuery.ligerDialog.open(dialogOptions);
 }
+
+var activeDialog2 = null;
+function f_openWindow2(url, title, width, height, buttons, zindex, showmax) {
+    var z_index = zindex || 9001;
+    var showMax = showmax || true;
+    if (buttons == null) {
+        buttons = [];
+    }
+ 
+    buttons.push({ text: '关闭', onclick: function (item, dialog) { dialog.close(); } });
+
+    var dialogOptions = {
+        zindex: z_index,
+        width: width,
+        height: height,
+        title: title,
+        url: url,
+        buttons: buttons,
+        isResize: false,
+        showToggle: false,
+        showMax: showMax,
+        timeParmName: 'a'
+    };
+
+    activeDialog2 = top.jQuery.ligerDialog.open(dialogOptions);
+}
+
 function DateDiff(sDate) {    //sDate1和sDate2是2006-12-18格式  
     var oDate1, oDate2, iDays;
     oDate1 = new Date();    //转换为12-18-2006格式

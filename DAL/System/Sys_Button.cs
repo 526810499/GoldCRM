@@ -96,10 +96,35 @@ namespace XHD.DAL
 			}
 		}
 
-		/// <summary>
-		/// 删除一条数据
-		/// </summary>
-		public bool Delete(string Btn_id)
+
+        /// <summary>
+        /// 删除一条数据
+        /// </summary>
+        public bool DeleteByMenUID(string Menu_id)
+        {
+
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("delete from Sys_Button ");
+            strSql.Append(" where Menu_id=@Menu_id ");
+            SqlParameter[] parameters = {
+                    new SqlParameter("@Menu_id", SqlDbType.VarChar,50)           };
+            parameters[0].Value = Menu_id;
+
+            int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
+            if (rows > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 删除一条数据
+        /// </summary>
+        public bool Delete(string Btn_id)
 		{
 			
 			StringBuilder strSql=new StringBuilder();

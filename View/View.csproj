@@ -812,10 +812,19 @@
     <Content Include="lib\ligerUI\skins\Tab\images\win\dialogbtn.gif" />
     <Content Include="lib\ligerUI\skins\Tab\images\win\dialogicon.gif" />
     <Content Include="License.html" />
+    <Content Include="Product\GetCodeProduct.aspx" />
     <Content Include="Product\GetProduct.aspx" />
+    <Content Include="Product\Product_out.aspx" />
+    <Content Include="Product\Product_allot.aspx" />
     <Content Include="Product\product.aspx" />
+    <Content Include="Product\Product_outAdd.aspx" />
+    <Content Include="Product\Product_allotAdd.aspx" />
     <Content Include="Product\product_add.aspx" />
+    <Content Include="Product\Product_supplier.aspx" />
+    <Content Include="Product\product_warehouse.aspx" />
     <Content Include="Product\product_category.aspx" />
+    <Content Include="Product\Product_supplier_add.aspx" />
+    <Content Include="Product\product_warehouse_add.aspx" />
     <Content Include="Product\product_category_add.aspx" />
     <Content Include="Sale\contract.aspx" />
     <Content Include="Sale\contract_add.aspx" />
@@ -3018,6 +3027,7 @@
     <Folder Include="Images\upload\logo\" />
     <Folder Include="Images\upload\portrait\" />
     <Folder Include="Images\upload\temp\" />
+    <Folder Include="lib\ligerUI2\" />
     <Folder Include="lib\ligerUI\skins\cyan\images\dialog\ie6\" />
     <Folder Include="Logs\" />
   </ItemGroup>

@@ -15,7 +15,8 @@
     <script src="../lib/jquery-validation/messages_cn.js" type="text/javascript"></script>
     <script src="../lib/ligerUI/js/common.js" type="text/javascript"></script>
     <script src="../lib/jquery.form.js" type="text/javascript"></script>
-
+    <script src="../lib/ligerUI2/js/plugins/ligerComboBox.js"></script>
+    <script src="../lib/ligerUI2/js/plugins/ligerTree.js"></script>
     <script src="../JS/XHD.js" type="text/javascript"></script>
     <script type="text/javascript">
         //图标
@@ -69,15 +70,8 @@
                         value: obj.parentid,
                         treeLeafOnly: false,
                         tree: {
-                            onSuccess: function () {
-                                setTimeout(function () {
-                                    var manager = $(".l-tree").ligerGetTreeManager();
-                                    manager.remove($("#" + oaid));
-                                }, 100);
-                            },
-                            url: 'Product_category.combo.xhd?rnd=' + Math.random(),
+                            url: 'Product_category.tree.xhd?rnd=' + Math.random(),
                             idFieldName: 'id',
-                            //parentIDFieldName: 'pid',
                             checkbox: false
                         }
                     })
@@ -87,7 +81,7 @@
             });
         }
 
-        function f_selectIcon() {            
+        function f_selectIcon() {
             winicons = $.ligerDialog.open({
                 title: '选取图标',
                 target: jiconlist,
@@ -133,10 +127,27 @@
 
     </script>
     <style type="text/css">
-        .iconlist { width: 360px; padding: 3px; }
-            .iconlist li { border: 1px solid #FFFFFF; float: left; display: block; padding: 2px; cursor: pointer; }
-                .iconlist li.over { border: 1px solid #516B9F; }
-                .iconlist li img { height: 16px; height: 16px; }
+        .iconlist {
+            width: 360px;
+            padding: 3px;
+        }
+
+            .iconlist li {
+                border: 1px solid #FFFFFF;
+                float: left;
+                display: block;
+                padding: 2px;
+                cursor: pointer;
+            }
+
+                .iconlist li.over {
+                    border: 1px solid #516B9F;
+                }
+
+                .iconlist li img {
+                    height: 16px;
+                    height: 16px;
+                }
     </style>
 
 </head>
@@ -172,7 +183,7 @@
                 <td height="23" style="width: 27px">
                     <img id="menuicon" style="width: 16px; height: 16px;" /></td>
                 <td height="23">
-                    <input type="text" id="T_category_icon" name="T_category_icon" ltype="text" ligerui="{width:180}" validate="{required:true}" />
+                    <input type="text" id="T_category_icon" name="T_category_icon" ltype="text" ligerui="{width:180}" validate="{required:false}" />
                 </td>
             </tr>
 

@@ -19,7 +19,7 @@ namespace XHD.Server
         public Model.hr_employee employee;
         public HttpRequest request;
         public string uid;
-        
+
 
         public Product_category()
         {
@@ -36,7 +36,7 @@ namespace XHD.Server
             emp_id = employee.id;
             emp_name = PageValidate.InputText(employee.name, 50);
             uid = PageValidate.InputText(employee.uid, 50);
-            
+
         }
 
         public string save()
@@ -88,7 +88,7 @@ namespace XHD.Server
 
             else
             {
-                
+
                 model.id = Guid.NewGuid().ToString();
                 model.create_id = emp_id;
                 model.create_time = DateTime.Now;
@@ -116,8 +116,19 @@ namespace XHD.Server
             DataSet ds = category.GetList($"1=1");
             var str = new StringBuilder();
             str.Append("[");
+            bool qb = request["qb"].CInt(0, false) == 1;
+            if (qb)
+            {
+                str.Append("{\"id\":\"\",\"text\":\"全部\",\"d_icon\":\"\"");
+                str.Append(",\"children\":[");
+            }
             str.Append(GetTreeString("root", ds.Tables[0]));
             str.Replace(",", "", str.Length - 1, 1);
+
+            if (qb)
+            {
+                str.Append("]}");
+            }
             str.Append("]");
             return str.ToString();
         }

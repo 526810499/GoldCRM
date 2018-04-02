@@ -29,23 +29,47 @@
         });
 
         function f_save() {
-            var manager = $("#maingrid4").ligerGetGridManager();
+
             f_check();
-            
-            if (f_postnum() == 0)
-            {
+
+            if (f_postnum() == 0) {
                 $.ligerDialog.warn("请添加产品！");
                 return;
             }
+            var msg = checkPrice();
+            if (msg.length > 0) {
+                if (!confirm(msg)) { return false; }
+            }
 
-
+            var manager = $("#maingrid4").ligerGetGridManager();
             if ($(form1).valid()) {
                 var sendtxt = "&id=" + getparastr("id");
                 sendtxt += "&PostData=" + JSON.stringify(manager.getChanges());
                 sendtxt += "&customer_id=" + getparastr("customer_id");
                 return $("form :input").fieldSerialize() + sendtxt;
             }
+
         }
+
+        function checkPrice() {
+            var T_total = parseFloat($("#T_total").val());
+            var T_receive = parseFloat($("#T_receive").val());
+            var T_arrears = T_total - T_receive;
+            $("#T_arrears").val(toMoney(T_arrears));
+            var msg = "";
+
+            if (T_receive <= 0) {
+                msg = ("已收金额为0确认要提交订单?");
+            }
+            else if (T_arrears != 0) {
+                msg = ("还有订单金额未支付确认要提交订单?");
+            }
+
+            return msg;
+        }
+
+
+
 
         function loadForm(oaid) {
             $.ajax({
@@ -77,16 +101,21 @@
                             ],
                             [
                                 { display: "支付方式", name: "T_paytype", type: "select", options: "{width:180,url:'Sys_Param.combo.xhd?type=pay_type',value:'" + obj.pay_type_id + "'}", validate: "{required:true}", initValue: formatTimebytype(obj.import_time, "yyyy-MM-dd") },
-                                { display: "金额总计", name: "T_total", type: "text", options: "{width:180,disabled:true}", validate: "{required:true}", initValue: toMoney( obj.total_amount) }
+                                { display: "应收金额", name: "T_total", type: "text", options: "{width:180,disabled:true}", validate: "{required:true}", initValue: toMoney(obj.total_amount) }
                             ],
                             [
-                                { display: "成交人员", name: "T_emp", validate: "{required:true}" }
+                                { display: "已收金额", name: "T_receive", type: "text", options: "{width:180,onChangeValue:function(){ arrearsAmount(); }}", validate: "{required:true}", initValue: toMoney2(obj.receive_money) },
+                                { display: "待收金额", name: "T_arrears", type: "text", options: "{width:180,disabled:true}", validate: "{required:true}", initValue: toMoney(obj.arrears_money) }
+                            ],
+                            [
+                                { display: "成交人员", name: "T_emp", validate: "{required:true}" },
+                                { display: "收银员", name: "T_cashier", validate: "{required:true}" }
                             ],
                             [
                                 { display: "备注", name: "T_details", type: "textarea", cols: 73, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.Order_details }
                             ]
                         );
-                   
+
                     if (!obj.discount_amount)
                         obj.discount_amount = 0;
 
@@ -95,17 +124,18 @@
                         fields: [
                             {
                                 display: '订单', type: 'group', icon: '',
-                                rows:rows
-                                
+                                rows: rows
+
                             }
                         ]
                     });
                     f_grid();
-                    
+
                     $("#T_customer").ligerComboBox({
                         width: 465,
                         onBeforeOpen: f_selectCustomer
-                    })
+                    });
+
 
                     $("#T_customer").val(obj.Customer_name);
                     $("#T_customer_val").val(obj.customer_id);
@@ -114,10 +144,18 @@
                     $("#T_emp").ligerComboBox({
                         width: 180,
                         onBeforeOpen: f_selectEmp
+                    });
+
+                    $("#T_cashier").ligerComboBox({
+                        width: 180,
+                        onBeforeOpen: f_selectCash
                     })
 
                     $("#T_emp").val(obj.emp_name);
                     $("#T_emp_val").val(obj.emp_id);
+
+                    $("#T_cashier").val(obj.emp_name);
+                    $("#T_cashier_val").val(obj.emp_id);
                 }
             });
         }
@@ -125,7 +163,7 @@
             $.ligerDialog.open({
                 zindex: 9005, title: '选择客户', width: 650, height: 300, url: '../crm/customer/getCustomer.aspx', buttons: [
                      { text: '确定', onclick: f_selectCustomerOK },
-                     { text: '取消', onclick: function (item, dialog) { dialog.close();} }
+                     { text: '取消', onclick: function (item, dialog) { dialog.close(); } }
                 ]
             });
             return false;
@@ -137,14 +175,13 @@
                 alert('请选择行!');
                 return;
             }
-            
+
             $("#T_customer").val(data.cus_name);
             $("#T_customer_val").val(data.id);
             dialog.close();
         }
 
-        function f_selectEmp()
-        {
+        function f_selectEmp() {
             $.ligerDialog.open({
                 zindex: 9005, title: '选择员工', width: 650, height: 300, url: '../hr/getemp_auth.aspx?auth=3', buttons: [
                      { text: '确定', onclick: f_selectEmpOK },
@@ -152,6 +189,29 @@
                 ]
             });
             return false;
+        }
+
+        function f_selectCash() {
+            $.ligerDialog.open({
+                zindex: 9005, title: '选择员工', width: 650, height: 300, url: '../hr/getemp_auth.aspx?auth=3', buttons: [
+                     { text: '确定', onclick: f_selectCashOK },
+                     { text: '取消', onclick: function (item, dialog) { dialog.close(); } }
+                ]
+            });
+            return false;
+        }
+
+        function f_selectCashOK(item, dialog) {
+            var data = dialog.frame.f_select();
+            if (!data) {
+                alert('请选择行!');
+                return;
+            }
+
+            $("#T_cashier").val(data.name);
+            $("#T_cashier_val").val(data.id);
+
+            dialog.close();
         }
 
         function f_selectEmpOK(item, dialog) {
@@ -163,11 +223,15 @@
 
             $("#T_emp").val(data.name);
             $("#T_emp_val").val(data.id);
+
+            if ($("#T_cashier").val().length <= 0) {
+                $("#T_cashier").val(data.name);
+                $("#T_cashier_val").val(data.id);
+            }
             dialog.close();
         }
 
-        function getAmount()
-        {
+        function getAmount() {
             var T_amount = $("#T_amount").val();
             var T_discount = $("#T_discount").val();
             var T_total = $("#T_total").val();
@@ -176,7 +240,7 @@
             $("#T_total").val(toMoney(parseFloat(T_amount.replace(/\$|\,/g, '')) - parseFloat(T_discount.replace(/\$|\,/g, ''))));
         }
 
-       
+
 
         function f_grid() {
             $("#maingrid4").ligerGrid({
@@ -207,7 +271,7 @@
                         }
                     }
                 ],
-                allowHideColumn:false,
+                allowHideColumn: false,
                 onAfterEdit: f_onAfterEdit,
                 title: '产品明细',
                 usePager: false,
@@ -241,18 +305,17 @@
                 click: pro_remove
             })
             $("#maingrid4").ligerGetGridManager()._onResize();
-        }        
+        }
 
         function f_onAfterEdit(e) {
             var manager = $("#maingrid4").ligerGetGridManager();
-            //alert(JSON.stringify(e)); return;
             manager.updateCell('amount', e.record.agio * e.record.quantity, e.record);
             $("#T_amount").val(toMoney(manager.getColumnDateByType('amount', 'sum') * 1.0));
             getAmount();
-        }        
+        }
 
         function add() {
-            f_openWindow("product/GetProduct.aspx", "选择产品", 800, 400, f_getpost, 9003);
+            f_openWindow("product/GetProduct.aspx", "选择产品", 1000, 600, f_getpost, 9003);
         }
         function pro_remove() {
             var manager = $("#maingrid4").ligerGetGridManager();
@@ -261,7 +324,7 @@
                 $("#T_amount").val(toMoney(manager.getColumnDateByType('amount', 'sum') * 1.0));
                 getAmount();
             }, 50)
-           
+
         }
         function f_getpost(item, dialog) {
             var rows = null;
@@ -299,15 +362,29 @@
 
         function f_postnum() {
             var manager = $("#maingrid4").ligerGetGridManager();
-            return manager.getColumnDateByType('amount', 'count') * 1.0;            
+            return manager.getColumnDateByType('amount', 'count') * 1.0;
         }
-        
+
         function f_check() {
             var g = $("#maingrid4").ligerGetGridManager().endEdit(true);
         }
         function remote() {
             var url = "PB_BicycleType.Exist.xhd?id=" + getparastr("id") + "&rnd=" + Math.random();
             return url;
+        }
+
+        function toMoney2(values) {
+            if (parseFloat(values) > 0) {
+                return toMoney(values);
+            }
+            return "";
+        }
+
+        function arrearsAmount() {
+            var T_total = parseFloat($("#T_total").val());
+            var T_receive = parseFloat($("#T_receive").val());
+            var T_arrears = T_total - T_receive;
+            $("#T_arrears").val(toMoney(T_arrears));
         }
 
     </script>

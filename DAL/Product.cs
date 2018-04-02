@@ -15,34 +15,160 @@ namespace XHD.DAL
         { }
         #region  BasicMethod
 
-
         /// <summary>
         /// 增加一条数据
         /// </summary>
-        public bool Add(XHD.Model.Product model)
+        public bool Add(Model.Product model)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Product(");
-            strSql.Append("id,product_name,category_id,status,unit,cost,price,agio,remarks,specifications,create_id,create_time)");
+            strSql.Append("id,product_name,category_id,status,Weight,unit,cost,price,agio,remarks,specifications,create_id,create_time,AttCosts,StockPrice,MainStoneWeight,AttStoneWeight,AttStoneNumber,StonePrice,GoldTotal,CostsTotal,Totals,Sbarcode,ImgLogo,BarCode,OutStatus,SalesTotalPrice,SalesCostsTotal,IsGold,SupplierID)");
             strSql.Append(" values (");
-            strSql.Append("@id,@product_name,@category_id,@status,@unit,@cost,@price,@agio,@remarks,@specifications,@create_id,@create_time)");
+            strSql.Append("@id,@product_name,@category_id,@status,@Weight,@unit,@cost,@price,@agio,@remarks,@specifications,@create_id,@create_time,@AttCosts,@StockPrice,@MainStoneWeight,@AttStoneWeight,@AttStoneNumber,@StonePrice,@GoldTotal,@CostsTotal,@Totals,@Sbarcode,@ImgLogo,@BarCode,@OutStatus,@SalesTotalPrice,@SalesCostsTotal,@IsGold,@SupplierID)");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@product_name", SqlDbType.VarChar,250),
                     new SqlParameter("@category_id", SqlDbType.VarChar,50),
-                    new SqlParameter("@status", SqlDbType.VarChar,250),
+                    new SqlParameter("@status", SqlDbType.Int,4),
+                    new SqlParameter("@Weight", SqlDbType.Decimal,9),
                     new SqlParameter("@unit", SqlDbType.VarChar,250),
                     new SqlParameter("@cost", SqlDbType.Decimal,9),
                     new SqlParameter("@price", SqlDbType.Decimal,9),
                     new SqlParameter("@agio", SqlDbType.Decimal,9),
-                    new SqlParameter("@remarks", SqlDbType.VarChar,-1),
+                    new SqlParameter("@remarks", SqlDbType.VarChar,2000),
                     new SqlParameter("@specifications", SqlDbType.VarChar,250),
                     new SqlParameter("@create_id", SqlDbType.VarChar,50),
-                    new SqlParameter("@create_time", SqlDbType.DateTime)};
+                    new SqlParameter("@create_time", SqlDbType.DateTime),
+                    new SqlParameter("@AttCosts", SqlDbType.Decimal,9),
+                    new SqlParameter("@StockPrice", SqlDbType.Decimal,9),
+                    new SqlParameter("@MainStoneWeight", SqlDbType.Decimal,9),
+                    new SqlParameter("@AttStoneWeight", SqlDbType.Decimal,9),
+                    new SqlParameter("@AttStoneNumber", SqlDbType.Decimal,9),
+                    new SqlParameter("@StonePrice", SqlDbType.Decimal,9),
+                    new SqlParameter("@GoldTotal", SqlDbType.Decimal,9),
+                    new SqlParameter("@CostsTotal", SqlDbType.Decimal,9),
+                    new SqlParameter("@Totals", SqlDbType.Decimal,9),
+                    new SqlParameter("@Sbarcode", SqlDbType.VarChar,50),
+                    new SqlParameter("@ImgLogo", SqlDbType.VarChar,250),
+                    new SqlParameter("@BarCode", SqlDbType.VarChar,50),
+                    new SqlParameter("@OutStatus", SqlDbType.Int,4),
+                    new SqlParameter("@SalesTotalPrice", SqlDbType.Decimal,9),
+                    new SqlParameter("@SalesCostsTotal", SqlDbType.Decimal,9),
+                    new SqlParameter("@IsGold", SqlDbType.Int,4),
+                    new SqlParameter("@SupplierID",SqlDbType.NVarChar,50),
+            };
             parameters[0].Value = model.id;
             parameters[1].Value = model.product_name;
             parameters[2].Value = model.category_id;
             parameters[3].Value = model.status;
+            parameters[4].Value = model.Weight;
+            parameters[5].Value = model.unit;
+            parameters[6].Value = model.cost;
+            parameters[7].Value = model.price;
+            parameters[8].Value = model.agio;
+            parameters[9].Value = model.remarks;
+            parameters[10].Value = model.specifications;
+            parameters[11].Value = model.create_id;
+            parameters[12].Value = model.create_time;
+            parameters[13].Value = model.AttCosts;
+            parameters[14].Value = model.StockPrice;
+            parameters[15].Value = model.MainStoneWeight;
+            parameters[16].Value = model.AttStoneWeight;
+            parameters[17].Value = model.AttStoneNumber;
+            parameters[18].Value = model.StonePrice;
+            parameters[19].Value = model.GoldTotal;
+            parameters[20].Value = model.CostsTotal;
+            parameters[21].Value = model.Totals;
+            parameters[22].Value = model.Sbarcode;
+            parameters[23].Value = model.ImgLogo;
+            parameters[24].Value = model.BarCode;
+            parameters[25].Value = model.OutStatus;
+            parameters[26].Value = model.SalesTotalPrice;
+            parameters[27].Value = model.SalesCostsTotal;
+            parameters[28].Value = model.IsGold;
+            parameters[29].Value = model.SupplierID;
+            int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
+            if (rows > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// 更新一条数据
+        /// </summary>
+        public bool Update(Model.Product model)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("update Product set ");
+            strSql.Append("product_name=@product_name,");
+            strSql.Append("category_id=@category_id,");
+            strSql.Append("status=@status,");
+            strSql.Append("Weight=@Weight,");
+            strSql.Append("unit=@unit,");
+            strSql.Append("cost=@cost,");
+            strSql.Append("price=@price,");
+            strSql.Append("agio=@agio,");
+            strSql.Append("remarks=@remarks,");
+            strSql.Append("specifications=@specifications,");
+            strSql.Append("create_id=@create_id,");
+            strSql.Append("create_time=@create_time,");
+            strSql.Append("AttCosts=@AttCosts,");
+            strSql.Append("StockPrice=@StockPrice,");
+            strSql.Append("MainStoneWeight=@MainStoneWeight,");
+            strSql.Append("AttStoneWeight=@AttStoneWeight,");
+            strSql.Append("AttStoneNumber=@AttStoneNumber,");
+            strSql.Append("StonePrice=@StonePrice,");
+            strSql.Append("GoldTotal=@GoldTotal,");
+            strSql.Append("CostsTotal=@CostsTotal,");
+            strSql.Append("Totals=@Totals,");
+            strSql.Append("Sbarcode=@Sbarcode,");
+            strSql.Append("ImgLogo=@ImgLogo,");
+            strSql.Append("OutStatus=@OutStatus,");
+            strSql.Append("SalesTotalPrice=@SalesTotalPrice,");
+            strSql.Append("SalesCostsTotal=@SalesCostsTotal,");
+            strSql.Append("SupplierID=@SupplierID,");
+            strSql.Append("IsGold=@IsGold");
+            strSql.Append(" where id=@id ");
+            SqlParameter[] parameters = {
+                    new SqlParameter("@product_name", SqlDbType.VarChar,250),
+                    new SqlParameter("@category_id", SqlDbType.VarChar,50),
+                    new SqlParameter("@status", SqlDbType.Int,4),
+                    new SqlParameter("@Weight", SqlDbType.Decimal,9),
+                    new SqlParameter("@unit", SqlDbType.VarChar,250),
+                    new SqlParameter("@cost", SqlDbType.Decimal,9),
+                    new SqlParameter("@price", SqlDbType.Decimal,9),
+                    new SqlParameter("@agio", SqlDbType.Decimal,9),
+                    new SqlParameter("@remarks", SqlDbType.VarChar,2000),
+                    new SqlParameter("@specifications", SqlDbType.VarChar,250),
+                    new SqlParameter("@create_id", SqlDbType.VarChar,50),
+                    new SqlParameter("@create_time", SqlDbType.DateTime),
+                    new SqlParameter("@AttCosts", SqlDbType.Decimal,9),
+                    new SqlParameter("@StockPrice", SqlDbType.Decimal,9),
+                    new SqlParameter("@MainStoneWeight", SqlDbType.Decimal,9),
+                    new SqlParameter("@AttStoneWeight", SqlDbType.Decimal,9),
+                    new SqlParameter("@AttStoneNumber", SqlDbType.Decimal,9),
+                    new SqlParameter("@StonePrice", SqlDbType.Decimal,9),
+                    new SqlParameter("@GoldTotal", SqlDbType.Decimal,9),
+                    new SqlParameter("@CostsTotal", SqlDbType.Decimal,9),
+                    new SqlParameter("@Totals", SqlDbType.Decimal,9),
+                    new SqlParameter("@Sbarcode", SqlDbType.VarChar,50),
+                    new SqlParameter("@ImgLogo", SqlDbType.VarChar,250),
+                    new SqlParameter("@OutStatus", SqlDbType.Int,4),
+                    new SqlParameter("@SalesTotalPrice", SqlDbType.Decimal,9),
+                    new SqlParameter("@SalesCostsTotal", SqlDbType.Decimal,9),
+                    new SqlParameter("@id", SqlDbType.VarChar,50),
+                    new SqlParameter("@BarCode", SqlDbType.VarChar,50),
+                   new SqlParameter("@IsGold", SqlDbType.Int,4),
+                 new SqlParameter("@SupplierID", SqlDbType.VarChar,50),
+            };
+            parameters[0].Value = model.product_name;
+            parameters[1].Value = model.category_id;
+            parameters[2].Value = model.status;
+            parameters[3].Value = model.Weight;
             parameters[4].Value = model.unit;
             parameters[5].Value = model.cost;
             parameters[6].Value = model.price;
@@ -51,7 +177,24 @@ namespace XHD.DAL
             parameters[9].Value = model.specifications;
             parameters[10].Value = model.create_id;
             parameters[11].Value = model.create_time;
-
+            parameters[12].Value = model.AttCosts;
+            parameters[13].Value = model.StockPrice;
+            parameters[14].Value = model.MainStoneWeight;
+            parameters[15].Value = model.AttStoneWeight;
+            parameters[16].Value = model.AttStoneNumber;
+            parameters[17].Value = model.StonePrice;
+            parameters[18].Value = model.GoldTotal;
+            parameters[19].Value = model.CostsTotal;
+            parameters[20].Value = model.Totals;
+            parameters[21].Value = model.Sbarcode;
+            parameters[22].Value = model.ImgLogo;
+            parameters[23].Value = model.OutStatus;
+            parameters[24].Value = model.SalesTotalPrice;
+            parameters[25].Value = model.SalesCostsTotal;
+            parameters[26].Value = model.id;
+            parameters[27].Value = model.BarCode;
+            parameters[28].Value = model.IsGold;
+            parameters[29].Value = model.SupplierID;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {
@@ -63,55 +206,18 @@ namespace XHD.DAL
             }
         }
 
-
         /// <summary>
-        /// 更新一条数据
+        /// 通过条形码获取产品状态
         /// </summary>
-        public bool Update(XHD.Model.Product model)
+        /// <param name="BarCode"></param>
+        /// <returns></returns>
+        public int GetPorductStatusByBarCode(string BarCode)
         {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("update Product set ");
-            strSql.Append("product_name=@product_name,");
-            strSql.Append("category_id=@category_id,");
-            strSql.Append("status=@status,");
-            strSql.Append("unit=@unit,");
-            strSql.Append("cost=@cost,");
-            strSql.Append("price=@price,");
-            strSql.Append("agio=@agio,");
-            strSql.Append("remarks=@remarks,");
-            strSql.Append("specifications=@specifications");
-            strSql.Append(" where id=@id ");
+            string sql = "select Status from  Product where BarCode=@BarCode";
             SqlParameter[] parameters = {
-                    new SqlParameter("@product_name", SqlDbType.VarChar,250),
-                    new SqlParameter("@category_id", SqlDbType.VarChar,50),
-                    new SqlParameter("@status", SqlDbType.VarChar,250),
-                    new SqlParameter("@unit", SqlDbType.VarChar,250),
-                    new SqlParameter("@cost", SqlDbType.Decimal,9),
-                    new SqlParameter("@price", SqlDbType.Decimal,9),
-                    new SqlParameter("@agio", SqlDbType.Decimal,9),
-                    new SqlParameter("@remarks", SqlDbType.VarChar,-1),
-                    new SqlParameter("@specifications", SqlDbType.VarChar,250),
-                    new SqlParameter("@id", SqlDbType.VarChar,50)};
-            parameters[0].Value = model.product_name;
-            parameters[1].Value = model.category_id;
-            parameters[2].Value = model.status;
-            parameters[3].Value = model.unit;
-            parameters[4].Value = model.cost;
-            parameters[5].Value = model.price;
-            parameters[6].Value = model.agio;
-            parameters[7].Value = model.remarks;
-            parameters[8].Value = model.specifications;
-            parameters[9].Value = model.id;
+                    new SqlParameter("@BarCode", SqlDbType.VarChar,50) { Value=BarCode}        };
 
-            int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
-            if (rows > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return DbHelperSQL.ExecuteScalar(sql, parameters).CInt(-1, false);
         }
 
         /// <summary>
@@ -164,8 +270,9 @@ namespace XHD.DAL
         public DataSet GetList(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select id,product_name,category_id,status,unit,cost,price,agio,remarks,specifications,create_id,create_time  ");
-            strSql.Append(",(select product_category from Product_category where id = Product.category_id) as category_name");
+            strSql.Append("select id, product_name, category_id, status, Weight,  create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, ImgLogo, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks  ");
+            strSql.Append(@",(select product_category from Product_category where id = Product.category_id) as category_name,
+                            (select product_supplier from Product_supplier where id = Product.SupplierID) as supplier_name ");
             strSql.Append(" FROM Product ");
             if (strWhere.Trim() != "")
             {
@@ -185,8 +292,9 @@ namespace XHD.DAL
             {
                 strSql.Append(" top " + Top.ToString());
             }
-            strSql.Append(" id,product_name,category_id,status,unit,cost,price,agio,remarks,specifications,create_id,create_time   ");
-            strSql.Append(",(select product_category from Product_category where id = Product.category_id) as category_name");
+            strSql.Append(" id, product_name, category_id, status, Weight,  create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, ImgLogo, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID ,IsGold,remarks  ");
+            strSql.Append(@",(select product_category from Product_category where id = Product.category_id) as category_name,
+                            (select product_supplier from Product_supplier where id = Product.SupplierID) as supplier_name ");
             strSql.Append(" FROM Product ");
             if (strWhere.Trim() != "")
             {
@@ -205,9 +313,10 @@ namespace XHD.DAL
             StringBuilder strSql_total = new StringBuilder();
             strSql_total.Append(" SELECT COUNT(id) FROM Product ");
             strSql_grid.Append("SELECT ");
-            strSql_grid.Append("      n,id,product_name,category_id,status,unit,cost,price,agio,remarks,specifications,create_id,create_time  ");
+            strSql_grid.Append("      n,id, product_name, category_id, status, Weight, create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, ImgLogo, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks ");
             strSql_grid.Append(",(select product_category from Product_category where id = w1.category_id) as category_name");
-            strSql_grid.Append(" FROM ( SELECT id,product_name,category_id,status,unit,cost,price,agio,remarks,specifications,create_id,create_time , ROW_NUMBER() OVER( Order by " + filedOrder + " ) AS n from Product");
+            strSql_grid.Append(",(select product_supplier from Product_supplier where id = w1.SupplierID) as supplier_name");
+            strSql_grid.Append(" FROM ( SELECT id, product_name, category_id, status, Weight, create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, ImgLogo, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks, ROW_NUMBER() OVER( Order by " + filedOrder + " ) AS n from Product");
             if (strWhere.Trim() != "")
             {
                 strSql_grid.Append(" WHERE " + strWhere);

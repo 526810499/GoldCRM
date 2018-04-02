@@ -28,6 +28,12 @@ namespace XHD.Model
         private string _order_details;
         private string _create_id;
         private DateTime? _create_time;
+
+        /// <summary>
+        /// 收银员
+        /// </summary>
+        public string  cashier_id{get;set;}
+
         /// <summary>
         /// 
         /// </summary>
@@ -37,7 +43,7 @@ namespace XHD.Model
             get { return _id; }
         }
         /// <summary>
-        /// 
+        /// 订单ID
         /// </summary>
         public string Serialnumber
         {
@@ -45,7 +51,7 @@ namespace XHD.Model
             get { return _serialnumber; }
         }
         /// <summary>
-        /// 
+        /// 客户ID
         /// </summary>
         public string Customer_id
         {
@@ -53,7 +59,7 @@ namespace XHD.Model
             get { return _customer_id; }
         }
         /// <summary>
-        /// 
+        /// 订单时间
         /// </summary>
         public DateTime? Order_date
         {
@@ -61,7 +67,7 @@ namespace XHD.Model
             get { return _order_date; }
         }
         /// <summary>
-        /// 
+        /// 支付方式
         /// </summary>
         public string pay_type_id
         {
@@ -69,7 +75,7 @@ namespace XHD.Model
             get { return _pay_type_id; }
         }
         /// <summary>
-        /// 
+        /// 订单状态
         /// </summary>
         public string Order_status_id
         {
@@ -77,7 +83,7 @@ namespace XHD.Model
             get { return _order_status_id; }
         }
         /// <summary>
-        /// 
+        /// 订单总金额
         /// </summary>
         public decimal? Order_amount
         {
@@ -85,7 +91,7 @@ namespace XHD.Model
             get { return _order_amount; }
         }
         /// <summary>
-        /// 
+        /// 订单折扣优惠金额
         /// </summary>
         public decimal? discount_amount
         {
@@ -93,7 +99,7 @@ namespace XHD.Model
             get { return _discount_amount; }
         }
         /// <summary>
-        /// 
+        /// 订单实收金额
         /// </summary>
         public decimal? total_amount
         {
@@ -101,7 +107,7 @@ namespace XHD.Model
             get { return _total_amount; }
         }
         /// <summary>
-        /// 
+        /// 业务员ID
         /// </summary>
         public string emp_id
         {
@@ -109,7 +115,7 @@ namespace XHD.Model
             get { return _emp_id; }
         }
         /// <summary>
-        /// 
+        /// 已收总金额
         /// </summary>
         public decimal? receive_money
         {
@@ -117,7 +123,7 @@ namespace XHD.Model
             get { return _receive_money; }
         }
         /// <summary>
-        /// 
+        /// 未收余额
         /// </summary>
         public decimal? arrears_money
         {
@@ -125,7 +131,7 @@ namespace XHD.Model
             get { return _arrears_money; }
         }
         /// <summary>
-        /// 
+        /// 已开票额
         /// </summary>
         public decimal? invoice_money
         {
@@ -133,7 +139,7 @@ namespace XHD.Model
             get { return _invoice_money; }
         }
         /// <summary>
-        /// 
+        /// 未开票额
         /// </summary>
         public decimal? arrears_invoice
         {
@@ -141,7 +147,7 @@ namespace XHD.Model
             get { return _arrears_invoice; }
         }
         /// <summary>
-        /// 
+        /// 订单备注
         /// </summary>
         public string Order_details
         {

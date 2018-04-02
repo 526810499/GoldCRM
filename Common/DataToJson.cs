@@ -175,4 +175,29 @@ namespace XHD.Common
             return result + "]";
         }
     }
+
+
+    /// <summary>
+    /// 将json 动态转换为类
+    /// </summary>
+    public class JsonDyamicHelper
+    {
+
+        /// <summary>
+        /// 对象序列化为字符串
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static string NetJsonConvertObject(object obj)
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+        }
+        public static T NetJsonConvertJson<T>(string json)
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json);
+        }
+
+
+    }
+
 }

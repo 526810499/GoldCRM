@@ -61,7 +61,7 @@ namespace XHD.Server
             else
                 serchtxt += " and isDelete=0 ";
 
-            if (!string.IsNullOrEmpty(request["company"]))
+            if (!string.IsNullOrEmpty(request["company"])&&request["company"].CString("")!= "输入关键词智能搜索客户")
                 serchtxt += $" and cus_name like N'%{PageValidate.InputText(request["company"], 255)}%'";
 
             if (!string.IsNullOrEmpty(request["address"]))

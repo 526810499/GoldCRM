@@ -6,29 +6,29 @@ using System.Data.SqlClient;
 using XHD.DBUtility;//Please add references
 namespace XHD.DAL
 {
-	/// <summary>
-	/// 数据访问类:Sale_order
-	/// </summary>
-	public partial class Sale_order
-	{
-		public Sale_order()
-		{}
-		#region  BasicMethod
+    /// <summary>
+    /// 数据访问类:Sale_order
+    /// </summary>
+    public partial class Sale_order
+    {
+        public Sale_order()
+        { }
+        #region  BasicMethod
 
-		/// <summary>
-		/// 是否存在该记录
-		/// </summary>
-		public bool Exists(string id)
-		{
-			StringBuilder strSql=new StringBuilder();
-			strSql.Append("select count(1) from Sale_order");
-			strSql.Append(" where id=@id ");
-			SqlParameter[] parameters = {
-					new SqlParameter("@id", SqlDbType.VarChar,50)			};
-			parameters[0].Value = id;
+        /// <summary>
+        /// 是否存在该记录
+        /// </summary>
+        public bool Exists(string id)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select count(1) from Sale_order");
+            strSql.Append(" where id=@id ");
+            SqlParameter[] parameters = {
+                    new SqlParameter("@id", SqlDbType.VarChar,50)           };
+            parameters[0].Value = id;
 
-			return DbHelperSQL.Exists(strSql.ToString(),parameters);
-		}
+            return DbHelperSQL.Exists(strSql.ToString(), parameters);
+        }
 
 
 
@@ -39,9 +39,9 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Sale_order(");
-            strSql.Append("id,Serialnumber,Customer_id,Order_date,pay_type_id,Order_status_id,Order_amount,discount_amount,total_amount,emp_id,receive_money,arrears_money,invoice_money,arrears_invoice,Order_details,create_id,create_time)");
+            strSql.Append("id,Serialnumber,Customer_id,Order_date,pay_type_id,Order_status_id,Order_amount,discount_amount,total_amount,emp_id,receive_money,arrears_money,invoice_money,arrears_invoice,Order_details,create_id,create_time,cashier_id)");
             strSql.Append(" values (");
-            strSql.Append("@id,@Serialnumber,@Customer_id,@Order_date,@pay_type_id,@Order_status_id,@Order_amount,@discount_amount,@total_amount,@emp_id,@receive_money,@arrears_money,@invoice_money,@arrears_invoice,@Order_details,@create_id,@create_time)");
+            strSql.Append("@id,@Serialnumber,@Customer_id,@Order_date,@pay_type_id,@Order_status_id,@Order_amount,@discount_amount,@total_amount,@emp_id,@receive_money,@arrears_money,@invoice_money,@arrears_invoice,@Order_details,@create_id,@create_time,@cashier_id)");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@Serialnumber", SqlDbType.VarChar,250),
@@ -59,7 +59,9 @@ namespace XHD.DAL
                     new SqlParameter("@arrears_invoice", SqlDbType.Decimal,9),
                     new SqlParameter("@Order_details", SqlDbType.VarChar,-1),
                     new SqlParameter("@create_id", SqlDbType.VarChar,50),
-                    new SqlParameter("@create_time", SqlDbType.DateTime)};
+                    new SqlParameter("@create_time", SqlDbType.DateTime),
+                   new SqlParameter("@cashier_id", SqlDbType.VarChar,50),
+            };
             parameters[0].Value = model.id;
             parameters[1].Value = model.Serialnumber;
             parameters[2].Value = model.Customer_id;
@@ -77,6 +79,7 @@ namespace XHD.DAL
             parameters[14].Value = model.Order_details;
             parameters[15].Value = model.create_id;
             parameters[16].Value = model.create_time;
+            parameters[17].Value = model.cashier_id;
 
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
@@ -103,7 +106,10 @@ namespace XHD.DAL
             strSql.Append("discount_amount=@discount_amount,");
             strSql.Append("total_amount=@total_amount,");
             strSql.Append("emp_id=@emp_id,");
-            strSql.Append("Order_details=@Order_details");
+            strSql.Append("Order_details=@Order_details,");
+            strSql.Append("cashier_id=@cashier_id,");
+            strSql.Append("receive_money=@receive_money,");
+            strSql.Append("arrears_money=@arrears_money");
             strSql.Append(" where id=@id ");
             SqlParameter[] parameters = {
                     new SqlParameter("@Order_date", SqlDbType.DateTime),
@@ -114,7 +120,11 @@ namespace XHD.DAL
                     new SqlParameter("@total_amount", SqlDbType.Decimal,9),
                     new SqlParameter("@emp_id", SqlDbType.VarChar,50),
                     new SqlParameter("@Order_details", SqlDbType.VarChar,-1),
-                    new SqlParameter("@id", SqlDbType.VarChar,50)};
+                    new SqlParameter("@id", SqlDbType.VarChar,50),
+               new SqlParameter("@cashier_id", SqlDbType.VarChar,50),
+               new SqlParameter("@receive_money", SqlDbType.Decimal,9),
+                    new SqlParameter("@arrears_money", SqlDbType.Decimal,9),
+               };
             parameters[0].Value = model.Order_date;
             parameters[1].Value = model.pay_type_id;
             parameters[2].Value = model.Order_status_id;
@@ -124,7 +134,9 @@ namespace XHD.DAL
             parameters[6].Value = model.emp_id;
             parameters[7].Value = model.Order_details;
             parameters[8].Value = model.id;
-
+            parameters[9].Value = model.cashier_id;
+            parameters[10].Value = model.receive_money;
+            parameters[11].Value = model.arrears_money;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {
@@ -140,50 +152,50 @@ namespace XHD.DAL
         /// 删除一条数据
         /// </summary>
         public bool Delete(string id)
-		{
-			
-			StringBuilder strSql=new StringBuilder();
-			strSql.Append("delete from Sale_order ");
-			strSql.Append(" where id=@id ");
-			SqlParameter[] parameters = {
-					new SqlParameter("@id", SqlDbType.VarChar,50)			};
-			parameters[0].Value = id;
+        {
 
-			int rows=DbHelperSQL.ExecuteSql(strSql.ToString(),parameters);
-			if (rows > 0)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		/// <summary>
-		/// 批量删除数据
-		/// </summary>
-		public bool DeleteList(string idlist )
-		{
-			StringBuilder strSql=new StringBuilder();
-			strSql.Append("delete from Sale_order ");
-			strSql.Append(" where id in ("+idlist + ")  ");
-			int rows=DbHelperSQL.ExecuteSql(strSql.ToString());
-			if (rows > 0)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("delete from Sale_order ");
+            strSql.Append(" where id=@id ");
+            SqlParameter[] parameters = {
+                    new SqlParameter("@id", SqlDbType.VarChar,50)           };
+            parameters[0].Value = id;
 
-		/// <summary>
-		/// 获得数据列表
-		/// </summary>
-		public DataSet GetList(string strWhere)
-		{
-			StringBuilder strSql=new StringBuilder();
+            int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
+            if (rows > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// 批量删除数据
+        /// </summary>
+        public bool DeleteList(string idlist)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("delete from Sale_order ");
+            strSql.Append(" where id in (" + idlist + ")  ");
+            int rows = DbHelperSQL.ExecuteSql(strSql.ToString());
+            if (rows > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 获得数据列表
+        /// </summary>
+        public DataSet GetList(string strWhere)
+        {
+            StringBuilder strSql = new StringBuilder();
             strSql.Append(" SELECT ");
             strSql.Append("      Sale_order.[id] ");
             strSql.Append("      , Sale_order.[Serialnumber] ");
@@ -211,24 +223,24 @@ namespace XHD.DAL
             strSql.Append("        INNER JOIN CRM_Customer ON CRM_Customer.id = Sale_order.Customer_id ");
             strSql.Append("        INNER JOIN hr_employee ON hr_employee.id = Sale_order.emp_id ");
             strSql.Append("        INNER JOIN hr_department ON hr_department.id = hr_employee.dep_id ");
-			if(strWhere.Trim()!="")
-			{
-				strSql.Append(" where "+strWhere);
-			}
-			return DbHelperSQL.Query(strSql.ToString());
-		}
+            if (strWhere.Trim() != "")
+            {
+                strSql.Append(" where " + strWhere);
+            }
+            return DbHelperSQL.Query(strSql.ToString());
+        }
 
-		/// <summary>
-		/// 获得前几行数据
-		/// </summary>
-		public DataSet GetList(int Top,string strWhere,string filedOrder)
-		{
-			StringBuilder strSql=new StringBuilder();
-			strSql.Append("select ");
-			if(Top>0)
-			{
-				strSql.Append(" top "+Top.ToString());
-			}
+        /// <summary>
+        /// 获得前几行数据
+        /// </summary>
+        public DataSet GetList(int Top, string strWhere, string filedOrder)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select ");
+            if (Top > 0)
+            {
+                strSql.Append(" top " + Top.ToString());
+            }
             strSql.Append("      Sale_order.[id] ");
             strSql.Append("      , Sale_order.[Serialnumber] ");
             strSql.Append("      , Sale_order.[Customer_id] ");
@@ -251,23 +263,24 @@ namespace XHD.DAL
             strSql.Append("      , CRM_Customer.cus_name ");
             strSql.Append("      , hr_employee.name as emp_name ");
             strSql.Append("      , hr_department.dep_name ");
+            strSql.Append("          ,cashier_id   ");
             strSql.Append("  FROM[dbo].[Sale_order] ");
             strSql.Append("        INNER JOIN CRM_Customer ON CRM_Customer.id = Sale_order.Customer_id ");
             strSql.Append("        INNER JOIN hr_employee ON hr_employee.id = Sale_order.emp_id ");
             strSql.Append("        INNER JOIN hr_department ON hr_department.id = hr_employee.dep_id ");
-            if (strWhere.Trim()!="")
-			{
-				strSql.Append(" where "+strWhere);
-			}
-			strSql.Append(" order by " + filedOrder);
-			return DbHelperSQL.Query(strSql.ToString());
-		}
+            if (strWhere.Trim() != "")
+            {
+                strSql.Append(" where " + strWhere);
+            }
+            strSql.Append(" order by " + filedOrder);
+            return DbHelperSQL.Query(strSql.ToString());
+        }
 
-		/// <summary>
-		/// 分页获取数据列表
-		/// </summary>
-		public DataSet GetList(int PageSize, int PageIndex, string strWhere, string filedOrder, out string Total)
-		{
+        /// <summary>
+        /// 分页获取数据列表
+        /// </summary>
+        public DataSet GetList(int PageSize, int PageIndex, string strWhere, string filedOrder, out string Total)
+        {
             StringBuilder strSql_inner = new StringBuilder();
             StringBuilder strSql_grid = new StringBuilder();
             StringBuilder strSql_total = new StringBuilder();
@@ -297,7 +310,7 @@ namespace XHD.DAL
             strSql_inner.Append("      , Sale_order.[create_time] ");
             strSql_inner.Append("      , CRM_Customer.cus_name ");
             strSql_inner.Append("      , hr_employee.name as emp_name ");
-            strSql_inner.Append("      , hr_department.dep_name ");
+            strSql_inner.Append("      , hr_department.dep_name  ,cashier_id ");
             strSql_inner.Append("  FROM[dbo].[Sale_order] ");
             strSql_inner.Append("        INNER JOIN CRM_Customer ON CRM_Customer.id = Sale_order.Customer_id ");
             strSql_inner.Append("        INNER JOIN hr_employee ON hr_employee.id = Sale_order.emp_id ");
@@ -376,7 +389,7 @@ namespace XHD.DAL
             }
             return false;
         }
-       
+
 
         /// <summary>
         ///     同比环比

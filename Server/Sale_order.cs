@@ -55,8 +55,10 @@ namespace XHD.Server
             model.Order_amount = decimal.Parse(request["T_amount"]);
             model.discount_amount = decimal.Parse(request["T_discount"]);
             model.total_amount = decimal.Parse(request["T_total"]);
-
+            model.receive_money = decimal.Parse(request["T_receive"]);
+            model.arrears_money = decimal.Parse(request["T_arrears"]);
             model.emp_id = PageValidate.InputText(request["T_emp_val"], 50);
+            model.cashier_id = PageValidate.InputText(request["T_cashier_val"], 50);
 
             string id = PageValidate.InputText(request["id"], 50);
             if (PageValidate.checkID(id))
@@ -112,15 +114,24 @@ namespace XHD.Server
                     dr["total_amount"].ToString(),
                     request["T_total"]
                     );
+                Log_Content += Syslog.get_log_content(
+                 dr["receive_money"].CString(""),
+                  request["T_receive"].CString(""),
+                  "应收金额",
+                 dr["receive_money"].CString(""),
+                  request["T_receive"].CString("")
+                  );
 
+                Log_Content += Syslog.get_log_content(
+               dr["arrears_money"].CString(""), request["T_arrears"].CString(""), "未收金额", dr["arrears_money"].CString(""), request["T_arrears"].CString(""));
 
                 if (!string.IsNullOrEmpty(Log_Content))
                     Syslog.Add_log(UserID, UserName, IPStreet, EventTitle, EventType, EventID, Log_Content);
 
-                //更新发票，收款
-                order.UpdateInvoice(id);
+                ////更新发票，收款
+                //order.UpdateInvoice(id);
 
-                order.UpdateReceive(id);
+                //order.UpdateReceive(id);
             }
             else
             {
@@ -130,13 +141,11 @@ namespace XHD.Server
                 model.create_id = emp_id;
                 model.create_time = DateTime.Now;
 
-                model.arrears_money = model.Order_amount;
-                model.receive_money = 0;
                 model.arrears_invoice = model.Order_amount;
                 model.invoice_money = 0;
 
                 model.Serialnumber = "DD-" + DateTime.Now.ToString("yyyy-MM-dd-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
-                //model.arrears_invoice = decimal.Parse(request["T_amount"]);
+
                 order.Add(model);
             }
 
@@ -159,7 +168,7 @@ namespace XHD.Server
             {
                 if (PageValidate.checkID(postdata[i].id))
                     modeldel.product_id = postdata[i].id;
-                else if(PageValidate.checkID(postdata[i].product_id))
+                else if (PageValidate.checkID(postdata[i].product_id))
                     modeldel.product_id = postdata[i].product_id;
 
                 modeldel.quantity = postdata[i].Quantity;
@@ -180,7 +189,7 @@ namespace XHD.Server
                 }
             }
 
-           
+
 
             return XhdResult.Success().ToString();
         }

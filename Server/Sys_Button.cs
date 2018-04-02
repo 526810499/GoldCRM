@@ -19,7 +19,7 @@ namespace XHD.Server
         public Model.hr_employee employee;
         public HttpRequest request;
         public string uid;
-        
+
 
         public Sys_Button()
         {
@@ -36,7 +36,7 @@ namespace XHD.Server
             emp_id = employee.id;
             emp_name = PageValidate.InputText(employee.name, 50);
             uid = PageValidate.InputText(employee.uid, 50);
-            
+
         }
 
         public string GetGrid(string menuid)
@@ -94,7 +94,7 @@ namespace XHD.Server
 
         public string del(string id)
         {
-            if (!PageValidate.checkID(id)) return "false";
+            if (string.IsNullOrWhiteSpace(id)) return "false";
             id = PageValidate.InputText(id, 50);
 
             DataSet ds = btn.GetList($"Btn_id='{id}'");

@@ -138,6 +138,10 @@
     <Compile Include="Finance_Invoice.cs" />
     <Compile Include="Finance_Receivable.cs" />
     <Compile Include="Finance_Receive.cs" />
+    <Compile Include="Product_allot.cs" />
+    <Compile Include="Product_allotDetail.cs" />
+    <Compile Include="Product_supplier.cs" />
+    <Compile Include="Product_warehouse.cs" />
     <Compile Include="Sale_order.cs" />
     <Compile Include="Sale_order_details.cs" />
     <Compile Include="Product.cs" />

@@ -61,16 +61,16 @@
                             return "<div style='color:#135294'>" + toMoney(item.arrears_money) + "</div>";
                         }, totalSummary: { type: 'sum_money' }
                     },
-                    {
-                        display: '已开票额（￥）', name: 'invoice_money', width: 100, align: 'right', render: function (item) {
-                            return "<div style='color:#135294'>" + toMoney(item.invoice_money) + "</div>";
-                        }
-                    },
-                    {
-                       display: '未开票额（￥）', name: 'arrears_invoice', width: 100, align: 'right', render: function (item) {
-                           return "<div style='color:#135294'>" + toMoney(item.arrears_invoice) + "</div>";
-                       }
-                    },
+                    //{
+                    //    display: '已开票额（￥）', name: 'invoice_money', width: 100, align: 'right', render: function (item) {
+                    //        return "<div style='color:#135294'>" + toMoney(item.invoice_money) + "</div>";
+                    //    }
+                    //},
+                    //{
+                    //   display: '未开票额（￥）', name: 'arrears_invoice', width: 100, align: 'right', render: function (item) {
+                    //       return "<div style='color:#135294'>" + toMoney(item.arrears_invoice) + "</div>";
+                    //   }
+                    //},
                     {
                         display: '成交时间', name: 'Order_date', width: 90, render: function (item) {
                             return formatTimebytype(item.Order_date, 'yyyy-MM-dd');
@@ -282,9 +282,7 @@
         }
         function f_save(item, dialog) {
             var issave = dialog.frame.f_save();
-            //alert(postdata);
-
-
+ 
             if (!issave) {
                 return;
             }

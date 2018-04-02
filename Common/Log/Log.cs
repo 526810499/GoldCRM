@@ -52,6 +52,17 @@ namespace XHD
         /// <summary>
         /// 记录日志
         /// </summary>
+        /// <param name="error">日志内容</param>
+        /// <param name="dirName">目录名称</param>
+        public static void LogStr(Exception error, string dirName)
+        {
+ 
+            LogStr(error.ToString(), dirName);
+        }
+
+        /// <summary>
+        /// 记录日志
+        /// </summary>
         /// <param name="vlog">日志内容</param>
         /// <param name="dirName">目录名称</param>
         public static void LogStr(string vlog, string dirName)

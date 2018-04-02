@@ -6,7 +6,7 @@ namespace XHD.Controller
 {
     public class GetTasks
     {
-        public static string GetTasksString(string Id, DataTable table)
+        public static string GetTasksString(string Id, DataTable table, string columnKey = "id")
         {
             DataRow[] rows = table.Select($"parentid = '{Id}'");
 
@@ -26,10 +26,10 @@ namespace XHD.Controller
                     str.Append(row[i]);
                     str.Append("\"");
                 }
-                if (GetTasksString((string) row["id"], table).Length > 0)
+                if (GetTasksString(row[columnKey].CString(""), table).Length > 0)
                 {
                     str.Append(",\"children\":[");
-                    str.Append(GetTasksString((string) row["id"], table));
+                    str.Append(GetTasksString(row[columnKey].CString(""), table));
                     str.Append("]},");
                 }
                 else
@@ -51,8 +51,8 @@ namespace XHD.Controller
             foreach (DataRow row in rows)
             {
                 str.Append($"'{row["id"]}',");
-                if (GetDepTask((string) row["id"], table).Length > 0)
-                    str.Append(GetDepTask((string) row["id"], table));
+                if (GetDepTask((string)row["id"], table).Length > 0)
+                    str.Append(GetDepTask((string)row["id"], table));
             }
             return str.ToString();
         }
