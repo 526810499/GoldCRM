@@ -18,6 +18,7 @@
         var treemanager;
         var status = "";
         var SupplierID = "";
+        var allotid = "";
         $(function () {
             $("#layout1").ligerLayout({ leftWidth: 200, allowLeftResize: false, allowLeftCollapse: true, space: 2, heightDiff: 1 });
             $("#tree1").ligerTree({
@@ -28,15 +29,19 @@
                 checkbox: false,
                 itemopen: false
             });
-            status = getparastr("status");
-            SupplierID = getparastr("SupplierID");
+            status = getparastr("status", "");
+            SupplierID = getparastr("SupplierID","");
+            allotid = getparastr("allotid", "");
             treemanager = $("#tree1").ligerGetTreeManager();
 
             initLayout();
             $(window).resize(function () {
                 initLayout();
             });
-
+            var url = "Product.grid.xhd?status=" + status + "&SupplierID=" + SupplierID;
+            if (allotid.length > 0) {
+                url = "Product_allot.gridDetail.xhd?allotid=" + allotid;
+            }
             $("#maingrid4").ligerGrid({
                 columns: [
                     { display: '产品名称', name: 'product_name', align: 'left', width: 120 },
@@ -64,7 +69,7 @@
                     },
                     {
                         display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.CostsTotal);
+                            return toMoney(item.SalesCostsTotal);
                         }
                     },
                     {
@@ -82,7 +87,7 @@
                 onSelectRow: function (row, index, data) {
                     //alert('onSelectRow:' + index + " | " + data.ProductName); 
                 },
-                url: "Product.grid.xhd?status=" + status + "&SupplierID=" + SupplierID,
+                url: url,
                 width: '100%',
                 height: '100%',
                 heightDiff: -2,
@@ -125,7 +130,14 @@
             }
             var serchtxt = "categoryid=" + cid + "&status=" + status + "&stext=" + $("#stext").val() + "&scode=" + $("#scode").val() + "&SupplierID=" + SupplierID + "&rnd=" + Math.random()
             var manager = $("#maingrid4").ligerGetGridManager();
-            manager._setUrl("Product.grid.xhd?" + serchtxt);
+            var url = "Product.grid.xhd?" + serchtxt;
+            if (allotid.length > 0) {
+                serchtxt += "&allotid=" + allotid;
+                url = "Product_allot.gridDetail.xhd?" + serchtxt;
+            }
+            manager._setUrl(url);
+
+
         }
 
 

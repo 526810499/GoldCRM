@@ -8,36 +8,18 @@ using XHD.Controller;
 
 namespace XHD.Server
 {
-    public class Personal_Calendar
+    public class Personal_Calendar : BaseCRMServer
     {
         public static BLL.Personal_Calendar calendar = new BLL.Personal_Calendar();
         public static Model.Personal_Calendar model = new Model.Personal_Calendar();
 
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
-        
+       
 
         public Personal_Calendar()
         {
         }
 
-        public Personal_Calendar(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-            
-        }
+        public Personal_Calendar(HttpContext context) : base(context) { }
 
 
         public string get()

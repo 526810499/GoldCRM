@@ -9,7 +9,7 @@ namespace XHD.DAL
     /// <summary>
     /// 数据访问类:Product
     /// </summary>
-    public partial class Product
+    public partial class Product: BaseTransaction
     {
         public Product()
         { }
@@ -314,9 +314,10 @@ namespace XHD.DAL
             strSql_total.Append(" SELECT COUNT(id) FROM Product ");
             strSql_grid.Append("SELECT ");
             strSql_grid.Append("      n,id, product_name, category_id, status, Weight, create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, ImgLogo, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks ");
-            strSql_grid.Append(",(select product_category from Product_category where id = w1.category_id) as category_name");
-            strSql_grid.Append(",(select product_supplier from Product_supplier where id = w1.SupplierID) as supplier_name");
-            strSql_grid.Append(" FROM ( SELECT id, product_name, category_id, status, Weight, create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, ImgLogo, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks, ROW_NUMBER() OVER( Order by " + filedOrder + " ) AS n from Product");
+            strSql_grid.Append(",(select product_category from Product_category(nolock) where id = w1.category_id) as category_name");
+            strSql_grid.Append(",(select product_supplier from Product_supplier(nolock) where id = w1.SupplierID) as supplier_name");
+            strSql_grid.Append(",(select product_warehouse from Product_warehouse(nolock) where id = w1.warehouse_id) as warehouse_name");
+            strSql_grid.Append(" FROM ( SELECT id, product_name, category_id, status, Weight, create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, ImgLogo, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks,warehouse_id, ROW_NUMBER() OVER( Order by " + filedOrder + " ) AS n from Product");
             if (strWhere.Trim() != "")
             {
                 strSql_grid.Append(" WHERE " + strWhere);

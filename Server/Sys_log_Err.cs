@@ -8,35 +8,17 @@ using XHD.Controller;
 
 namespace XHD.Server
 {
-    public class Sys_log_Err
+    public class Sys_log_Err : BaseCRMServer
     {
         public static BLL.Sys_log_Err log = new BLL.Sys_log_Err();
         public static Model.Sys_log_Err model = new Model.Sys_log_Err();
 
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
-
-
+ 
         public Sys_log_Err()
         {
         }
 
-        public Sys_log_Err(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-        }
+        public Sys_log_Err(HttpContext context) : base(context) { }
 
         public string grid()
         {

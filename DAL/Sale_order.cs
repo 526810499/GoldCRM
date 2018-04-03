@@ -39,9 +39,9 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Sale_order(");
-            strSql.Append("id,Serialnumber,Customer_id,Order_date,pay_type_id,Order_status_id,Order_amount,discount_amount,total_amount,emp_id,receive_money,arrears_money,invoice_money,arrears_invoice,Order_details,create_id,create_time,cashier_id)");
+            strSql.Append("id,Serialnumber,Customer_id,Order_date,pay_type_id,Order_status_id,Order_amount,discount_amount,total_amount,emp_id,receive_money,arrears_money,invoice_money,arrears_invoice,Order_details,create_id,create_time,cashier_id,vipcard,dept_id)");
             strSql.Append(" values (");
-            strSql.Append("@id,@Serialnumber,@Customer_id,@Order_date,@pay_type_id,@Order_status_id,@Order_amount,@discount_amount,@total_amount,@emp_id,@receive_money,@arrears_money,@invoice_money,@arrears_invoice,@Order_details,@create_id,@create_time,@cashier_id)");
+            strSql.Append("@id,@Serialnumber,@Customer_id,@Order_date,@pay_type_id,@Order_status_id,@Order_amount,@discount_amount,@total_amount,@emp_id,@receive_money,@arrears_money,@invoice_money,@arrears_invoice,@Order_details,@create_id,@create_time,@cashier_id,@vipcard,@dept_id)");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@Serialnumber", SqlDbType.VarChar,250),
@@ -61,6 +61,8 @@ namespace XHD.DAL
                     new SqlParameter("@create_id", SqlDbType.VarChar,50),
                     new SqlParameter("@create_time", SqlDbType.DateTime),
                    new SqlParameter("@cashier_id", SqlDbType.VarChar,50),
+                   new SqlParameter("@vipcard", SqlDbType.VarChar,50),
+                  new SqlParameter("@dept_id", SqlDbType.VarChar,50),
             };
             parameters[0].Value = model.id;
             parameters[1].Value = model.Serialnumber;
@@ -80,6 +82,8 @@ namespace XHD.DAL
             parameters[15].Value = model.create_id;
             parameters[16].Value = model.create_time;
             parameters[17].Value = model.cashier_id;
+            parameters[18].Value = model.vipcard;
+            parameters[19].Value = model.dept_id;
 
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
@@ -108,8 +112,10 @@ namespace XHD.DAL
             strSql.Append("emp_id=@emp_id,");
             strSql.Append("Order_details=@Order_details,");
             strSql.Append("cashier_id=@cashier_id,");
+            strSql.Append("vipcard=@vipcard,");
             strSql.Append("receive_money=@receive_money,");
-            strSql.Append("arrears_money=@arrears_money");
+            strSql.Append("arrears_money=@arrears_money,");
+            strSql.Append(" dept_id=@dept_id ");
             strSql.Append(" where id=@id ");
             SqlParameter[] parameters = {
                     new SqlParameter("@Order_date", SqlDbType.DateTime),
@@ -121,9 +127,11 @@ namespace XHD.DAL
                     new SqlParameter("@emp_id", SqlDbType.VarChar,50),
                     new SqlParameter("@Order_details", SqlDbType.VarChar,-1),
                     new SqlParameter("@id", SqlDbType.VarChar,50),
-               new SqlParameter("@cashier_id", SqlDbType.VarChar,50),
-               new SqlParameter("@receive_money", SqlDbType.Decimal,9),
+                    new SqlParameter("@cashier_id", SqlDbType.VarChar,50),
+                    new SqlParameter("@vipcard", SqlDbType.VarChar,50),
+                    new SqlParameter("@receive_money", SqlDbType.Decimal,9),
                     new SqlParameter("@arrears_money", SqlDbType.Decimal,9),
+                    new SqlParameter("@dept_id", SqlDbType.VarChar,50),
                };
             parameters[0].Value = model.Order_date;
             parameters[1].Value = model.pay_type_id;
@@ -135,8 +143,10 @@ namespace XHD.DAL
             parameters[7].Value = model.Order_details;
             parameters[8].Value = model.id;
             parameters[9].Value = model.cashier_id;
-            parameters[10].Value = model.receive_money;
-            parameters[11].Value = model.arrears_money;
+            parameters[10].Value = model.vipcard;
+            parameters[11].Value = model.receive_money;
+            parameters[12].Value = model.arrears_money;
+            parameters[13].Value = model.dept_id;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {
@@ -214,6 +224,8 @@ namespace XHD.DAL
             strSql.Append("      , Sale_order.[invoice_money] ");
             strSql.Append("      , Sale_order.[arrears_invoice] ");
             strSql.Append("      , Sale_order.[Order_details] ");
+            strSql.Append("      , Sale_order.[dept_id] ");
+            strSql.Append("      , Sale_order.[vipcard] ");
             strSql.Append("      , Sale_order.[create_id] ");
             strSql.Append("      , Sale_order.[create_time] ");
             strSql.Append("      , CRM_Customer.cus_name ");
@@ -222,7 +234,7 @@ namespace XHD.DAL
             strSql.Append("  FROM [dbo].[Sale_order] ");
             strSql.Append("        INNER JOIN CRM_Customer ON CRM_Customer.id = Sale_order.Customer_id ");
             strSql.Append("        INNER JOIN hr_employee ON hr_employee.id = Sale_order.emp_id ");
-            strSql.Append("        INNER JOIN hr_department ON hr_department.id = hr_employee.dep_id ");
+            strSql.Append("        INNER JOIN hr_department(nolock) ON hr_department.id = hr_employee.dep_id ");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);
@@ -260,6 +272,8 @@ namespace XHD.DAL
             strSql.Append("      , Sale_order.[Order_details] ");
             strSql.Append("      , Sale_order.[create_id] ");
             strSql.Append("      , Sale_order.[create_time] ");
+            strSql.Append("      , Sale_order.[dept_id] ");
+            strSql.Append("      , Sale_order.[vipcard] ");
             strSql.Append("      , CRM_Customer.cus_name ");
             strSql.Append("      , hr_employee.name as emp_name ");
             strSql.Append("      , hr_department.dep_name ");
@@ -308,6 +322,9 @@ namespace XHD.DAL
             strSql_inner.Append("      , Sale_order.[Order_details] ");
             strSql_inner.Append("      , Sale_order.[create_id] ");
             strSql_inner.Append("      , Sale_order.[create_time] ");
+            strSql_inner.Append("      , Sale_order.[dept_id] ");
+            strSql_inner.Append("      , xsdep.[dep_name] as saledepname ");
+            strSql_inner.Append("      , Sale_order.[vipcard] ");
             strSql_inner.Append("      , CRM_Customer.cus_name ");
             strSql_inner.Append("      , hr_employee.name as emp_name ");
             strSql_inner.Append("      , hr_department.dep_name  ,cashier_id ");
@@ -315,6 +332,7 @@ namespace XHD.DAL
             strSql_inner.Append("        INNER JOIN CRM_Customer ON CRM_Customer.id = Sale_order.Customer_id ");
             strSql_inner.Append("        INNER JOIN hr_employee ON hr_employee.id = Sale_order.emp_id ");
             strSql_inner.Append("        INNER JOIN hr_department ON hr_department.id = hr_employee.dep_id ");
+            strSql_inner.Append("        INNER JOIN hr_department(nolock) as xsdep ON xsdep.id = Sale_order.dept_id ");
             if (strWhere.Trim() != "")
             {
                 strSql_inner.Append(" WHERE " + strWhere);

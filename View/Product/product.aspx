@@ -18,7 +18,7 @@
         var manager = "";
         var treemanager;
         $(function () {
-            $("#layout1").ligerLayout({ leftWidth: 200, allowLeftResize: false, allowLeftCollapse: true, space: 2, heightDiff: -5 });
+            $("#layout1").ligerLayout({ leftWidth: 180, allowLeftResize: false, allowLeftCollapse: true, space: 2, heightDiff: -5 });
             $("#tree1").ligerTree({
                 url: 'Product_category.tree.xhd?qb=1&rnd=' + Math.random(),
                 onSelect: onSelect,
@@ -71,7 +71,7 @@
                     },
                     {
                         display: '附石数', name: 'AttStoneNumber', width: 50, align: 'right', render: function (item) {
-                            return (item.AttStoneNumber);
+                            return toMoney(item.AttStoneNumber);
                         }
                     },
                     {
@@ -96,7 +96,7 @@
                     },
                     {
                         display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.CostsTotal);
+                            return toMoney(item.SalesCostsTotal);
                         }
                     },
                     {
@@ -104,7 +104,22 @@
                             return toMoney(item.SalesTotalPrice);
                         }
                     },
-                    { display: '供应商', name: 'supplier_name', width: 100 }
+                    { display: '供应商', name: 'supplier_name', width: 100 },
+                     { display: '现存仓库', name: 'warehouse_name', width: 100, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name;} } },
+                    {
+                        display: '状态', name: 'status', width: 80, align: 'right', render: function (item) {
+                            switch (item.status) {
+                                case 1:
+                                    return "<span style='color:#0066FF'> 入库 </span>";
+                                case 2:
+                                    return "<span style='color:#00CC66'> 调拨中 </span>";
+                                case 3:
+                                    return "<span style='color:#009900'> 出库中 </span>";
+                                case 4:
+                                    return "<span style='color:#FF3300'> 已销售 </span>";
+                            }
+                        }
+                    }
 
                 ],
                 dataAction: 'server',
@@ -194,13 +209,11 @@
         }
         function add() {
             var notes = $("#tree1").ligerGetTreeManager().getSelected();
-
+            var categoryid = "";
             if (notes != null && notes != undefined) {
-                f_openWindow('product/product_add.aspx?categoryid=' + notes.data.id, "新增产品", 700, 580, f_save);
+                categoryid = notes.data.id;
             }
-            else {
-                $.ligerDialog.warn('请选择产品类别！');
-            }
+            f_openWindow('product/product_add.aspx?categoryid=' + categoryid, "新增产品", 700, 580, f_save);
         }
 
         function del() {

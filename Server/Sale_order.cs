@@ -8,39 +8,22 @@ using XHD.Controller;
 
 namespace XHD.Server
 {
-    public class Sale_order
+    public class Sale_order : BaseCRMServer
     {
         public static BLL.Sale_order order = new BLL.Sale_order();
         public static Model.Sale_order model = new Model.Sale_order();
-
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
-
-
+        public static BLL.CRM_Customer customerBll = new BLL.CRM_Customer();
+ 
         public Sale_order()
         {
         }
 
-        public Sale_order(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-
-        }
+        public Sale_order(HttpContext context) : base(context) { }
 
         public string save()
         {
+            //是否可以家积分 0 不可以 1可以 -1 扣积分
+            int canAddIntegal = 0;
             model.Customer_id = PageValidate.InputText(request["T_Customer_val"], 50);
             if (PageValidate.checkID(request["customer_id"]))
                 model.Customer_id = PageValidate.InputText(request["customer_id"], 50);
@@ -59,7 +42,8 @@ namespace XHD.Server
             model.arrears_money = decimal.Parse(request["T_arrears"]);
             model.emp_id = PageValidate.InputText(request["T_emp_val"], 50);
             model.cashier_id = PageValidate.InputText(request["T_cashier_val"], 50);
-
+            model.vipcard = PageValidate.InputText(request["T_vipcard"], 50);
+            model.dept_id= PageValidate.InputText(request["T_dept_id_val"], 50);
             string id = PageValidate.InputText(request["id"], 50);
             if (PageValidate.checkID(id))
             {
@@ -128,6 +112,16 @@ namespace XHD.Server
                 if (!string.IsNullOrEmpty(Log_Content))
                     Syslog.Add_log(UserID, UserName, IPStreet, EventTitle, EventType, EventID, Log_Content);
 
+                if (model.Order_status_id != "5587BCED-0A36-4EDF-9562-F962A9B1913C" && dr["Order_status_id"].CString("") == "5587BCED-0A36-4EDF-9562-F962A9B1913C")
+                {
+                    canAddIntegal = -1;
+                }
+
+                if (model.Order_status_id == "5587BCED-0A36-4EDF-9562-F962A9B1913C" && dr["Order_status_id"].CString("") != "5587BCED-0A36-4EDF-9562-F962A9B1913C")
+                {
+                    canAddIntegal = 1;
+                }
+
                 ////更新发票，收款
                 //order.UpdateInvoice(id);
 
@@ -140,14 +134,22 @@ namespace XHD.Server
                 model.id = id;
                 model.create_id = emp_id;
                 model.create_time = DateTime.Now;
-
                 model.arrears_invoice = model.Order_amount;
                 model.invoice_money = 0;
-
                 model.Serialnumber = "DD-" + DateTime.Now.ToString("yyyy-MM-dd-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
-
+                if (model.Order_status_id == "5587BCED-0A36-4EDF-9562-F962A9B1913C")
+                {
+                    canAddIntegal = 1;
+                }
                 order.Add(model);
             }
+
+            //用户积分修改
+            if (canAddIntegal != 0)
+            {
+                customerBll.UpdateIntegral(model.Customer_id, (canAddIntegal * model.total_amount).CInt(0, false));
+            }
+
 
             //产品
             string json = request["PostData"].ToLower();
@@ -162,36 +164,43 @@ namespace XHD.Server
                 order_id = id,
             };
 
-
+            bool rs = true;
             //cod.Delete($" order_id= '{modeldel.order_id}'");
             for (int i = 0; i < postdata.Length; i++)
             {
-                if (PageValidate.checkID(postdata[i].id))
-                    modeldel.product_id = postdata[i].id;
-                else if (PageValidate.checkID(postdata[i].product_id))
-                    modeldel.product_id = postdata[i].product_id;
+                PostData pdata = postdata[i];
 
-                modeldel.quantity = postdata[i].Quantity;
-                modeldel.agio = postdata[i].agio;
-                modeldel.amount = postdata[i].Amount;
+                if (PageValidate.checkID(pdata.id))
+                    modeldel.product_id = pdata.id;
+                else if (PageValidate.checkID(pdata.product_id))
+                    modeldel.product_id = pdata.product_id;
 
-                if (postdata[i].__status == "add")
+                modeldel.quantity = pdata.Quantity;
+                modeldel.agio = pdata.agio;
+                modeldel.amount = pdata.Amount;
+                modeldel.BarCode = pdata.BarCode;
+
+                if (pdata.__status == "add")
                 {
-                    cod.Add(modeldel);
+                    rs = cod.Add(modeldel);
                 }
-                else if (postdata[i].__status == "update")
+                else if (pdata.__status == "update")
                 {
-                    cod.Update(modeldel);
+                    rs = cod.Update(modeldel);
                 }
-                else if (postdata[i].__status == "delete")
+                else if (pdata.__status == "delete")
                 {
-                    cod.Delete($"order_id = '{modeldel.order_id}' and product_id = '{modeldel.product_id}'");
+                    rs = cod.Delete(modeldel.order_id, modeldel.product_id);
                 }
             }
+            if (rs)
+            {
+                return XhdResult.Success().ToString();
+            }
+            else {
+                return XhdResult.Error("部分订单产品信息处理失败,请确认").ToString();
+            }
 
-
-
-            return XhdResult.Success().ToString();
         }
 
         public string grid()
@@ -276,8 +285,10 @@ namespace XHD.Server
             DataSet ds = order.GetList($"Sale_order.id = '{id}'");
 
             var receivable = new BLL.Finance_Receivable();
-            if (receivable.GetList($"Finance_Receivable.order_id= '{id}'").Tables[0].Rows.Count > 0)
+            if (ds.Tables[0].Rows[0]["receive_money"].CDecimal(0, false) > 0)
+            {
                 return XhdResult.Error("此订单下含有应收款，不允许删除！").ToString();
+            }
 
             bool candel = true;
             if (uid != "admin")
@@ -401,6 +412,9 @@ namespace XHD.Server
             public int Quantity { get; set; }
             public decimal Amount { get; set; }
             public string __status { get; set; }
+
+
+            public string BarCode { get; set; }
         }
     }
 }

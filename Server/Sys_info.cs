@@ -9,35 +9,17 @@ using XHD.SMS;
 
 namespace XHD.Server
 {
-    public class Sys_info
+    public class Sys_info : BaseCRMServer
     {
         public static BLL.Sys_info info = new BLL.Sys_info();
         public static Model.Sys_info model = new Model.Sys_info();
 
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
-
-
+ 
         public Sys_info()
         {
         }
 
-        public Sys_info(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-        }
+        public Sys_info(HttpContext context) : base(context) { }
 
         public string grid()
         {

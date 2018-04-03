@@ -7,24 +7,17 @@ using XHD.Controller;
 
 namespace XHD.Server
 {
-    public class m_login
+    public class m_login : BaseCRMServer
     {
         public static BLL.hr_employee emp = new BLL.hr_employee();
 
-        public HttpRequest request;
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;        
+       
 
         public m_login()
         {
         }
 
-        public m_login(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-        }
+        public m_login(HttpContext context) : base(context) { }
 
         public string check()
         {
@@ -72,5 +65,7 @@ namespace XHD.Server
                
             return XhdResult.Error("输入的数据不正确！").ToString();
         }
+
+
     }
 }

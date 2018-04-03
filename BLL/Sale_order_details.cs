@@ -41,12 +41,20 @@ namespace XHD.BLL
 			
 			return dal.Delete(id);
 		}
-		
 
-		/// <summary>
-		/// 获得数据列表
-		/// </summary>
-		public DataSet GetList(string strWhere)
+
+        /// <summary>
+        /// 删除一条数据
+        /// </summary>
+        public bool Delete(string order_id, string product_id)
+        {
+            return dal.Delete(order_id,product_id);
+        }
+
+        /// <summary>
+        /// 获得数据列表
+        /// </summary>
+        public DataSet GetList(string strWhere)
 		{
 			return dal.GetList(strWhere);
 		}

@@ -10,7 +10,7 @@ using System.Text;
 
 namespace XHD.Server
 {
-    public class m_customer
+    public class m_customer : BaseCRMServer
     {
         public static BLL.CRM_Customer customer = new BLL.CRM_Customer();
         public static BLL.Sys_log log = new BLL.Sys_log();
@@ -21,31 +21,13 @@ namespace XHD.Server
 
         public static Model.CRM_Customer model = new Model.CRM_Customer();
 
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
-        
+ 
 
         public m_customer()
         {
         }
 
-        public m_customer(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetEmpWithToken(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-            
-        }
+        public m_customer(HttpContext context) : base(context) { }
 
         public string list()
         {

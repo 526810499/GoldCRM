@@ -8,36 +8,17 @@ using XHD.Controller;
 
 namespace XHD.Server
 {
-    public class Product_warehouse
+    public class Product_warehouse : BaseCRMServer
     {
         public static BLL.Product_warehouse category = new BLL.Product_warehouse();
         public static Model.Product_warehouse model = new Model.Product_warehouse();
 
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
-
-
+       
         public Product_warehouse()
         {
         }
 
-        public Product_warehouse(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-
-        }
+        public Product_warehouse(HttpContext context) : base(context) { }
 
         public string save()
         {
@@ -66,7 +47,7 @@ namespace XHD.Server
                 string UserName = emp_name;
                 string IPStreet = request.UserHostAddress;
                 string EventTitle = model.product_warehouse;
-                string EventType = "产品类别修改";
+                string EventType = "仓库修改";
                 string EventID = model.id.CString("");
                 string Log_Content = null;
 
@@ -125,9 +106,15 @@ namespace XHD.Server
                 str.Append("{\"id\":\"\",\"text\":\"全部\",\"d_icon\":\"\"");
                 str.Append(",\"children\":[");
             }
+            bool zqk = request["zqk"].CInt(0, false) == 1;
+            if (zqk)
+            {
+                str.Append("{\"id\":\"0\",\"text\":\"总仓库\",\"d_icon\":\"\"");
+                str.Append(",\"children\":[");
+            }
             str.Append(GetTreeString("0", ds.Tables[0]));
             str.Replace(",", "", str.Length - 1, 1);
-            if (qb)
+            if (qb || zqk)
             {
                 str.Append("]}");
             }
@@ -187,7 +174,7 @@ namespace XHD.Server
             if (!isdel) return XhdResult.Error("系统错误！").ToString();
 
             //日志
-            string EventType = "产品类别删除";
+            string EventType = "仓库删除";
 
             string UserID = emp_id;
             string UserName = emp_name;

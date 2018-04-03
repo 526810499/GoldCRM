@@ -22,7 +22,7 @@
                 //$(element).hove.ligerTip({ content: lable.html(), appendIdTo: lable });
                 $(element).hover(function (e) {
                     //$(this).ligerTip({ content: lable.html(), appendIdTo: lable, distanceX: event.clientX - $(this).offset().left - $(this).width() + 15 });
-                   // $(element).removeAttr("title").ligerHideTip();
+                    // $(element).removeAttr("title").ligerHideTip();
                     //$(element).attr("title", lable.html()).ligerTip();
                     $(element).ligerTip({ content: lable.html() });
                     //alert($(element).attr("id"));
@@ -56,9 +56,13 @@
 
 //货币格式
 
-function toMoney(num) {
+function toMoney(num, defaults) {
     if (num == null || num == "" || num == undefined) {
-        return "0.00";
+        if (defaults == null || defaults == undefined) {
+            return "0.00";
+        } else {
+            return defaults;
+        }
     } else {
         num = num.toString().replace(/\$|\,/g, '');
         if (isNaN(num))
@@ -121,7 +125,7 @@ Date.prototype.format = function (format) //author: meizz
     return format;
 };
 //获取参数
-function getparastr(strname,defaults) {
+function getparastr(strname, defaults) {
     var hrefstr, pos, parastr, para, tempstr;
     hrefstr = window.location.href;
     pos = hrefstr.indexOf("?");
@@ -608,11 +612,11 @@ function view(type, id, id1) {
             break;
         case "sms":
             width = 730, height = 450, title = "查看短信", url = 'CRM/contact/sms_add.aspx?id=' + id;
-            break;        
+            break;
         case "receivable":
             width = 730, height = 450, title = "应收单", url = 'finance/receivable_add.aspx?id=' + id;
             break;
-       
+
     }
     f_openWindow(url, title, width, height, false, null, showMax);
 }
@@ -621,32 +625,29 @@ function f_addTab(tabid, text, url) {
     top.tab.addTabItem({ tabid: tabid, text: text, url: url });
 }
 
-function f_cusinfo(id, text)
-{    
+function f_cusinfo(id, text) {
     if (!id) return;
-    if(!text) text = "未知客户";
-    
+    if (!text) text = "未知客户";
+
     var url = "CRM/customer/Customer_info.aspx?id=" + id;
 
     f_addTab(id, text, url);
 }
 
-function f_mailview(id)
-{
+function f_mailview(id) {
     if (!id) return;
     //if (!text) text = "【无主题】";
-    text = "【查看邮件】" ;
+    text = "【查看邮件】";
 
     var url = "mail/mail_view.aspx?id=" + id;
 
     f_addTab(id, text, url);
 }
 
-function f_newsview(id)
-{
+function f_newsview(id) {
     if (!id) return;
     //if (!text) text = "【无主题】";
-    text = "【系统消息】" ;
+    text = "【系统消息】";
 
     var url = 'home/news_view.aspx?id=' + id;
 
@@ -694,7 +695,7 @@ function f_openWindow(url, title, width, height, onOK, zindex, showmax) {
         showMax: showMax,
         timeParmName: 'a'
     };
-    
+
     activeDialog = top.jQuery.ligerDialog.open(dialogOptions);
 }
 
@@ -705,7 +706,7 @@ function f_openWindow2(url, title, width, height, buttons, zindex, showmax) {
     if (buttons == null) {
         buttons = [];
     }
- 
+
     buttons.push({ text: '关闭', onclick: function (item, dialog) { dialog.close(); } });
 
     var dialogOptions = {

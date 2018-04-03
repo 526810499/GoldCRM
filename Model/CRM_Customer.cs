@@ -36,10 +36,21 @@ namespace XHD.Model
 		
 		private string _create_id;
 		private DateTime? _create_time;
-		/// <summary>
-		/// 
-		/// </summary>
-		public string id
+
+        /// <summary>
+        /// 用户生日
+        /// </summary>
+        public DateTime? birthday { get; set; }
+
+        /// <summary>
+        /// 用户积分
+        /// </summary>
+        public int integral { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string id
 		{
 			set{ _id=value;}
 			get{return _id;}

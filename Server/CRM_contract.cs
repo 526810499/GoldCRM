@@ -7,38 +7,20 @@ using System.IO;
 
 namespace XHD.Server
 {
-    public class CRM_contract
+    public class CRM_contract : BaseCRMServer
     {
         private static BLL.CRM_contract contract = new BLL.CRM_contract();
         private static Model.CRM_contract model = new Model.CRM_contract();
 
         private static BLL.CRM_contract_atta atta = new BLL.CRM_contract_atta();
 
-        private HttpContext Context;
-        private string emp_id;
-        private string emp_name;
-        private Model.hr_employee employee;
-        private HttpRequest request;
-        private string uid;
-
+ 
 
         public CRM_contract()
         {
         }
 
-        public CRM_contract(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-
-        }
+        public CRM_contract(HttpContext context) : base(context) { }
 
         public string grid()
         {

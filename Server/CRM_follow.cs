@@ -6,36 +6,17 @@ using System;
 
 namespace XHD.Server
 {
-    public class CRM_follow
+    public class CRM_follow : BaseCRMServer
     {
         private static BLL.CRM_follow follow = new BLL.CRM_follow();
         private static Model.CRM_follow model = new Model.CRM_follow();
-
-        private HttpContext Context;
-        private string emp_id;
-        private string emp_name;
-        private Model.hr_employee employee;
-        private HttpRequest request;
-        private string uid;
-        
+ 
 
         public CRM_follow()
         {
         }
 
-        public CRM_follow(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-            
-        }
+        public CRM_follow(HttpContext context) : base(context) { }
 
         public string save()
         {

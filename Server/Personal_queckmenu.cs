@@ -6,36 +6,17 @@ using System.Web.Script.Serialization;
 
 namespace XHD.Server
 {
-    public class Personal_queckmenu
+    public class Personal_queckmenu : BaseCRMServer
     {
         public static BLL.Personal_queckmenu menu = new BLL.Personal_queckmenu();
         public static Model.Personal_queckmenu model = new Model.Personal_queckmenu();
 
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
-        
-
+ 
         public Personal_queckmenu()
         {
         }
 
-        public Personal_queckmenu(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-            
-        }
+        public Personal_queckmenu(HttpContext context) : base(context) { }
 
         public string get()
         {

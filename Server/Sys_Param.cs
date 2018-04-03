@@ -8,37 +8,17 @@ using System;
 
 namespace XHD.Server
 {
-    public class Sys_Param
+    public class Sys_Param : BaseCRMServer
     {
         public static BLL.Sys_Param param = new BLL.Sys_Param();
         public static Model.Sys_Param model = new Model.Sys_Param();
-
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
-
+ 
 
         public Sys_Param()
         {
         }
 
-        public Sys_Param(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-
-        }
-
+        public Sys_Param(HttpContext context) : base(context) { }
         public string GetApp()
         {
             var cpst = new BLL.Sys_Param_Type();
@@ -113,6 +93,7 @@ namespace XHD.Server
             model.params_name = PageValidate.InputText(request["T_param_name"], 255);
             model.params_order = int.Parse(request["T_param_order"]);
             model.KeyID = request["T_KeyID"].CLong(0, false);
+            model.params_type = PageValidate.InputText(request["parentid"], 50);
             string id = PageValidate.InputText(request["paramid"], 50);
 
             if (PageValidate.checkID(id))

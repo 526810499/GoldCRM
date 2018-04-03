@@ -73,8 +73,14 @@
 
                     //$("#T_product_category").ligerGetComboBoxManager().selectValue(obj.category_id);
 
-                    if (!obj.category_id)
-                        obj.category_id = getparastr("categoryid");
+                    if (!obj.category_id) {
+                        obj.category_id = getparastr("categoryid","");
+                    }
+ 
+                    if (obj.SupplierID == null || obj.SupplierID == undefined || obj.SupplierID.length <= 0) {
+                        obj.SupplierID = "";
+                    }
+
 
                     $("#form1").ligerAutoForm({
                         labelWidth: 80, inputWidth: 180, space: 20,
@@ -84,7 +90,7 @@
                                 rows: [
                                    [
                                     { display: "产品名称", name: "T_product_name", type: "text", options: "{width:180}", validate: "{required:true}", initValue: obj.product_name },
-                                    { display: "产品类别", name: "T_product_category", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_category.tree.xhd',idFieldName: 'id',checkbox: false},value:'" + obj.category_id + "'}", validate: "{required:true}" }
+                                    { display: "产品类别", name: "T_product_category", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_category.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + obj.category_id + "'}", validate: "{required:true}" }
                                    ],
                                    [
                                     { display: "进货金价", name: "T_StockPrice", type: "text", options: "{width:180,onChangeValue:function(value){ $('#T_StockPrice').val(toMoney(value));SetT_GoldTotal(); }}", validate: "{required:true}", initValue: toMoney(obj.StockPrice) },
@@ -108,11 +114,11 @@
                                     { display: "成本总价", name: "T_Totals", type: "text", options: "{width:180,disabled:true,onChangeValue:function(value){ $('#T_Totals').val(toMoney(value)); }}", validate: "{required:true}", initValue: toMoney(obj.Totals) }
                                   ],
                                 [
-                                    { display: "供应商", name: "T_SupplierID", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_supplier.tree.xhd',idFieldName: 'id',checkbox: false},value:'" + obj.SupplierID + "'}", validate: "{required:true}" },
+                                    { display: "供应商", name: "T_SupplierID", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_supplier.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + obj.SupplierID + "'}", validate: "{required:true}" },
                                     { display: "出厂码", name: "T_Sbarcode", type: "text", options: "{width:180}", validate: "{required:false}", initValue: (obj.Sbarcode) },
                                 ],
                                    [{ display: "条形码", name: "T_BarCode", type: "text", options: "{width:180,disabled:true}", validate: "{required:false}", initValue: (obj.BarCode) },
-                                    { display: "是否黄金类", name: "T_GType", type: "select", options: "{width:180,onSelected:function(value){SetT_SalesTotalPrice(value);},data:[{id:0,text:'否'},{id:1,text:'是'}],selectBoxHeight:50, value:0}", validate: "{required:true}" }
+                                    { display: "是否黄金类", name: "T_GType", type: "select", options: "{width:180,onSelected:function(value){SetT_SalesTotalPrice(value);},data:[{id:0,text:'否'},{id:1,text:'是'}],selectBoxHeight:50, value:" + obj.IsGold + "}", validate: "{required:true}" }
                                    ],
                              [
                                     { display: "销售价格", name: "T_SalesTotalPrice", type: "text", options: "{width:180,disabled:true,onChangeValue:function(value){   $('#T_SalesTotalPrice').val(toMoney(value));  ; }}", validate: "{required:true}", initValue: toMoney(obj.SalesTotalPrice) },

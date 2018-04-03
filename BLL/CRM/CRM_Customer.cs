@@ -31,10 +31,21 @@ namespace XHD.BLL
 			return dal.Add(model);
 		}
 
-		/// <summary>
-		/// 更新一条数据
-		/// </summary>
-		public bool Update(XHD.Model.CRM_Customer model)
+        /// <summary>
+        /// 修改用户积分
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="integral"></param>
+        /// <returns></returns>
+        public bool UpdateIntegral(string id, int integral)
+        {
+            return dal.UpdateIntegral(id, integral);
+        }
+
+        /// <summary>
+        /// 更新一条数据
+        /// </summary>
+        public bool Update(XHD.Model.CRM_Customer model)
 		{
 			return dal.Update(model);
 		}

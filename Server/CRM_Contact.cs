@@ -7,34 +7,21 @@ using System.IO;
 
 namespace XHD.Server
 {
-    public class CRM_Contact
+    public class CRM_Contact : BaseCRMServer
     {
         private static BLL.CRM_Contact contact = new BLL.CRM_Contact();
         private static Model.CRM_Contact model = new Model.CRM_Contact();
 
-        private HttpContext Context;
-        private string emp_id;
-        private string emp_name;
-        private Model.hr_employee employee;
-        private HttpRequest request;
-        private string uid;
+
 
 
         public CRM_Contact()
         {
         }
 
-        public CRM_Contact(HttpContext context)
+        public CRM_Contact(HttpContext context) : base(context)
         {
-            Context = context;
-            request = context.Request;
 
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
 
         }
 

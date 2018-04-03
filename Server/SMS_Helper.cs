@@ -10,20 +10,14 @@ using XHD.SMS;
 
 namespace XHD.Server
 {
-    public class SMS_Helper
+    public class SMS_Helper : BaseCRMServer
     {
         public static BLL.Sys_info info = new BLL.Sys_info();
         public static BLL.CRM_Contact contact = new BLL.CRM_Contact();
         public static Model.CRM_Contact model = new Model.CRM_Contact();
         public static SMSHelper sms = new SMSHelper();
 
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
-
+ 
         public string SerialNo;
         public string key;
 
@@ -33,16 +27,8 @@ namespace XHD.Server
         }
 
         public SMS_Helper(HttpContext context)
+       : base(context)
         {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
 
             DataSet ds = info.GetAllList();
 

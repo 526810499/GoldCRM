@@ -85,6 +85,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseCRMServer.cs" />
     <Compile Include="CRM_Contact.cs" />
     <Compile Include="CRM_contract.cs" />
     <Compile Include="CRM_contract_atta.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="Product.cs" />
     <Compile Include="Product_allot.cs" />
     <Compile Include="Product_category.cs" />
+    <Compile Include="Product_out.cs" />
     <Compile Include="Product_supplier.cs" />
     <Compile Include="Product_warehouse.cs" />
     <Compile Include="public_news.cs" />
@@ -131,6 +133,8 @@
     <Compile Include="Sale_order_details.cs" />
     <Compile Include="SMS.cs" />
     <Compile Include="SMS_Helper.cs" />
+    <Compile Include="SProduct_OldChangeNew.cs" />
+    <Compile Include="SProduct_Retrieval.cs" />
     <Compile Include="Sys_App.cs" />
     <Compile Include="Sys_base.cs" />
     <Compile Include="Sys_Button.cs" />

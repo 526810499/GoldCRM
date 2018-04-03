@@ -70,8 +70,9 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.XML" />
-    <Reference Include="XHD.BLL">
-      <HintPath>..\BLL\bin\Debug\XHD.BLL.dll</HintPath>
+    <Reference Include="XHD.BLL, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\XHD.BLL.dll</HintPath>
     </Reference>
     <Reference Include="XHD.Common">
       <HintPath>..\Common\bin\Debug\XHD.Common.dll</HintPath>

@@ -130,16 +130,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseTransaction.cs" />
     <Compile Include="CRM\CRM_Contact.cs" />
     <Compile Include="CRM\CRM_contract.cs" />
     <Compile Include="CRM\CRM_contract_atta.cs" />
     <Compile Include="CRM\CRM_Customer.cs" />
     <Compile Include="CRM\CRM_follow.cs" />
+    <Compile Include="DProduct_OldChangeNew.cs" />
+    <Compile Include="DProduct_Retrieval.cs" />
     <Compile Include="Finance_Invoice.cs" />
     <Compile Include="Finance_Receivable.cs" />
     <Compile Include="Finance_Receive.cs" />
     <Compile Include="Product_allot.cs" />
     <Compile Include="Product_allotDetail.cs" />
+    <Compile Include="Product_out.cs" />
+    <Compile Include="Product_outDetail.cs" />
     <Compile Include="Product_supplier.cs" />
     <Compile Include="Product_warehouse.cs" />
     <Compile Include="Sale_order.cs" />

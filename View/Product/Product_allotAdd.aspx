@@ -83,13 +83,14 @@
                              { display: "调拨仓库", name: "T_NowWarehouse", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_warehouse.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + (obj.NowWarehouse == undefined ? whid : obj.NowWarehouse) + "'}", validate: "{required:true}" }
                             ],
                             [
-                            { display: "状态", name: "T_Status", type: "select", options: "{width:180,onSelected:function(value){},data:[{id:0,text:'等待提交'},{id:1,text:'等待审核'},{id:2,text:'审核通过'},{id:3,text:'审核不通过'}],selectBoxHeight:50, value:" + obj.status + "}", validate: "{required:true}" }
-                            ],
-                            [
                              { display: "备注", name: "T_Remark", type: "textarea", cols: 73, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.remark }
                             ]
                         );
- 
+                    if (obj != null && obj.status >= 0) {
+                        rows.push([
+                               { display: "状态", name: "T_Status", type: "select", options: "{width:180,onSelected:function(value){},data:[{id:0,text:'等待提交'},{id:1,text:'等待审核'},{id:2,text:'审核通过'},{id:3,text:'审核不通过'}],selectBoxHeight:50, value:" + obj.status + "}", validate: "{required:true}" }
+                        ]);
+                    }
                     $("#form1").ligerAutoForm({
                         labelWidth: 80, inputWidth: 180, space: 20,
                         fields: [
@@ -148,7 +149,7 @@
                 title: '产品明细',
                 usePager: false,
                 enabledEdit: false,
-                url: "Product_allot.gridDetail.xhd?orderid=" + getparastr("id"),
+                url: "Product_allot.gridDetail.xhd?allotid=" + getparastr("id"),
                 width: '100%',
                 height: 500,
                 heightDiff: -1,

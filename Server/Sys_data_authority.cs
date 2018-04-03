@@ -10,37 +10,16 @@ using System.Collections.Generic;
 
 namespace XHD.Server
 {
-    public class Sys_data_authority
+    public class Sys_data_authority : BaseCRMServer
     {
         public static BLL.Sys_data_authority auth = new BLL.Sys_data_authority();
         public static Model.Sys_data_authority model = new Model.Sys_data_authority();
-
-
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
-        
-
+ 
         public Sys_data_authority()
         {
         }
 
-        public Sys_data_authority(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-            
-        }
+        public Sys_data_authority(HttpContext context) : base(context) { }
 
         public string get(string Role_id)
         {

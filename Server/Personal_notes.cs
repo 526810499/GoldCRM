@@ -7,36 +7,18 @@ using XHD.Controller;
 
 namespace XHD.Server
 {
-    public class Personal_notes
+    public class Personal_notes : BaseCRMServer
     {
         public static BLL.Personal_notes notes = new BLL.Personal_notes();
         public static Model.Personal_notes model = new Model.Personal_notes();
 
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
-        
+     
 
         public Personal_notes()
         {
         }
 
-        public Personal_notes(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-            
-        }
+        public Personal_notes(HttpContext context) : base(context) { }
 
 
         public string Get()

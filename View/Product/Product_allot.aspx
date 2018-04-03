@@ -119,7 +119,7 @@
                             ],
                             usePager: false,
                             checkbox: false,
-                            url: "Product_allot.gridDetail.xhd?orderid=" + r.id,
+                            url: "Product_allot.gridDetail.xhd?allotid=" + r.id,
                             width: '99%', height: '180',
                             heightDiff: 0
                         })
@@ -146,6 +146,7 @@
                     arr[i].icon = "../" + arr[i].icon;
                     items.push(arr[i]);
                 }
+                items.push({ type: 'textbox', id: 'sstatus', text: '状态：' });
                 items.push({ type: 'textbox', id: 'sorderid', text: '调拨单号：' });
                 items.push({ type: 'textbox', id: 'scode', text: '条形码：' });
                 items.push({ type: 'button', text: '搜索', icon: '../images/search.gif', disable: true, click: function () { doserch() } });
@@ -154,11 +155,20 @@
                     items: items
 
                 });
-                menu = $.ligerMenu({
-                    width: 120, items: getMenuItems(data)
-                });
+                //menu = $.ligerMenu({
+                //    width: 120, items: getMenuItems(data)
+                //});
                 $("#sorderid").ligerTextBox({ width: 200 });
                 $("#scode").ligerTextBox({ width: 250 });
+                $("#sstatus").ligerComboBox({
+                    data: [
+                    { text: '所有', id: '' },
+                    { text: '等待提交', id: '0' },
+                    { text: '等待审核', id: '1' },
+                    { text: '审核通过', id: '2' },
+                    { text: '审核不通过', id: '3' }
+                    ], valueFieldID: 'status',
+                });
                 $("#maingrid4").ligerGetGridManager()._onResize();
             });
         }

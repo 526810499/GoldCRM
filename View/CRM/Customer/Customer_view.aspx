@@ -53,12 +53,12 @@
             g2 && g2._onResize();
             g3 && g3._onResize();
             g4 && g4._onResize();
-            g5 && g5._onResize();
-            g6 && g6._onResize();
+            //g5 && g5._onResize();
+            //g6 && g6._onResize();
         }
 
         function f_authtab() {
-            var curauth = ['customer_contact', 'contact_follow', 'sale_order', 'finance_receivable', 'sale_contract'];
+            var curauth = ['customer_contact', 'contact_follow', 'sale_order'];//, 'finance_receivable', 'sale_contract'
             $.ajax({
                 type: "GET",
                 url: "Sys_role.getEmpMenus.xhd", /* 注意后面的名字对应CS的方法名称 */
@@ -89,8 +89,8 @@
             setTimeout(f_contact(), 0);
             setTimeout(f_follow(), 10);
             setTimeout(f_order(), 20);
-            setTimeout(f_receivable(), 40);
-            setTimeout(f_contract(), 50);
+            //setTimeout(f_receivable(), 40);
+            //setTimeout(f_contract(), 50);
         }
 
         function f_contact() {
@@ -334,8 +334,8 @@
                     $("#T_cus").text(obj.cus_name);
                     $("#T_add").text(obj.cus_add);
                     $("#T_tel").text(obj.cus_tel);
-                    $("#T_fax").text(obj.cus_fax);
-                    $("#T_website").text(obj.cus_website);
+                    $("#T_integral").text(obj.integral);
+                    $("#T_birthday").text(formatTimebytype(obj.birthday, "yyyy-MM-dd"));
                     $("#T_descript").text(obj.DesCripe);
                     $("#T_remark").text(obj.Remarks);
 
@@ -372,9 +372,9 @@
                             <span id="T_cus"></span>
 
                         </td>
-                        <td class="table_label" style="width: 100px;">客户网址：</td>
+                        <td class="table_label" style="width: 100px;">客户生日：</td>
                         <td>
-                            <span id="T_website"></span>
+                            <span id="T_birthday"></span>
                         </td>
                     </tr>
                     <tr>
@@ -392,9 +392,9 @@
                         <td>
                             <span id="T_tel"></span>
                         </td>
-                        <td class="table_label">传真：</td>
+                        <td class="table_label">客户积分：</td>
                         <td>
-                            <span id="T_fax"></span>
+                            <span id="T_integral"></span>
                         </td>
                     </tr>
                     <tr>
@@ -466,7 +466,7 @@
                 </div>
             </div>
 
-            <div tabid="finance_receivable" title="应收管理" style="">
+<%--            <div tabid="finance_receivable" title="应收管理" style="">
                 <div style="padding: 10px 1px 1px 1px;">
                     <div id="toolbar_finance_receivable"></div>
                     <div id="maingrid_receivable" style="margin: -1px;"></div>
@@ -479,7 +479,7 @@
                     <div id="toolbar_sale_contract"></div>
                     <div id="maingrid_contract" style="margin: -1px;"></div>
                 </div>
-            </div>
+            </div>--%>
         </div>
     </form>
 </body>

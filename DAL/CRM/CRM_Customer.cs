@@ -30,6 +30,21 @@ namespace XHD.DAL
             return DbHelperSQL.Exists(strSql.ToString(), parameters);
         }
 
+        /// <summary>
+        /// 修改用户积分
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="integral"></param>
+        /// <returns></returns>
+        public bool UpdateIntegral(string id, int integral)
+        {
+            string sql = "update CRM_Customer set integral=isnull(integral,0)+@integral where id=@id";
+            SqlParameter[] par = {
+                new SqlParameter("@id",SqlDbType.VarChar,50) { Value=id},
+                new SqlParameter("@integral",SqlDbType.Int) { Value=integral}
+            };
+            return DbHelperSQL.ExecuteSql(sql, par) > 0;
+        }
 
         /// <summary>
         /// 增加一条数据
@@ -38,9 +53,9 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into CRM_Customer(");
-            strSql.Append("id,Serialnumber,cus_name,cus_add,cus_tel,cus_fax,cus_website,cus_industry_id,Provinces_id,City_id,cus_type_id,cus_level_id,cus_source_id,DesCripe,Remarks,emp_id,isPrivate,lastfollow,xy,isDelete,Delete_time,create_id,create_time,cus_extend)");
+            strSql.Append("id,Serialnumber,cus_name,cus_add,cus_tel,cus_fax,cus_website,cus_industry_id,Provinces_id,City_id,cus_type_id,cus_level_id,cus_source_id,DesCripe,Remarks,emp_id,isPrivate,lastfollow,xy,isDelete,Delete_time,create_id,create_time,cus_extend,birthday,integral)");
             strSql.Append(" values (");
-            strSql.Append("@id,@Serialnumber,@cus_name,@cus_add,@cus_tel,@cus_fax,@cus_website,@cus_industry_id,@Provinces_id,@City_id,@cus_type_id,@cus_level_id,@cus_source_id,@DesCripe,@Remarks,@emp_id,@isPrivate,@lastfollow,@xy,@isDelete,@Delete_time,@create_id,@create_time,@cus_extend)");
+            strSql.Append("@id,@Serialnumber,@cus_name,@cus_add,@cus_tel,@cus_fax,@cus_website,@cus_industry_id,@Provinces_id,@City_id,@cus_type_id,@cus_level_id,@cus_source_id,@DesCripe,@Remarks,@emp_id,@isPrivate,@lastfollow,@xy,@isDelete,@Delete_time,@create_id,@create_time,@cus_extend,@birthday,@integral)");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@Serialnumber", SqlDbType.VarChar,250),
@@ -65,7 +80,9 @@ namespace XHD.DAL
                     new SqlParameter("@Delete_time", SqlDbType.DateTime),
                     new SqlParameter("@create_id", SqlDbType.VarChar,50),
                     new SqlParameter("@create_time", SqlDbType.DateTime),
-                    new SqlParameter("@cus_extend",SqlDbType.VarChar,-1)
+                    new SqlParameter("@cus_extend",SqlDbType.VarChar,-1),
+                    new SqlParameter("@birthday",SqlDbType.DateTime),
+                    new SqlParameter("@integral",SqlDbType.Int,4)
             };
             parameters[0].Value = model.id;
             parameters[1].Value = model.Serialnumber;
@@ -91,7 +108,8 @@ namespace XHD.DAL
             parameters[21].Value = model.create_id;
             parameters[22].Value = model.create_time;
             parameters[23].Value = model.cus_extend;
-
+            parameters[24].Value = model.birthday;
+            parameters[25].Value = model.integral;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {
@@ -125,8 +143,10 @@ namespace XHD.DAL
             strSql.Append("Remarks=@Remarks,");
             strSql.Append("emp_id=@emp_id,");
             strSql.Append("isPrivate=@isPrivate,");
+            strSql.Append("birthday=@birthday,");
             strSql.Append("cus_extend=@cus_extend,");
             strSql.Append("xy=@xy");
+            strSql.Append(",integral=@integral ");
             strSql.Append(" where id=@id ");
             SqlParameter[] parameters = {
                     new SqlParameter("@Serialnumber", SqlDbType.VarChar,250),
@@ -147,7 +167,9 @@ namespace XHD.DAL
                     new SqlParameter("@isPrivate", SqlDbType.Int,4),
                     new SqlParameter("@xy", SqlDbType.VarChar,50),
                     new SqlParameter("@id", SqlDbType.VarChar,50),
-                    new SqlParameter("@cus_extend",SqlDbType.VarChar,-1)
+                    new SqlParameter("@cus_extend",SqlDbType.VarChar,-1),
+                   new SqlParameter("@birthday",SqlDbType.DateTime),
+                   new SqlParameter("@integral",SqlDbType.Int,4)
             };
             parameters[0].Value = model.Serialnumber;
             parameters[1].Value = model.cus_name;
@@ -168,7 +190,8 @@ namespace XHD.DAL
             parameters[16].Value = model.xy;
             parameters[17].Value = model.id;
             parameters[18].Value = model.cus_extend;
-
+            parameters[19].Value = model.birthday;
+            parameters[20].Value = model.integral.CInt(0,false);
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {
@@ -228,7 +251,7 @@ namespace XHD.DAL
         public DataSet GetList(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select id,Serialnumber,cus_name,cus_add,cus_tel,cus_fax,cus_website,cus_industry_id,Provinces_id,City_id,cus_type_id,cus_level_id,cus_source_id,DesCripe,Remarks,emp_id,isPrivate,lastfollow,xy,isDelete,Delete_time,create_id,create_time,cus_extend ");
+            strSql.Append("select integral,birthday,id,Serialnumber,cus_name,cus_add,cus_tel,cus_fax,cus_website,cus_industry_id,Provinces_id,City_id,cus_type_id,cus_level_id,cus_source_id,DesCripe,Remarks,emp_id,isPrivate,lastfollow,xy,isDelete,Delete_time,create_id,create_time,cus_extend ");
             strSql.Append(",(select params_name from Sys_Param where id = CRM_Customer.cus_industry_id) as cus_industry");
             strSql.Append(",(select params_name from Sys_Param where id = CRM_Customer.cus_level_id) as cus_level");
             strSql.Append(",(select params_name from Sys_Param where id = CRM_Customer.cus_type_id) as cus_type");
@@ -256,7 +279,7 @@ namespace XHD.DAL
             {
                 strSql.Append(" top " + Top.ToString());
             }
-            strSql.Append(" id,Serialnumber,cus_name,cus_add,cus_tel,cus_fax,cus_website,cus_industry_id,Provinces_id,City_id,cus_type_id,cus_level_id,cus_source_id,DesCripe,Remarks,emp_id,isPrivate,lastfollow,xy,isDelete,Delete_time,create_id,create_time,cus_extend ");
+            strSql.Append(" integral,birthday,id,Serialnumber,cus_name,cus_add,cus_tel,cus_fax,cus_website,cus_industry_id,Provinces_id,City_id,cus_type_id,cus_level_id,cus_source_id,DesCripe,Remarks,emp_id,isPrivate,lastfollow,xy,isDelete,Delete_time,create_id,create_time,cus_extend ");
             strSql.Append(",(select params_name from Sys_Param where id = CRM_Customer.cus_industry_id) as cus_industry");
             strSql.Append(",(select params_name from Sys_Param where id = CRM_Customer.cus_level_id) as cus_level");
             strSql.Append(",(select params_name from Sys_Param where id = CRM_Customer.cus_type_id) as cus_type");
@@ -284,7 +307,7 @@ namespace XHD.DAL
             StringBuilder strSql_total = new StringBuilder();
 
             //联合数据
-            strSql_inner.Append("( SELECT id, Serialnumber, cus_name, cus_add, cus_tel, cus_fax, cus_website, cus_industry_id, Provinces_id, City_id, cus_type_id, cus_level_id, cus_source_id, DesCripe, Remarks, emp_id, isPrivate, lastfollow, xy, isDelete, Delete_time, create_id, create_time,cus_extend  ");
+            strSql_inner.Append("( SELECT integral,birthday,id, Serialnumber, cus_name, cus_add, cus_tel, cus_fax, cus_website, cus_industry_id, Provinces_id, City_id, cus_type_id, cus_level_id, cus_source_id, DesCripe, Remarks, emp_id, isPrivate, lastfollow, xy, isDelete, Delete_time, create_id, create_time,cus_extend  ");
             strSql_inner.Append("        ,cus_industry,cus_level, cus_type,cus_source,City,Provinces,department,employee");
             strSql_inner.Append($"        ,ROW_NUMBER() OVER(Order by {filedOrder}) AS n FROM ");
             strSql_inner.Append("   (");
@@ -467,7 +490,7 @@ namespace XHD.DAL
         /// <param name="dt1"></param>
         /// <param name="dt2"></param>
         /// <returns></returns>
-        public DataSet Compared_level(string year1, string month1, string year2, string month2 )
+        public DataSet Compared_level(string year1, string month1, string year2, string month2)
         {
             var strSql = new StringBuilder();
             strSql.Append(" select CustomerLevel as yy,count(CustomerLevel) as xx,");

@@ -142,6 +142,7 @@ F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Debug\OpenSmtp.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Debug\Excel.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Debug\COM.Excel.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Debug\Newtonsoft.Json.Net35.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Debug\XHD.BLL.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Debug\IBatisNet.DataMapper.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Debug\IBatisNet.Common.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Debug\System.Data.SQLite.dll

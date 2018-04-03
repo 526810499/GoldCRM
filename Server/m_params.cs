@@ -10,38 +10,20 @@ using System.Text;
 
 namespace XHD.Server
 {
-    public class m_params
+    public class m_params : BaseCRMServer
     {
         public static BLL.Sys_Param param = new BLL.Sys_Param();
         public static BLL.Sys_Param_Provinces provinces = new BLL.Sys_Param_Provinces();
         public static BLL.Sys_Param_City city = new BLL.Sys_Param_City();
         public static BLL.hr_employee emp = new BLL.hr_employee();
 
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
-        
+ 
 
         public m_params()
         {
         }
 
-        public m_params(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetEmpWithToken(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-            
-        }
+        public m_params(HttpContext context) : base(context) { }
 
         //combo
         public string combo()

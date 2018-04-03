@@ -70,7 +70,7 @@
                         value: obj.parentid,
                         treeLeafOnly: false,
                         tree: {
-                            url: 'Product_warehouse.tree.xhd?rnd=' + Math.random(),
+                            url: 'Product_warehouse.tree.xhd?zqk=1&rnd=' + Math.random(),
                             idFieldName: 'id',
                             checkbox: false
                         }

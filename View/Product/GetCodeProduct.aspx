@@ -17,11 +17,13 @@
         var manager = "";
         var status = "";
         var SupplierID = "";
+        var allotid = "";
         $(function () {
-          //  $("#layout1").ligerLayout({ leftWidth: 200, allowLeftResize: false, allowLeftCollapse: true, space: 2, heightDiff: 1 });
+            //  $("#layout1").ligerLayout({ leftWidth: 200, allowLeftResize: false, allowLeftCollapse: true, space: 2, heightDiff: 1 });
 
-            status = getparastr("status");
-            SupplierID = getparastr("SupplierID");
+            status = getparastr("status", "");
+            SupplierID = getparastr("SupplierID", "");
+            allotid = getparastr("allotid", "");
             initLayout();
             $(window).resize(function () {
                 initLayout();
@@ -54,7 +56,7 @@
                     },
                     {
                         display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.CostsTotal);
+                            return toMoney(item.SalesCostsTotal);
                         }
                     },
                     {
@@ -111,16 +113,20 @@
             var manager = $("#maingrid4").ligerGetGridManager();
             var serchtxt = "status=" + status + "&scode=" + scode + "&SupplierID=" + SupplierID + "&rnd=" + Math.random()
             var url = ("Product.grid.xhd?" + serchtxt);
+            if (allotid.length > 0) {
+                serchtxt += "&allotid=" + allotid;
+                url = "Product_allot.gridDetail.xhd?" + serchtxt;
+            }
             $.get(url, function (rdata, textStatus) {
-             
+
                 var data = eval('(' + rdata + ')');
                 if (data.Total <= 0) {
                     $.ligerDialog.warn('该条形码未找到产品');
                 } else {
                     var rows = data.Rows;
-                    $(rows).each(function (i,v) {
+                    $(rows).each(function (i, v) {
 
-                        v.quantity = 1; 
+                        v.quantity = 1;
                         manager.addRow(v);
                         if (itemsCode.indexOf(scode) <= -1) {
                             itemsCode.push(scode);

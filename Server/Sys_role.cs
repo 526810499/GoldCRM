@@ -9,36 +9,17 @@ using XHD.Controller;
 
 namespace XHD.Server
 {
-    public class Sys_role
+    public class Sys_role : BaseCRMServer
     {
         public static BLL.Sys_role role = new BLL.Sys_role();
         public static Model.Sys_role model = new Model.Sys_role();
 
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
-        
-
+ 
         public Sys_role()
         {
         }
 
-        public Sys_role(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-            
-        }
+        public Sys_role(HttpContext context) : base(context) { }
 
         //save
         public string SysSave()

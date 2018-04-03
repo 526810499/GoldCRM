@@ -7,37 +7,19 @@ using XHD.Controller;
 
 namespace XHD.Server
 {
-    public class Finance_Invoice
+    public class Finance_Invoice : BaseCRMServer
     {
         private static BLL.Finance_Invoice invoice = new BLL.Finance_Invoice();
         private static Model.Finance_Invoice model = new Model.Finance_Invoice();
         private static BLL.Sale_order order = new BLL.Sale_order();
 
-        private HttpContext Context;
-        private string emp_id;
-        private string emp_name;
-        private Model.hr_employee employee;
-        private HttpRequest request;
-        private string uid;
-        
+ 
 
         public Finance_Invoice()
         {
         }
 
-        public Finance_Invoice(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-            
-        }
+        public Finance_Invoice(HttpContext context) : base(context) { }
 
         public string save()
         {            

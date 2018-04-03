@@ -7,36 +7,17 @@ using System.IO;
 
 namespace XHD.Server
 {
-    public class CRM_Customer
+    public class CRM_Customer : BaseCRMServer
     {
         private static BLL.CRM_Customer customer = new BLL.CRM_Customer();
         private static Model.CRM_Customer model = new Model.CRM_Customer();
 
-        private HttpContext Context;
-        private string emp_id;
-        private string emp_name;
-        private Model.hr_employee employee;
-        private HttpRequest request;
-        private string uid;
-        
-
+ 
         public CRM_Customer()
         {
         }
 
-        public CRM_Customer(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-            
-        }
+        public CRM_Customer(HttpContext context) : base(context) { }
 
         public string grid()
         {
@@ -181,7 +162,8 @@ namespace XHD.Server
             model.isPrivate = int.Parse(request["T_private_val"]);
             model.xy = PageValidate.InputText(request["T_xy"], 50);
             model.cus_extend = PageValidate.InputText(request["extendjson"], int.MaxValue);
-
+            model.birthday = request["T_birthday"].CDateTime();
+            model.integral = request["T_integral"].CInt(0,false);
             string id = PageValidate.InputText(request["id"], 50);
             if (PageValidate.checkID(id))
             {

@@ -29,7 +29,16 @@ namespace XHD.BLL
         {
             return dal.Add(model);
         }
-
+        /// <summary>
+        /// 获取调拨单下该产品对应订单状态
+        /// </summary>
+        /// <param name="allotid"></param>
+        /// <param name="barcode"></param>
+        /// <returns></returns>
+        public int GetBarCodeStatus(string allotid, string barcode)
+        {
+            return dal.GetBarCodeStatus(allotid, barcode);
+        }
         /// <summary>
         /// 更新一条数据
         /// </summary>

@@ -9,35 +9,18 @@ using XHD.Controller;
 
 namespace XHD.Server
 {
-    public class m_base
+    public class m_base : BaseCRMServer
     {
         public static BLL.Sys_Menu menu = new BLL.Sys_Menu();
         public static BLL.Sys_info info = new BLL.Sys_info();
 
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
-        
+ 
 
         public m_base()
         {
         }
 
-        public m_base(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetEmpWithToken(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);            
-        }
+        public m_base(HttpContext context) : base(context) { }
 
         public string getMenu()
         {

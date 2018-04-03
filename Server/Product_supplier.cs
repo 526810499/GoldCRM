@@ -8,36 +8,18 @@ using XHD.Controller;
 
 namespace XHD.Server
 {
-    public class Product_supplier
+    public class Product_supplier : BaseCRMServer
     {
         public static BLL.Product_supplier category = new BLL.Product_supplier();
         public static Model.Product_supplier model = new Model.Product_supplier();
 
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
-
+ 
 
         public Product_supplier()
         {
         }
 
-        public Product_supplier(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-
-        }
+        public Product_supplier(HttpContext context) : base(context) { }
 
         public string save()
         {
@@ -68,7 +50,7 @@ namespace XHD.Server
                 string UserName = emp_name;
                 string IPStreet = request.UserHostAddress;
                 string EventTitle = model.product_supplier;
-                string EventType = "产品类别修改";
+                string EventType = "供应商修改";
                 string EventID = model.id.CString("");
                 string Log_Content = null;
 
@@ -117,6 +99,10 @@ namespace XHD.Server
             DataSet ds = category.GetList($"1=1");
             var str = new StringBuilder();
             str.Append("[");
+            if (request["qxz"].CInt(0, false) == 1)
+            {
+                str.Append("{\"id\":\"\",\"text\":\"请选择\",\"d_icon\":\"\"},");
+            }
             str.Append(GetTreeString("0", ds.Tables[0]));
             str.Replace(",", "", str.Length - 1, 1);
             str.Append("]");
@@ -155,10 +141,10 @@ namespace XHD.Server
 
             var product = new BLL.Product();
             if (product.GetList($" SupplierID = {id}").Tables[0].Rows.Count > 0)
-                return XhdResult.Error("此仓库下含有产品，不允许删除！").ToString();
+                return XhdResult.Error("此供应商下含有产品，不允许删除！").ToString();
 
             if (category.GetList($"parentid = '{id}'").Tables[0].Rows.Count > 0)
-                return XhdResult.Error("此仓库下含有下级，不允许删除！").ToString();
+                return XhdResult.Error("此供应商下含有下级，不允许删除！").ToString();
 
             bool candel = true;
             if (uid != "admin")
@@ -174,7 +160,7 @@ namespace XHD.Server
             if (!isdel) return XhdResult.Error("系统错误！").ToString();
 
             //日志
-            string EventType = "产品类别删除";
+            string EventType = "供应商删除";
 
             string UserID = emp_id;
             string UserName = emp_name;

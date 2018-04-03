@@ -9,7 +9,7 @@ using XHD.SMS;
 
 namespace XHD.Server
 {
-    public class SMS
+    public class SMS : BaseCRMServer
     {
         public static BLL.Sys_info info = new BLL.Sys_info();
 
@@ -21,13 +21,6 @@ namespace XHD.Server
 
         public static SMSHelper smshelper = new SMSHelper();
 
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
-
 
         public string SerialNo;
         public string key;
@@ -38,17 +31,8 @@ namespace XHD.Server
         {
         }
 
-        public SMS(HttpContext context)
+        public SMS(HttpContext context) : base(context)
         {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
 
 
             DataSet ds = info.GetAllList();
@@ -108,7 +92,7 @@ namespace XHD.Server
         public string save()
         {
             model.sms_title = PageValidate.InputText(request["T_title"], 255);
-            model.sms_content = $"【{company}】{PageValidate.InputText(request["T_content"], int.MaxValue)}" ;
+            model.sms_content = $"【{company}】{PageValidate.InputText(request["T_content"], int.MaxValue)}";
 
             string mobiles = PageValidate.InputText(request["mobiles"], int.MaxValue);
             mobiles = mobiles.Trim().TrimEnd(',');

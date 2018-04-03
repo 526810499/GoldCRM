@@ -15,7 +15,8 @@
     <script src="../lib/jquery-validation/jquery.metadata.js" type="text/javascript"></script>
     <script src="../lib/jquery-validation/messages_cn.js" type="text/javascript"></script>
     <script src="../lib/ligerUI/js/common.js" type="text/javascript"></script>
-
+    <script src="../lib/ligerUI2/js/plugins/ligerComboBox.js"></script>
+    <script src="../lib/ligerUI2/js/plugins/ligerTree.js"></script>
     <script src="../lib/jquery.form.js" type="text/javascript"></script>
     <script src="../JS/XHD.js" type="text/javascript"></script>
 
@@ -63,6 +64,9 @@
             }
             else if (T_arrears != 0) {
                 msg = ("还有订单金额未支付确认要提交订单?");
+                if (T_arrears < 0) {
+                    msg = "应收金额比实际要收金额高,确认要提交订单?";
+                }
             }
 
             return msg;
@@ -89,8 +93,14 @@
                     var customer_id = obj.Customer_id || getparastr("customer_id");
                     if (!customer_id)
                         rows.push([{ display: "客户", name: "T_customer", validate: "{required:true}", width: 465 }])
-
+                    if (obj.dept_id == null || obj.dept_id == undefined) {
+                        obj.dept_id = "";
+                    }
                     rows.push(
+                              [
+                                { display: "会员卡号", name: "T_vipcard", type: "text", initValue: obj.vipcard },
+                                { display: "销售门店", name: "T_dept_id", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'hr_department.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + obj.dept_id + "'}", validate: "{required:true}" }
+                              ],
                             [
                                 { display: "成交时间", name: "T_date", type: "date", options: "{width:180}", validate: "{required:true}", initValue: formatTimebytype(obj.Order_date, "yyyy-MM-dd") },
                                 { display: "订单金额", name: "T_amount", type: "text", options: "{width:180,disabled:true,onChangeValue:function(){ getAmount(); }}", validate: "{required:true}", initValue: toMoney(obj.Order_amount) }
@@ -245,40 +255,33 @@
         function f_grid() {
             $("#maingrid4").ligerGrid({
                 columns: [
-
+                    { display: '产品名称', name: 'product_name', align: 'left', width: 150 },
+                    { display: '产品类别', name: 'category_name', align: 'left', width: 150 },
+                    { display: '条形码', name: 'BarCode', align: 'left', width: 180 },
                     {
-                        display: '产品', name: 'product_name', width: 120
-                    },
-                    {
-                        display: '单位', name: 'unit', width: 40
-                    },
-                    {
-                        display: '规格', name: 'specifications', width: 100
-                    },
-                    {
-                        display: '销售价', name: 'agio', width: 80, type: 'float', align: 'right', render: function (item) {
-                            return toMoney(item.agio);
+                        display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {
+                            return toMoney(item.Weight);
                         }
-                        , editor: { type: 'float' }
                     },
                     {
-                        display: '数量', name: 'quantity', width: 60, type: 'int',
-                        editor: { type: 'int', isNegative: false }
+                        display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.SalesCostsTotal);
+                        }
                     },
                     {
-                        display: '总价', name: 'amount', width: 100, type: 'float', align: 'right', render: function (item) {
-                            return toMoney(item.amount);
+                        display: '销售价格(￥)', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.SalesTotalPrice);
                         }
                     }
                 ],
                 allowHideColumn: false,
-                onAfterEdit: f_onAfterEdit,
+                //onAfterEdit: f_onAfterEdit,
                 title: '产品明细',
                 usePager: false,
-                enabledEdit: true,
+                //enabledEdit: true,
                 url: "Sale_order_details.grid.xhd?orderid=" + getparastr("id"),
                 width: '100%',
-                height: 170,
+                height: 350,
                 heightDiff: -1,
                 onLoaded: f_loaded
             });
@@ -315,7 +318,7 @@
         }
 
         function add() {
-            f_openWindow("product/GetProduct.aspx", "选择产品", 1000, 600, f_getpost, 9003);
+            f_openWindow("product/GetProduct.aspx?status=3", "选择产品", 1000, 600, f_getpost, 9003);
         }
         function pro_remove() {
             var manager = $("#maingrid4").ligerGetGridManager();
@@ -323,8 +326,7 @@
             setTimeout(function () {
                 $("#T_amount").val(toMoney(manager.getColumnDateByType('amount', 'sum') * 1.0));
                 getAmount();
-            }, 50)
-
+            }, 50);
         }
         function f_getpost(item, dialog) {
             var rows = null;
@@ -350,7 +352,7 @@
                     if (add == 1) {
                         //price
                         rows[i].quantity = 1;
-                        rows[i]["amount"] = rows[i].agio * rows[i].quantity;
+                        rows[i]["amount"] = parseFloat(rows[i].SalesCostsTotal) + parseFloat(rows[i].SalesTotalPrice);
                         manager.addRow(rows[i]);
                     }
                 }

@@ -21,12 +21,10 @@
     <script src="../JS/XHD.js?v=2" type="text/javascript"></script>
 
     <script type="text/javascript">
-        var whid = "";
 
         $(function () {
             $.metadata.setType("attr", "validate");
             XHD.validate($(form1));
-            whid = getparastr("whid", "");
             loadForm(getparastr("id"));
 
         });
@@ -34,19 +32,19 @@
         function f_save() {
             var manager = $("#maingridc4").ligerGetGridManager();
             var fdata = manager.getData();
-            var T_NowWarehouse_val = $("#T_NowWarehouse_val").val();
-            if (T_NowWarehouse_val.length <= 0) {
-                $.ligerDialog.warn('请选择调度仓库');
+            var T_allot_id = $("#T_allot_id").val();
+            if (T_allot_id.length <= 0) {
+                $.ligerDialog.warn('请填写原调拨单号');
                 return false;
             }
             if (fdata.length <= 0) {
-                $.ligerDialog.warn('请添加调度产品');
+                $.ligerDialog.warn('请添加出库产品');
                 return false;
             }
             if ($(form1).valid()) {
-                var sendtxt = "&id=" + getparastr("id");
+                var sendtxt = "T_allot_id=" + T_allot_id + "&T_Remark=" + $("#T_Remark").val() + "&id=" + getparastr("id");
                 sendtxt += "&PostData=" + JSON.stringify(GetPostData());
-                return $("form :input").fieldSerialize() + sendtxt;
+                return sendtxt;
             }
         }
         function GetPostData() {
@@ -66,7 +64,7 @@
         function loadForm(oaid) {
             $.ajax({
                 type: "get",
-                url: "Product_allot.form.xhd", /* 注意后面的名字对应CS的方法名称 */
+                url: "Product_out.form.xhd", /* 注意后面的名字对应CS的方法名称 */
                 data: { id: oaid, rnd: Math.random() }, /* 注意参数的格式和名称 */
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -80,15 +78,17 @@
 
                     rows.push(
                             [
-                             { display: "调拨仓库", name: "T_NowWarehouse", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_warehouse.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + (obj.NowWarehouse == undefined ? whid : obj.NowWarehouse) + "'}", validate: "{required:true}" }
-                            ],
-                            [
-                             { display: "状态", name: "T_Status", type: "select", options: "{width:180,disabled:true,,data:[{id:0,text:'等待提交'},{id:1,text:'等待审核'},{id:2,text:'审核通过'},{id:3,text:'审核不通过'}],selectBoxHeight:50, value:" + obj.status + "}", validate: "{required:false}" }
+                             { display: "调拨单号", name: "T_allot_id", type: "text", width: 450, validate: "{required:true}", initValue: obj.allot_id },
                             ],
                             [
                              { display: "备注", name: "T_Remark", type: "textarea", cols: 73, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.remark }
                             ]
                         );
+                    if (obj != null && obj.status >= 0) {
+                        rows.push([
+                             { display: "状态", name: "T_Status", type: "select", options: "{width:180,disabled:true,,data:[{id:0,text:'等待提交'},{id:1,text:'等待审核'},{id:2,text:'审核通过'},{id:3,text:'审核不通过'}],selectBoxHeight:50, value:" + obj.status + "}", validate: "{required:false}" }
+                        ]);
+                    }
 
                     if (!obj.discount_amount)
                         obj.discount_amount = 0;
@@ -97,7 +97,7 @@
                         labelWidth: 80, inputWidth: 180, space: 20,
                         fields: [
                             {
-                                display: '调拨', type: 'group', icon: '',
+                                display: '出库', type: 'group', icon: '',
                                 rows: rows
 
                             }
@@ -148,10 +148,10 @@
                     }
                 ],
                 allowHideColumn: false,
-                title: '产品明细',
+                title: '出库明细',
                 usePager: false,
                 enabledEdit: false,
-                url: "Product_allot.gridDetail.xhd?orderid=" + getparastr("id"),
+                url: "Product_out.gridDetail.xhd?outid=" + getparastr("id"),
                 width: '100%',
                 height: 500,
                 heightDiff: -1,
@@ -192,19 +192,54 @@
             $("#maingridc4").ligerGetGridManager()._onResize();
         }
 
+        function checkAllotID() {
+            var allotid = $("#T_allot_id").val();
+            var url = ("Product_allot.CheckAllotid.xhd?id=" + allotid);
+            var rs = false;
+            $.ajax({
+                url: url,
+                async: false,
+                dataType: "json",
+                success: function (rdata) {
+                    rs = rdata.isSuccess;
+                    if (rdata.isSuccess) {
+                        $("#T_allot_id").attr("disabled", "true");
+
+                    } else {
+                        $.ligerDialog.warn('请确认原调拨单是单号是否正确');
+
+                    }
+                }
+            });
+            return rs;
+        }
+
         function add() {
+            var r = checkAllotID();
+            if (!r) { return; }
+
+            var allotid = $("#T_allot_id").val();
+
             var buttons = [];
             buttons.push({ text: '保存', onclick: f_getpost });
-            f_openWindow2("product/GetProduct.aspx?status=1", "选择产品", 1000, 400, buttons, 9003);
+            f_openWindow2("product/GetProduct.aspx?status=2&allotid=" + allotid, "选择产品", 1000, 400, buttons, 9003);
         }
 
         function addCode() {
-            f_openWindow("product/GetCodeProduct.aspx?status=1", "选择扫码产品", 1000, 400, f_getpost, 9003);
+            var r = checkAllotID();
+            if (!r) { return; }
+            f_openWindow("product/GetCodeProduct.aspx?status=2&allotid=" + $("#T_allot_id").val(), "选择扫码产品", 1000, 400, f_getpost, 9003);
         }
 
         function pro_remove() {
             var manager = $("#maingridc4").ligerGetGridManager();
             manager.deleteSelectedRow();
+
+
+            var fdata = manager.getData();
+            if (fdata.length <= 0) {
+                $("#T_allot_id").removeAttr("disabled");
+            }
         }
 
 

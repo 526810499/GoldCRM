@@ -42,6 +42,18 @@ namespace XHD.BLL
         {
             return dal.AuthApproved(id, authuser_id, status, remark);
         }
+
+        /// <summary>
+        /// 获取调度单下的产品总数
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public int CountPorduct(string id)
+        {
+            return dal.CountPorduct(id);
+        }
+
+ 
         /// <summary>
         /// 更新一条数据
         /// </summary>

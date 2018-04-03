@@ -42,7 +42,7 @@
                 columns: [
                     //{ display: '序号', name: 'id', width: 50, render: function (item, i) { return item.n; } },
                     {
-                        display: '客户', name: 'cus_name', width: 200, align: 'left', render: function (item) {
+                        display: '客户', name: 'cus_name', width: 100, align: 'left', render: function (item) {
                             var html = "<a href='javascript:void(0)' onclick=f_cusinfo('" + item.id + "','【" + item.cus_name + "】')>";
                             if (item.cus_name)
                                 html += item.cus_name;
@@ -51,38 +51,52 @@
                         }
                     },
                     { display: '电话', name: 'cus_tel', width: 120 },
-                    { display: '客户类型', name: 'cus_type_id', width: 80, render: function (item, i) { return item.cus_type } },
-                    { display: '客户类别', name: 'cus_level_id', width: 80, render: function (item, i) { return item.cus_level } },
-                    { display: '客户来源', name: 'cus_source_id', width: 80, render: function (item, i) { return item.cus_source } },
-                    { display: '省份', name: 'Provinces_id', width: 80, render: function (item, i) { return item.Provinces } },
-                    { display: '城市', name: 'City_id', width: 80, render: function (item, i) { return item.City } },
-                    { display: '所属行业', name: 'cus_industry_id', width: 80, render: function (item, i) { return item.cus_industry } },
-                    { display: '部门', name: 'emp_id', width: 80, render: function (item, i) { return item.department } },
-                    { display: '员工', name: 'emp_id', width: 80, render: function (item, i) { return item.employee } },
-                    {
-                        display: '客源状态', name: 'isPrivate', width: 60, render: function (item, i) {
-                            if (item.isPrivate == 1) return "公客";
-                            else
-                                return "私客";
-                        }
-                    },
-                    {
-                        display: '最后跟进', name: 'lastfollow', width: 90, render: function (item) {
-                            var lastfollow = formatTimebytype(item.lastfollow, 'yyyy-MM-dd');
-                            if (lastfollow == "1900-01-01")
-                                lastfollow = "";
-                            return lastfollow;
-                        }
-                    },
-                    {
-                        display: '创建时间',
-                        name: 'create_time',
-                        width: 90,
-                        render: function (item) {
-                            var create_time = formatTimebytype(item.create_time, 'yyyy-MM-dd');
-                            return create_time;
-                        }
+                {
+                    display: '客户生日',
+                    name: 'birthday',
+                    width: 90,
+                    render: function (item) {
+                        var create_time = formatTimebytype(item.birthday, 'yyyy-MM-dd');
+                        return create_time;
                     }
+                },
+                {
+                    display: "客户积分",
+                    name: "integral",
+                    width: 90,
+                },
+                { display: '客户类型', name: 'cus_type_id', width: 80, render: function (item, i) { return item.cus_type } },
+        { display: '客户类别', name: 'cus_level_id', width: 80, render: function (item, i) { return item.cus_level } },
+        { display: '客户来源', name: 'cus_source_id', width: 80, render: function (item, i) { return item.cus_source } },
+        { display: '省份', name: 'Provinces_id', width: 80, render: function (item, i) { return item.Provinces } },
+        { display: '城市', name: 'City_id', width: 80, render: function (item, i) { return item.City } },
+        { display: '所属行业', name: 'cus_industry_id', width: 80, render: function (item, i) { return item.cus_industry } },
+        { display: '员工', name: 'emp_id', width: 80, render: function (item, i) { return item.employee } },
+
+        {
+            display: '客源状态', name: 'isPrivate', width: 60, render: function (item, i) {
+                if (item.isPrivate == 1) return "公客";
+                else
+                    return "私客";
+            }
+        },
+        {
+            display: '最后跟进', name: 'lastfollow', width: 90, render: function (item) {
+                var lastfollow = formatTimebytype(item.lastfollow, 'yyyy-MM-dd');
+                if (lastfollow == "1900-01-01")
+                    lastfollow = "";
+                return lastfollow;
+            }
+        },
+        {
+            display: '创建时间',
+            name: 'create_time',
+            width: 90,
+            render: function (item) {
+                var create_time = formatTimebytype(item.create_time, 'yyyy-MM-dd');
+                return create_time;
+            }
+        }
                 ],
                 rownumbers: true,
                 onbeforeLoaded: function (grid, data) {
@@ -336,11 +350,17 @@
 
     </script>
     <style type="text/css">
-        .l-treeleve1 { background: yellow; }
+        .l-treeleve1 {
+            background: yellow;
+        }
 
-        .l-treeleve2 { background: yellow; }
+        .l-treeleve2 {
+            background: yellow;
+        }
 
-        .l-treeleve3 { background: #eee; }
+        .l-treeleve3 {
+            background: #eee;
+        }
     </style>
 </head>
 <body>
@@ -349,7 +369,7 @@
 
         <div id="grid" style="">
             <form id="form1" onsubmit=" return false ">
-                <div id="maingrid4" style=" min-width: 800px;"></div>
+                <div id="maingrid4" style="min-width: 800px;"></div>
             </form>
 
         </div>

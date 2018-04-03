@@ -6,36 +6,17 @@ using XHD.Controller;
 
 namespace XHD.Server
 {
-    public class Product
+    public class Product : BaseCRMServer
     {
         public static BLL.Product product = new BLL.Product();
         public static Model.Product model = new Model.Product();
 
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
-
-
+ 
         public Product()
         {
         }
 
-        public Product(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-
-        }
+        public Product(HttpContext context) : base(context) { }
 
         public string save()
         {
@@ -178,7 +159,7 @@ namespace XHD.Server
             if (!string.IsNullOrEmpty(request["scode"]))
                 serchtxt += $" and BarCode='{ PageValidate.InputText(request["scode"], 255) }'";
 
-            if (!string.IsNullOrEmpty(request["status"])&& request["status"].CString("")!="null")
+            if (!string.IsNullOrEmpty(request["status"]) && request["status"].CString("") != "null")
                 serchtxt += $" and status={request["status"].CInt(0, false)}";
             if (!string.IsNullOrEmpty(request["SupplierID"]) && request["SupplierID"].CString("") != "null")
                 serchtxt += $" and SupplierID='{request["SupplierID"].CString("")}'";
@@ -211,8 +192,11 @@ namespace XHD.Server
             var ccod = new BLL.Sale_order_details();
             if (ccod.GetList($"product_id = '{id}'").Tables[0].Rows.Count > 0)
                 return XhdResult.Error("此产品下含有订单，不允许删除！").ToString();
-
-
+            int cblls = new BLL.Product_allotDetail().GetBarCodeStatus(id, ds.Tables[0].Rows[0]["barcode"].CString(""));
+            if (cblls != 3)
+            {
+                return XhdResult.Error("此产品下含有调拨单，不允许删除！").ToString();
+            }
 
             bool candel = true;
             if (uid != "admin")

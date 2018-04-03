@@ -11,36 +11,18 @@ using System.Text;
 
 namespace XHD.Server
 {
-    public class hr_employee
+    public class hr_employee : BaseCRMServer
     {
         public static BLL.hr_employee emp = new BLL.hr_employee();
         public static Model.hr_employee model = new Model.hr_employee();
 
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
-
+ 
 
         public hr_employee()
         {
         }
 
-        public hr_employee(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-
-        }
+        public hr_employee(HttpContext context) : base(context) { }
 
         public string grid()
         {

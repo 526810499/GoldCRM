@@ -7,37 +7,16 @@ using XHD.Controller;
 
 namespace XHD.Server
 {
-    public class Tool_batch
+    public class Tool_batch : BaseCRMServer
     {
         public static BLL.Tool_batch batch = new BLL.Tool_batch();
         public static Model.Tool_batch model = new Model.Tool_batch();
-
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
-        
-
+ 
         public Tool_batch()
         {
         }
 
-        public Tool_batch(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-            
-        }
-
+        public Tool_batch(HttpContext context) : base(context) { }
 
         public void save()
         {

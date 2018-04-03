@@ -9,36 +9,18 @@ using XHD.Controller;
 
 namespace XHD.Server
 {
-    public class m_contact
+    public class m_contact : BaseCRMServer
     {
         public static BLL.CRM_Contact contact = new BLL.CRM_Contact();
         public static Model.CRM_Contact model = new Model.CRM_Contact();
-
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
+ 
         
 
         public m_contact()
         {
         }
 
-        public m_contact(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetEmpWithToken(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-            
-        }
+        public m_contact(HttpContext context) : base(context) { }
 
         public string list()
         {

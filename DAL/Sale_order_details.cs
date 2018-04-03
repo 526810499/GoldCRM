@@ -9,13 +9,13 @@ namespace XHD.DAL
     /// <summary>
 	/// 数据访问类:Sale_order_details
 	/// </summary>
-	public partial class Sale_order_details
+	public partial class Sale_order_details : BaseTransaction
     {
         public Sale_order_details()
         { }
 
         #region  BasicMethod
-        
+
         /// <summary>
         /// 增加一条数据
         /// </summary>
@@ -23,30 +23,33 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Sale_order_details(");
-            strSql.Append("order_id,product_id,agio,quantity,amount)");
+            strSql.Append("order_id,product_id,agio,quantity,amount,BarCode)");
             strSql.Append(" values (");
-            strSql.Append("@order_id,@product_id,@agio,@quantity,@amount)");
+            strSql.Append("@order_id,@product_id,@agio,@quantity,@amount,@BarCode); ");
+            strSql.AppendLine(" update Product set status=4 where id=@product_id; ");
             SqlParameter[] parameters = {
                     new SqlParameter("@order_id", SqlDbType.VarChar,250),
                     new SqlParameter("@product_id", SqlDbType.VarChar,250),
                     new SqlParameter("@agio", SqlDbType.Decimal,9),
                     new SqlParameter("@quantity", SqlDbType.Int,4),
-                    new SqlParameter("@amount", SqlDbType.Decimal,9)};
+                    new SqlParameter("@amount", SqlDbType.Decimal,9),
+                    new SqlParameter("@BarCode", SqlDbType.VarChar,50),
+            };
             parameters[0].Value = model.order_id;
             parameters[1].Value = model.product_id;
             parameters[2].Value = model.agio;
             parameters[3].Value = model.quantity;
             parameters[4].Value = model.amount;
+            parameters[5].Value = model.BarCode;
 
-            int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
-            if (rows > 0)
+            SqlCommand cmd = new SqlCommand();
+            cmd.CommandText = strSql.ToString();
+            foreach (SqlParameter par in parameters)
             {
-                return true;
+                cmd.Parameters.Add(par);
             }
-            else
-            {
-                return false;
-            }
+
+            return ExecTran(cmd, 2);
         }
 
         /// <summary>
@@ -92,8 +95,8 @@ namespace XHD.DAL
 
             StringBuilder strSql = new StringBuilder();
             strSql.Append("delete from Sale_order_details ");
-            strSql.Append(" where "+whereStr);
-           
+            strSql.Append(" where " + whereStr);
+
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString());
             if (rows > 0)
             {
@@ -104,6 +107,28 @@ namespace XHD.DAL
                 return false;
             }
         }
+
+
+        /// <summary>
+        /// 删除一条数据
+        /// </summary>
+        public bool Delete(string order_id, string product_id)
+        {
+
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("delete from Sale_order_details where order_id=@order_id and  product_id=@product_id; ");
+            strSql.AppendLine(" update Product set status=3 where id=@product_id; ");
+
+
+            SqlCommand cmd = new SqlCommand();
+            cmd.CommandText = strSql.ToString();
+
+            cmd.Parameters.Add(new SqlParameter("@order_id", SqlDbType.VarChar, 250) { Value = order_id });
+            cmd.Parameters.Add(new SqlParameter("@product_id", SqlDbType.VarChar, 50) { Value = product_id });
+
+            return ExecTran(cmd, 2);
+        }
+
 
         /// <summary>
         /// 获得数据列表
@@ -120,8 +145,14 @@ namespace XHD.DAL
             strSql.Append("      , Product.product_name ");
             strSql.Append("      , Product.specifications ");
             strSql.Append("      , Product.unit ");
-            strSql.Append("FROM[dbo].[Sale_order_details] ");
+            strSql.Append("      , Product.BarCode ");
+            strSql.Append("      , isnull(Product.SalesCostsTotal,0) as SalesCostsTotal ");
+            strSql.Append("      , isnull(Product.SalesTotalPrice,0 ) as SalesTotalPrice");
+            strSql.Append("      , Product.Weight ");
+            strSql.Append("      ,Product_category.product_category as category_name ");
+            strSql.Append("  FROM[dbo].[Sale_order_details] ");
             strSql.Append("  INNER JOIN Product ON Product.id = Sale_order_details.product_id ");
+            strSql.Append("  INNER JOIN Product_category(nolock) ON Product.category_id = Product_category.id ");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);

@@ -6,36 +6,19 @@ using System;
 
 namespace XHD.Server
 {
-    public class m_notice
+    public class m_notice : BaseCRMServer
     {
         public static BLL.public_notice notice = new BLL.public_notice();
         public static Model.public_notice model = new Model.public_notice();
 
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
+ 
         
 
         public m_notice()
         {
         }
 
-        public m_notice(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetEmpWithToken(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-            
-        }
+        public m_notice(HttpContext context) : base(context) { }
 
         public string list()
         {

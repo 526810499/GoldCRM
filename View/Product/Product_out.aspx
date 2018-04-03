@@ -18,21 +18,10 @@
         var manager = "";
         var treemanager;
         $(function () {
-            $("#layout1").ligerLayout({ leftWidth: 200, allowLeftResize: false, allowLeftCollapse: true, space: 2, heightDiff: -5 });
-            $("#tree1").ligerTree({
-                url: 'Product_warehouse.tree.xhd?qb=1&rnd=' + Math.random(),
-                onSelect: onSelect,
-                idFieldName: 'id',
-                //parentIDFieldName: 'pid',
-                usericon: 'd_icon',
-                checkbox: false,
-                itemopen: false,
-                onSuccess: function () {
-                    //$(".l-first div:first").click();
-                }
-            });
+            // $("#layout1").ligerLayout({   allowLeftResize: false, allowLeftCollapse: true, space: 2, heightDiff: -5 });
 
-            treemanager = $("#tree1").ligerGetTreeManager();
+
+            // treemanager = $("#tree1").ligerGetTreeManager();
 
             initLayout();
             $(window).resize(function () {
@@ -41,11 +30,11 @@
 
             $("#maingrid4").ligerGrid({
                 columns: [
-                    { display: '订单号', name: 'id', align: 'left', width: 250 },
-                    { display: '调拨到仓库', name: 'NowWarehouseName', align: 'left', width: 120 },
+                    { display: '出库订单号', name: 'id', align: 'left', width: 300 },
+                    { display: '调拨单号', name: 'allot_id', align: 'left', width: 300 },
                     { display: '创建人', name: 'CreateName', align: 'left', width: 160 },
                     {
-                        display: '创建时间', name: 'create_time', width: 50, align: 'left', render: function (item) {
+                        display: '创建时间', name: 'create_time', width: 100, align: 'left', render: function (item) {
                             return toMoney(item.Weight);
                         }
                     },
@@ -63,17 +52,54 @@
                             }
                         }
                     },
-                    { display: '备注', name: 'remark', width: 100 }
+                    { display: '备注', name: 'remark', width: 120 }
 
                 ],
                 dataAction: 'server',
-                url: "Product_allot.grid.xhd?rnd=" + Math.random(),
+                url: "Product_out.grid.xhd?rnd=" + Math.random(),
                 pageSize: 30,
                 pageSizeOptions: [20, 30, 50, 100],
                 width: '100%',
                 height: '100%',
                 heightDiff: -8,
+                detail: {
+                    height: 'auto',
+                    onShowDetail: function (r, p) {
+                        for (var n in r) {
+                            if (r[n] == null) r[n] = "";
+                        }
+                        var grid = document.createElement('div');
+                        $(p).append(grid);
+                        $(grid).css('margin', 3).ligerGrid({
+                            columns: [
+                                { display: '产品名称', name: 'product_name', align: 'left', width: 120 },
+                                { display: '产品类别', name: 'category_name', align: 'left', width: 120 },
+                                { display: '条形码', name: 'BarCode', align: 'left', width: 200 },
+                                {
+                                    display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {
+                                        return toMoney(item.Weight);
+                                    }
+                                },
+                                {
+                                    display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
+                                        return toMoney(item.CostsTotal);
+                                    }
+                                },
+                                {
+                                    display: '销售价格(￥)', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
+                                        return toMoney(item.SalesTotalPrice);
+                                    }
+                                }
+                            ],
+                            usePager: false,
+                            checkbox: false,
+                            url: "Product_out.gridDetail.xhd?outid=" + r.id,
+                            width: '99%', height: '180',
+                            heightDiff: 0
+                        })
 
+                    }
+                },
                 onContextmenu: function (parm, e) {
                     actionCustomerID = parm.data.id;
                     menu.show({ top: e.pageY, left: e.pageX });
@@ -84,7 +110,7 @@
 
         });
         function toolbar() {
-            $.get("toolbar.GetSys.xhd?mid=product_list&rnd=" + Math.random(), function (data, textStatus) {
+            $.get("toolbar.GetSys.xhd?mid=product_out&rnd=" + Math.random(), function (data, textStatus) {
                 var data = eval('(' + data + ')');
                 //alert(data);
                 var items = [];
@@ -93,7 +119,9 @@
                     arr[i].icon = "../" + arr[i].icon;
                     items.push(arr[i]);
                 }
-                items.push({ type: 'textbox', id: 'sorderid', text: '调拨单号：' });
+                items.push({ type: 'textbox', id: 'sstatus', text: '状态：' });
+                items.push({ type: 'textbox', id: 'sorderid', text: '出库单号：' });
+                items.push({ type: 'textbox', id: 'allotid', text: '调拨单号：' });
                 items.push({ type: 'textbox', id: 'scode', text: '条形码：' });
                 items.push({ type: 'button', text: '搜索', icon: '../images/search.gif', disable: true, click: function () { doserch() } });
 
@@ -101,11 +129,20 @@
                     items: items
 
                 });
-                menu = $.ligerMenu({
-                    width: 120, items: getMenuItems(data)
-                });
+                //menu = $.ligerMenu({
+                //    width: 120, items: getMenuItems(data)
+                //});
                 $("#sorderid").ligerTextBox({ width: 200 });
                 $("#scode").ligerTextBox({ width: 250 });
+                $("#sstatus").ligerComboBox({
+                    data: [
+                    { text: '所有', id: '' },
+                    { text: '等待提交', id: '0' },
+                    { text: '等待审核', id: '1' },
+                    { text: '审核通过', id: '2' },
+                    { text: '审核不通过', id: '3' }
+                    ], valueFieldID: 'status',
+                });
                 $("#maingrid4").ligerGetGridManager()._onResize();
             });
         }
@@ -118,19 +155,14 @@
         function doserch() {
             var sendtxt = "&rnd=" + Math.random();
             var serchtxt = $("#form1 :input").fieldSerialize() + sendtxt;
-            var tdata = treemanager.getSelected();
-            var cid = "";
-            if (tdata != null && tdata.data != null) {
-                cid = tdata.data.id;
-            }
-            serchtxt += "&whid=" + cid;
+
             var manager = $("#maingrid4").ligerGetGridManager();
-            manager._setUrl("Product_allot.grid.xhd?" + serchtxt);
+            manager._setUrl("Product_out.grid.xhd?" + serchtxt);
         }
 
         //重置
         function doclear() {
-            //var serchtxt = $("#serchform :input").reset();
+
             $("#form1").each(function () {
                 this.reset();
             });
@@ -145,7 +177,7 @@
                     buttons.push({ text: '审核通过', onclick: f_saveYesAuth });
                     buttons.push({ text: '审核不通过', onclick: f_saveNoAuth });
                 }
-                f_openWindow2('product/Product_allotAdd.aspx?authbtn=1&orderid=' + rows.id, "审核调拨单", 700, 580, buttons);
+                f_openWindow2('product/Product_outAdd.aspx?authbtn=1&id=' + rows.id + "&astatus=" + rows.status, "审核出库单", 1050, 680, buttons);
             }
             else {
                 $.ligerDialog.warn('请选择产品！');
@@ -162,32 +194,27 @@
                     buttons.push({ text: '保存', onclick: f_save });
                     buttons.push({ text: '保存并提交审核', onclick: f_saveAuth });
                 }
-                f_openWindow2('product/Product_allotAdd.aspx?id=' + rows.id + "&astatus=" + rows.status, "修改调拨单", 700, 580, buttons);
+                f_openWindow2('product/Product_outAdd.aspx?id=' + rows.id + "&astatus=" + rows.status, "修改出库单", 1050, 680, buttons);
             }
             else {
                 $.ligerDialog.warn('请选择产品！');
             }
         }
         function add() {
-            var notes = $("#tree1").ligerGetTreeManager().getSelected();
-            var whid = "";
-            if (notes != null && notes != undefined) {
-                whid = notes.data.id;
-            }
             var buttons = [];
             buttons.push({ text: '保存', onclick: f_save });
             buttons.push({ text: '保存并提交审核', onclick: f_saveAuth });
-            f_openWindow2('product/Product_allotAdd.aspx?astatus=0&whid=' + whid, "新增调拨单", 1050, 580, buttons);
+            f_openWindow2('product/Product_outAdd.aspx?astatus=0', "新增出库单", 1050, 680, buttons);
         }
 
         function del() {
             var manager = $("#maingrid4").ligerGetGridManager();
             var row = manager.getSelectedRow();
             if (row) {
-                $.ligerDialog.confirm("调拨单删除不能恢复，确定删除？", function (yes) {
+                $.ligerDialog.confirm("出库单删除不能恢复，确定删除？", function (yes) {
                     if (yes) {
                         $.ajax({
-                            url: "Product_allot.del.xhd", type: "POST",
+                            url: "Product_out.del.xhd", type: "POST",
                             data: { id: row.id, rnd: Math.random() },
                             dataType: 'json',
                             success: function (result) {
@@ -211,7 +238,7 @@
                 })
             }
             else {
-                $.ligerDialog.warn("请选择调拨单");
+                $.ligerDialog.warn("请选择出库单");
             }
 
         }
@@ -230,7 +257,7 @@
                 dialog.close();
                 $.ligerDialog.waitting('数据保存中,请稍候...');
                 $.ajax({
-                    url: "Product_allot.save.xhd?auth=" + auth, type: "POST",
+                    url: "Product_out.save.xhd?auth=" + auth, type: "POST",
                     data: issave,
                     dataType: 'json',
                     success: function (result) {
@@ -270,7 +297,7 @@
                 dialog.close();
                 $.ligerDialog.waitting('数据保存中,请稍候...');
                 $.ajax({
-                    url: "Product_allot.Auth.xhd?auth=" + auth, type: "POST",
+                    url: "Product_out.Auth.xhd?auth=" + auth, type: "POST",
                     data: issave,
                     dataType: 'json',
                     success: function (result) {
@@ -310,11 +337,7 @@
     <div style="padding: 5px 10px 0px 5px;">
         <form id="form1" onsubmit="return false">
             <div id="layout1" style="">
-                <div position="left" title="仓库">
-                    <div id="treediv" style="width: 200px; height: 100%; margin: -1px; float: left; overflow: auto; margin-top: 2px;">
-                        <ul id="tree1"></ul>
-                    </div>
-                </div>
+
                 <div position="center">
                     <div id="toolbar" style="margin-top: 10px;"></div>
                     <div id="maingrid4" style="margin: -1px;"></div>

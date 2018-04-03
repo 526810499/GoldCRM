@@ -10,7 +10,7 @@ namespace XHD.DAL
     /// <summary>
     /// 数据访问类:Product_allotDetail
     /// </summary>
-    public partial class Product_allotDetail
+    public partial class Product_allotDetail : BaseTransaction
     {
         public Product_allotDetail()
         { }
@@ -30,41 +30,22 @@ namespace XHD.DAL
             return DbHelperSQL.Exists(strSql.ToString(), parameters);
         }
 
-        private bool ExecTran(System.Data.SqlClient.SqlCommand cm, int execRows)
+        /// <summary>
+        /// 获取调拨单下该产品对应订单状态
+        /// </summary>
+        /// <param name="allotid"></param>
+        /// <param name="barcode"></param>
+        /// <returns></returns>
+        public int GetBarCodeStatus(string allotid, string barcode)
         {
-            System.Data.SqlClient.SqlConnection cnn = new System.Data.SqlClient.SqlConnection(DbHelperSQL.connectionString);
-            bool rs = false;
-            cm.Connection = cnn;
-            cnn.Open();
-            System.Data.SqlClient.SqlTransaction trans = cnn.BeginTransaction();
-            try
-            {
-                cm.Transaction = trans;
-                rs = cm.ExecuteNonQuery() == execRows;
-                if (rs)
-                {
-                    trans.Commit();
-
-                }
-                else {
-                    trans.Rollback();
-                }
-            }
-            catch (Exception error)
-            {
-                trans.Rollback();
-                SoftLog.LogStr(error.ToString(), "Product_allotDetail");
-            }
-            finally
-            {
-                cnn.Close();
-                trans.Dispose();
-                cnn.Dispose();
-            }
-            return rs;
+            string sql = @"SELECT status FROM  Product_allotDetail(NOLOCK) INNER JOIN Product_allot(NOLOCK) ON dbo.Product_allot.id = dbo.Product_allotDetail.allotid
+                        where allotid=@allotid and barcode=@barcode";
+            SqlParameter[] parameters = {
+                    new SqlParameter("@allotid", SqlDbType.VarChar,50) { Value=allotid}  ,
+                  new SqlParameter("@barcode", SqlDbType.VarChar,50) { Value=barcode}  ,
+            };
+            return DbHelperSQL.ExecuteScalar(sql, parameters).CInt(0, false);
         }
-
-
         /// <summary>
         /// 增加一条数据
         /// </summary>
@@ -72,7 +53,7 @@ namespace XHD.DAL
         {
             bool rs = false;
             StringBuilder strSql = new StringBuilder();
-            strSql.Append(" if not exists(select 1 from Product_allotDetail where barcode=@barcode) begin");
+            strSql.Append(" if not exists(select 1 from Product_allotDetail where barcode=@barcode) begin ");
             strSql.AppendLine("insert into Product_allotDetail(");
             strSql.Append("id,allotid,barcode,FromWarehouse,create_id,create_time)");
             strSql.Append(" values (");
@@ -181,7 +162,7 @@ namespace XHD.DAL
 
             StringBuilder strSql = new StringBuilder();
             strSql.Append("delete from Product_allotDetail ");
-            strSql.Append(" where allotid=allotid and barcode=@barcode ");
+            strSql.Append(" where allotid=@allotid and barcode=@barcode ");
             strSql.AppendLine(" update Product set Status=1 where barcode=@barcode");
             SqlParameter[] parameters = {
                     new SqlParameter("@allotid", SqlDbType.VarChar,50) { Value=allotid}  ,

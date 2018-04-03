@@ -6,37 +6,17 @@ using System;
 
 namespace XHD.Server
 {
-    public class m_note
+    public class m_note : BaseCRMServer
     {
         public static BLL.Personal_notes note = new BLL.Personal_notes();
         public static Model.Personal_notes model = new Model.Personal_notes();
-
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
-        
+ 
 
         public m_note()
         {
         }
 
-        public m_note(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetEmpWithToken(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-            
-        }
-
+        public m_note(HttpContext context) : base(context) { }
         public string list()
         {
             int PageIndex = int.Parse(request["pageindex"] == null ? "1" : request["pageindex"]);

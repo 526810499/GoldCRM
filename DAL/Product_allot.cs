@@ -10,7 +10,7 @@ namespace XHD.DAL
     /// <summary>
     /// 数据访问类:Product_allot
     /// </summary>
-    public class Product_allot
+    public class Product_allot : BaseTransaction
     {
         public Product_allot()
         { }
@@ -71,39 +71,6 @@ namespace XHD.DAL
         }
 
 
-        private bool ExecTran(System.Data.SqlClient.SqlCommand cm, int execRows)
-        {
-            System.Data.SqlClient.SqlConnection cnn = new System.Data.SqlClient.SqlConnection(DbHelperSQL.connectionString);
-            bool rs = false;
-            cm.Connection = cnn;
-            cnn.Open();
-            System.Data.SqlClient.SqlTransaction trans = cnn.BeginTransaction();
-            try
-            {
-                cm.Transaction = trans;
-                rs = cm.ExecuteNonQuery() == execRows;
-                if (rs)
-                {
-                    trans.Commit();
-                }
-                else {
-                    trans.Rollback();
-                }
-            }
-            catch (Exception error)
-            {
-                trans.Rollback();
-                SoftLog.LogStr(error.ToString(), "Product_allot");
-            }
-            finally
-            {
-                cnn.Close();
-                trans.Dispose();
-                cnn.Dispose();
-            }
-            return rs;
-        }
-
 
         /// <summary>
         /// 更新一条数据
@@ -138,6 +105,11 @@ namespace XHD.DAL
             }
         }
 
+        /// <summary>
+        /// 获取调度单下的产品总数
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public int CountPorduct(string id)
         {
 
@@ -145,7 +117,7 @@ namespace XHD.DAL
             SqlParameter[] par = { new SqlParameter("@allotid", SqlDbType.VarChar, 50) { Value = id }, };
             return DbHelperSQL.ExecuteScalar(sql, par).CInt(0, false);
         }
-
+ 
         /// <summary>
         /// 审核
         /// </summary>
@@ -154,7 +126,7 @@ namespace XHD.DAL
         /// <param name="status"></param>
         /// <param name="remark"></param>
         /// <returns></returns>
-        public bool AuthApproved(string id, string authuser_id, int status,string remark)
+        public bool AuthApproved(string id, string authuser_id, int status, string remark)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("update Product_allot set ");

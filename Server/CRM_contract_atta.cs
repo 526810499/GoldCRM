@@ -8,36 +8,17 @@ using System.Text;
 
 namespace XHD.Server
 {
-    public class CRM_contract_atta
+    public class CRM_contract_atta : BaseCRMServer
     {
         private static BLL.CRM_contract_atta atta = new BLL.CRM_contract_atta();
         private static Model.CRM_contract_atta model = new Model.CRM_contract_atta();
 
-        private HttpContext Context;
-        private string emp_id;
-        private string emp_name;
-        private Model.hr_employee employee;
-        private HttpRequest request;
-        private string uid;
-
-
+ 
         public CRM_contract_atta()
         {
         }
 
-        public CRM_contract_atta(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-
-        }
+        public CRM_contract_atta(HttpContext context) : base(context) { }
 
         public string grid()
         {

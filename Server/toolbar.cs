@@ -6,35 +6,16 @@ using XHD.Controller;
 
 namespace XHD.Server
 {
-    public class toolbar
+    public class toolbar : BaseCRMServer
     {
         public static BLL.Sys_Button btn = new BLL.Sys_Button();
-
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
-        
+ 
 
         public toolbar()
         {
         }
 
-        public toolbar(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-            
-        }
+        public toolbar(HttpContext context) : base(context) { }
 
         public string GetSys()
         {

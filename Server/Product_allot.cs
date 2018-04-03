@@ -10,7 +10,7 @@ namespace XHD.Server
     /// <summary>
     /// 调拨
     /// </summary>
-    public class Product_allot
+    public class Product_allot : BaseCRMServer
     {
         public static BLL.Product product = new BLL.Product();
         public static BLL.Product_allot allotBll = new BLL.Product_allot();
@@ -18,29 +18,15 @@ namespace XHD.Server
 
         public static Model.Product_allot model = new Model.Product_allot();
 
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee employee;
-        public HttpRequest request;
-        public string uid;
 
 
         public Product_allot()
         {
         }
 
-        public Product_allot(HttpContext context)
+        public Product_allot(HttpContext context) : base(context)
         {
-            Context = context;
-            request = context.Request;
 
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
 
         }
 
@@ -66,14 +52,14 @@ namespace XHD.Server
                     return XhdResult.Error("产品信息为空,请确认后在操作！").ToString();
                 }
 
-                if (PageValidate.checkID(id))
+                if (PageValidate.checkID(id, false))
                 {
                     isAdd = false;
                     int status = request["auth"].CInt(0, false);
                     //需要判断是否有审核权限
                     if (status > 1)
                     {
-                        if (new GetAuthorityByUid().GetBtnAuthority("product_allot", "38ED924E-E025-4FD0-87CB-D148EA2077A8"))
+                        if (new GetAuthorityByUid().GetBtnAuthority(emp_id, "38ED924E-E025-4FD0-87CB-D148EA2077A8"))
                         {
                             return XhdResult.Error("您没有该操作权限,请确认后在操作！").ToString();
                         }
@@ -120,7 +106,7 @@ namespace XHD.Server
                 {
                     model.create_id = emp_id;
                     model.create_time = DateTime.Now;
-                    id = Guid.NewGuid().ToString();
+                    id = "DB-" + DateTime.Now.ToString("yy-MM-dd-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
                     model.id = id;
                     model.status = request["auth"].CInt(0, false) == 1 ? 1 : 0;
 
@@ -190,6 +176,10 @@ namespace XHD.Server
 
             if (!string.IsNullOrEmpty(request["whid"]))
                 serchtxt += $" and NowWarehouse={request["whid"].CInt(0, false)}";
+
+            if (!string.IsNullOrEmpty(request["status"]))
+                serchtxt += $" and status={request["status"].CInt(0, false)}";
+
             if (!string.IsNullOrEmpty(request["sorderid"]))
                 serchtxt += $" and id='{PageValidate.InputText(request["sorderid"], 50)}'";
 
@@ -203,6 +193,7 @@ namespace XHD.Server
                 }
                 serchtxt += $" and id='{dsc.Tables[0].Rows[0]["allotid"]}'";
             }
+            serchtxt = GetSQLCreateIDWhere(serchtxt, true);
 
             DataSet ds = allotBll.GetList(PageSize, PageIndex, serchtxt, sorttext, out Total);
             string dt = GetGridJSON.DataTableToJSON1(ds.Tables[0], Total);
@@ -229,9 +220,9 @@ namespace XHD.Server
 
             string Total;
             string serchtxt = $" 1=1 ";
-            if (!string.IsNullOrEmpty(request["orderid"]) && request["orderid"] != "null")
+            if (!string.IsNullOrEmpty(request["allotid"]) && request["allotid"] != "null")
             {
-                serchtxt += $" and allotid='{PageValidate.InputText(request["orderid"], 50)}'";
+                serchtxt += $" and allotid='{PageValidate.InputText(request["allotid"], 50)}'";
             }
             else {
                 return GetGridJSON.DataTableToJSON1(new DataTable(), "0");
@@ -255,7 +246,7 @@ namespace XHD.Server
         /// <returns></returns>
         public string form(string id)
         {
-            if (!PageValidate.checkID(id) || id == "null") return "{}";
+            if (!PageValidate.checkID(id, false) || id == "null") return "{}";
             id = PageValidate.InputText(id, 50);
             DataSet ds = allotBll.GetList($" id= '{id}' ");
             return DataToJson.DataToJSON(ds);
@@ -269,13 +260,13 @@ namespace XHD.Server
         /// <returns></returns>
         public string Auth(string id)
         {
-            if (new GetAuthorityByUid().GetBtnAuthority("product_allot", "38ED924E-E025-4FD0-87CB-D148EA2077A8"))
+            if (new GetAuthorityByUid().GetBtnAuthority(emp_id, "38ED924E-E025-4FD0-87CB-D148EA2077A8"))
             {
                 return XhdResult.Error("您没有该操作权限,请确认后在操作！").ToString();
             }
             id = PageValidate.InputText(request["id"], 50);
             string remark = PageValidate.InputText(request["remark"], 250);
-            if (PageValidate.checkID(id))
+            if (PageValidate.checkID(id, false))
             {
                 int status = request["auth"].CInt(0, false);
 
@@ -304,17 +295,29 @@ namespace XHD.Server
         /// <returns></returns>
         public string del(string id)
         {
-            if (!PageValidate.checkID(id)) return XhdResult.Error("参数错误！").ToString();
+            if (!PageValidate.checkID(id, false)) return XhdResult.Error("参数错误！").ToString();
             id = PageValidate.InputText(id, 50);
             DataSet ds = allotBll.GetList($" id= '{id}' ");
             if (ds.Tables[0].Rows.Count < 1)
                 return XhdResult.Error("系统错误，无数据！").ToString();
 
+            int status = ds.Tables[0].Rows[0]["status"].CInt(0, false);
 
-            if (allotDetailBll.GetList($"allotid = '{id}'").Tables[0].Rows.Count > 0)
-                return XhdResult.Error("此调拨单下含有产品信息，不允许删除！").ToString();
+            //审核不通过不需要盘点
+            if (status != 3)
+            {
+                if (allotDetailBll.GetList($"allotid = '{id}'").Tables[0].Rows.Count > 0)
+                    return XhdResult.Error("此调拨单下含有产品信息，不允许删除！").ToString();
 
-
+                DataSet outDset = new BLL.Product_out().GetList($"allot_id = '{id}'");
+                if (outDset != null && outDset.Tables[0].Rows.Count > 0)
+                {
+                    if (outDset.Tables[0].Rows[0]["status"].CInt(0, false) != 3)
+                    {
+                        return XhdResult.Error("此调拨单下含有出库单信息，不允许删除！").ToString();
+                    }
+                }
+            }
 
             bool candel = true;
             if (uid != "admin")
@@ -344,6 +347,32 @@ namespace XHD.Server
 
             return XhdResult.Success().ToString();
 
+        }
+
+
+
+        /// <summary>
+        /// 检查调度单ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public string CheckAllotid(string id)
+        {
+            id = PageValidate.InputText(request["id"], 50);
+            string remark = PageValidate.InputText(request["remark"], 250);
+            if (PageValidate.checkID(id, false))
+            {
+                bool r = allotBll.CountPorduct(id) > 0;
+                if (r)
+                {
+                    return XhdResult.Success().ToString();
+                }
+                else {
+                    return XhdResult.Error("请确认调度是否正确,调度单下是否有产品").ToString();
+                }
+            }
+
+            return XhdResult.Error("请确认调度是否正确").ToString();
         }
     }
 }

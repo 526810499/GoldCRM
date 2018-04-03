@@ -18,6 +18,11 @@ namespace XHD.Model
         private decimal? _amount;
         
         /// <summary>
+        /// 商品条形码
+        /// </summary>
+        public string BarCode { get; set; }
+
+        /// <summary>
         /// 
         /// </summary>
         public string order_id

@@ -8,35 +8,18 @@ using System.Web.Security;
 
 namespace XHD.Server
 {
-    public class m_personal
+    public class m_personal : BaseCRMServer
     {
         public static BLL.hr_employee employee = new BLL.hr_employee();
         public static Model.hr_employee model = new Model.hr_employee();
 
-        public HttpContext Context;
-        public string emp_id;
-        public string emp_name;
-        public Model.hr_employee _model;
-        public HttpRequest request;
-        public string uid;
-        
+ 
 
         public m_personal()
         {
         }
 
-        public m_personal(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            _model = userinfo.GetEmpWithToken(context);
-
-            emp_id = _model.id;
-            emp_name = PageValidate.InputText(_model.name, 50);
-            uid = PageValidate.InputText(_model.uid, 50);
-        }
+        public m_personal(HttpContext context) : base(context) { }
 
         //changepwd
         public string changepwd()

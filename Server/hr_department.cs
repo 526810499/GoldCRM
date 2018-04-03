@@ -9,36 +9,17 @@ using System;
 
 namespace XHD.Server
 {
-    public class hr_department
+    public class hr_department : BaseCRMServer
     {
         private static BLL.hr_department dep = new BLL.hr_department();
         private static Model.hr_department model = new Model.hr_department();
 
-        private HttpContext Context;
-        private string emp_id;
-        private string emp_name;
-        private Model.hr_employee employee;
-        private HttpRequest request;
-        private string uid;
-        
-
+ 
         public hr_department()
         {
         }
 
-        public hr_department(HttpContext context)
-        {
-            Context = context;
-            request = context.Request;
-
-            var userinfo = new User_info();
-            employee = userinfo.GetCurrentEmpInfo(context);
-
-            emp_id = employee.id;
-            emp_name = PageValidate.InputText(employee.name, 50);
-            uid = PageValidate.InputText(employee.uid, 50);
-            
-        }
+        public hr_department(HttpContext context) : base(context) { }
 
         public string deptree()
         {
@@ -94,6 +75,10 @@ namespace XHD.Server
             DataSet ds = dep.GetList(0, serchtxt, " dep_order");
             var str = new StringBuilder();
             str.Append("[");
+            if (request["qxz"].CInt(0, false) == 1)
+            {
+                str.Append("{\"id\":\"\",\"text\":\"请选择\",\"d_icon\":\"\"},");
+            }
             str.Append(GetTreeString("root", ds.Tables[0]));
             str.Replace(",", "", str.Length - 1, 1);
             str.Append("]");
