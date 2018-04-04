@@ -122,7 +122,7 @@
         function edit() {
             var row = $("#maingrid2").ligerGetGridManager().getSelectedRow();
             if (row) {
-                f_openWindow('System/sysbase/Sys_Button_add.aspx?btnid=' + row.Btn_id, "修改按钮", 480, 380, f_save);
+                f_openWindow('System/sysbase/Sys_Button_add.aspx?btnid=' + row.Btn_id + "&menuid=" + row.Menu_id, "修改按钮", 480, 380, f_save);
             }
             else {
                 $.ligerDialog.warn('请选择按钮！');
@@ -148,7 +148,7 @@
                         $.ajax({
                             type: "POST",
                             url: "Sys_Button.del.xhd",
-                            data: { btnid: row.Btn_id },
+                            data: { id: row.Btn_id },
                             success: function (result) {
                                 treereload();
                             }

@@ -149,6 +149,7 @@
                     arr[i].icon = "../" + arr[i].icon;
                     items.push(arr[i]);
                 }
+                items.push({ type: 'textbox', id: 'sstatus', text: '状态：' });
                 items.push({ type: 'textbox', id: 'stext', text: '产品名：' });
                 items.push({ type: 'textbox', id: 'scode', text: '条形码：' });
                 items.push({ type: 'button', text: '搜索', icon: '../images/search.gif', disable: true, click: function () { doserch() } });
@@ -159,6 +160,15 @@
                 });
                 menu = $.ligerMenu({
                     width: 120, items: getMenuItems(data)
+                });
+                $("#sstatus").ligerComboBox({
+                    data: [
+                    { text: '所有', id: '' },
+                    { text: '入库', id: '1' },
+                    { text: '调拨', id: '2' },
+                    { text: '出库', id: '3' },
+                    { text: '已销售', id: '4' }
+                    ], valueFieldID: 'status',
                 });
                 $("#stext").ligerTextBox({ width: 200 });
                 $("#scode").ligerTextBox({ width: 250 });

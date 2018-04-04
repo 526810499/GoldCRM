@@ -37,9 +37,9 @@ namespace XHD.Model
         /// <summary>
         /// 销售部门
         /// </summary>
-        public string dept_id { get; set; }
+        public string createdep_id { get; set; }
 
-
+ 
         /// <summary>
         /// 会员卡号
         /// </summary>

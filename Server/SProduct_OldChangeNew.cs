@@ -24,7 +24,11 @@ namespace XHD.Server
         {
         }
 
-        public SProduct_OldChangeNew(HttpContext context) : base(context) { }
+        public SProduct_OldChangeNew(HttpContext context) : base(context) {
+
+            allDataBtnid = "B15C597D-A9B8-438C-82B5-FAC22BBF9916";
+            depDataBtnid = "266106C6-9D13-4607-8FFF-A39EC03DDC04";
+        }
 
         public string save()
         {
@@ -38,7 +42,7 @@ namespace XHD.Server
             model.oldWeight = request["T_newWeight"].CDecimal(0, false);
             model.discount = request["T_discount"].CDecimal(0, false);
             model.difTotalPrice = request["T_difTotalPrice"].CDecimal(0, false);
-            model.dep_id = PageValidate.InputText(request["T_dep_id_val"], 250);
+            //model.createdep_id = PageValidate.InputText(request["T_dep_id_val"], 250);
             string id = PageValidate.InputText(request["id"], 250);
 
             if (!string.IsNullOrWhiteSpace(id))
@@ -97,6 +101,7 @@ namespace XHD.Server
 
             else
             {
+                model.createdep_id = dep_id;
                 model.id = "HX-" + DateTime.Now.ToString("yy-MM-dd-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
                 model.status = 1;
                 model.create_id = emp_id;
@@ -124,7 +129,7 @@ namespace XHD.Server
             string serchtxt = $" 1=1 ";
             if (!string.IsNullOrEmpty(request["id"]))
                 serchtxt += " and id='" + PageValidate.InputText(request["id"], 50) + "'";
-
+            serchtxt = GetSQLCreateIDWhere(serchtxt, true);
             string Total = "";
             DataSet ds = bll.GetList(PageSize, PageIndex, serchtxt, sorttext, out Total);
 

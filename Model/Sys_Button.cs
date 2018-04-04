@@ -21,10 +21,16 @@ namespace XHD.Model
 		private int? _btn_order;
 		private string _create_id;
 		private DateTime? _create_time;
-		/// <summary>
-		/// 
-		/// </summary>
-		public string Btn_id
+
+        /// <summary>
+        /// 是否隐藏 隐藏的则做条件搜索权限使用
+        /// </summary>
+        public int isHide { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Btn_id
 		{
 			set{ _btn_id=value;}
 			get{return _btn_id;}

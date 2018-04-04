@@ -99,7 +99,7 @@
 
         function doChangeSearch() {
             var v = $("#scode").val();
-            if (v != undefined && v.length == 20) {
+            if (v != undefined && v.length == 13) {
                 doserch();
             }
         }

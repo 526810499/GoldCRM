@@ -31,7 +31,7 @@ namespace XHD.Model
         /// <summary>
         /// 门店
         /// </summary>
-        public string dep_id { get; set; }
+        public string createdep_id { get; set; }
 
         /// <summary>
         /// 状态

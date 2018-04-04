@@ -55,8 +55,8 @@
                     }
                     var rows = [];
 
-                    if (obj.dep_id == null || obj.dep_id == undefined) {
-                        obj.dep_id = "";
+                    if (obj.createdep_id == null || obj.createdep_id == undefined) {
+                        obj.createdep_id = "";
                     }
         
                     rows.push(

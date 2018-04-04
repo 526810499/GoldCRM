@@ -53,13 +53,11 @@ namespace XHD.DAL
         {
             bool rs = false;
             StringBuilder strSql = new StringBuilder();
-            strSql.Append(" if not exists(select 1 from Product_allotDetail where barcode=@barcode) begin ");
             strSql.AppendLine("insert into Product_allotDetail(");
             strSql.Append("id,allotid,barcode,FromWarehouse,create_id,create_time)");
             strSql.Append(" values (");
             strSql.Append("@id,@allotid,@barcode,@FromWarehouse,@create_id,@create_time)");
-            strSql.AppendLine(" update Product set Status=2,warehouse_id=@FromWarehouse where barcode=@barcode");
-            strSql.AppendLine("end");
+            strSql.AppendLine(" update Product set Status=2,warehouse_id=@NowWarehouse where barcode=@barcode and Status=1");
 
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
@@ -67,14 +65,16 @@ namespace XHD.DAL
                     new SqlParameter("@barcode", SqlDbType.VarChar,50),
                     new SqlParameter("@FromWarehouse", SqlDbType.Int,4),
                     new SqlParameter("@create_id", SqlDbType.VarChar,50),
-                    new SqlParameter("@create_time", SqlDbType.DateTime)};
+                    new SqlParameter("@create_time", SqlDbType.DateTime),
+                    new SqlParameter("@NowWarehouse", SqlDbType.Int,4),
+            };
             parameters[0].Value = model.id;
             parameters[1].Value = model.allotid;
             parameters[2].Value = model.barcode;
             parameters[3].Value = model.FromWarehouse;
             parameters[4].Value = model.create_id;
             parameters[5].Value = model.create_time;
-
+            parameters[6].Value = model.NowWarehouse;
 
             System.Data.SqlClient.SqlCommand cm = new System.Data.SqlClient.SqlCommand();
 

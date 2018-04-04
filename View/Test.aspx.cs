@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using XHD.Common;
 
 namespace XHD.View
 {
@@ -11,7 +13,21 @@ namespace XHD.View
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            SoftLog.LogStr(DateTime.Now.ToString(),"test");
+            System.Drawing.Bitmap imgTemp = new Code128()
+            {
+                DataToEncode = "ZJW123456789",
+                HumanReadable = true,
+                Checksum = true,
+                IsDisplayCheckCode = true,
+                //,IsDisplayStartStopSign=true
+                //,CodeBarColor=Color.Red
+
+            }.getBitmapImage(Request["r"].CInt(50,false));
+
+            byte[] bytes = imgTemp.Bitmap2Byte();
+            Response.ClearContent();
+            Response.ContentType = "image/jpg";
+            Response.BinaryWrite(bytes);
         }
     }
 }

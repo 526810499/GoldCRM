@@ -21,7 +21,7 @@ namespace XHD.Common.DEncrypt
         /// <returns></returns>
         public static string Encrypt(string Text)
         {
-            return Encrypt(Text, "XHD");
+            return Encrypt(Text, "crm_123Admin");
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace XHD.Common.DEncrypt
         /// <returns></returns>
         public static string Decrypt(string Text)
         {
-            return Decrypt(Text, "XHD");
+            return Decrypt(Text, "crm_123Admin");
         }
 
         /// <summary>

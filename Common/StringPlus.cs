@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -60,11 +61,11 @@ namespace XHD.Common
             {
                 if (c[i] == 32)
                 {
-                    c[i] = (char) 12288;
+                    c[i] = (char)12288;
                     continue;
                 }
                 if (c[i] < 127)
-                    c[i] = (char) (c[i] + 65248);
+                    c[i] = (char)(c[i] + 65248);
             }
             return new string(c);
         }
@@ -81,11 +82,11 @@ namespace XHD.Common
             {
                 if (c[i] == 12288)
                 {
-                    c[i] = (char) 32;
+                    c[i] = (char)32;
                     continue;
                 }
                 if (c[i] > 65280 && c[i] < 65375)
-                    c[i] = (char) (c[i] - 65248);
+                    c[i] = (char)(c[i] - 65248);
             }
             return new string(c);
         }
@@ -198,5 +199,50 @@ namespace XHD.Common
         }
 
         #endregion
+
+        /// <summary>
+        /// 获取当前随机字母
+        /// </summary>
+        public static string GetRandomLetters()
+        {
+
+            int r = GetRandom(1, 9);
+
+            return NunberToChar(r);
+        }
+
+        /// <summary>
+        /// 数字转字母
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public static string NunberToChar(int number)
+        {
+            if (1 <= number && 36 >= number)
+            {
+                int num = number + 64;
+                System.Text.ASCIIEncoding asciiEncoding = new System.Text.ASCIIEncoding();
+                byte[] btNumber = new byte[] { (byte)num };
+                return asciiEncoding.GetString(btNumber);
+            }
+            return number.CString("");
+        }
+
+        /// <summary>
+        /// 获取指定范围的随机数
+        /// </summary>
+        /// <param name="MinNumber">最小值</param>
+        /// <param name="MaxNumber">最大值</param>
+        /// <returns></returns>
+        public static Int32 GetRandom(Int32 MinNumber, Int32 MaxNumber)
+        {
+
+            Int32 value = 0;
+
+            Random rnd = new Random(Guid.NewGuid().GetHashCode());
+            value = rnd.Next(MinNumber, MaxNumber);
+            return value;
+
+        }
     }
 }

@@ -56,6 +56,7 @@ namespace XHD.Server
             model.Btn_name = PageValidate.InputText(request["T_btn_name"], 255);
             model.Btn_icon = PageValidate.InputText(request["T_btn_icon"], 255);
             model.Btn_handler = PageValidate.InputText(request["T_btn_handler"], 255);
+            model.isHide = request["isHide"].CInt(0, false);
             if (PageValidate.IsNumber(request["T_btn_order"]))
                 model.Btn_order = int.Parse(request["T_btn_order"]);
 

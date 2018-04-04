@@ -218,12 +218,16 @@ function initLayout() {
     $(".l-dialog").css({ 'top': offsettop, 'left': offsetleft });
 }
 
-function getCookie(name)//取cookies函数          
+function getCookie(name, defaults)//取cookies函数          
 {
     var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
     if (arr != null)
         return unescape(arr[2]);
-    return null;
+    if (defaults == null || defaults == undefined) {
+        return null;
+    } else {
+        return defaults;
+    }
 }
 
 function SetCookie(name, value, time)//两个参数，一个是cookie的名子，一个是值  

@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 [assembly: AssemblyTitle("XHD.Common")]
 [assembly: AssemblyDescription("Common Library By XHD")]
-[assembly: AssemblyConfiguration("XHD")]
+[assembly: AssemblyConfiguration("crm_123Admin")]
 [assembly: AssemblyCompany("动软卓越（北京）科技有限公司")]
 [assembly: AssemblyProduct("XHD.Common")]
 [assembly: AssemblyCopyright("Copyright (C) XHD 2004-2012")]

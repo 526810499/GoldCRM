@@ -55,7 +55,7 @@ namespace XHD.Model
         /// <summary>
         /// 订购部门
         /// </summary>
-        public string dep_id
+        public string createdep_id
         {
             set { _dep_id = value; }
             get { return _dep_id; }

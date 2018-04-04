@@ -21,6 +21,12 @@ namespace XHD.Model
         private int _fromwarehouse;
         private string _create_id;
         private DateTime _create_time;
+
+        /// <summary>
+        /// 现在仓库
+        /// </summary>
+       public int NowWarehouse { get; set; }
+
         /// <summary>
         /// 
         /// </summary>

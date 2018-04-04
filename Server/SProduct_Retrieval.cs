@@ -24,7 +24,11 @@ namespace XHD.Server
         {
         }
 
-        public SProduct_Retrieval(HttpContext context) : base(context) { }
+        public SProduct_Retrieval(HttpContext context) : base(context) {
+
+            allDataBtnid = "6CD949FC-208E-427C-8383-AACDA68C1853";
+            depDataBtnid = "5F551588-B7CC-48F4-90C2-108D63BFB040";
+        }
 
         public string save()
         {
@@ -32,7 +36,7 @@ namespace XHD.Server
             model.remark = PageValidate.InputText(request["T_remark"], 250);
             model.weight = request["T_weight"].CDecimal(0, false);
             model.number = request["T_number"].CInt(0, false);
-            model.dep_id = PageValidate.InputText(request["T_dep_id_val"], 250);
+            model.createdep_id = PageValidate.InputText(request["T_dep_id_val"], 250);
             string id = PageValidate.InputText(request["id"], 250);
 
             if (!string.IsNullOrWhiteSpace(id))
@@ -103,6 +107,8 @@ namespace XHD.Server
                 serchtxt += " and category_id='" + PageValidate.InputText(request["category_id"], 50) + "'";
             if (!string.IsNullOrEmpty(request["id"]))
                 serchtxt += " and id='" + PageValidate.InputText(request["id"], 50) + "'";
+
+            serchtxt = GetSQLCreateIDWhere(serchtxt,true);
 
             string Total = "";
             DataSet ds = bll.GetList(PageSize, PageIndex, serchtxt, sorttext, out Total);

@@ -11,12 +11,16 @@ namespace XHD.Server
         public static BLL.Product product = new BLL.Product();
         public static Model.Product model = new Model.Product();
 
- 
+
         public Product()
         {
         }
 
-        public Product(HttpContext context) : base(context) { }
+        public Product(HttpContext context) : base(context)
+        {
+            allDataBtnid = "1992FBF3-206A-4DE5-A1C4-1EB3A4F597D8";
+            depDataBtnid = "ADE0DF75-65F1-4D8A-93C9-597D60140046";
+        }
 
         public string save()
         {
@@ -121,11 +125,12 @@ namespace XHD.Server
                 model.create_id = emp_id;
                 model.create_time = DateTime.Now;
                 model.id = Guid.NewGuid().ToString();
+                model.createdep_id = dep_id;
                 model.status = 1;
-                string code = (Guid.NewGuid().CString("").MD5ToHex());
+                string code = StringPlus.GetRandomLetters() + DateTime.Now.GetHashCode().ToString().Replace("-", "");
                 string T_product_category = request["T_product_category"].CString("HJ");
                 string str = T_product_category.GetSpellCode(true);
-                code = str.PadRight(5, '0').Substring(0, 4) + code;
+                code = str.PadRight(2, '0').Substring(0, 2) + code;
 
                 model.BarCode = code.ToUpper();
                 product.Add(model);
@@ -158,12 +163,14 @@ namespace XHD.Server
 
             if (!string.IsNullOrEmpty(request["scode"]))
                 serchtxt += $" and BarCode='{ PageValidate.InputText(request["scode"], 255) }'";
-
+            if (!string.IsNullOrEmpty(request["status"]))
+                serchtxt += $" and status={request["status"].CInt(0, false)}";
             if (!string.IsNullOrEmpty(request["status"]) && request["status"].CString("") != "null")
                 serchtxt += $" and status={request["status"].CInt(0, false)}";
             if (!string.IsNullOrEmpty(request["SupplierID"]) && request["SupplierID"].CString("") != "null")
                 serchtxt += $" and SupplierID='{request["SupplierID"].CString("")}'";
             //权限
+            serchtxt = GetSQLCreateIDWhere(serchtxt, true);
             DataSet ds = product.GetList(PageSize, PageIndex, serchtxt, sorttext, out Total);
 
             string dt = GetGridJSON.DataTableToJSON1(ds.Tables[0], Total);
@@ -192,8 +199,9 @@ namespace XHD.Server
             var ccod = new BLL.Sale_order_details();
             if (ccod.GetList($"product_id = '{id}'").Tables[0].Rows.Count > 0)
                 return XhdResult.Error("此产品下含有订单，不允许删除！").ToString();
-            int cblls = new BLL.Product_allotDetail().GetBarCodeStatus(id, ds.Tables[0].Rows[0]["barcode"].CString(""));
-            if (cblls != 3)
+            int status = ds.Tables[0].Rows[0]["status"].CInt(1, false);
+
+            if (status != 1)
             {
                 return XhdResult.Error("此产品下含有调拨单，不允许删除！").ToString();
             }

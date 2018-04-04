@@ -29,9 +29,9 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Product_OldChangeNew(");
-            strSql.Append("id,oldWeight,oldTotalPrice,oldCharge,newWeight,newTotalPrice,costsTotalPrice,discount,difTotalPrice,status,remark,create_time,create_id)");
+            strSql.Append("id,oldWeight,oldTotalPrice,oldCharge,newWeight,newTotalPrice,costsTotalPrice,discount,difTotalPrice,status,remark,create_time,create_id,createdep_id)");
             strSql.Append(" values (");
-            strSql.Append("@id,@oldWeight,@oldTotalPrice,@oldCharge,@newWeight,@newTotalPrice,@costsTotalPrice,@discount,@difTotalPrice,@status,@remark,@create_time,@create_id)");
+            strSql.Append("@id,@oldWeight,@oldTotalPrice,@oldCharge,@newWeight,@newTotalPrice,@costsTotalPrice,@discount,@difTotalPrice,@status,@remark,@create_time,@create_id,@createdep_id)");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@oldWeight", SqlDbType.Decimal,9),
@@ -45,7 +45,9 @@ namespace XHD.DAL
                     new SqlParameter("@status", SqlDbType.Int,4),
                     new SqlParameter("@remark", SqlDbType.NVarChar,50),
                     new SqlParameter("@create_time", SqlDbType.DateTime),
-                    new SqlParameter("@create_id", SqlDbType.VarChar,50)};
+                    new SqlParameter("@create_id", SqlDbType.VarChar,50),
+                    new SqlParameter("@createdep_id",SqlDbType.VarChar,50)
+            };
             parameters[0].Value = model.id;
             parameters[1].Value = model.oldWeight;
             parameters[2].Value = model.oldTotalPrice;
@@ -59,6 +61,7 @@ namespace XHD.DAL
             parameters[10].Value = model.remark;
             parameters[11].Value = model.create_time;
             parameters[12].Value = model.create_id;
+            parameters[13].Value = model.createdep_id;
 
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
@@ -171,7 +174,7 @@ namespace XHD.DAL
         public DataSet GetList(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select id,oldWeight,oldTotalPrice,oldCharge,newWeight,newTotalPrice,costsTotalPrice,discount,difTotalPrice,status,remark,create_time,create_id ");
+            strSql.Append("select id,oldWeight,oldTotalPrice,oldCharge,newWeight,newTotalPrice,costsTotalPrice,discount,difTotalPrice,status,remark,create_time,create_id,createdep_id ");
             strSql.Append(" FROM Product_OldChangeNew ");
             if (strWhere.Trim() != "")
             {
@@ -191,7 +194,7 @@ namespace XHD.DAL
             {
                 strSql.Append(" top " + Top.ToString());
             }
-            strSql.Append(" id,oldWeight,oldTotalPrice,oldCharge,newWeight,newTotalPrice,costsTotalPrice,discount,difTotalPrice,status,remark,create_time,create_id ");
+            strSql.Append(" id,oldWeight,oldTotalPrice,oldCharge,newWeight,newTotalPrice,costsTotalPrice,discount,difTotalPrice,status,remark,create_time,create_id,createdep_id ");
             strSql.Append(" FROM Product_OldChangeNew ");
             if (strWhere.Trim() != "")
             {

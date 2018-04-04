@@ -31,6 +31,12 @@
         function f_save() {
 
             if ($(form1).valid()) {
+                var T_product_category = $("#T_product_category_val").val();
+                if (T_product_category.length <= 0) {
+                    $.ligerDialog.warn('产品分类需选择');
+                    return false;
+                }
+
                 var T_StockPrice = parseFloat($("#T_StockPrice").val());
                 var T_Weight = parseFloat($("#T_Weight").val());
 
@@ -43,8 +49,8 @@
                     return false;
                 }
 
-                var sct = parseFloat($("#T_SalesCostsTotal").val());
-                var stp = parseFloat($("#T_SalesTotalPrice").val());
+                var sct = parseFloat($("#T_SalesCostsTotal").val().replace(/\$|\,/g, ''));
+                var stp = parseFloat($("#T_SalesTotalPrice").val().replace(/\$|\,/g, ''));
                 if (sct <= 0 && stp <= 0) {
                     $.ligerDialog.warn('价格总价不能为空！');
                     return false;
@@ -74,13 +80,14 @@
                     //$("#T_product_category").ligerGetComboBoxManager().selectValue(obj.category_id);
 
                     if (!obj.category_id) {
-                        obj.category_id = getparastr("categoryid","");
+                        obj.category_id = getparastr("categoryid", "");
                     }
- 
+
                     if (obj.SupplierID == null || obj.SupplierID == undefined || obj.SupplierID.length <= 0) {
                         obj.SupplierID = "";
                     }
 
+                    if (obj.IsGold == null || obj.IsGold == undefined) { obj.IsGold = 0; }
 
                     $("#form1").ligerAutoForm({
                         labelWidth: 80, inputWidth: 180, space: 20,
@@ -144,7 +151,7 @@
             var T_GoldTotal = $("#T_GoldTotal").val();
             var T_CostsTotal = $("#T_CostsTotal").val();
             var T_StonePrice = $("#T_StonePrice").val();
-            total = parseFloat(T_StonePrice) + parseFloat(T_CostsTotal) + parseFloat(T_GoldTotal);
+            total = parseFloat(T_StonePrice.replace(/\$|\,/g, '')) + parseFloat(T_CostsTotal.replace(/\$|\,/g, '')) + parseFloat(T_GoldTotal.replace(/\$|\,/g, ''));
             $("#T_Totals").val(toMoney(total));
             var gtype = 0;
             if ($("#T_GType").val() == "是") { gtype = 1; }
@@ -157,12 +164,12 @@
             var T_Totals = $("#T_Totals").val();
             //（2）黄金类产品，生成销售工费（工费小计*3）
             if (value == 1) {
-                var total = parseFloat(T_Totals) * 3;
+                var total = parseFloat(T_Totals.replace(/\$|\,/g, '')) * 3;
                 $("#T_SalesCostsTotal").val(toMoney(total));
                 $("#T_SalesTotalPrice").val(0.00);
             } else {
                 //非黄金类产品（K金，金镶玉，钻石）生成销售单价（成本总价*2.5）
-                var total = parseFloat(T_Totals) * 2.5;
+                var total = parseFloat(T_Totals.replace(/\$|\,/g, '')) * 2.5;
                 $("#T_SalesCostsTotal").val(0.00);
                 $("#T_SalesTotalPrice").val(toMoney(total));
             }
@@ -174,7 +181,7 @@
             var total = 0;
             var T_StockPrice = $("#T_StockPrice").val();
             var T_Weight = $("#T_Weight").val();
-            total = parseFloat(T_StockPrice) * parseFloat(T_Weight);
+            total = parseFloat(T_StockPrice.replace(/\$|\,/g, '')) * parseFloat(T_Weight.replace(/\$|\,/g, ''));
             $("#T_GoldTotal").val(toMoney(total));
             SetT_CostsTotal();
         }
@@ -184,7 +191,7 @@
             var total = 0;
             var T_AttCosts = $("#T_AttCosts").val();
             var T_Weight = $("#T_Weight").val();
-            total = parseFloat(T_AttCosts) * parseFloat(T_Weight);
+            total = parseFloat(T_AttCosts.replace(/\$|\,/g, '')) * parseFloat(T_Weight.replace(/\$|\,/g, ''));
             $("#T_CostsTotal").val(toMoney(total));
             SetT_Totals();
         }

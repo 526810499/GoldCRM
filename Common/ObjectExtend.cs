@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -32,7 +34,48 @@ namespace XHD
             return obj == null ? defaultValue : obj == DBNull.Value ? defaultValue : (obj.ToString().Trim());
         }
 
-
+        /// <summary>
+        /// bitmap 转byte
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <returns></returns>
+        public static byte[] Bitmap2Byte(this Bitmap bitmap)
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                bitmap.Save(stream, ImageFormat.Jpeg);
+                byte[] data = new byte[stream.Length];
+                stream.Seek(0, SeekOrigin.Begin);
+                stream.Read(data, 0, Convert.ToInt32(stream.Length));
+                return data;
+            }
+        }
+        /// <summary>
+        /// bytes 转 bitmap
+        /// </summary>
+        /// <param name="Bytes"></param>
+        /// <returns></returns>
+        public static Bitmap BytesToBitmap(this byte[] Bytes)
+        {
+            MemoryStream stream = null;
+            try
+            {
+                stream = new MemoryStream(Bytes);
+                return new Bitmap((Image)new Bitmap(stream));
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw ex;
+            }
+            catch (ArgumentException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                stream.Close();
+            }
+        }
 
         /// <summary>
         /// 从对象中取得int数据

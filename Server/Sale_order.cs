@@ -13,12 +13,17 @@ namespace XHD.Server
         public static BLL.Sale_order order = new BLL.Sale_order();
         public static Model.Sale_order model = new Model.Sale_order();
         public static BLL.CRM_Customer customerBll = new BLL.CRM_Customer();
- 
+
         public Sale_order()
         {
         }
 
-        public Sale_order(HttpContext context) : base(context) { }
+        public Sale_order(HttpContext context) : base(context)
+        {
+
+            allDataBtnid = "4C2A57BB-94A5-401A-82AA-24DE1F5DE4DB";
+            depDataBtnid = "1F5A29CE-CE24-4A96-9B98-D72D5AF9B924";
+        }
 
         public string save()
         {
@@ -43,7 +48,7 @@ namespace XHD.Server
             model.emp_id = PageValidate.InputText(request["T_emp_val"], 50);
             model.cashier_id = PageValidate.InputText(request["T_cashier_val"], 50);
             model.vipcard = PageValidate.InputText(request["T_vipcard"], 50);
-            model.dept_id= PageValidate.InputText(request["T_dept_id_val"], 50);
+            model.createdep_id = PageValidate.InputText(request["T_dept_id_val"], 50);
             string id = PageValidate.InputText(request["id"], 50);
             if (PageValidate.checkID(id))
             {
@@ -250,7 +255,9 @@ namespace XHD.Server
             }
 
             //权限 
-            serchtxt += DataAuth();
+            //serchtxt += DataAuthUserID("Sale_order.emp_id");
+            serchtxt = GetSQLCreateIDWhere(serchtxt, true);
+
             DataSet ds = order.GetList(PageSize, PageIndex, serchtxt, sorttext, out Total);
 
             string dt = GetGridJSON.DataTableToJSON1(ds.Tables[0], Total);
@@ -385,24 +392,7 @@ namespace XHD.Server
             string dt = GetGridJSON.DataTableToJSON(ds.Tables[0]);
             return dt;
         }
-        private string DataAuth()
-        {
-            GetDataAuth dataauth = new GetDataAuth();
-            DataAuth auth = dataauth.getAuth(emp_id);
 
-            switch (auth.authtype)
-            {
-                case 0: return " 1=2 ";
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                    return $" and Sale_order.emp_id in ({auth.authtext})";
-                case 5: return "";
-            }
-
-            return auth.authtype + ":" + auth.authtext;
-        }
 
         public class PostData
         {

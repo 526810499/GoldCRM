@@ -21,7 +21,7 @@ namespace XHD.Server
         {
             string mid = PageValidate.InputText(request["mid"],50);
 
-            string serchtxt = "";
+            string serchtxt = "  ";
            if (PageValidate.checkID(mid, false))
                 serchtxt = $"Menu_id='{mid}' ";
             else
@@ -35,7 +35,7 @@ namespace XHD.Server
             {
                 BtnAble = true;
             }
-
+            serchtxt += " and isHide=0 ";
             DataSet ds = btn.GetList(0, serchtxt , "Btn_order");
             var getauth = new GetAuthorityByUid();
             string toolbarscript = "{\"Items\":[";

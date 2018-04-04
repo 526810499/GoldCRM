@@ -18,7 +18,7 @@
     <script src="../lib/ligerUI2/js/plugins/ligerComboBox.js"></script>
     <script src="../lib/ligerUI2/js/plugins/ligerTree.js"></script>
     <script src="../lib/jquery.form.js" type="text/javascript"></script>
-    <script src="../JS/XHD.js" type="text/javascript"></script>
+    <script src="../JS/XHD.js?v=1.0" type="text/javascript"></script>
 
     <script type="text/javascript">
         $(function () {
@@ -53,8 +53,8 @@
         }
 
         function checkPrice() {
-            var T_total = parseFloat($("#T_total").val());
-            var T_receive = parseFloat($("#T_receive").val());
+            var T_total = parseFloat($("#T_total").val().replace(/\$|\,/g, ''));
+            var T_receive = parseFloat($("#T_receive").val().replace(/\$|\,/g, ''));
             var T_arrears = T_total - T_receive;
             $("#T_arrears").val(toMoney(T_arrears));
             var msg = "";
@@ -91,15 +91,21 @@
                     var rows = [];
 
                     var customer_id = obj.Customer_id || getparastr("customer_id");
-                    if (!customer_id)
-                        rows.push([{ display: "客户", name: "T_customer", validate: "{required:true}", width: 465 }])
-                    if (obj.dept_id == null || obj.dept_id == undefined) {
-                        obj.dept_id = "";
+                    if (!customer_id) {
+                        rows.push([{ display: "客户", name: "T_customer", validate: "{required:true}", width: 465 }]);
                     }
+                    if (obj.createdep_id == null || obj.createdep_id == undefined) {
+                        obj.createdep_id = getCookie("udepid", "");
+                    }
+                    if (obj.emp_name == null || obj.emp_name == undefined) {
+                        obj.emp_name = getCookie("xhdcrm_uid", "");
+                        obj.emp_id = ("<%=XHD.Common.DEncrypt.DEncrypt.Decrypt(HttpUtility.UrlDecode(XHD.Common.CookieHelper.GetValue("uid")))%>");
+                    }
+
                     rows.push(
                               [
                                 { display: "会员卡号", name: "T_vipcard", type: "text", initValue: obj.vipcard },
-                                { display: "销售门店", name: "T_dept_id", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'hr_department.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + obj.dept_id + "'}", validate: "{required:true}" }
+                                { display: "销售门店", name: "T_dept_id", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'hr_department.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + obj.createdep_id + "'}", validate: "{required:true}" }
                               ],
                             [
                                 { display: "成交时间", name: "T_date", type: "date", options: "{width:180}", validate: "{required:true}", initValue: formatTimebytype(obj.Order_date, "yyyy-MM-dd") },
@@ -383,8 +389,8 @@
         }
 
         function arrearsAmount() {
-            var T_total = parseFloat($("#T_total").val());
-            var T_receive = parseFloat($("#T_receive").val());
+            var T_total = parseFloat($("#T_total").val().replace(/\$|\,/g, ''));
+            var T_receive = parseFloat($("#T_receive").val().replace(/\$|\,/g, ''));
             var T_arrears = T_total - T_receive;
             $("#T_arrears").val(toMoney(T_arrears));
         }

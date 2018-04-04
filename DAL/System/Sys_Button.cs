@@ -22,9 +22,9 @@ namespace XHD.DAL
 		{
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("insert into Sys_Button(");
-			strSql.Append("Btn_id,Btn_name,Btn_type,Btn_icon,Btn_handler,Menu_id,Btn_order,create_id,create_time)");
+			strSql.Append("Btn_id,Btn_name,Btn_type,Btn_icon,Btn_handler,Menu_id,Btn_order,create_id,create_time,isHide)");
 			strSql.Append(" values (");
-			strSql.Append("@Btn_id,@Btn_name,@Btn_type,@Btn_icon,@Btn_handler,@Menu_id,@Btn_order,@create_id,@create_time)");
+			strSql.Append("@Btn_id,@Btn_name,@Btn_type,@Btn_icon,@Btn_handler,@Menu_id,@Btn_order,@create_id,@create_time,@isHide)");
 			SqlParameter[] parameters = {
 					new SqlParameter("@Btn_id", SqlDbType.VarChar,50),
 					new SqlParameter("@Btn_name", SqlDbType.NVarChar,255),
@@ -34,7 +34,9 @@ namespace XHD.DAL
 					new SqlParameter("@Menu_id", SqlDbType.VarChar,50),
 					new SqlParameter("@Btn_order", SqlDbType.Int,4),
 					new SqlParameter("@create_id", SqlDbType.VarChar,50),
-					new SqlParameter("@create_time", SqlDbType.DateTime)};
+					new SqlParameter("@create_time", SqlDbType.DateTime),
+                   new SqlParameter("@isHide", SqlDbType.Int,4),
+            };
 			parameters[0].Value = model.Btn_id;
 			parameters[1].Value = model.Btn_name;
 			parameters[2].Value = model.Btn_type;
@@ -44,8 +46,8 @@ namespace XHD.DAL
 			parameters[6].Value = model.Btn_order;
 			parameters[7].Value = model.create_id;
 			parameters[8].Value = model.create_time;
-
-			int rows=DbHelperSQL.ExecuteSql(strSql.ToString(),parameters);
+            parameters[9].Value = model.isHide;
+            int rows=DbHelperSQL.ExecuteSql(strSql.ToString(),parameters);
 			if (rows > 0)
 			{
 				return true;
@@ -67,7 +69,7 @@ namespace XHD.DAL
 			strSql.Append("Btn_icon=@Btn_icon,");
 			strSql.Append("Btn_handler=@Btn_handler,");
 			strSql.Append("Menu_id=@Menu_id,");
-			strSql.Append("Btn_order=@Btn_order");
+			strSql.Append("Btn_order=@Btn_order,isHide=@isHide");
 			strSql.Append(" where Btn_id=@Btn_id ");
 			SqlParameter[] parameters = {
 					new SqlParameter("@Btn_name", SqlDbType.NVarChar,255),
@@ -76,7 +78,9 @@ namespace XHD.DAL
 					new SqlParameter("@Btn_handler", SqlDbType.VarChar,255),
 					new SqlParameter("@Menu_id", SqlDbType.VarChar,50),
 					new SqlParameter("@Btn_order", SqlDbType.Int,4),
-					new SqlParameter("@Btn_id", SqlDbType.VarChar,50)};
+					new SqlParameter("@Btn_id", SqlDbType.VarChar,50),
+                    new SqlParameter("@isHide", SqlDbType.Int,4),
+            };
 			parameters[0].Value = model.Btn_name;
 			parameters[1].Value = model.Btn_type;
 			parameters[2].Value = model.Btn_icon;
@@ -84,8 +88,8 @@ namespace XHD.DAL
 			parameters[4].Value = model.Menu_id;
 			parameters[5].Value = model.Btn_order;
 			parameters[6].Value = model.Btn_id;
-
-			int rows=DbHelperSQL.ExecuteSql(strSql.ToString(),parameters);
+            parameters[7].Value = model.isHide;
+            int rows=DbHelperSQL.ExecuteSql(strSql.ToString(),parameters);
 			if (rows > 0)
 			{
 				return true;
@@ -171,7 +175,7 @@ namespace XHD.DAL
 		public DataSet GetList(string strWhere)
 		{
 			StringBuilder strSql=new StringBuilder();
-			strSql.Append("select Btn_id,Btn_name,Btn_type,Btn_icon,Btn_handler,Menu_id,Btn_order,create_id,create_time ");
+			strSql.Append("select Btn_id,Btn_name,Btn_type,Btn_icon,Btn_handler,Menu_id,Btn_order,create_id,create_time,isHide ");
 			strSql.Append(" FROM Sys_Button ");
 			if(strWhere.Trim()!="")
 			{
@@ -191,7 +195,7 @@ namespace XHD.DAL
 			{
 				strSql.Append(" top "+Top.ToString());
 			}
-			strSql.Append(" Btn_id,Btn_name,Btn_type,Btn_icon,Btn_handler,Menu_id,Btn_order,create_id,create_time ");
+			strSql.Append(" Btn_id,Btn_name,Btn_type,Btn_icon,Btn_handler,Menu_id,Btn_order,create_id,create_time,isHide ");
 			strSql.Append(" FROM Sys_Button ");
 			if(strWhere.Trim()!="")
 			{

@@ -22,6 +22,12 @@ namespace XHD.Model
         private string _update_id;
         private DateTime _update_time;
 
+        /// <summary>
+        /// 部门id
+        /// </summary>
+        public string createdep_id { get; set; }
+
+
         public string Remark { get; set;}
         /// <summary>
         /// 

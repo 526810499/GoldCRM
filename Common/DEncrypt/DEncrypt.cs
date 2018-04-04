@@ -19,7 +19,7 @@ namespace XHD.Common.DEncrypt
         /// <returns>密文</returns>
         public static string Encrypt(string original)
         {
-            return Encrypt(original, "XHD");
+            return Encrypt(original, "crm_123Admin");
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace XHD.Common.DEncrypt
         /// <returns>明文</returns>
         public static string Decrypt(string original)
         {
-            return Decrypt(original, "XHD", Encoding.Default);
+            return Decrypt(original, "crm_123Admin", Encoding.Default);
         }
 
         #endregion
@@ -87,7 +87,7 @@ namespace XHD.Common.DEncrypt
         /// <returns>明文</returns>
         public static byte[] Decrypt(byte[] encrypted)
         {
-            byte[] key = Encoding.Default.GetBytes("XHD");
+            byte[] key = Encoding.Default.GetBytes("crm_123Admin");
             return Decrypt(encrypted, key);
         }
 
@@ -99,7 +99,7 @@ namespace XHD.Common.DEncrypt
         /// <returns>密文</returns>
         public static byte[] Encrypt(byte[] original)
         {
-            byte[] key = Encoding.Default.GetBytes("XHD");
+            byte[] key = Encoding.Default.GetBytes("crm_123Admin");
             return Encrypt(original, key);
         }
 

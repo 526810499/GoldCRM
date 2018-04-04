@@ -22,9 +22,9 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Product(");
-            strSql.Append("id,product_name,category_id,status,Weight,unit,cost,price,agio,remarks,specifications,create_id,create_time,AttCosts,StockPrice,MainStoneWeight,AttStoneWeight,AttStoneNumber,StonePrice,GoldTotal,CostsTotal,Totals,Sbarcode,ImgLogo,BarCode,OutStatus,SalesTotalPrice,SalesCostsTotal,IsGold,SupplierID)");
+            strSql.Append("id,product_name,category_id,status,Weight,unit,cost,price,agio,remarks,specifications,create_id,create_time,AttCosts,StockPrice,MainStoneWeight,AttStoneWeight,AttStoneNumber,StonePrice,GoldTotal,CostsTotal,Totals,Sbarcode,ImgLogo,BarCode,OutStatus,SalesTotalPrice,SalesCostsTotal,IsGold,SupplierID,createdep_id)");
             strSql.Append(" values (");
-            strSql.Append("@id,@product_name,@category_id,@status,@Weight,@unit,@cost,@price,@agio,@remarks,@specifications,@create_id,@create_time,@AttCosts,@StockPrice,@MainStoneWeight,@AttStoneWeight,@AttStoneNumber,@StonePrice,@GoldTotal,@CostsTotal,@Totals,@Sbarcode,@ImgLogo,@BarCode,@OutStatus,@SalesTotalPrice,@SalesCostsTotal,@IsGold,@SupplierID)");
+            strSql.Append("@id,@product_name,@category_id,@status,@Weight,@unit,@cost,@price,@agio,@remarks,@specifications,@create_id,@create_time,@AttCosts,@StockPrice,@MainStoneWeight,@AttStoneWeight,@AttStoneNumber,@StonePrice,@GoldTotal,@CostsTotal,@Totals,@Sbarcode,@ImgLogo,@BarCode,@OutStatus,@SalesTotalPrice,@SalesCostsTotal,@IsGold,@SupplierID,@createdep_id)");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@product_name", SqlDbType.VarChar,250),
@@ -56,6 +56,7 @@ namespace XHD.DAL
                     new SqlParameter("@SalesCostsTotal", SqlDbType.Decimal,9),
                     new SqlParameter("@IsGold", SqlDbType.Int,4),
                     new SqlParameter("@SupplierID",SqlDbType.NVarChar,50),
+                    new SqlParameter("@createdep_id",SqlDbType.VarChar,50)
             };
             parameters[0].Value = model.id;
             parameters[1].Value = model.product_name;
@@ -87,6 +88,7 @@ namespace XHD.DAL
             parameters[27].Value = model.SalesCostsTotal;
             parameters[28].Value = model.IsGold;
             parameters[29].Value = model.SupplierID;
+            parameters[30].Value = model.createdep_id;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {

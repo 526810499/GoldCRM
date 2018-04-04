@@ -17,14 +17,17 @@ namespace XHD.Server
         public static BLL.Product_outDetail allotDetailBll = new BLL.Product_outDetail();
 
         public static Model.Product_out model = new Model.Product_out();
- 
+        private string authRightID = "AFEB4AFD-DF89-4E16-BBCB-407B2227B55B";
 
 
         public Product_out()
         {
         }
 
-        public Product_out(HttpContext context) : base(context) { }
+        public Product_out(HttpContext context) : base(context) {
+            allDataBtnid = "94676CBB-F382-45C9-A5F3-834F25348C24";
+            depDataBtnid = "B42553AB-9AA5-4EBB-A73E-CA28738182D7";
+        }
 
         public string save()
         {
@@ -56,7 +59,7 @@ namespace XHD.Server
                     //需要判断是否有审核权限
                     if (status > 1)
                     {
-                        if (new GetAuthorityByUid().GetBtnAuthority(emp_id, "AFEB4AFD-DF89-4E16-BBCB-407B2227B55B"))
+                        if (CheckBtnAuthority(authRightID))
                         {
                             return XhdResult.Error("您没有该操作权限,请确认后在操作！").ToString();
                         }
@@ -101,6 +104,7 @@ namespace XHD.Server
                 }
                 else
                 {
+                    model.createdep_id = dep_id;
                     model.create_id = emp_id;
                     model.create_time = DateTime.Now;
                     id = "CK-" + DateTime.Now.ToString("yy-MM-dd-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
@@ -191,6 +195,8 @@ namespace XHD.Server
                 serchtxt += $" and id='{dsc.Tables[0].Rows[0]["outid"]}'";
             }
 
+            serchtxt = GetSQLCreateIDWhere(serchtxt,true);
+
             DataSet ds = allotBll.GetList(PageSize, PageIndex, serchtxt, sorttext, out Total);
             string dt = GetGridJSON.DataTableToJSON1(ds.Tables[0], Total);
             return (dt);
@@ -254,7 +260,7 @@ namespace XHD.Server
         /// <returns></returns>
         public string Auth(string id)
         {
-            if (new GetAuthorityByUid().GetBtnAuthority(emp_id, "AFEB4AFD-DF89-4E16-BBCB-407B2227B55B"))
+            if (CheckBtnAuthority(authRightID))
             {
                 return XhdResult.Error("您没有该操作权限,请确认后在操作！").ToString();
             }
@@ -306,9 +312,8 @@ namespace XHD.Server
             bool candel = true;
             if (uid != "admin")
             {
-                //controll auth
-                var getauth = new GetAuthorityByUid();
-                candel = getauth.GetBtnAuthority(emp_id.ToString(), "B8494FA6-EE5D-483F-9421-817E2BF2C5A6");
+      
+                candel = CheckBtnAuthority("B8494FA6-EE5D-483F-9421-817E2BF2C5A6");
                 if (!candel)
                     return XhdResult.Error("无此权限！").ToString();
             }

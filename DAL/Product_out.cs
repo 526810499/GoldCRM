@@ -38,9 +38,9 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Product_out(");
-            strSql.Append("id,remark,allot_id,create_id,create_time,status,update_id,update_time)");
+            strSql.Append("id,remark,allot_id,create_id,create_time,status,update_id,update_time,createdep_id,outdep_id)");
             strSql.Append(" values (");
-            strSql.Append("@id,@remark,@allot_id,@create_id,@create_time,@status,@update_id,@update_time)");
+            strSql.Append("@id,@remark,@allot_id,@create_id,@create_time,@status,@update_id,@update_time,@createdep_id,@outdep_id)");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@remark", SqlDbType.NVarChar,50),
@@ -49,7 +49,10 @@ namespace XHD.DAL
                     new SqlParameter("@create_time", SqlDbType.DateTime),
                     new SqlParameter("@status", SqlDbType.Int,4),
                     new SqlParameter("@update_id", SqlDbType.VarChar,50),
-                    new SqlParameter("@update_time", SqlDbType.DateTime)};
+                    new SqlParameter("@update_time", SqlDbType.DateTime),
+                    new SqlParameter("@createdep_id", SqlDbType.VarChar,50),
+                    new SqlParameter("@outdep_id", SqlDbType.VarChar,50),
+            };
             parameters[0].Value = model.id;
             parameters[1].Value = model.Remark;
             parameters[2].Value = model.allot_id;
@@ -58,6 +61,8 @@ namespace XHD.DAL
             parameters[5].Value = model.status;
             parameters[6].Value = model.update_id;
             parameters[7].Value = model.update_time;
+            parameters[8].Value = model.createdep_id;
+            parameters[9].Value = model.outdep_id;
 
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)

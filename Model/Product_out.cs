@@ -22,6 +22,17 @@ namespace XHD.Model
         private string _update_id;
         private DateTime _update_time;
 
+
+        /// <summary>
+        /// 调拨到哪个门店部门
+        /// </summary>
+        public string outdep_id { get; set; }
+
+        /// <summary>
+        /// 部门id
+        /// </summary>
+        public string createdep_id { get; set; }
+       
         public string Remark { get; set;}
 
         /// <summary>

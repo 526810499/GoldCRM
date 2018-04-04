@@ -42,6 +42,12 @@ namespace XHD.Model
         private decimal? _salestotalprice;
         private decimal? _salescoststotal;
 
+        /// <summary>
+        /// 部门id
+        /// </summary>
+        public string createdep_id { get; set; }
+
+
         public int warehouse_id { get; set; }
 
         /// <summary>

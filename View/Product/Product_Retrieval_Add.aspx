@@ -59,8 +59,8 @@
                     }
                     var rows = [];
 
-                    if (obj.dep_id == null || obj.dep_id == undefined) {
-                        obj.dep_id = "";
+                    if (obj.createdep_id == null || obj.createdep_id == undefined) {
+                        obj.createdep_id = "";
                     }
                     if (obj.category_id == null || obj.category_id == undefined) {
                         obj.category_id = "";
@@ -76,7 +76,7 @@
                              { display: "品类", name: "T_category", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_category.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + obj.category_id + "'}", validate: "{required:true}" }
                             ],
                             [
-                             { display: "门店", name: "T_dep_id", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'hr_department.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + obj.dep_id + "'}", validate: "{required:true}" }
+                             { display: "门店", name: "T_dep_id", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'hr_department.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + obj.createdep_id + "'}", validate: "{required:true}" }
                             ],
                             [
                                 { display: "备注", name: "T_remark", type: "textarea", cols: 73, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.remark }

@@ -18,6 +18,7 @@ namespace XHD.Server
 
         public static Model.Product_allot model = new Model.Product_allot();
 
+        private string authRightID = "38ED924E-E025-4FD0-87CB-D148EA2077A8";
 
 
         public Product_allot()
@@ -26,7 +27,8 @@ namespace XHD.Server
 
         public Product_allot(HttpContext context) : base(context)
         {
-
+            allDataBtnid = "B07133BA-7063-42E9-9AF2-26005AA99FB2";
+            depDataBtnid = "B33D7B1B-50A7-41EF-8D2D-AE3E9D91D19B";
 
         }
 
@@ -59,7 +61,7 @@ namespace XHD.Server
                     //需要判断是否有审核权限
                     if (status > 1)
                     {
-                        if (new GetAuthorityByUid().GetBtnAuthority(emp_id, "38ED924E-E025-4FD0-87CB-D148EA2077A8"))
+                        if (CheckBtnAuthority(authRightID))
                         {
                             return XhdResult.Error("您没有该操作权限,请确认后在操作！").ToString();
                         }
@@ -104,6 +106,7 @@ namespace XHD.Server
                 }
                 else
                 {
+                    model.createdep_id = dep_id;
                     model.create_id = emp_id;
                     model.create_time = DateTime.Now;
                     id = "DB-" + DateTime.Now.ToString("yy-MM-dd-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
@@ -121,11 +124,15 @@ namespace XHD.Server
                         int pstatus = product.GetPorductStatusByBarCode(m.BarCode);
                         if (pstatus != 1)
                         {
-                            msg += "\r\n 条形码【" + m.BarCode + "】产品状态发生改变,请确认在添加或提交审核";
+                            msg += "\r\n 条形码【" + m.BarCode + "】产品状态发生改变,请确认后在添加或提交审核";
                         }
                         else {
 
-                            bool r = allotDetailBll.Add(new Model.Product_allotDetail() { id = Guid.NewGuid().ToString(), allotid = id, barcode = m.BarCode, FromWarehouse = m.warehouse_id.CInt(0, false), create_id = emp_id, create_time = DateTime.Now });
+                            bool r = allotDetailBll.Add(new Model.Product_allotDetail() { id = Guid.NewGuid().ToString(), allotid = id, barcode = m.BarCode, NowWarehouse = model.NowWarehouse, FromWarehouse = m.warehouse_id.CInt(0, false), create_id = emp_id, create_time = DateTime.Now });
+                            if (!r)
+                            {
+                                msg += "\r\n 条形码【" + m.BarCode + "】产品状态发生改变,请确认后在添加或提交审核";
+                            }
                         }
                     }
                     else if (m.__status == "delete" && CanDel)
@@ -260,7 +267,7 @@ namespace XHD.Server
         /// <returns></returns>
         public string Auth(string id)
         {
-            if (new GetAuthorityByUid().GetBtnAuthority(emp_id, "38ED924E-E025-4FD0-87CB-D148EA2077A8"))
+            if (CheckBtnAuthority(authRightID))
             {
                 return XhdResult.Error("您没有该操作权限,请确认后在操作！").ToString();
             }
@@ -322,9 +329,8 @@ namespace XHD.Server
             bool candel = true;
             if (uid != "admin")
             {
-                //controll auth
-                var getauth = new GetAuthorityByUid();
-                candel = getauth.GetBtnAuthority(emp_id.ToString(), "0DAC81A8-7C15-4D77-A28F-C6C7468D6287");
+
+                candel = CheckBtnAuthority("0DAC81A8-7C15-4D77-A28F-C6C7468D6287");
                 if (!candel)
                     return XhdResult.Error("无此权限！").ToString();
             }

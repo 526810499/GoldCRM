@@ -6,6 +6,7 @@ using System.Web.Security;
 using System.Web.SessionState;
 using XHD.BLL;
 using XHD.Common;
+using XHD.Common.DEncrypt;
 using XHD.Controller;
 
 namespace XHD.Server
@@ -71,6 +72,9 @@ namespace XHD.Server
 
                 Context.Response.Cookies.Add(cookie);
 
+                CookieHelper.Add("udepid", ds.Tables[0].Rows[0]["dep_id"].CString(""));
+                CookieHelper.Add("udepname", ds.Tables[0].Rows[0]["dep_name"].CString(""));
+                CookieHelper.Add("uid", HttpUtility.UrlEncode(DEncrypt.Encrypt(userid)));
                 //日志
                 var log = new BLL.Sys_log();
                 var modellog = new Model.Sys_log();
