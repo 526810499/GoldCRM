@@ -16,9 +16,6 @@ F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Release\System.Data.S
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Release\MySql.Data.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Release\XHD.DAL.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Release\XHD.Common.pdb
-F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Release\XHD.Controller.pdb
-F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Release\XHD.DBUtility.pdb
-F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Release\XHD.BLL.pdb
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Release\XHD.Model.pdb
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Release\XHD.DAL.pdb
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\obj\Release\Excel.csprojResolveAssemblyReference.cache

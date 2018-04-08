@@ -4,11 +4,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-    
+
     <link href="../lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" />
     <link href="../lib/ligerUI/skins/Gray2014/css/all.css" rel="stylesheet" />
     <link href="../CSS/input.css" rel="stylesheet" type="text/css" />
-    
+
     <script src="../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
     <script src="../JS/XHD.js" type="text/javascript"></script>
@@ -16,67 +16,144 @@
 
         var manager = "";
         var treemanager;
+        var status = "";
+        var SupplierID = "";
+        var allotid = "";
         $(function () {
-            $("#layout1").ligerLayout({ leftWidth: 200, allowLeftResize: false, allowLeftCollapse: true, space: 2,heightDiff:1 });
+            $("#layout1").ligerLayout({ leftWidth: 200, allowLeftResize: false, allowLeftCollapse: true, space: 2, heightDiff: 1 });
             $("#tree1").ligerTree({
-                url: 'Product_category.tree.xhd?rnd=' + Math.random(),
+                url: 'Product_category.tree.xhd?qb=1&rnd=' + Math.random(),
                 onSelect: onSelect,
                 idFieldName: 'id',
-                //parentIDFieldName: 'pid',
                 usericon: 'd_icon',
                 checkbox: false,
                 itemopen: false
             });
-
+            status = getparastr("status", "");
+            SupplierID = getparastr("SupplierID","");
+            allotid = getparastr("allotid", "");
             treemanager = $("#tree1").ligerGetTreeManager();
 
             initLayout();
             $(window).resize(function () {
                 initLayout();
             });
-
-
-
+            var url = "Product.grid.xhd?status=" + status + "&SupplierID=" + SupplierID;
+            if (allotid.length > 0) {
+                url = "Product_allot.gridDetail.xhd?allotid=" + allotid;
+            }
             $("#maingrid4").ligerGrid({
                 columns: [
-                    { display: '序号', width: 50, render: function (item,i) { return item.n; } },
-                    { display: '产品名称', name: 'product_name', width: 120 },
-                    { display: '产品类别', name: 'category_name', width: 120 },
-                    { display: '产品规格', name: 'specifications', width: 120 },
-                    { display: '单位', name: 'unit', width: 120 },
-                    { display: '备注', name: 'remarks', width: 120 }
+                    { display: '产品名称', name: 'product_name', align: 'left', width: 120 },
+                    { display: '产品类别', name: 'category_name', align: 'left', width: 120 },
+                    { display: '条形码', name: 'BarCode', align: 'left', width: 160 },
+                    {
+                        display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {
+                            return toMoney(item.Weight);
+                        }
+                    },
+                    {
+                        display: '主石重', name: 'MainStoneWeight', width: 60, align: 'right', render: function (item) {
+                            return toMoney(item.MainStoneWeight);
+                        }
+                    },
+                    {
+                        display: '附石重', name: 'AttStoneWeight', width: 60, align: 'right', render: function (item) {
+                            return toMoney(item.AttStoneWeight);
+                        }
+                    },
+                    {
+                        display: '附石数', name: 'AttStoneNumber', width: 50, align: 'right', render: function (item) {
+                            return (item.AttStoneNumber);
+                        }
+                    },
+                    {
+                        display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.SalesCostsTotal);
+                        }
+                    },
+                    {
+                        display: '销售价格(￥)', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.SalesTotalPrice);
+                        }
+                    },
+                    { display: '供应商', name: 'supplier_name', width: 100 }
 
                 ],
-                checkbox:true,
+                checkbox: true,
                 dataAction: 'server',
                 pageSize: 30,
                 pageSizeOptions: [20, 30, 50, 100],
                 onSelectRow: function (row, index, data) {
                     //alert('onSelectRow:' + index + " | " + data.ProductName); 
                 },
-                url: "Product.grid.xhd",
+                url: url,
                 width: '100%',
                 height: '100%',
-                heightDiff: -2
+                heightDiff: -2,
+                title: "产品选择",
             });
-            
+            toolbar();
         });
+        function toolbar() {
+            var items = [];
+
+            items.push({ type: 'textbox', id: 'stext', text: '产品名：' });
+            items.push({ type: 'textbox', id: 'scode', text: '条形码：' });
+            items.push({ type: 'button', text: '搜索', icon: '../images/search.gif', disable: true, click: function () { doserch() } });
+
+            $("#toolbar").ligerToolBar({
+                items: items
+            });
+
+            $("#stext").ligerTextBox({ width: 200 });
+            $("#scode").ligerTextBox({ width: 250 });
+
+            $("#scode").on('input', function (e) {
+                doChangeSearch();
+            });
+        }
+
+        function doChangeSearch() {
+            var v = $("#scode").val();
+            if (v != undefined && v.length == 13) {
+                doserch();
+            }
+        }
+
+        //查询
+        function doserch() {
+            var tdata = treemanager.getSelected();
+            var cid = "";
+            if (tdata != null && tdata.data != null) {
+                cid = tdata.data.id;
+            }
+            var serchtxt = "categoryid=" + cid + "&status=" + status + "&stext=" + $("#stext").val() + "&scode=" + $("#scode").val() + "&SupplierID=" + SupplierID + "&rnd=" + Math.random()
+            var manager = $("#maingrid4").ligerGetGridManager();
+            var url = "Product.grid.xhd?" + serchtxt;
+            if (allotid.length > 0) {
+                serchtxt += "&allotid=" + allotid;
+                url = "Product_allot.gridDetail.xhd?" + serchtxt;
+            }
+            manager._setUrl(url);
+
+
+        }
+
 
         function onSelect(note) {
-            var manager = $("#maingrid4").ligerGetGridManager();
-            var url = "Product.grid.xhd?categoryid=" + note.data.id + "&rnd=" + Math.random();
-            manager._setUrl(url);
+            doserch();
         }
 
         function f_select() {
             var manager = $("#maingrid4").ligerGetGridManager();
             var rows = manager.getCheckedRows();
             return rows;
-            
+
         }
     </script>
 </head>
-<body style="padding: 0px;overflow:hidden;">
+<body style="padding: 0px; overflow: hidden;">
     <form id="form1" onsubmit="return false">
         <div id="layout1" style="margin: -1px">
             <div position="left" title="产品类别">
@@ -85,7 +162,7 @@
                 </div>
             </div>
             <div position="center">
-                <div id="toolbar"></div>
+                <div id="toolbar" style="margin-top: 5px"></div>
                 <div id="maingrid4" style="margin: -1px;"></div>
 
             </div>

@@ -83,7 +83,7 @@
                 //    return display + ":" + column + "  £¨¹²" + data.length + "Ìõ¼ÇÂ¼¡££©";
                 //},
                 //defaultCloseGroup: true,
-                dataAction: 'server', pageSize: 30, pageSizeOptions: [20, 30, 50, 100],
+                dataAction: 'server', pageSize: 30, pageSizeOptions: [10, 20, 30, 40, 50, 60, 80, 100, 120],
                 url: "Sale_order.grid.xhd?rnd=" + Math.random(),
                 width: '100%', height: '100%',
                 heightDiff: -10,

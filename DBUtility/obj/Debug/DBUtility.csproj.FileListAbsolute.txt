@@ -31,5 +31,6 @@ F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\bin\Debug\IBatisNet.C
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\bin\Debug\IBatisNet.DataMapper.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\bin\Debug\MySql.Data.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\bin\Debug\System.Data.SQLite.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\obj\Debug\DBUtility.csprojResolveAssemblyReference.cache
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\obj\Debug\XHD.DBUtility.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\obj\Debug\XHD.DBUtility.pdb

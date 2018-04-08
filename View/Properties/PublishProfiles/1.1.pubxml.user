@@ -49,52 +49,52 @@
       <publishTime>07/02/2016 22:07:46</publishTime>
     </File>
     <File Include="bin/XHD.BLL.dll">
-      <publishTime>02/06/2018 16:04:54</publishTime>
+      <publishTime>04/04/2018 17:24:30</publishTime>
     </File>
     <File Include="bin/XHD.Common.dll">
-      <publishTime>02/07/2018 13:33:20</publishTime>
+      <publishTime>04/04/2018 16:50:59</publishTime>
     </File>
     <File Include="bin/XHD.Controller.dll">
-      <publishTime>02/06/2018 16:04:54</publishTime>
+      <publishTime>03/27/2018 18:44:08</publishTime>
     </File>
     <File Include="bin/XHD.DAL.dll">
-      <publishTime>02/06/2018 16:04:53</publishTime>
+      <publishTime>04/04/2018 17:24:29</publishTime>
     </File>
     <File Include="bin/XHD.DBUtility.dll">
-      <publishTime>02/06/2018 16:04:53</publishTime>
+      <publishTime>02/07/2018 17:56:05</publishTime>
     </File>
     <File Include="bin/XHD.Excel.dll">
-      <publishTime>02/06/2018 16:04:54</publishTime>
+      <publishTime>04/04/2018 17:24:29</publishTime>
     </File>
     <File Include="bin/XHD.Model.dll">
-      <publishTime>02/06/2018 16:04:53</publishTime>
+      <publishTime>04/04/2018 17:24:27</publishTime>
     </File>
     <File Include="bin/XHD.Server.dll">
-      <publishTime>02/06/2018 16:04:55</publishTime>
+      <publishTime>04/04/2018 17:24:31</publishTime>
     </File>
     <File Include="bin/XHD.Service.dll">
       <publishTime>02/06/2018 16:04:53</publishTime>
     </File>
     <File Include="bin/XHD.SMS.dll">
-      <publishTime>02/06/2018 16:04:53</publishTime>
+      <publishTime>02/07/2018 15:49:49</publishTime>
     </File>
     <File Include="bin/XHD.View.dll">
-      <publishTime>02/07/2018 13:45:15</publishTime>
+      <publishTime>04/08/2018 09:46:54</publishTime>
     </File>
     <File Include="conn.config">
       <publishTime>02/05/2018 17:18:20</publishTime>
     </File>
     <File Include="CRM/Contact/Customer_follow.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:35</publishTime>
     </File>
     <File Include="CRM/Contact/Customer_follow_add.aspx">
-      <publishTime>09/25/2017 09:58:43</publishTime>
+      <publishTime>02/08/2018 17:15:35</publishTime>
     </File>
     <File Include="CRM/Contact/sms.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:35</publishTime>
     </File>
     <File Include="CRM/Contact/sms_add.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:35</publishTime>
     </File>
     <File Include="CRM/Contact/sms_report.aspx">
       <publishTime>09/24/2017 22:54:01</publishTime>
@@ -103,28 +103,28 @@
       <publishTime>02/05/2018 17:19:47</publishTime>
     </File>
     <File Include="CRM/Customer/Customer.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>04/03/2018 18:13:49</publishTime>
     </File>
     <File Include="CRM/Customer/Customer_add.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>04/03/2018 18:12:00</publishTime>
     </File>
     <File Include="CRM/Customer/Customer_Contact.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:36</publishTime>
     </File>
     <File Include="CRM/Customer/Customer_Contact_add.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:36</publishTime>
     </File>
     <File Include="CRM/Customer/Customer_import.aspx">
       <publishTime>02/05/2018 17:19:47</publishTime>
     </File>
     <File Include="CRM/Customer/Customer_info.aspx">
-      <publishTime>09/28/2017 11:33:23</publishTime>
+      <publishTime>04/03/2018 18:00:34</publishTime>
     </File>
     <File Include="CRM/Customer/Customer_map.aspx">
-      <publishTime>02/05/2018 17:19:47</publishTime>
+      <publishTime>02/08/2018 17:15:36</publishTime>
     </File>
     <File Include="CRM/Customer/Customer_view.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>04/03/2018 18:33:23</publishTime>
     </File>
     <File Include="CRM/Customer/GetContact.aspx">
       <publishTime>09/24/2017 22:54:01</publishTime>
@@ -133,10 +133,10 @@
       <publishTime>09/24/2017 22:54:01</publishTime>
     </File>
     <File Include="CRM/Customer/GetCustomer.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>04/02/2018 15:07:51</publishTime>
     </File>
     <File Include="CRM/Customer/map_mark.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:36</publishTime>
     </File>
     <File Include="CSS/bootstrap.min.css">
       <publishTime>09/18/2017 11:51:27</publishTime>
@@ -229,28 +229,28 @@
       <publishTime>09/05/2017 22:23:26</publishTime>
     </File>
     <File Include="finance/getReceivable.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:36</publishTime>
     </File>
     <File Include="finance/invoice.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:36</publishTime>
     </File>
     <File Include="finance/invoice_add.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:36</publishTime>
     </File>
     <File Include="finance/invoice_list.aspx">
       <publishTime>09/12/2017 21:09:07</publishTime>
     </File>
     <File Include="finance/Receivable.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:36</publishTime>
     </File>
     <File Include="finance/Receivable_add.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:36</publishTime>
     </File>
     <File Include="finance/Receive.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:36</publishTime>
     </File>
     <File Include="finance/Receive_add.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:36</publishTime>
     </File>
     <File Include="font/fontawesome-webfont.eot">
       <publishTime>03/17/2017 09:21:41</publishTime>
@@ -274,70 +274,70 @@
       <publishTime>09/16/2015 11:59:11</publishTime>
     </File>
     <File Include="home/getMenu.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:36</publishTime>
     </File>
     <File Include="home/GetPortal.aspx">
       <publishTime>09/24/2017 22:54:01</publishTime>
     </File>
     <File Include="home/home.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:36</publishTime>
     </File>
     <File Include="home/queckmenu.aspx">
       <publishTime>09/24/2017 22:54:01</publishTime>
     </File>
     <File Include="HR/emp_personal_update.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:36</publishTime>
     </File>
     <File Include="HR/Getemp.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:36</publishTime>
     </File>
     <File Include="HR/Getemp_Auth.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:36</publishTime>
     </File>
     <File Include="HR/GetMultemp.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:36</publishTime>
     </File>
     <File Include="HR/headimage.aspx">
       <publishTime>09/03/2017 10:59:08</publishTime>
     </File>
     <File Include="HR/hr_changepwd.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:36</publishTime>
     </File>
     <File Include="HR/hr_department.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:36</publishTime>
     </File>
     <File Include="HR/hr_department_add.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:37</publishTime>
     </File>
     <File Include="HR/hr_employee.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:37</publishTime>
     </File>
     <File Include="HR/hr_employee_add.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:37</publishTime>
     </File>
     <File Include="HR/hr_employee_changpwd.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:37</publishTime>
     </File>
     <File Include="HR/hr_getpost.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:37</publishTime>
     </File>
     <File Include="HR/hr_position.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:37</publishTime>
     </File>
     <File Include="HR/hr_position_add.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:37</publishTime>
     </File>
     <File Include="HR/hr_post.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:37</publishTime>
     </File>
     <File Include="HR/hr_post_add.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:37</publishTime>
     </File>
     <File Include="HR/QuickAddEmp.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:37</publishTime>
     </File>
     <File Include="HR/QuickAddPost.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:37</publishTime>
     </File>
     <File Include="Images/accordion_arrows.png">
       <publishTime>01/19/2016 12:13:04</publishTime>
@@ -5260,13 +5260,13 @@
       <publishTime>09/16/2015 11:59:11</publishTime>
     </File>
     <File Include="install/index.aspx">
-      <publishTime>02/05/2018 17:19:48</publishTime>
+      <publishTime>02/08/2018 16:55:07</publishTime>
     </File>
     <File Include="install/install.sql">
       <publishTime>02/05/2018 17:19:48</publishTime>
     </File>
     <File Include="install/remind.aspx">
-      <publishTime>02/05/2018 17:19:48</publishTime>
+      <publishTime>02/08/2018 16:55:07</publishTime>
     </File>
     <File Include="install/step2.aspx">
       <publishTime>02/05/2018 17:19:48</publishTime>
@@ -5401,7 +5401,7 @@
       <publishTime>09/15/2017 17:45:49</publishTime>
     </File>
     <File Include="JS/XHD.js">
-      <publishTime>09/21/2017 13:00:46</publishTime>
+      <publishTime>04/04/2018 14:15:17</publishTime>
     </File>
     <File Include="lib/images/loading.gif">
       <publishTime>08/16/2017 16:35:03</publishTime>
@@ -7657,229 +7657,271 @@
       <publishTime>08/16/2017 16:35:07</publishTime>
     </File>
     <File Include="License.html">
-      <publishTime>02/05/2018 17:19:50</publishTime>
+      <publishTime>02/08/2018 17:04:41</publishTime>
     </File>
     <File Include="login.aspx">
-      <publishTime>02/06/2018 14:03:33</publishTime>
+      <publishTime>02/08/2018 17:15:15</publishTime>
     </File>
     <File Include="main.aspx">
-      <publishTime>02/05/2018 17:28:40</publishTime>
+      <publishTime>02/08/2018 17:15:39</publishTime>
     </File>
     <File Include="Personal/Message/news.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:39</publishTime>
     </File>
     <File Include="Personal/Message/news_add.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="Personal/Message/news_view.aspx">
-      <publishTime>09/21/2017 17:08:56</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="Personal/Message/notice.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="Personal/Message/notice_add.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="Personal/Message/notice_view.aspx">
-      <publishTime>09/21/2017 17:08:56</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="Personal/Personal/add_note.aspx">
       <publishTime>09/16/2015 11:59:11</publishTime>
     </File>
     <File Include="Personal/Personal/Calendar.aspx">
-      <publishTime>09/21/2017 17:08:56</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="Personal/Personal/Calendar_add.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="Personal/Personal/notes.aspx">
-      <publishTime>09/03/2017 18:55:04</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="Personal/Task/Assignment.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="Personal/Task/Assignment_add.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="Personal/Task/task_list.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="Personal/Task/task_list_add.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="Personal/Task/todo.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="Personal/Task/todo_add.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
+    </File>
+    <File Include="Product/GetCodeProduct.aspx">
+      <publishTime>04/04/2018 16:58:26</publishTime>
     </File>
     <File Include="Product/GetProduct.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>04/04/2018 16:58:33</publishTime>
     </File>
     <File Include="Product/product.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>04/04/2018 17:00:22</publishTime>
     </File>
     <File Include="Product/product_add.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>04/04/2018 16:44:34</publishTime>
+    </File>
+    <File Include="Product/Product_allot.aspx">
+      <publishTime>04/03/2018 19:49:18</publishTime>
+    </File>
+    <File Include="Product/Product_allotAdd.aspx">
+      <publishTime>04/03/2018 18:17:45</publishTime>
     </File>
     <File Include="Product/product_category.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>03/26/2018 19:05:10</publishTime>
     </File>
     <File Include="Product/product_category_add.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>03/27/2018 18:04:48</publishTime>
+    </File>
+    <File Include="Product/Product_out.aspx">
+      <publishTime>04/03/2018 19:50:18</publishTime>
+    </File>
+    <File Include="Product/Product_outAdd.aspx">
+      <publishTime>04/03/2018 19:40:45</publishTime>
+    </File>
+    <File Include="Product/Product_Retrieval.aspx">
+      <publishTime>04/03/2018 16:23:17</publishTime>
+    </File>
+    <File Include="Product/Product_Retrieval_Add.aspx">
+      <publishTime>04/04/2018 14:07:23</publishTime>
+    </File>
+    <File Include="Product/Product_supplier.aspx">
+      <publishTime>03/27/2018 22:09:11</publishTime>
+    </File>
+    <File Include="Product/Product_supplier_add.aspx">
+      <publishTime>03/27/2018 22:28:13</publishTime>
+    </File>
+    <File Include="Product/product_warehouse.aspx">
+      <publishTime>03/27/2018 22:07:27</publishTime>
+    </File>
+    <File Include="Product/product_warehouse_add.aspx">
+      <publishTime>04/03/2018 10:56:51</publishTime>
     </File>
     <File Include="ReportForm/Compared/customer_add.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="ReportForm/Compared/customer_follow.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="ReportForm/Compared/customer_level.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="ReportForm/Compared/customer_source.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="ReportForm/Compared/customer_type.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="ReportForm/Compared/emp_customer_add.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="ReportForm/Compared/emp_customer_follow.aspx">
-      <publishTime>09/24/2017 22:54:01</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="ReportForm/Compared/emp_customer_order.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="ReportForm/CRM/CRM_Report_year.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="ReportForm/CRM/Follow_Report_year.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="ReportForm/emp/customer_add.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:40</publishTime>
     </File>
     <File Include="ReportForm/emp/customer_add_month.aspx">
       <publishTime>09/24/2017 22:54:00</publishTime>
     </File>
     <File Include="ReportForm/emp/customer_follow.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
     </File>
     <File Include="ReportForm/emp/customer_order.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
     </File>
     <File Include="ReportForm/funnel/CRM_Report_funnel.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
     </File>
     <File Include="Sale/contract.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
     </File>
     <File Include="Sale/contract_add.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
     </File>
     <File Include="Sale/contract_view.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
     </File>
     <File Include="Sale/GetOrder.aspx">
       <publishTime>09/24/2017 22:54:00</publishTime>
     </File>
     <File Include="Sale/order.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>04/02/2018 14:41:35</publishTime>
     </File>
     <File Include="Sale/order_add.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>04/04/2018 14:47:57</publishTime>
     </File>
     <File Include="Sale/order_view.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
+    </File>
+    <File Include="Sale/Product_oldChangeNew.aspx">
+      <publishTime>04/03/2018 17:25:08</publishTime>
+    </File>
+    <File Include="Sale/Product_oldChangeNew_add.aspx">
+      <publishTime>04/04/2018 14:07:13</publishTime>
     </File>
     <File Include="System/sysbase/Sys_App.aspx">
-      <publishTime>02/06/2018 16:15:57</publishTime>
+      <publishTime>02/08/2018 17:16:00</publishTime>
     </File>
     <File Include="System/sysbase/Sys_App_add.aspx">
-      <publishTime>02/06/2018 16:15:15</publishTime>
+      <publishTime>02/08/2018 17:16:00</publishTime>
     </File>
     <File Include="System/sysbase/Sys_Button.aspx">
-      <publishTime>02/06/2018 13:21:09</publishTime>
+      <publishTime>04/04/2018 10:48:34</publishTime>
     </File>
     <File Include="System/sysbase/Sys_Button_add.aspx">
-      <publishTime>02/06/2018 15:30:30</publishTime>
+      <publishTime>04/04/2018 11:03:04</publishTime>
     </File>
     <File Include="System/sysbase/sys_log_err.aspx">
-      <publishTime>02/05/2018 17:56:49</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
     </File>
     <File Include="System/sysbase/Sys_Menu.aspx">
-      <publishTime>02/06/2018 14:13:36</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
     </File>
     <File Include="System/sysbase/Sys_Menu_add.aspx">
-      <publishTime>02/06/2018 15:30:19</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
     </File>
     <File Include="System/sysconfig/sms_config.aspx">
-      <publishTime>02/05/2018 17:19:50</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
     </File>
     <File Include="System/sysconfig/sms_config_add.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
     </File>
     <File Include="System/sysinfo/Sys_info.aspx">
-      <publishTime>02/06/2018 15:34:33</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
     </File>
     <File Include="System/sysinfo/Sys_version.aspx">
-      <publishTime>02/05/2018 17:19:50</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
     </File>
     <File Include="System/sysmanager/Getemp.aspx">
       <publishTime>09/24/2017 22:54:00</publishTime>
     </File>
     <File Include="System/sysmanager/GetRole.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
     </File>
     <File Include="System/sysmanager/Param_City.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
     </File>
     <File Include="System/sysmanager/Param_City_add.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
     </File>
     <File Include="System/sysmanager/Param_Provinces.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
     </File>
     <File Include="System/sysmanager/Param_Provinces_add.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
     </File>
     <File Include="System/sysmanager/Param_SysParam.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>03/22/2018 20:26:08</publishTime>
     </File>
     <File Include="System/sysmanager/Param_SysParam_add.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>03/22/2018 20:26:15</publishTime>
     </File>
     <File Include="System/sysmanager/Role_emp.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
     </File>
     <File Include="System/sysmanager/Sys_data_authorized.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
     </File>
     <File Include="System/sysmanager/Sys_log.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
     </File>
     <File Include="System/sysmanager/Sys_role.aspx">
-      <publishTime>02/05/2018 18:19:26</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
     </File>
     <File Include="System/sysmanager/Sys_role_add.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:41</publishTime>
     </File>
     <File Include="System/sysmanager/Sys_Role_authorized.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:42</publishTime>
+    </File>
+    <File Include="Test.aspx">
+      <publishTime>02/08/2018 16:26:17</publishTime>
     </File>
     <File Include="Toolbar/Batch/batch.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:42</publishTime>
     </File>
     <File Include="Toolbar/Batch/batch_add.aspx">
-      <publishTime>09/24/2017 22:54:00</publishTime>
+      <publishTime>02/08/2018 17:15:42</publishTime>
     </File>
     <File Include="Toolbar/Recycle/CRM/Customer.aspx">
-      <publishTime>09/04/2017 18:12:33</publishTime>
+      <publishTime>02/08/2018 17:15:42</publishTime>
     </File>
     <File Include="Toolbar/Repeat.aspx">
-      <publishTime>02/05/2018 17:19:50</publishTime>
+      <publishTime>02/08/2018 17:15:42</publishTime>
     </File>
     <File Include="ueditor/.DS_Store">
       <publishTime>03/25/2016 18:13:00</publishTime>
@@ -8725,10 +8767,10 @@
       <publishTime>09/16/2015 11:59:11</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>02/07/2018 13:42:32</publishTime>
+      <publishTime>04/08/2018 09:47:00</publishTime>
     </File>
     <File Include="welcome.htm">
-      <publishTime>02/05/2018 17:19:51</publishTime>
+      <publishTime>02/08/2018 16:55:07</publishTime>
     </File>
   </ItemGroup>
 </Project>

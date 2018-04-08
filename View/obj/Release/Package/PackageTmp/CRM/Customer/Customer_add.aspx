@@ -68,11 +68,11 @@
                                 rows: [
                                     [
                                         { display: "客户名称", name: "T_customer", type: "text", options: "{width:180}", validate: "{required:true}", initValue: obj.cus_name },
-                                        { display: "网址", name: "T_Website", type: "text", options: "{width:180}", initValue: obj.cus_website }
+                                        { display: "客户生日", name: "T_birthday", type: "date", options: "{width:180}", validate: "{required:true}", initValue: formatTimebytype(obj.birthday, "yyyy-MM-dd") },
                                     ],
                                     [
                                         { display: "电话", name: "T_tel", type: "text", options: "{width:180}", validate: "{required:true}", initValue: obj.cus_tel },
-                                        { display: "传真", name: "T_fax", type: "text", options: "{width:180}", initValue: obj.cus_fax }
+                                        { display: "积分", name: "T_integral", type: "digits", align: "left", options: "{width:180;}", initValue: obj.integral }
                                     ],
                                     [
                                         { display: "省份", name: "T_Provinces" },
@@ -147,7 +147,7 @@
                             //$.get("Sys_City.combo.xhd?provincesid=" + newvalue + "&rnd=" + Math.random(), function (data, textStatus) {
                             //    b.setData(eval(data));
                             //});
-                            url= "Sys_City.combo.xhd?provincesid=" + newvalue + "&rnd=" + Math.random(),
+                            url = "Sys_City.combo.xhd?provincesid=" + newvalue + "&rnd=" + Math.random(),
                             b.setUrl(url);
                         }, emptyText: '（空）'
                     });

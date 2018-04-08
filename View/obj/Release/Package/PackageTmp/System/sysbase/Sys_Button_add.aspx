@@ -20,6 +20,11 @@
     <script type="text/javascript">
         //图标
         var jiconlist, winicons, currentComboBox;
+
+        var proData =
+        [{ id: 0, text: '显示' },
+        { id: 1, text: '隐藏' }];
+        var thmanager;
         $(function () {
             $.metadata.setType("attr", "validate");
             XHD.validate($(form1));
@@ -29,7 +34,10 @@
 
             $("#T_btn_icon").bind("click", f_selectContact);
             $("#btnicon").bind("click", f_selectContact);
-           
+
+
+            thmanager = $("#T_isHide").ligerComboBox({ data: proData, isMultiSelect: false, initValue: 0 });
+
             if (getparastr("btnid")) {
                 loadForm(getparastr("btnid"));
             }
@@ -40,12 +48,13 @@
 
         function f_save() {
             if ($(form1).valid()) {
-                var sendtxt = "&btnid=" + getparastr("btnid")+"&menuid="+getparastr("menuid");
+                var sendtxt = "&btnid=" + getparastr("btnid") + "&menuid=" + getparastr("menuid") + "&isHide=" + $("#T_isHide_val").val();
                 return $("form :input").fieldSerialize() + sendtxt;
             }
         }
 
         function loadForm(oaid) {
+
             $.ajax({
                 type: "GET",
                 url: "Sys_Button.form.xhd", /* 注意后面的名字对应CS的方法名称 */
@@ -54,15 +63,14 @@
                 dataType: "json",
                 success: function (result) {
                     var obj = eval(result);
-                    for (var n in obj) {
-                        
-                    }
+
                     //alert(obj.constructor); //String 构造函数
                     $("#T_btn_name").val(obj.Btn_name);
                     $("#T_btn_handler").val(obj.Btn_handler);
                     $("#T_btn_icon").val(obj.Btn_icon);
                     $("#T_btn_order").val(obj.Btn_order);
-                    $("#btnicon").attr("src", "../../"+obj.Btn_icon);
+                    $("#btnicon").attr("src", "../../" + obj.Btn_icon);
+                    thmanager.setValue(obj.isHide);
                 }
             });
         }
@@ -103,7 +111,7 @@
                 });
             }
         }
- 
+
         function ClickImg(v) {
             var src = $(v).attr("src");
             $("#btnicon").attr("src", "../../images/icon/" + src.split('images/icon/')[1]);
@@ -114,63 +122,98 @@
 
     </script>
     <style type="text/css">
-        .iconlist{ width:360px;padding:3px;}
-        .iconlist li{ border:1px solid #FFFFFF; float:left; display:block; padding:2px; cursor:pointer; }
-        .iconlist li.over{border:1px solid #516B9F;}
-        .iconlist li img{ height:16px; height:16px;} 
+        .iconlist {
+            width: 360px;
+            padding: 3px;
+        }
 
+            .iconlist li {
+                border: 1px solid #FFFFFF;
+                float: left;
+                display: block;
+                padding: 2px;
+                cursor: pointer;
+            }
+
+                .iconlist li.over {
+                    border: 1px solid #516B9F;
+                }
+
+                .iconlist li img {
+                    height: 16px;
+                    height: 16px;
+                }
     </style>
-    
-</head>
-<body style="padding:0px">
-    <form id="form1" onsubmit="return false">
-        <table  border="0" cellpadding="3" cellspacing="1"  style="background: #fff; width:400px;">
-            
-            <tr>
-                <td height="23" style="width:88px" colspan="2" >
-                
-                    <div align="left" style="width: 62px">按钮名称：</div></td>
-                <td height="23" >
 
-                    <input type="text" id="T_btn_name" name="T_btn_name"   ltype="text"  ligerui="{width:180}"  validate="{required:true}" />
+</head>
+<body style="padding: 0px">
+    <form id="form1" onsubmit="return false">
+        <table border="0" cellpadding="3" cellspacing="1" style="background: #fff; width: 400px;">
+
+            <tr>
+                <td height="23" style="width: 88px" colspan="2">
+
+                    <div align="left" style="width: 62px">按钮名称：</div>
+                </td>
+                <td height="23">
+
+                    <input type="text" id="T_btn_name" name="T_btn_name" ltype="text" ligerui="{width:180}" validate="{required:true}" />
 
                 </td>
             </tr>
             <tr>
-                <td height="23" colspan="2" >
-                
-                    <div align="left" style="width: 62px">相应事件：</div></td>
-                <td height="23" >
+                <td height="23" colspan="2">
 
-                    <input type="text" id="T_btn_handler"  name="T_btn_handler"    ltype="text" ligerui="{width:180}" validate="{required:true}"/>
+                    <div align="left" style="width: 62px">相应事件：</div>
+                </td>
+                <td height="23">
 
-                        
+                    <input type="text" id="T_btn_handler" name="T_btn_handler" ltype="text" ligerui="{width:180}" validate="{required:true}" />
+
+
+                </td>
+            </tr>
+            <tr>
+                <td height="23" colspan="2">
+
+                    <div align="left" style="width: 62px">是否隐藏：</div>
+                </td>
+                <td height="23">
+                    <input type="text" id="T_isHide" name="T_isHide" ltype="select" ligerui="{width:180}" validate="{required:true}" />
+                    <%-- <select id="T_isHide" name="T_isHide">
+                        <option value="0">显示</option>
+                        <option value="1">隐藏</option>
+                    </select>--%>
+
+
                 </td>
             </tr>
             <tr>
                 <td height="23" style="width: 62px">
-                
-                    <div align="left" style="width: 62px">按钮图标：</div></td>
-                <td height="23" style="width: 18px">
-                
-                    <img style="width:16px;height:16px" id="btnicon" /></td>
-                <td height="23" >
 
-                        <input type="text" id="T_btn_icon" name="T_btn_icon"  ltype="text" ligerui="{width:180}" validate="{required:true}"/>
+                    <div align="left" style="width: 62px">按钮图标：</div>
+                </td>
+                <td height="23" style="width: 18px">
+
+                    <img style="width: 16px; height: 16px" id="btnicon" /></td>
+                <td height="23">
+
+                    <input type="text" id="T_btn_icon" name="T_btn_icon" ltype="text" ligerui="{width:180}" validate="{required:true}" />
                 </td>
             </tr>
-            
+
             <tr>
                 <td height="23" colspan="2">
-                
-                    <div align="left" style="width: 62px">排序：</div></td>
-                <td height="23" >
-                    <input type="text" id="T_btn_order" name="T_btn_order" value="20"  ltype='spinner' ligerui="{type:'int',width:180}"  ligerui="{width:180}" validate="{required:true}"/>
+
+                    <div align="left" style="width: 62px">排序：</div>
+                </td>
+                <td height="23">
+                    <input type="text" id="T_btn_order" name="T_btn_order" value="20" ltype='spinner' ligerui="{type:'int',width:180}" ligerui="{width:180}" validate="{required:true}" />
 
                 </td>
             </tr>
-            
-            </table>
+
+        </table>
     </form>
 </body>
 </html>

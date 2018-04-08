@@ -1,77 +1,53 @@
 <%@ Page Language="C#" AutoEventWireup="true" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge chrome=1" />
     <link href="../../lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" />
     <link href="../../lib/ligerUI/skins/Gray2014/css/all.css" rel="stylesheet" />
-
     <link href="../../CSS/input.css" rel="stylesheet" type="text/css" />
 
     <script src="../../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="../../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
     <script src="../../JS/XHD.js" type="text/javascript"></script>
-
-
-
     <script type="text/javascript">
-
-        var manager = "";
-        var treemanager;
         $(function () {
-            $("#layout1").ligerLayout({ leftWidth: 150, allowLeftResize: false, allowLeftCollapse: true, space: 2 });
-            $("#tree1").ligerTree({
-                url: 'Sys_App.GetAppList.xhd?rnd=' + Math.random(),
-                onSelect: onSelect,
-                idFieldName: 'id',
-                usericon: 'App_icon',
-                iconpath: '../../',
-                checkbox: false,
-                itemopen: false
-            });
 
-            initLayout();
-            $(window).resize(function () {
-                initLayout();
-            });
-
-            toolbar();
-
-            $("#maingrid").ligerGrid({
+            $("#maingrid4").ligerGrid({
                 columns: [
-                    { display: 'ID', name: 'Menu_id', type: 'int', width: 120, align: 'left' },
-                    { display: '菜单名', name: 'Menu_name', align: 'left' },
-                    { display: '链接地址', name: 'Menu_url', align: 'left', width: 300 },
+                   { display: 'ID', name: 'id', type: 'int', width: 280, align: 'left' },
+                    { display: '菜单名', name: 'App_name', width: 250, align: 'left' },
                     {
-                        display: '图标', name: 'Menu_icon', width: 50, render: function (item) {
-                            return "<img style='width:16px;height:16px;margin-top:8px;' src='../../" + item.Menu_icon + "'/>"
+                        display: '图标', name: 'App_icon', width: 250, render: function (item) {
+                            return "<img style='width:16px;height:16px;margin-top:8px;' src='../../" + item.App_icon + "'/>";
                         }
                     },
-                    //{ display: '响应事件', name: 'Menu_handler' },
-                    { display: '排序', name: 'Menu_order', width: 50 }
-
-
+                    { display: '排序', name: 'App_order' }
                 ],
                 dataAction: 'server',
                 pageSize: 30,
                 pageSizeOptions: [20, 30, 50, 100],
-                tree: { columnName: 'Menu_name' },
-                url: "Sys_Menu.GetMenuV2.xhd?parentid=-1",
+                enabledEdit: true,
+                url: "Sys_App.GridData.xhd",
+                width: '100%',
+                height: '100%',
+                heightDiff: -11,
+                onRClickToSelect: true,
+                rownumbers: true,
                 onContextmenu: function (parm, e) {
                     actionCustomerID = parm.data.id;
                     menu.show({ top: e.pageY, left: e.pageX });
                     return false;
-                },
-                width: '100%',
-                height: '100%',
-                heightDiff: -10,
-                onRClickToSelect: true
+                }
             });
-
-            $("#maingrid").ligerGetGridManager()._onResize();
-
-
+            initLayout();
+            $(window).resize(function () {
+                initLayout();
+            });
+            toolbar();
         });
         function toolbar() {
             var items = [];
@@ -84,46 +60,49 @@
 
             });
         }
+        function f_reload() {
+            var manager = $("#maingrid4").ligerGetGridManager();
+            manager.loadData(true);
+        };
 
-        function onSelect(note) {
-            var manager = $("#maingrid").ligerGetGridManager();
-            //manager.showData({ Rows: [], Total: 0 });
-            var url = "Sys_Menu.GetMenuV2.xhd?appid=" + note.data.id + "&rnd=" + Math.random();
-            manager._setUrl(url);
+ 
+        function add() {
+            f_openWindow("System/sysbase/Sys_App_Add.aspx", "新增主菜单", 700, 350, f_save);
+
         }
 
         function edit() {
-            var row = $("#maingrid").ligerGetGridManager().getSelectedRow();
-            var notes = $("#tree1").ligerGetTreeManager().getSelected();
-            if (row != null && row != undefined && notes != null && notes != undefined) {
-                f_openWindow('System/sysbase/Sys_Menu_add.aspx?menuid=' + row.Menu_id + '&appid=' + notes.data.id, "修改目录", 530, 380, f_save);
-            }
-            else {
-                $.ligerDialog.warn('请选择目录！');
-            }
-        }
-        function add() {
-            var notes = $("#tree1").ligerGetTreeManager().getSelected();
-            if (notes != null && notes != undefined) {
-                f_openWindow('System/sysbase/Sys_Menu_add.aspx?appid=' + notes.data.id, "新增目录", 530, 380, f_save);
-            }
-            else {
-                $.ligerDialog.warn('请选择主菜单目录！');
+            var manager = $("#maingrid4").ligerGetGridManager();
+            var row = manager.getSelectedRow();
+            if (row) {
+                f_openWindow('System/sysbase/Sys_App_Add.aspx?id=' + row.id, "修改主菜单", 700, 350, f_save);
+            } else {
+                $.ligerDialog.warn("请选择行");
             }
         }
 
         function del() {
-            var manager = $("#maingrid").ligerGetGridManager();
+            var manager = $("#maingrid4").ligerGetGridManager();
             var row = manager.getSelectedRow();
             if (row) {
-                $.ligerDialog.confirm("删除后不能恢复，\n您确定要删除？", function (yes) {
+                $.ligerDialog.confirm("主菜单删除后不能恢复，\n您确定要移除？", function (yes) {
                     if (yes) {
                         $.ajax({
                             type: "POST",
-                            url: "Sys_Menu.del.xhd",
-                            data: { menuid: row.Menu_id },
+                            url: "Sys_App.delete.xhd", /* 注意后面的名字对应CS的方法名称 */
+                            data: { id: row.id }, /* 注意参数的格式和名称 */
+                            dataType: 'json',
                             success: function (result) {
-                                treereload();
+                                $.ligerDialog.closeWaitting();
+
+                                var obj = eval(result);
+
+                                if (obj.isSuccess) {
+                                    f_reload();
+                                }
+                                else {
+                                    $.ligerDialog.error(obj.Message);
+                                }
                             }
                         });
                     }
@@ -139,11 +118,20 @@
                 dialog.close();
                 top.$.ligerDialog.waitting('数据保存中,请稍候...');
                 $.ajax({
-                    url: "Sys_Menu.save.xhd", type: "POST",
+                    url: "Sys_App.save.xhd", type: "POST",
                     data: issave,
-                    success: function (responseText) {
+                    dataType: 'json',
+                    success: function (result) {
                         top.$.ligerDialog.closeWaitting();
-                        treereload();
+
+                        var obj = eval(result);
+
+                        if (obj.isSuccess) {
+                            f_reload();
+                        }
+                        else {
+                            top.$.ligerDialog.error(obj.Message);
+                        }
 
                     },
                     error: function () {
@@ -151,29 +139,17 @@
                         top.$.ligerDialog.error('操作失败！');
                     }
                 });
-
             }
-        }
-
-        function treereload() {
-            var manager = $("#maingrid").ligerGetGridManager();
-            manager.loadData(true);
         }
     </script>
 </head>
-<body style="padding: 0px">
-    <form id="form1" onsubmit="return false">
-
-        <div id="layout1" style="margin-top: -1px; margin-left: -1px">
-
-
-            <div style="padding: 5px;">
-                <div id="toolbar"></div>
-                <div style="padding-top: 5px;">
-                    <div id="maingrid" style=""></div>
-                </div>
+<body>
+    <form id="mainform" onsubmit="return false">
+        <div style="padding: 10px;">
+            <div id="toolbar"></div>
+            <div id="grid" style="">
+                <div id="maingrid4" style="margin: -1px;"></div>
             </div>
-
         </div>
     </form>
 </body>

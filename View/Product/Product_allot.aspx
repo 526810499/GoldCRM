@@ -69,7 +69,7 @@
                 dataAction: 'server',
                 url: "Product_allot.grid.xhd?rnd=" + Math.random(),
                 pageSize: 30,
-                pageSizeOptions: [20, 30, 50, 100],
+                pageSizeOptions: [10, 20, 30, 40, 50, 60, 80, 100, 120],
                 width: '100%',
                 height: '100%',
                 heightDiff: -8,

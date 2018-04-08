@@ -23,17 +23,15 @@
             $.metadata.setType("attr", "validate");
             XHD.validate($(form1));
 
-            //$("#T_Contract_name").focus();
             $("form").ligerForm();
             $("#menuicon").bind("click", f_selectContact);
             $("#T_menu_icon").bind("click", f_selectContact);
+            var id = getparastr("id");
+            if (id) {
+                $("#hid").val(id);
+                loadForm(id);
+            }
 
-            if (getparastr("menuid")) {
-                loadForm(getparastr("menuid"));
-            }
-            else {
-                initcomb();
-            }
 
             jiconlist = $("body > .iconlist:first");
             if (!jiconlist.length) jiconlist = $('<ul class="iconlist"></ul>').appendTo('body');
@@ -41,57 +39,33 @@
 
         function f_save() {
             if ($(form1).valid()) {
-                var sendtxt = "&menutype=sys&menuid=" + getparastr("menuid") + "&appid=" + getparastr("appid");
-                return $("form :input").fieldSerialize() + sendtxt;
+                return $("form :input").fieldSerialize();
             }
         }
 
         function loadForm(oaid) {
             $.ajax({
                 type: "GET",
-                url: "Sys_Menu.form.xhd", /* 注意后面的名字对应CS的方法名称 */
+                url: "Sys_App.form.xhd", /* 注意后面的名字对应CS的方法名称 */
                 data: { id: oaid, rnd: Math.random() }, /* 注意参数的格式和名称 */
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
                     var obj = eval(result);
-                    for (var n in obj) {
 
-                    }
-
-                    if (!obj.isMobile)
-                        obj.isMobile = 0;
                     //alert(obj.constructor); //String 构造函数
-                    $("#T_menu_name").val(obj.Menu_name);
-                    $("#T_menu_url").val(obj.Menu_url);
-                    $("#T_menu_icon").val(obj.Menu_icon);
-                    $("#T_menu_order").val(obj.Menu_order);
-                    $("#T_menu_id").val(obj.Menu_id);
-                    $("#menuicon").attr("src", "../../" + obj.Menu_icon);
+                    $("#T_menu_name").val(obj.App_name);
 
-                    initcomb(obj.parentid);
+                    $("#T_menu_icon").val(obj.App_icon);
+                    $("#T_menu_order").val(obj.App_order);
+                    $("#T_menu_id").val(obj.id);
+                    $("#menuicon").attr("src", "../../" + obj.App_icon);
+
+
                 }
             });
         }
-        function initcomb(value) {
-            var appid = getparastr("appid")
 
-            $("#T_menu_parent").ligerComboBox({
-                width: 300,
-                selectBoxWidth: 300,
-                selectBoxHeight: 180,
-                valueField: 'id',
-                textField: 'text',
-                initValue: value,
-                treeLeafOnly: true,
-                tree: {
-                    url: 'Sys_Menu.SysTreeV2.xhd?appid=' + appid + '&rnd=' + Math.random(),
-                    idFieldName: 'id',
-                    checkbox: false
-                }
-            });
-
-        }
         function f_selectContact() {
             if (winicons) {
                 winicons.show();
@@ -130,7 +104,7 @@
                 });
             }
         }
- 
+
         function ClickImg(v) {
             var src = $(v).attr("src");
             $("#menuicon").attr("src", "../../images/icon/" + src.split('images/icon/')[1]);
@@ -171,17 +145,17 @@
             <tr>
                 <td height="23" style="width: 85px" colspan="2">
 
-                    <div align="left" style="width: 62px">目录ID：</div>
+                    <div align="left" style="width: 62px">AppID：</div>
                 </td>
                 <td height="23">
-
+                    <input type="hidden" id="hid" name="hid" />
                     <input type="text" id="T_menu_id" name="T_menu_id" ltype="text" ligerui="{width:300}" validate="{required:true}" /></td>
             </tr>
 
             <tr>
                 <td height="23" style="width: 85px" colspan="2">
 
-                    <div align="left" style="width: 62px">目录名称：</div>
+                    <div align="left" style="width: 62px">名称：</div>
                 </td>
                 <td height="23">
 
@@ -189,31 +163,12 @@
 
                 </td>
             </tr>
-            <tr>
-                <td height="23" colspan="2">
-
-                    <div align="left" style="width: 62px">上级目录：</div>
-                </td>
-                <td height="23">
-
-                    <input type="text" id="T_menu_parent" name="T_menu_parent" validate="{required:true}" /></td>
-            </tr>
-            <tr>
-                <td height="23" colspan="2">
-
-                    <div align="left" style="width: 62px">链接地址：</div>
-                </td>
-                <td height="23">
-
-                    <input type="text" id="T_menu_url" name="T_menu_url" ltype="text" ligerui="{width:300}" />
 
 
-                </td>
-            </tr>
             <tr>
                 <td height="23" style="width: 62px">
 
-                    <div align="left" style="width: 62px">目录图标：</div>
+                    <div align="left" style="width: 62px">图标：</div>
                 </td>
                 <td height="23" style="width: 27px">
                     <img id="menuicon" style="width: 16px; height: 16px;" /></td>
@@ -224,7 +179,7 @@
             <tr>
                 <td height="23" colspan="2">
 
-                    <div align="left" style="width: 62px">排序行号：</div>
+                    <div align="left" style="width: 62px">排序号：</div>
                 </td>
                 <td height="23">
                     <input type="text" id="T_menu_order" name="T_menu_order" value="20" ltype='spinner' ligerui="{type:'int',width:300}" /></td>

@@ -5,3 +5,4 @@ F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\bin\Release\Newtonsoft.J
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\bin\Release\OpenSmtp.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\bin\Release\OWC10Chart.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\obj\Release\XHD.Common.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\obj\Release\Common.csprojResolveAssemblyReference.cache

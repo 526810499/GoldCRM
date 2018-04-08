@@ -26,7 +26,6 @@
 
 
         <div class="logoContent">
- 
         </div>
         <div class="navright">
 
@@ -63,7 +62,7 @@
         </div>
         <div position="bottom">
 
-            <div style="text-align: center; font-size: 12px;">©2015 <a href="http://www.xhdcrm.com/" target="_blank">{xx}CRM</a> 版权所有 v2.0</div>
+            <div style="text-align: center; font-size: 12px;">©2015 <a href="#" target="_blank">{xx}CRM</a> 版权所有 v2.0</div>
 
         </div>
     </div>
@@ -109,7 +108,6 @@
 
 
             getuserinfo();
-            //remind();
 
             $("#userinfo").click(function (e) { f_dropdown(e) });
             onResize();
@@ -118,15 +116,11 @@
             });
 
             setInterval("getUser()", 30000);
-            checkbrowse();
-
             accordion = $("#accordion1").ligerAccordion({ height: height - 32 });
-
-            //f_getCompany();
             menu();
-            usertree();
-
-            getsysinfo();
+            setInterval("usertree()", 30000);
+            setInterval("getsysinfo()", 30000);
+            checkbrowse();
         });
 
 
@@ -324,10 +318,6 @@
 
 
         function getUser() {
-            //url: 'Sys_base.getUserTree.xhd?rnd=' + Math.random(),
-            //$.getJSON("C_Sys_base.getUserTree.xhd?rnd=" + Math.random(), function (data, textStatus) {
-
-            //});
             $.ajax({
                 type: 'post',
                 dataType: 'json',

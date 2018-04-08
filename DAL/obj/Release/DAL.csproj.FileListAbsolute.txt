@@ -10,7 +10,5 @@ F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Release\IBatisNet.DataM
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Release\IBatisNet.Common.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Release\System.Data.SQLite.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Release\MySql.Data.dll
-F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Release\XHD.Common.pdb
-F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Release\XHD.DBUtility.pdb
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\obj\Release\DAL.csprojResolveAssemblyReference.cache
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\obj\Release\XHD.DAL.dll

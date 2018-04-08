@@ -18,9 +18,9 @@
         var manager = "";
         var treemanager;
         $(function () {
-            $("#layout1").ligerLayout({ leftWidth: 200, allowLeftResize: false, allowLeftCollapse: true, space: 2, heightDiff: -5 });
+            $("#layout1").ligerLayout({ leftWidth: 180, allowLeftResize: false, allowLeftCollapse: true, space: 2, heightDiff: -5 });
             $("#tree1").ligerTree({
-                url: 'Product_category.tree.xhd?rnd=' + Math.random(),
+                url: 'Product_category.tree.xhd?qb=1&rnd=' + Math.random(),
                 onSelect: onSelect,
                 idFieldName: 'id',
                 //parentIDFieldName: 'pid',
@@ -28,7 +28,7 @@
                 checkbox: false,
                 itemopen: false,
                 onSuccess: function () {
-                    $(".l-first div:first").click();
+                    //$(".l-first div:first").click();
                 }
             });
 
@@ -41,31 +41,89 @@
 
             $("#maingrid4").ligerGrid({
                 columns: [
-                    //{ display: '序号', width: 50, render: function (item,i) { return item.n; } },
-                    { display: '产品名称', name: 'product_name', width: 120 },
-                    { display: '产品类别', name: 'category_name', width: 120 },
-                    { display: '产品规格', name: 'specifications', width: 120 },
+                    { display: '产品名称', name: 'product_name', align: 'left', width: 120 },
+                    { display: '产品类别', name: 'category_name', align: 'left', width: 120 },
+                    { display: '条形码', name: 'BarCode', align: 'left', width: 160 },
                     {
-                        display: '成本价（￥）', name: 'cost', width: 120, align: 'right', render: function (item) {
-                            return toMoney(item.cost);
+                        display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {
+                            return toMoney(item.Weight);
                         }
                     },
                     {
-                        display: '报价（￥）', name: 'price', width: 120, align: 'right', render: function (item) {
-                            return toMoney(item.price);
+                        display: '进货金价(￥)', name: 'StockPrice', width: 80, align: 'left', render: function (item) {
+                            return toMoney(item.StockPrice);
                         }
                     },
                     {
-                        display: '销售价（￥）', name: 'agio', width: 120, align: 'right', render: function (item) {
-                            return toMoney(item.agio);
+                        display: '附工费(￥)', name: 'AttCosts', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.AttCosts);
                         }
                     },
-                    { display: '单位', name: 'unit', width: 120 },
-                    { display: '备注', name: 'remarks', width: 120 }
+                    {
+                        display: '主石重', name: 'MainStoneWeight', width: 60, align: 'right', render: function (item) {
+                            return toMoney(item.MainStoneWeight);
+                        }
+                    },
+                    {
+                        display: '附石重', name: 'AttStoneWeight', width: 60, align: 'right', render: function (item) {
+                            return toMoney(item.AttStoneWeight);
+                        }
+                    },
+                    {
+                        display: '附石数', name: 'AttStoneNumber', width: 50, align: 'right', render: function (item) {
+                            return toMoney(item.AttStoneNumber);
+                        }
+                    },
+                    {
+                        display: '石价(￥)', name: 'StonePrice', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.StonePrice);
+                        }
+                    },
+                    {
+                        display: '金价小计(￥)', name: 'GoldTotal', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.GoldTotal);
+                        }
+                    },
+                    {
+                        display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.CostsTotal);
+                        }
+                    },
+                    {
+                        display: '成本总价(￥)', name: 'Totals', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.Totals);
+                        }
+                    },
+                    {
+                        display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.SalesCostsTotal);
+                        }
+                    },
+                    {
+                        display: '销售价格(￥)', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.SalesTotalPrice);
+                        }
+                    },
+                    { display: '供应商', name: 'supplier_name', width: 100 },
+                     { display: '现存仓库', name: 'warehouse_name', width: 100, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name;} } },
+                    {
+                        display: '状态', name: 'status', width: 80, align: 'right', render: function (item) {
+                            switch (item.status) {
+                                case 1:
+                                    return "<span style='color:#0066FF'> 入库 </span>";
+                                case 2:
+                                    return "<span style='color:#00CC66'> 调拨中 </span>";
+                                case 3:
+                                    return "<span style='color:#009900'> 出库中 </span>";
+                                case 4:
+                                    return "<span style='color:#FF3300'> 已销售 </span>";
+                            }
+                        }
+                    }
 
                 ],
                 dataAction: 'server',
-                url: "Product_category.grid.xhd?categoryid=0&rnd=" + Math.random(),
+                url: "Product.grid.xhd?categoryid=&rnd=" + Math.random(),
                 pageSize: 30,
                 pageSizeOptions: [20, 30, 50, 100],
                 width: '100%',
@@ -91,7 +149,9 @@
                     arr[i].icon = "../" + arr[i].icon;
                     items.push(arr[i]);
                 }
+                items.push({ type: 'textbox', id: 'sstatus', text: '状态：' });
                 items.push({ type: 'textbox', id: 'stext', text: '产品名：' });
+                items.push({ type: 'textbox', id: 'scode', text: '条形码：' });
                 items.push({ type: 'button', text: '搜索', icon: '../images/search.gif', disable: true, click: function () { doserch() } });
 
                 $("#toolbar").ligerToolBar({
@@ -101,7 +161,17 @@
                 menu = $.ligerMenu({
                     width: 120, items: getMenuItems(data)
                 });
+                $("#sstatus").ligerComboBox({
+                    data: [
+                    { text: '所有', id: '' },
+                    { text: '入库', id: '1' },
+                    { text: '调拨', id: '2' },
+                    { text: '出库', id: '3' },
+                    { text: '已销售', id: '4' }
+                    ], valueFieldID: 'status',
+                });
                 $("#stext").ligerTextBox({ width: 200 });
+                $("#scode").ligerTextBox({ width: 250 });
                 $("#maingrid4").ligerGetGridManager()._onResize();
             });
         }
@@ -116,7 +186,13 @@
         function doserch() {
             var sendtxt = "&rnd=" + Math.random();
             var serchtxt = $("#form1 :input").fieldSerialize() + sendtxt;
+            var tdata = treemanager.getSelected();
 
+            var cid = "";
+            if (tdata != null && tdata.data != null) {
+                cid = tdata.data.id;
+            }
+            serchtxt += "&categoryid=" + cid;
             var manager = $("#maingrid4").ligerGetGridManager();
             manager._setUrl("Product.grid.xhd?" + serchtxt);
         }
@@ -135,7 +211,7 @@
             var manager = $("#maingrid4").ligerGetGridManager();
             var rows = manager.getSelectedRow();
             if (rows && rows != undefined) {
-                f_openWindow('product/product_add.aspx?pid=' + rows.id, "修改产品", 700, 380, f_save);
+                f_openWindow('product/product_add.aspx?pid=' + rows.id, "修改产品", 700, 580, f_save);
             }
             else {
                 $.ligerDialog.warn('请选择产品！');
@@ -143,13 +219,11 @@
         }
         function add() {
             var notes = $("#tree1").ligerGetTreeManager().getSelected();
-
+            var categoryid = "";
             if (notes != null && notes != undefined) {
-                f_openWindow('product/product_add.aspx?categoryid=' + notes.data.id, "新增产品", 700, 380, f_save);
+                categoryid = notes.data.id;
             }
-            else {
-                $.ligerDialog.warn('请选择产品类别！');
-            }
+            f_openWindow('product/product_add.aspx?categoryid=' + categoryid, "新增产品", 700, 580, f_save);
         }
 
         function del() {
@@ -230,7 +304,7 @@
         <form id="form1" onsubmit="return false">
             <div id="layout1" style="">
                 <div position="left" title="产品类别">
-                    <div id="treediv" style="width: 200px; height: 100%; margin: -1px; float: left; overflow: auto;margin-top:2px;">
+                    <div id="treediv" style="width: 200px; height: 100%; margin: -1px; float: left; overflow: auto; margin-top: 2px;">
                         <ul id="tree1"></ul>
                     </div>
                 </div>

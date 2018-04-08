@@ -30,7 +30,7 @@
                         }
                     },
                     {
-                        display: '客户', name: 'Customer_id', width: 260,  render: function (item) {
+                        display: '客户', name: 'Customer_id', width: 260, render: function (item) {
                             var html = "<a href='javascript:void(0)' onclick=view('customer','" + item.Customer_id + "')>";
                             if (item.cus_name)
                                 html += item.cus_name;
@@ -49,28 +49,28 @@
                     {
                         display: '订单金额（￥）', name: 'total_amount', width: 100, align: 'right', render: function (item) {
                             return "<div style='color:#135294'>" + toMoney(item.total_amount) + "</div>";
-                        }, totalSummary: { type: 'sum_money' }
+                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥" + item.sum; } }
                     },
                     {
                         display: '已收总额（￥）', name: 'receive_money', width: 100, align: 'right', render: function (item) {
                             return "<div style='color:#135294'>" + toMoney(item.receive_money) + "</div>";
-                        }, totalSummary: { type: 'sum_money' }
+                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥" + item.sum; } }
                     },
                     {
                         display: '未收余额（￥）', name: 'arrears_money', width: 100, align: 'right', render: function (item) {
                             return "<div style='color:#135294'>" + toMoney(item.arrears_money) + "</div>";
-                        }, totalSummary: { type: 'sum_money' }
+                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥" + item.sum; } }
                     },
-                    {
-                        display: '已开票额（￥）', name: 'invoice_money', width: 100, align: 'right', render: function (item) {
-                            return "<div style='color:#135294'>" + toMoney(item.invoice_money) + "</div>";
-                        }
-                    },
-                    {
-                       display: '未开票额（￥）', name: 'arrears_invoice', width: 100, align: 'right', render: function (item) {
-                           return "<div style='color:#135294'>" + toMoney(item.arrears_invoice) + "</div>";
-                       }
-                    },
+                    //{
+                    //    display: '已开票额（￥）', name: 'invoice_money', width: 100, align: 'right', render: function (item) {
+                    //        return "<div style='color:#135294'>" + toMoney(item.invoice_money) + "</div>";
+                    //    }
+                    //},
+                    //{
+                    //   display: '未开票额（￥）', name: 'arrears_invoice', width: 100, align: 'right', render: function (item) {
+                    //       return "<div style='color:#135294'>" + toMoney(item.arrears_invoice) + "</div>";
+                    //   }
+                    //},
                     {
                         display: '成交时间', name: 'Order_date', width: 90, render: function (item) {
                             return formatTimebytype(item.Order_date, 'yyyy-MM-dd');
@@ -98,21 +98,24 @@
                         $(p).append(grid);
                         $(grid).css('margin', 3).ligerGrid({
                             columns: [
-                                //{ display: '序号', width: 30, render: function (item, i) { return i + 1; } },
-                                { display: '产品名', name: 'product_name', width: 120 },
+                                { display: '产品名称', name: 'product_name', align: 'left', width: 150 },
+                                { display: '产品类别', name: 'category_name', align: 'left', width: 150 },
+                                { display: '条形码', name: 'BarCode', align: 'left', width: 180 },
                                 {
-                                    display: '单价', name: 'agio', width: 80, type: 'float', align: 'right', render: function (item) {
-                                        return toMoney(item.agio);
+                                    display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {
+                                        return toMoney(item.Weight);
                                     }
                                 },
-                                { display: '数量', name: 'quantity', width: 40, type: 'int' },
-                                { display: '单位', name: 'unit', width: 40 },
                                 {
-                                    display: '总价', name: 'amount', width: 100, type: 'float', align: 'right', render: function (item) {
-                                        return toMoney(item.amount) + "元";
+                                    display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
+                                        return toMoney(item.SalesCostsTotal);
+                                    }
+                                },
+                                {
+                                    display: '销售价格(￥)', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
+                                        return toMoney(item.SalesTotalPrice);
                                     }
                                 }
-
                             ],
                             //selectRowButtonOnly: true,
                             usePager: false,
@@ -227,14 +230,14 @@
 
 
         function add() {
-            f_openWindow("sale/order_add.aspx", "新增订单", 770, 500, f_save);
+            f_openWindow("sale/order_add.aspx", "新增订单", 800, 700, f_save);
         }
 
         function edit() {
             var manager = $("#maingrid4").ligerGetGridManager();
             var row = manager.getSelectedRow();
             if (row) {
-                f_openWindow('sale/order_add.aspx?id=' + row.id, "修改订单", 770, 500, f_save);
+                f_openWindow('sale/order_add.aspx?id=' + row.id, "修改订单", 800, 700, f_save);
             }
             else {
                 $.ligerDialog.warn('请选择行！');
@@ -282,8 +285,6 @@
         }
         function f_save(item, dialog) {
             var issave = dialog.frame.f_save();
-            //alert(postdata);
-
 
             if (!issave) {
                 return;

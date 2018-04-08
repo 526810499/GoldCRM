@@ -66,29 +66,7 @@
                         <table class="bodytable3">
                             <tr>
                                 <td style="border-bottom: 1px solid #d2e2f2; width: 400px;">
-                                    <p class="l-log-content">
-                                        作者: 黄润伟
-                                       
-                                    </p>
-                                    <p class="l-log-content">
-                                        QQ: 250476029
-                                       
-                                    </p>
-                                    <p class="l-log-content">
-                                        交流QQ群1群: <a href="http://jq.qq.com/?_wv=1027&amp;k=KkkA4m" target="_blank">2317681</a>
-                                    </p>
-                                    <p class="l-log-content">
-                                        官方网站：<a href="http://www.xhdcrm.com/)" target="_blank">http://www.xhdcrm.com</a>
-                                    </p>
-                                    <p class="l-log-content">
-                                        演示地址：<a href="http://crm.xhdcrm.com/" target="_blank">http://crm.xhdcrm.com</a>
-                                    </p>
-                                    <p class="l-log-content">
-                                        官方论坛：<a href="http://bbs.ligerui.com/" target="_blank">http://bbs.xhdcrm.com</a>
-                                    </p>
-                                    <p class="l-log-content">
-                                        源码下载：<a href="http://www.xhdcrm.com/down/" target="_blank">http://www.xhdcrm.com/down/</a>
-                                    </p>
+                                   
 
                                 </td>
                                 <td style="border-bottom: 1px solid #d2e2f2;">

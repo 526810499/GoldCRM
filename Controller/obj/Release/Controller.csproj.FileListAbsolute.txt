@@ -13,7 +13,6 @@ F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Release\IBatisNe
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Release\IBatisNet.Common.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Release\System.Data.SQLite.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Release\MySql.Data.dll
-F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Release\XHD.BLL.pdb
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Release\XHD.Common.pdb
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Release\XHD.Model.pdb
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Release\XHD.DAL.pdb

@@ -67,16 +67,15 @@
             });
             $("#maingrid2").ligerGrid({
                 columns: [
-                    //{ display: 'ID', name: 'Btn_id', width: 150 },
-                    { display: '名称', name: 'Btn_name' },
+                    { display: 'ID', name: 'Btn_id', width: 350 },
+                    { display: '名称', name: 'Btn_name', width: 150 },
                     { display: '菜单ID', name: 'Menu_id', width: 150 },
-                    { display: '菜单名称', name: 'Menu_name' },
                     {
                         display: '图标', name: 'Btn_icon', width: 50, render: function (item) {
                             return "<img src='../../" + item.Btn_icon + "' style='width:16px;height:16px;margin-top:3px;'/>"
                         }
                     },
-                    { display: '响应事件', name: 'Btn_handler', width: 200 },
+                    { display: '响应事件', name: 'Btn_handler', width: 100 },
                     { display: '排序', name: 'Btn_order', width: 60 }
 
                 ],
@@ -123,7 +122,7 @@
         function edit() {
             var row = $("#maingrid2").ligerGetGridManager().getSelectedRow();
             if (row) {
-                f_openWindow('System/sysbase/Sys_Button_add.aspx?btnid=' + row.Btn_id, "修改按钮", 480, 380, f_save);
+                f_openWindow('System/sysbase/Sys_Button_add.aspx?btnid=' + row.Btn_id + "&menuid=" + row.Menu_id, "修改按钮", 480, 380, f_save);
             }
             else {
                 $.ligerDialog.warn('请选择按钮！');
@@ -149,7 +148,7 @@
                         $.ajax({
                             type: "POST",
                             url: "Sys_Button.del.xhd",
-                            data: { btnid: row.Btn_id },
+                            data: { id: row.Btn_id },
                             success: function (result) {
                                 treereload();
                             }

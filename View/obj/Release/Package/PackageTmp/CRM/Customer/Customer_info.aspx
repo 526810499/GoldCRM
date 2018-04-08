@@ -45,8 +45,8 @@
                     $("#T_cus").text(obj.cus_name);
                     $("#T_add").text(obj.cus_add);
                     $("#T_tel").text(obj.cus_tel);
-                    $("#T_fax").text(obj.cus_fax);
-                    $("#T_website").text(obj.cus_website);
+                    $("#T_integral").text(obj.integral);
+                    $("#T_birthday").text(formatTimebytype(obj.birthday, "yyyy-MM-dd"));
                     $("#T_descript").text(obj.DesCripe);
                     $("#T_remark").text(obj.Remarks);
 
@@ -75,12 +75,12 @@
         }
 
         function f_onResize() {
-            g1 && g1._onResize();
+            //g1 && g1._onResize();
             g2 && g2._onResize();
             g3 && g3._onResize();
             g4 && g4._onResize();
-            g5 && g5._onResize();
-            g6 && g6._onResize();
+            //g5 && g5._onResize();
+            //g6 && g6._onResize();
         }
 
         function f_heightChanged() {
@@ -149,9 +149,9 @@
             setTimeout(f_contact(), 0);
             setTimeout(f_follow(), 10);
             setTimeout(f_order(), 20);
-            setTimeout(f_log(), 30);
-            setTimeout(f_receivable(), 40);
-            setTimeout(f_contract(), 50);
+            //setTimeout(f_log(), 30);
+            //setTimeout(f_receivable(), 40);
+            //setTimeout(f_contract(), 50);
         }
 
         function f_log() {
@@ -538,7 +538,7 @@
                         $.ligerDialog.warn('请选择行！');
                         return;
                     }
-                    url = "sale/contract_add.aspx?id="  +row.id;
+                    url = "sale/contract_add.aspx?id=" + row.id;
                     title = "修改合同";
                     width = 770;
                     height = 490;
@@ -617,13 +617,13 @@
                 case "sale_contract": url = "CRM_contract.save.xhd"; break;
             }
 
-            top.$.ligerDialog.waitting('数据保存中,请稍候...',9003);
+            top.$.ligerDialog.waitting('数据保存中,请稍候...', 9003);
             $.ajax({
                 url: url, type: "POST",
                 data: issave,
                 dataType: "json",
                 success: function (result) {
-                   
+
 
                     var obj = eval(result);
 
@@ -652,8 +652,8 @@
                 case "customer_contact": g1.loadData(true); break;
                 case "contact_follow": g2.loadData(true); break;
                 case "sale_order": g3.loadData(true); break;
-                case "finance_receivable": g5.loadData(true); break;
-                case "sale_contract": g6.loadData(true); break;
+                    //case "finance_receivable": g5.loadData(true); break;
+                    //case "sale_contract": g6.loadData(true); break;
             }
         }
 
@@ -661,8 +661,14 @@
         { }
     </script>
     <style>
-        .bodytable0 td { height: 27px; padding-left: 5px; }
-        .l-layout-center { border-top: none; }
+        .bodytable0 td {
+            height: 27px;
+            padding-left: 5px;
+        }
+
+        .l-layout-center {
+            border-top: none;
+        }
     </style>
 </head>
 <body>
@@ -679,9 +685,9 @@
                         <span id="T_cus"></span>
 
                     </td>
-                    <td class="table_label" style="width: 100px;">客户网址：</td>
+                    <td class="table_label" style="width: 100px;">客户生日：</td>
                     <td>
-                        <span id="T_website"></span>
+                        <span id="T_birthday"></span>
                     </td>
                 </tr>
                 <tr>
@@ -699,9 +705,9 @@
                     <td>
                         <span id="T_tel"></span>
                     </td>
-                    <td class="table_label">传真：</td>
+                    <td class="table_label">客户积分：</td>
                     <td>
-                        <span id="T_fax"></span>
+                        <span id="T_integral"></span>
                     </td>
                 </tr>
                 <tr>
@@ -753,11 +759,11 @@
         <div id="layout1" style="margin-top: 5px; background: #fff;">
 
             <div position="center" id="maintab">
-                <div tabid="cus_log" title="操作日志" style="">
+                <%--                <div tabid="cus_log" title="操作日志" style="">
                     <div style="padding: 10px 1px 1px 1px;">
                         <div id="maingrid_log" style="margin: -1px;"></div>
                     </div>
-                </div>
+                </div>--%>
 
                 <div tabid="customer_contact" title="联系人">
                     <div style="padding: 10px 1px 1px 1px;">
@@ -779,7 +785,7 @@
                     </div>
                 </div>
 
-                <div tabid="finance_receivable" title="应收管理" style="">
+                <%--           <div tabid="finance_receivable" title="应收管理" style=" ">
                     <div style="padding: 10px 1px 1px 1px;">
                         <div id="toolbar_finance_receivable"></div>
                         <div id="maingrid_receivable" style="margin: -1px;"></div>
@@ -787,12 +793,12 @@
                 </div>
 
 
-                <div tabid="sale_contract" title="合同管理" style="">
+                <div tabid="sale_contract" title="合同管理" style=" ">
                     <div style="padding: 10px 1px 1px 1px;">
                         <div id="toolbar_sale_contract"></div>
                         <div id="maingrid_contract" style="margin: -1px;"></div>
                     </div>
-                </div>
+                </div>--%>
             </div>
 
 

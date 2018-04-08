@@ -39,7 +39,8 @@
                 columns: [
                     //{ display: '序号', width: 50, render: function (item,i) { return item.n; } },
                     //{ display: 'pid', name: 'parentid', width: 50 },
-                    { display: '参数名', name: 'params_name',width:200 },
+                    { display: '参数名', name: 'params_name', width: 200 },
+                    { display: '标识Key', name: 'KeyID', width: 50 },
                     { display: '排序', name: 'params_order', width: 50 }
 
                 ],

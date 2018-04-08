@@ -105,7 +105,7 @@
                         }
                     },
                     { display: '供应商', name: 'supplier_name', width: 100 },
-                     { display: '现存仓库', name: 'warehouse_name', width: 100, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name;} } },
+                     { display: '现存仓库', name: 'warehouse_name', width: 100, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
                     {
                         display: '状态', name: 'status', width: 80, align: 'right', render: function (item) {
                             switch (item.status) {
@@ -125,11 +125,11 @@
                 dataAction: 'server',
                 url: "Product.grid.xhd?categoryid=&rnd=" + Math.random(),
                 pageSize: 30,
-                pageSizeOptions: [20, 30, 50, 100],
+                pageSizeOptions: [10, 20, 30, 40, 50, 60, 80, 100, 120],
                 width: '100%',
                 height: '100%',
                 heightDiff: -8,
-
+                checkbox: true,
                 onContextmenu: function (parm, e) {
                     actionCustomerID = parm.data.id;
                     menu.show({ top: e.pageY, left: e.pageX });
@@ -259,6 +259,17 @@
             else {
                 $.ligerDialog.warn("请选择产品");
             }
+
+        }
+
+        function print() {
+            var manager = $("#maingrid4").ligerGetGridManager();
+            var rows = manager.getCheckedRows();
+            if (rows == null || rows.length <= 0) {
+                $.ligerDialog.warn("没有需要打印的产品");
+                return;
+            }
+
 
         }
 

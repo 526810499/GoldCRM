@@ -13,5 +13,4 @@ F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\bin\Release\IBatisNet.Commo
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\bin\Release\System.Data.SQLite.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\bin\Release\MySql.Data.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\bin\Release\XHD.DAL.pdb
-F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\bin\Release\XHD.DBUtility.pdb
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\BLL\obj\Release\XHD.BLL.dll

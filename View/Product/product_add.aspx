@@ -164,7 +164,8 @@
             var T_Totals = $("#T_Totals").val();
             //（2）黄金类产品，生成销售工费（工费小计*3）
             if (value == 1) {
-                var total = parseFloat(T_Totals.replace(/\$|\,/g, '')) * 3;
+                var T_CostsTotal = $("#T_CostsTotal").val();
+                var total = parseFloat(T_CostsTotal.replace(/\$|\,/g, '')) * 3;
                 $("#T_SalesCostsTotal").val(toMoney(total));
                 $("#T_SalesTotalPrice").val(0.00);
             } else {

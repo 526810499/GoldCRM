@@ -1,9 +1,9 @@
-<%@ Page Language="C#" AutoEventWireup="true"  %>
+<%@ Page Language="C#" AutoEventWireup="true" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head  >
+<head>
     <title></title>
     <link href="../../lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" />
     <link href="../../lib/ligerUI/skins/Gray2014/css/all.css" rel="stylesheet" />
@@ -11,7 +11,7 @@
 
     <script src="../../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="../../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
-    
+
     <script src="../../lib/jquery-validation/jquery.validate.js" type="text/javascript"></script>
     <script src="../../lib/jquery-validation/jquery.metadata.js" type="text/javascript"></script>
     <script src="../../lib/jquery-validation/messages_cn.js" type="text/javascript"></script>
@@ -55,40 +55,52 @@
                 success: function (result) {
                     var obj = eval(result);
                     for (var n in obj) {
-                        
+
                     }
                     //alert(obj.constructor); //String 构造函数
                     $("#T_param_name").val(obj.params_name);
-                    $("#T_param_order").val(obj.params_order);                   
+                    $("#T_param_order").val(obj.params_order);
+                    $("#T_KeyID").val(obj.KeyID);
                 }
             });
         }
-        
+
     </script>
 </head>
-<body style="margin:5px 5px 5px 5px">
+<body style="margin: 5px 5px 5px 5px">
     <form id="form1" onsubmit="return false">
-    <div>
-        <table  align="left" border="0" cellpadding="3" cellspacing="1" 
-            style="background: #fff; width:320px;" class="aztable">
-            
-            <tr>
-                <td  width="65px"  ><div align="left" style="width: 61px">参数名称：</div></td>
-                <td   >
-                    <div style="float:left; height: 20px;">
-                        <input type="text" id="T_param_name" name="T_param_name" ltype="text"   ligerui="{width:180}" validate="{required:true}" />
-                    </div>                    
-                </td>
-            </tr>
-            
-            <tr>
-                <td  width="65px"  ><div align="left" style="width: 61px">参数排序：</div></td>
-                <td   >
-                    <input type="text" id="T_param_order" name="T_param_order" value="20"  ltype='spinner' ligerui="{type:'int',width:180}"/>
-                </td>
-            </tr>
+        <div>
+            <table align="left" border="0" cellpadding="3" cellspacing="1"
+                style="background: #fff; width: 320px;" class="aztable">
+
+                <tr>
+                    <td width="65px">
+                        <div align="left" style="width: 61px">参数名称：</div>
+                    </td>
+                    <td>
+                        <div style="float: left; height: 20px;">
+                            <input type="text" id="T_param_name" name="T_param_name" ltype="text" ligerui="{width:180}" validate="{required:true}" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="65px">
+                        <div align="left" style="width: 61px">标识Key：</div>
+                    </td>
+                    <td>
+                        <input type="text" id="T_KeyID" name="T_KeyID" value="20" ltype='spinner' ligerui="{type:'int',width:180}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td width="65px">
+                        <div align="left" style="width: 61px">参数排序：</div>
+                    </td>
+                    <td>
+                        <input type="text" id="T_param_order" name="T_param_order" value="20" ltype='spinner' ligerui="{type:'int',width:180}" />
+                    </td>
+                </tr>
             </table>
-    </div>
+        </div>
     </form>
 </body>
 </html>
