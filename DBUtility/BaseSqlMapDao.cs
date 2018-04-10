@@ -6,6 +6,7 @@ using IBatisNet.Common.Pagination;
 using IBatisNet.DataMapper;
 using IBatisNet.DataMapper.Configuration;
 using IBatisNet.DataMapper.Exceptions;
+using System.Data;
 
 namespace XHD.DBUtility
 {
@@ -204,61 +205,191 @@ namespace XHD.DBUtility
     }
 
 
-    ///// <summary>
-    ///// Stream 
-    ///// </summary>
-    //public class Stream
-    //{
-    //    public Stream()
-    //    {
+    /// <summary>
+    /// 用于快速转换数据库对象.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public static class ModelConvertHelper<T> where T : new()
+    {
 
-    //    }
+        #region DataTable
 
-    //    private string ctablename;
+        /// <summary>
+        /// 将DataTable 转为Model, 如果DATATABLE为空，或不存在任何行，返回空列表
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static IList<T> ToModels(DataTable dt)
+        {
+            if (dt == null || dt.Rows.Count == 0)
+            {
+                return new List<T>();
+            }
+            // 获得此模型的类型
+            IList<T> ts = new List<T>();
+            Type type = typeof(T);
 
-    //    public string CTableName
-    //    {
-    //        get { return ctablename; }
-    //        set { ctablename = value; }
-    //    }
-    //    private int imaxid;
+            foreach (DataRow dr in dt.Rows)
+            {
+                T t = new T();
+                // 获得此模型的公共属性
+                PropertyInfo[] propertys = t.GetType().GetProperties();
+                foreach (PropertyInfo pi in propertys)
+                {
+                    string tempName = pi.Name;
+                    // 检查DataTable是否包含此列
+                    if (dt.Columns.Contains(tempName))
+                    {
+                        // 判断此属性是否有Setter
+                        if (!pi.CanWrite)
+                            continue;
+                        object value = dr[tempName];
 
-    //    public int IMaxID
-    //    {
-    //        get { return imaxid; }
-    //        set { imaxid = value; }
-    //    }
-    //}
+                        if (value == null)
+                            continue;
+                        if (value == DBNull.Value)
+                            continue;
 
-    //public class ContainerAccessorUtil
-    //{
-    //    private ContainerAccessorUtil()
-    //    {
-    //    }
+                        var pType = GetPropertyType(pi.PropertyType);
+                        if (pType.IsEnum)
+                        {
+                            pi.SetValue(t, Enum.Parse(pType, value.ToString().Trim(), true), null);
+                        }
+                        else {
+                            pi.SetValue(t, Convert.ChangeType(value, pType), null);
+                        }
 
-    //    /// <summary>
-    //    /// Obtain the Cuyahoga container.
-    //    /// </summary>
-    //    /// <returns></returns>
-    //    public static IWindsorContainer GetContainer()
-    //    {
-    //        IContainerAccessor containerAccessor = HttpContext.Current.ApplicationInstance as IContainerAccessor;
+                    }
+                }
+                ts.Add(t);
+            }
+            return ts;
+        }
 
-    //        if (containerAccessor == null)
-    //        {
-    //            throw new Exception("You must extend the HttpApplication in your web project " +
-    //                "and implement the IContainerAccessor to properly expose your container instance");
-    //        }
+        /// <summary>
+        /// 将DataTable的第一行 转为 Model,如果没数据则返回null
+        /// </summary>
+        /// <param name="dt">表格</param>
+        /// <returns></returns>
+        public static T ToModel(DataTable dt)
+        {
+            if (dt == null || dt.Rows.Count <= 0) return default(T);
+            return ToModel(dt.Rows[0]);
+        }
+        /// <summary>
+        /// 将DataRow读取到的一行 转为 Model
+        /// </summary>
+        /// <param name="dr">行</param>
+        /// <returns></returns>
+        public static T ToModel(DataRow dr)
+        {
+            // 获得此模型的类型
+            Type type = typeof(T);
+            string tempName = "";
+            T t = new T();
+            // 获得此模型的公共属性
+            PropertyInfo[] propertys = t.GetType().GetProperties();
+            DataTable dt = dr.Table;
+            foreach (PropertyInfo pi in propertys)
+            {
+                tempName = pi.Name;
+                if (dt.Columns.Contains(tempName))
+                {
+                    // 判断此属性是否有Setter
+                    if (!pi.CanWrite)
+                        continue;
+                    object value = dr[tempName];
+                    if (value == null)
+                        continue;
+                    if (value == DBNull.Value)
+                        continue;
 
-    //        IWindsorContainer container = containerAccessor.Container as IWindsorContainer;
+                    var pType = GetPropertyType(pi.PropertyType);
+                    if (pType.IsEnum)
+                    {
+                        pi.SetValue(t, Enum.Parse(pType, value.ToString().Trim(), true), null);
+                    }
+                    else {
+                        pi.SetValue(t, Convert.ChangeType(value, pType), null);
+                    }
+                }
+            }
+            return t;
+        }
 
-    //        if (container == null)
-    //        {
-    //            throw new Exception("The container seems to be unavailable in " +
-    //                "your HttpApplication subclass");
-    //        }
+        #endregion
 
-    //        return container;
-    //    }
-    //} 
+        #region reader
+        /// <summary>
+        /// 将DataReader读取的内容转为Model，结束后不会自动关闭Reader
+        /// </summary>
+        /// <param name="dr"></param>
+        /// <returns></returns>
+        public static IList<T> ToModels(IDataReader dr)
+        {
+            IList<T> ts = new List<T>();
+            while (dr.Read())
+            {
+                ts.Add(ToModel(dr));
+            }
+            return ts;
+        }
+
+        /// <summary>
+        /// 将 SqlDataReader 转为Model, 如果 SqlDataReader.read() 有值 ，返回对象，否则返回Null
+        /// </summary>
+        /// <param name="dr"></param>
+        /// <returns></returns>
+        public static T ToModel(IDataRecord dr)
+        {
+            // 获得此模型的类型
+            Type type = typeof(T);
+            T t = new T();
+            // 获得此模型的公共属性
+            PropertyInfo[] propertys = t.GetType().GetProperties();
+            int clen = dr.FieldCount;
+
+            //遍历所有列名 key = 字段名  value = 值
+            Dictionary<string, object> nv = new Dictionary<string, object>();
+
+            for (int i = 0; i < clen; i++)
+            {
+                string fieldname = dr.GetName(i).ToLower();
+                nv[fieldname] = dr[i];
+            }
+
+            foreach (PropertyInfo pi in propertys)
+            {
+                var tempName = pi.Name.ToLower();
+                if (nv.ContainsKey(tempName))
+                {
+
+                    if (!pi.CanWrite)
+                        continue;
+                    object value = nv[tempName];
+                    if (value != DBNull.Value)
+                    {
+                        var pType = GetPropertyType(pi.PropertyType);
+                        if (pType.IsEnum)
+                        {
+                            pi.SetValue(t, Enum.Parse(pType, value.ToString().Trim(), true), null);
+                        }
+                        else {
+                            pi.SetValue(t, Convert.ChangeType(value, pType), null);
+                        }
+                    }
+                }
+            }
+            return t;
+        }
+
+        private static Type GetPropertyType(Type pType)
+        {
+            var gTypes = pType.GetGenericArguments();
+            if (gTypes.Length > 0) return gTypes[0];
+            return pType;
+        }
+        #endregion
+
+    }
 }

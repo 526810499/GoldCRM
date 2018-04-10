@@ -52,8 +52,7 @@
     javascript: window.history.forward(1);
 
 })(jQuery);
-
-
+ 
 //货币格式
 
 function toMoney(num, defaults) {

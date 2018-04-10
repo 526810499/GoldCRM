@@ -22,6 +22,16 @@ namespace XHD.Common
         }
 
         /// <summary>
+        /// 清除缓存Key
+        /// </summary>
+        /// <param name="CacheKey"></param>
+        public static void ClearCache(string CacheKey)
+        {
+            Cache objCache = HttpRuntime.Cache;
+            objCache.Remove(CacheKey);
+        }
+
+        /// <summary>
         ///     设置当前应用程序指定CacheKey的Cache值
         /// </summary>
         /// <param name="CacheKey"></param>

@@ -139,6 +139,7 @@
     <Compile Include="DProduct_OldChangeNew.cs" />
     <Compile Include="DProduct_Retrieval.cs" />
     <Compile Include="DProduct_RetrievalDetail.cs" />
+    <Compile Include="DTodayBroadcast.cs" />
     <Compile Include="Finance_Invoice.cs" />
     <Compile Include="Finance_Receivable.cs" />
     <Compile Include="Finance_Receive.cs" />

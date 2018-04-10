@@ -156,6 +156,7 @@
     <Content Include="JS\webuploader\Uploader.swf" />
     <Content Include="JS\webuploader\webuploader.js" />
     <Content Include="JS\webuploader\webuploader.min.js" />
+    <Content Include="JS\xMarquee.js" />
     <Content Include="lib\images\loading.gif" />
     <Content Include="lib\images\top.jpg" />
     <Content Include="lib\images\topicon.gif" />
@@ -812,9 +813,14 @@
     <Content Include="lib\ligerUI\skins\Tab\images\win\dialogbtn.gif" />
     <Content Include="lib\ligerUI\skins\Tab\images\win\dialogicon.gif" />
     <Content Include="License.html" />
+    <Content Include="Product\Dep\StockOut.aspx" />
+    <Content Include="Product\Dep\StockOut_Add.aspx" />
+    <Content Include="Product\Dep\StockIn.aspx" />
+    <Content Include="Product\Dep\StockIn_Add.aspx" />
     <Content Include="Product\GetCodeProduct.aspx" />
     <Content Include="Product\GetProduct2.aspx" />
     <Content Include="Product\GetProduct.aspx" />
+    <Content Include="Product\AllStock.aspx" />
     <Content Include="Product\Product_out.aspx" />
     <Content Include="Product\Product_allot.aspx" />
     <Content Include="Product\product.aspx" />
@@ -922,6 +928,7 @@
     <Content Include="JS\DragFlow\DragFlow.Render.js" />
     <Content Include="JS\DragFlow\DragFlow.Tools.js" />
     <Content Include="System\sysmanager\GetRole.aspx" />
+    <Content Include="System\sysmanager\TodayBroadcast.aspx" />
     <Content Include="Toolbar\Repeat.aspx" />
     <Content Include="conn.config">
       <SubType>Designer</SubType>

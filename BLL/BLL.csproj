@@ -124,6 +124,7 @@
     <Compile Include="BProduct_OldChangeNew.cs" />
     <Compile Include="BProduct_Retrieval.cs" />
     <Compile Include="BProduct_RetrievalDetail.cs" />
+    <Compile Include="BTodayBroadcast.cs" />
     <Compile Include="CRM\CRM_Contact.cs" />
     <Compile Include="CRM\CRM_contract.cs" />
     <Compile Include="CRM\CRM_contract_atta.cs" />

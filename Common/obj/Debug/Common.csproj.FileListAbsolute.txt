@@ -61,3 +61,4 @@ F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\bin\Debug\OpenSmtp.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\bin\Debug\OWC10Chart.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\obj\Debug\XHD.Common.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\obj\Debug\XHD.Common.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache

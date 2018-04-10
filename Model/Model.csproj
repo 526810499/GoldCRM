@@ -165,6 +165,7 @@
     <Compile Include="Sys_Param_Type.cs" />
     <Compile Include="Sys_role.cs" />
     <Compile Include="Sys_role_emp.cs" />
+    <Compile Include="TodayBroadcast.cs" />
     <Compile Include="Tool_batch.cs" />
     <Compile Include="Sys_Param_City.cs" />
     <Compile Include="Sys_Param_Provinces.cs" />

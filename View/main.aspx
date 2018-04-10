@@ -16,16 +16,35 @@
     <script src="lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
     <script src="JS/jquery.jclock.js" type="text/javascript"></script>
     <script src="JS/XHD.js" type="text/javascript"></script>
+    <style>
+        .scroll_div {
+            width: 200px;
+            height: 49px;
+            margin-left: 1200px;
+            margin-top: 12px;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        #scroll_begin, #scroll_end, #scroll_begin ul, #scroll_end ul, #scroll_begin ul li, #scroll_end ul li {
+            display: inline;
+        }
+    </style>
 </head>
 <body>
 
-    <%--<div id="pageloading" class="l-tab-loading">
-        <div class="l-tab-loading-loader"></div>
-    </div>--%>
+
     <div id="header">
 
 
         <div class="logoContent">
+            <div class="xMarquee">
+                <div id="scroll_div" class="scroll_div">
+                    <div id="scroll_begin">
+                    </div>
+                    <div id="scroll_end"></div>
+                </div>
+            </div>
         </div>
         <div class="navright">
 
@@ -56,10 +75,7 @@
             </div>
         </div>
 
-        <div position="right" title="功能菜单" id="accordion2">
-            <ul id="tree1" style="margin-top: 5px;"></ul>
 
-        </div>
         <div position="bottom">
 
             <div style="text-align: center; font-size: 12px;">©2015 <a href="#" target="_blank">{xx}CRM</a> 版权所有 v2.0</div>
@@ -107,20 +123,17 @@
             });
 
 
-            getuserinfo();
-
             $("#userinfo").click(function (e) { f_dropdown(e) });
             onResize();
             $(window).resize(function () {
                 onResize();
             });
-
-            setInterval("getUser()", 30000);
             accordion = $("#accordion1").ligerAccordion({ height: height - 32 });
             menu();
-            setInterval("usertree()", 30000);
-            setInterval("getsysinfo()", 30000);
+            //setInterval("usertree()", 30000);
+            //setInterval("getsysinfo()", 30000);
             checkbrowse();
+            setTimeout("getuserinfo()", 3000);
         });
 
 
@@ -308,11 +321,14 @@
             $.getJSON("Sys_base.GetUserInfo.xhd?rnd=" + Math.random(), function (data, textStatus) {
                 //alert(data);
                 $("#Username").html("<div style='cursor:pointer'>" + data.name + "</div>");
-                if (data.title)
+                if (data.title) {
                     $("#userheader").attr("src", "file/header/" + data.title);
-                else
+                }
+                else {
                     $("#userheader").attr("src", "/images/noheadimage.jpg");
+                }
             });
+            //GetTodayBroadcast();
         }
 
 
@@ -409,6 +425,43 @@
         }
 
 
+
+
+        function GetTodayBroadcast() {
+            $.getJSON("STodayBroadcast.GetTodayBroadcast.xhd?rnd=" + Math.random(), function (data, textStatus) {
+                if (data != null) {
+                    var c = "<li>今日金价:<b>" + data.TodayGlodPrice + "</b></li><li>&nbsp;&nbsp;" + data.OtherBrodcast + "</li>";
+                    c += "<li>&nbsp;&nbsp;</li>";
+                    c += "<li>&nbsp;&nbsp;</li>";
+                    c += "<li>今日金价:<b>" + data.TodayGlodPrice + "</b></li><li>&nbsp;&nbsp;" + data.OtherBrodcast + "</li>";
+                    c += "<li>&nbsp;&nbsp;</li>";
+                    c += "<li>&nbsp;&nbsp;</li>";
+                    c += "<li>今日金价:<b>" + data.TodayGlodPrice + "</b></li><li>&nbsp;&nbsp;" + data.OtherBrodcast + "</li>";
+
+                    $("#scroll_begin").html("<ul>" + c + "</ul>");
+                    ScrollImgLeft();
+                }
+            });
+        }
+
+        function ScrollImgLeft() {
+            var speed = 20
+            var scroll_begin = document.getElementById("scroll_begin");
+            var scroll_end = document.getElementById("scroll_end");
+            var scroll_div = document.getElementById("scroll_div");
+            scroll_end.innerHTML = scroll_begin.innerHTML
+            function Marquee() {
+                if (scroll_end.offsetWidth - scroll_div.scrollLeft <= 0) {
+                    scroll_div.scrollLeft -= scroll_begin.offsetWidth;
+                }
+                else {
+                    scroll_div.scrollLeft++;
+                }
+            }
+            var MyMar = setInterval(Marquee, speed);
+            scroll_div.onmouseover = function () { clearInterval(MyMar); }
+            scroll_div.onmouseout = function () { MyMar = setInterval(Marquee, speed); }
+        }
 
     </script>
 

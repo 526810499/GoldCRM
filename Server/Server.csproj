@@ -135,6 +135,7 @@
     <Compile Include="SMS_Helper.cs" />
     <Compile Include="SProduct_OldChangeNew.cs" />
     <Compile Include="SProduct_Retrieval.cs" />
+    <Compile Include="STodayBroadcast.cs" />
     <Compile Include="Sys_App.cs" />
     <Compile Include="Sys_base.cs" />
     <Compile Include="Sys_Button.cs" />
