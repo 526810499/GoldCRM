@@ -20,6 +20,17 @@ namespace XHD.Model
         private string _barcode;
         private string _create_id;
         private DateTime _create_time;
+
+        /// <summary>
+        /// 出库单类型 0 总部出库 1 部门出库单
+        /// </summary>
+        public int outType { get; set; }
+
+        /// <summary>
+        /// 来自哪个仓库，原仓库
+        /// </summary>
+       public string FromWarehouse { get; set; }
+
         /// <summary>
         /// 
         /// </summary>

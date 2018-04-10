@@ -122,16 +122,27 @@ namespace XHD.Server
                     if (m.__status == "add" && CanAdd)
                     {
                         int pstatus = product.GetPorductStatusByBarCode(m.BarCode);
-                        if (pstatus != 1)
+                        //不是出库的不是销售的都可以调拨
+                        if (pstatus == 3|| pstatus == 4)
                         {
-                            msg += "\r\n 条形码【" + m.BarCode + "】产品状态发生改变,请确认后在添加或提交审核";
+                            msg += "\r\n 条形码【" + m.BarCode + "】";
                         }
                         else {
 
-                            bool r = allotDetailBll.Add(new Model.Product_allotDetail() { id = Guid.NewGuid().ToString(), allotid = id, barcode = m.BarCode, NowWarehouse = model.NowWarehouse, FromWarehouse = m.warehouse_id.CInt(0, false), create_id = emp_id, create_time = DateTime.Now });
+                            bool r = allotDetailBll.Add(new Model.Product_allotDetail()
+                            {
+                                id = Guid.NewGuid().ToString(),
+                                allotid = id,
+                                barcode = m.BarCode,
+                                NowWarehouse = model.NowWarehouse,
+                                FromWarehouse = m.warehouse_id.CInt(0, false),
+                                create_id = emp_id,
+                                create_time = DateTime.Now,
+                                allotType = model.allotType
+                            });
                             if (!r)
                             {
-                                msg += "\r\n 条形码【" + m.BarCode + "】产品状态发生改变,请确认后在添加或提交审核";
+                                msg += "\r\n 条形码【" + m.BarCode + "】";
                             }
                         }
                     }
@@ -157,7 +168,7 @@ namespace XHD.Server
                 {
                     allotBll.Update(model);
                 }
-                return XhdResult.Success(msg).ToString();
+                return XhdResult.Success(msg+ "产品状态发生改变,请确认后在添加或提交审核").ToString();
             }
 
             return XhdResult.Success().ToString();
@@ -311,19 +322,9 @@ namespace XHD.Server
             int status = ds.Tables[0].Rows[0]["status"].CInt(0, false);
 
             //审核不通过不需要盘点
-            if (status != 3)
+            if (status == 2)
             {
-                if (allotDetailBll.GetList($"allotid = '{id}'").Tables[0].Rows.Count > 0)
-                    return XhdResult.Error("此调拨单下含有产品信息，不允许删除！").ToString();
-
-                DataSet outDset = new BLL.Product_out().GetList($"allot_id = '{id}'");
-                if (outDset != null && outDset.Tables[0].Rows.Count > 0)
-                {
-                    if (outDset.Tables[0].Rows[0]["status"].CInt(0, false) != 3)
-                    {
-                        return XhdResult.Error("此调拨单下含有出库单信息，不允许删除！").ToString();
-                    }
-                }
+                return XhdResult.Error("此调拨单已审核通过，不允许删除！").ToString();
             }
 
             bool candel = true;

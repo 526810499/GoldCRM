@@ -77,7 +77,7 @@
                             obj[n] = "";
                     }
                     var rows = [];
-                    console.log(obj.status);
+ 
                     rows.push(
                             [
                              { display: "调拨仓库", name: "T_NowWarehouse", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_warehouse.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + (obj.NowWarehouse == undefined ? whid : obj.NowWarehouse) + "'}", validate: "{required:true}" }
@@ -193,11 +193,11 @@
         function add() {
             var buttons = [];
             buttons.push({ text: '保存', onclick: f_getpost });
-            f_openWindow2("product/GetProduct.aspx?status=1", "选择产品", 1000, 400, buttons, 9003);
+            f_openWindow2("product/GetProduct2.aspx?status=1", "选择产品", 1200, 600, buttons, 9003);
         }
 
         function addCode() {
-            f_openWindow("product/GetCodeProduct.aspx?status=1", "选择扫码产品", 1000, 400, f_getpost, 9003);
+            f_openWindow("product/GetCodeProduct.aspx?status=1", "选择扫码产品", 1200, 600, f_getpost, 9003);
         }
 
         function pro_remove() {
@@ -209,7 +209,8 @@
         function f_getpost(item, dialog) {
             var rows = null;
             if (!dialog.frame.f_select()) {
-                alert('请选择产品!');
+ 
+                $.ligerDialog.warn('请选择产品');
                 return;
             }
             else {

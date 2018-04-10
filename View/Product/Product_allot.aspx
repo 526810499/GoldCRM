@@ -209,7 +209,7 @@
                     buttons.push({ text: '审核通过', onclick: f_saveYesAuth });
                     buttons.push({ text: '审核不通过', onclick: f_saveNoAuth });
                 }
-                f_openWindow2('product/Product_allotAdd.aspx?authbtn=1&id=' + rows.id + "&astatus=" + rows.status, "审核调拨单", 700, 580, buttons);
+                f_openWindow2('product/Product_allotAdd.aspx?authbtn=1&id=' + rows.id + "&astatus=" + rows.status, "审核调拨单", 1200, 600, buttons);
             }
             else {
                 $.ligerDialog.warn('请选择产品！');
@@ -226,7 +226,7 @@
                     buttons.push({ text: '保存', onclick: f_save });
                     buttons.push({ text: '保存并提交审核', onclick: f_saveAuth });
                 }
-                f_openWindow2('product/Product_allotAdd.aspx?id=' + rows.id + "&astatus=" + rows.status, "修改调拨单", 700, 580, buttons);
+                f_openWindow2('product/Product_allotAdd.aspx?id=' + rows.id + "&astatus=" + rows.status, "修改调拨单", 1200, 600, buttons);
             }
             else {
                 $.ligerDialog.warn('请选择产品！');
@@ -241,7 +241,7 @@
             var buttons = [];
             buttons.push({ text: '保存', onclick: f_save });
             buttons.push({ text: '保存并提交审核', onclick: f_saveAuth });
-            f_openWindow2('product/Product_allotAdd.aspx?astatus=0&whid=' + whid, "新增调拨单", 1050, 580, buttons);
+            f_openWindow2('product/Product_allotAdd.aspx?astatus=0&whid=' + whid, "新增调拨单", 1200, 600, buttons);
         }
 
         function del() {
@@ -382,7 +382,6 @@
                 <div position="center">
                     <div id="toolbar" style="margin-top: 10px;"></div>
                     <div id="maingrid4" style="margin: -1px;"></div>
-
                 </div>
             </div>
         </form>

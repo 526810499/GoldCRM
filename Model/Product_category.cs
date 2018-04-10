@@ -18,10 +18,17 @@ namespace XHD.Model
 		
 		private string _create_id;
 		private DateTime? _create_time;
-		/// <summary>
-		/// 
-		/// </summary>
-		public string id
+
+
+        /// <summary>
+        /// 分类条形码开始标记
+        /// </summary>
+        public string CodingBegins { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string id
 		{
 			set{ _id=value;}
 			get{return _id;}

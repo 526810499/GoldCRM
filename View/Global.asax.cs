@@ -20,7 +20,9 @@ namespace XHD.View
         void Application_Error(object sender, EventArgs e)
         {
             // 在出现未处理的错误时运行的代码
-            Exception objErr = Server.GetLastError().GetBaseException();            
+            Exception objErr = Server.GetLastError().GetBaseException();
+
+            SoftLog.LogStr("Application_Error"+objErr.ToString(), "Application_Error");
 
             BLL.Sys_log_Err ssle = new BLL.Sys_log_Err();
             Model.Sys_log_Err model = new Model.Sys_log_Err();
@@ -36,6 +38,7 @@ namespace XHD.View
             model.Err_ip = Request.UserHostAddress;
 
             var cookie = Request.Cookies[FormsAuthentication.FormsCookieName];
+
 
 
             //检验Cookie是否已经存在 

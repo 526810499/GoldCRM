@@ -813,6 +813,7 @@
     <Content Include="lib\ligerUI\skins\Tab\images\win\dialogicon.gif" />
     <Content Include="License.html" />
     <Content Include="Product\GetCodeProduct.aspx" />
+    <Content Include="Product\GetProduct2.aspx" />
     <Content Include="Product\GetProduct.aspx" />
     <Content Include="Product\Product_out.aspx" />
     <Content Include="Product\Product_allot.aspx" />
@@ -821,6 +822,7 @@
     <Content Include="Product\Product_allotAdd.aspx" />
     <Content Include="Product\product_add.aspx" />
     <Content Include="Product\Product_Retrieval.aspx" />
+    <Content Include="Product\Product_Retrieval_AddDe.aspx" />
     <Content Include="Product\Product_supplier.aspx" />
     <Content Include="Product\Product_Retrieval_Add.aspx" />
     <Content Include="Product\product_warehouse.aspx" />
@@ -830,6 +832,7 @@
     <Content Include="Product\product_category_add.aspx" />
     <Content Include="Sale\contract.aspx" />
     <Content Include="Sale\contract_add.aspx" />
+    <Content Include="Sale\contract_atta.aspx" />
     <Content Include="Sale\GetOrder.aspx" />
     <Content Include="Sale\order.aspx" />
     <Content Include="Sale\order_view.aspx" />
@@ -3000,28 +3003,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Product\Product_Retrieval.aspx.cs">
-      <DependentUpon>Product_Retrieval.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Product\Product_Retrieval.aspx.designer.cs">
-      <DependentUpon>Product_Retrieval.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sale\Product_oldChangeNew_add.aspx.cs">
-      <DependentUpon>Product_oldChangeNew_add.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Sale\Product_oldChangeNew_add.aspx.designer.cs">
-      <DependentUpon>Product_oldChangeNew_add.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Sale\Product_oldChangeNew.aspx.cs">
-      <DependentUpon>Product_oldChangeNew.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Sale\Product_oldChangeNew.aspx.designer.cs">
-      <DependentUpon>Product_oldChangeNew.aspx</DependentUpon>
-    </Compile>
     <Compile Include="ueditor\net\App_Code\Config.cs" />
     <Compile Include="ueditor\net\App_Code\ConfigHandler.cs" />
     <Compile Include="ueditor\net\App_Code\CrawlerHandler.cs" />

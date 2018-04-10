@@ -23,9 +23,14 @@ namespace XHD.Model
         private DateTime _create_time;
 
         /// <summary>
+        /// 调拨类型 0 总部调拨单 1 门店调拨单
+        /// </summary>
+        public int allotType { get; set; }
+
+        /// <summary>
         /// 现在仓库
         /// </summary>
-       public int NowWarehouse { get; set; }
+        public int NowWarehouse { get; set; }
 
         /// <summary>
         /// 

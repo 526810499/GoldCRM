@@ -24,7 +24,8 @@ namespace XHD.Server
         {
         }
 
-        public Product_out(HttpContext context) : base(context) {
+        public Product_out(HttpContext context) : base(context)
+        {
             allDataBtnid = "94676CBB-F382-45C9-A5F3-834F25348C24";
             depDataBtnid = "B42553AB-9AA5-4EBB-A73E-CA28738182D7";
         }
@@ -33,7 +34,7 @@ namespace XHD.Server
         {
             model.NowWarehouse = request["T_NowWarehouse_val"].CInt(0, false);
             model.Remark = PageValidate.InputText(request["T_Remark"], 255);
-            model.allot_id = PageValidate.InputText(request["T_allot_id"], 255);
+
             model.update_id = emp_id;
             model.update_time = DateTime.Now;
             string id = PageValidate.InputText(request["id"], 50);
@@ -88,9 +89,9 @@ namespace XHD.Server
                     string Log_Content = null;
 
 
-                    if (dr["allot_id"].ToString() != request["T_allot_id"])
-                        Log_Content += string.Format("【{0}】{1} → {2} \n", "NowWarehouse", dr["allot_id"],
-                            request["T_allot_id"]);
+                    if (dr["NowWarehouse"].ToString() != request["T_NowWarehouse_val"])
+                        Log_Content += string.Format("【{0}】{1} → {2} \n", "NowWarehouse", dr["NowWarehouse"],
+                            request["T_NowWarehouse_val"]);
 
                     if (dr["Remark"].ToString() != request["T_Remark"])
                         Log_Content += string.Format("【{0}】{1} → {2} \n", "statusRemark", dr["Remark"],
@@ -120,13 +121,27 @@ namespace XHD.Server
                     if (m.__status == "add" && CanAdd)
                     {
                         int pstatus = product.GetPorductStatusByBarCode(m.BarCode);
-                        if (pstatus != 2)
+                        if (pstatus == 3 || pstatus == 4)
                         {
-                            msg += "\r\n 条形码【" + m.BarCode + "】产品状态发生改变,请确认在添加或提交审核";
+                            msg += "\r\n 条形码【" + m.BarCode + "】";
                         }
                         else {
 
-                            bool r = allotDetailBll.Add(new Model.Product_outDetail() { id = Guid.NewGuid().ToString(), outid = id, barcode = m.BarCode, create_id = emp_id, create_time = DateTime.Now });
+                            bool r = allotDetailBll.Add(new Model.Product_outDetail()
+                            {
+                                id = Guid.NewGuid().ToString(),
+                                outid = id,
+                                barcode = m.BarCode,
+                                create_id = emp_id,
+                                create_time = DateTime.Now,
+                                outType = model.outType,
+                                FromWarehouse = m.warehouse_id
+                            });
+
+                            if (!r)
+                            {
+                                msg += "\r\n 保存时条形码【" + m.BarCode + "】";
+                            }
                         }
                     }
                     else if (m.__status == "delete" && CanDel)
@@ -151,6 +166,7 @@ namespace XHD.Server
                 {
                     allotBll.Update(model);
                 }
+                msg += "状态发生改变,请确认在添加或提交审核";
                 return XhdResult.Success(msg).ToString();
             }
 
@@ -195,7 +211,7 @@ namespace XHD.Server
                 serchtxt += $" and id='{dsc.Tables[0].Rows[0]["outid"]}'";
             }
 
-            serchtxt = GetSQLCreateIDWhere(serchtxt,true);
+            serchtxt = GetSQLCreateIDWhere(serchtxt, true);
 
             DataSet ds = allotBll.GetList(PageSize, PageIndex, serchtxt, sorttext, out Total);
             string dt = GetGridJSON.DataTableToJSON1(ds.Tables[0], Total);
@@ -302,17 +318,16 @@ namespace XHD.Server
                 return XhdResult.Error("系统错误，无数据！").ToString();
 
             int status = ds.Tables[0].Rows[0]["status"].CInt(0, false);
-            if (status != 3)
+            if (status == 2)
             {
-                if (allotDetailBll.GetList($"outid = '{id}'").Tables[0].Rows.Count > 0)
-                    return XhdResult.Error("此出库单下含有产品信息，不允许删除！").ToString();
+                return XhdResult.Error("此出库单已审核通过，不允许删除！").ToString();
             }
 
 
             bool candel = true;
             if (uid != "admin")
             {
-      
+
                 candel = CheckBtnAuthority("B8494FA6-EE5D-483F-9421-817E2BF2C5A6");
                 if (!candel)
                     return XhdResult.Error("无此权限！").ToString();
@@ -338,28 +353,6 @@ namespace XHD.Server
 
         }
 
-        /// <summary>
-        /// 检查调度单ID
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public string CheckAllotid(string id)
-        {
-            id = PageValidate.InputText(request["id"], 50);
-            string remark = PageValidate.InputText(request["remark"], 250);
-            if (PageValidate.checkID(id, false))
-            {
-                bool r = allotBll.CountPorduct(id) > 0;
-                if (r)
-                {
-                    return XhdResult.Success().ToString();
-                }
-                else {
-                    return XhdResult.Error("请确认调度是否正确,调度单下是否有产品").ToString();
-                }
-            }
 
-            return XhdResult.Error("请确认调度是否正确").ToString();
-        }
     }
 }

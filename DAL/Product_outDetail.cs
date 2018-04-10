@@ -10,7 +10,7 @@ namespace XHD.DAL
     /// <summary>
     /// 数据访问类:Product_allotDetail
     /// </summary>
-    public partial class Product_outDetail:BaseTransaction
+    public partial class Product_outDetail : BaseTransaction
     {
         public Product_outDetail()
         { }
@@ -30,7 +30,7 @@ namespace XHD.DAL
             return DbHelperSQL.Exists(strSql.ToString(), parameters);
         }
 
- 
+
 
 
         /// <summary>
@@ -41,23 +41,28 @@ namespace XHD.DAL
             bool rs = false;
             StringBuilder strSql = new StringBuilder();
             strSql.AppendLine("insert into Product_outDetail(");
-            strSql.Append("id,outid,barcode,create_id,create_time)");
+            strSql.Append("id,outid,barcode,create_id,create_time,FromWarehouse,outType)");
             strSql.Append(" values (");
-            strSql.Append("@id,@outid,@barcode,@create_id,@create_time) ");
-            strSql.AppendLine(" update Product set Status=3 where barcode=@barcode; ");
+            strSql.Append("@id,@outid,@barcode,@create_id,@create_time,@FromWarehouse,@outType) ");
+            strSql.AppendLine(" update Product set Status=3 where barcode=@barcode and Status in(1,2); ");
 
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@outid", SqlDbType.VarChar,50),
                     new SqlParameter("@barcode", SqlDbType.VarChar,50),
                     new SqlParameter("@create_id", SqlDbType.VarChar,50),
-                    new SqlParameter("@create_time", SqlDbType.DateTime)};
+                    new SqlParameter("@create_time", SqlDbType.DateTime),
+                    new SqlParameter("@FromWarehouse", SqlDbType.Int,4),
+                    new SqlParameter("@outType", SqlDbType.Int,4),
+
+            };
             parameters[0].Value = model.id;
             parameters[1].Value = model.outid;
             parameters[2].Value = model.barcode;
             parameters[3].Value = model.create_id;
             parameters[4].Value = model.create_time;
-
+            parameters[5].Value = model.FromWarehouse.CInt(0, false);
+            parameters[6].Value = model.outType;
 
             System.Data.SqlClient.SqlCommand cm = new System.Data.SqlClient.SqlCommand();
 
@@ -211,7 +216,7 @@ namespace XHD.DAL
         {
 
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select  top 1 id,outid,barcode,create_id,create_time from Product_outDetail ");
+            strSql.Append("select  top 1 id,outid,barcode,create_id,create_time,FromWarehouse,outType from Product_outDetail ");
             strSql.Append(" where id=@id ");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50)         };
@@ -250,7 +255,7 @@ namespace XHD.DAL
                 {
                     model.barcode = row["barcode"].ToString();
                 }
- 
+
                 if (row["create_id"] != null)
                 {
                     model.create_id = row["create_id"].ToString();
@@ -269,7 +274,7 @@ namespace XHD.DAL
         public DataSet GetList(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select id,outid,barcode,create_id,create_time ");
+            strSql.Append("select id,outid,barcode,create_id,create_time,FromWarehouse,outType ");
             strSql.Append(" FROM Product_outDetail ");
             if (strWhere.Trim() != "")
             {
@@ -336,7 +341,7 @@ namespace XHD.DAL
             {
                 strSql.Append(" top " + Top.ToString());
             }
-            strSql.Append(" id,outid,barcode,create_id,create_time ");
+            strSql.Append(" id,outid,barcode,create_id,create_time,FromWarehouse,outType ");
             strSql.Append(" FROM Product_outDetail ");
             if (strWhere.Trim() != "")
             {

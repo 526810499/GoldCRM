@@ -16,23 +16,8 @@
     <script type="text/javascript">
 
         var manager = "";
-        var treemanager;
-        $(function () {
-            $("#layout1").ligerLayout({ leftWidth: 180, allowLeftResize: false, allowLeftCollapse: true, space: 2, heightDiff: -5 });
-            $("#tree1").ligerTree({
-                url: 'Product_category.tree.xhd?qb=1&rnd=' + Math.random(),
-                onSelect: onSelect,
-                idFieldName: 'id',
-                //parentIDFieldName: 'pid',
-                usericon: 'd_icon',
-                checkbox: false,
-                itemopen: false,
-                onSuccess: function () {
-                    //$(".l-first div:first").click();
-                }
-            });
 
-            treemanager = $("#tree1").ligerGetTreeManager();
+        $(function () {
 
             initLayout();
             $(window).resize(function () {
@@ -129,7 +114,7 @@
                 width: '100%',
                 height: '100%',
                 heightDiff: -8,
-                checkbox: true,
+                checkbox: false,
                 onContextmenu: function (parm, e) {
                     actionCustomerID = parm.data.id;
                     menu.show({ top: e.pageY, left: e.pageX });
@@ -149,6 +134,8 @@
                     arr[i].icon = "../" + arr[i].icon;
                     items.push(arr[i]);
                 }
+                items.push({ type: 'textbox', id: 'sfl', text: '分类：' });
+                items.push({ type: 'textbox', id: 'sck', text: '现存仓库：' });
                 items.push({ type: 'textbox', id: 'sstatus', text: '状态：' });
                 items.push({ type: 'textbox', id: 'stext', text: '产品名：' });
                 items.push({ type: 'textbox', id: 'scode', text: '条形码：' });
@@ -156,7 +143,6 @@
 
                 $("#toolbar").ligerToolBar({
                     items: items
-
                 });
                 menu = $.ligerMenu({
                     width: 120, items: getMenuItems(data)
@@ -172,27 +158,44 @@
                 });
                 $("#stext").ligerTextBox({ width: 200 });
                 $("#scode").ligerTextBox({ width: 250 });
+                $("#sfl").ligerComboBox({
+                    width: 150,
+                    selectBoxWidth: 240,
+                    selectBoxHeight: 200,
+                    valueField: 'id',
+                    textField: 'text',
+                    treeLeafOnly: false,
+                    tree: {
+                        url: 'Product_category.tree.xhd?qxz=1&rnd=' + Math.random(),
+                        idFieldName: 'id',
+                        checkbox: false
+                    },
+                });
+                $("#sck").ligerComboBox({
+                    width: 150,
+                    selectBoxWidth: 240,
+                    selectBoxHeight: 200,
+                    valueField: 'id',
+                    textField: 'text',
+                    treeLeafOnly: false,
+                    tree: {
+                        url: 'Product_warehouse.tree.xhd?zb=1&qxz=1&rnd=' + Math.random(),
+                        idFieldName: 'id',
+                        checkbox: false
+                    },
+                });
                 $("#maingrid4").ligerGetGridManager()._onResize();
             });
         }
 
 
-        function onSelect(note) {
-            var manager = $("#maingrid4").ligerGetGridManager();
-            var url = "Product.grid.xhd?categoryid=" + note.data.id + "&rnd=" + Math.random();
-            manager._setUrl(url);
-        }
         //查询
         function doserch() {
             var sendtxt = "&rnd=" + Math.random();
             var serchtxt = $("#form1 :input").fieldSerialize() + sendtxt;
-            var tdata = treemanager.getSelected();
-
-            var cid = "";
-            if (tdata != null && tdata.data != null) {
-                cid = tdata.data.id;
-            }
-            serchtxt += "&categoryid=" + cid;
+ 
+            serchtxt += "&categoryid=" + $("#sfl_val").val();
+            serchtxt += "&warehouse_id=" + $("#sck_val").val();
             var manager = $("#maingrid4").ligerGetGridManager();
             manager._setUrl("Product.grid.xhd?" + serchtxt);
         }
@@ -218,12 +221,8 @@
             }
         }
         function add() {
-            var notes = $("#tree1").ligerGetTreeManager().getSelected();
-            var categoryid = "";
-            if (notes != null && notes != undefined) {
-                categoryid = notes.data.id;
-            }
-            f_openWindow('product/product_add.aspx?categoryid=' + categoryid, "新增产品", 700, 580, f_save);
+
+            f_openWindow('product/product_add.aspx?categoryid=', "新增产品", 700, 580, f_save);
         }
 
         function del() {
@@ -264,7 +263,8 @@
 
         function print() {
             var manager = $("#maingrid4").ligerGetGridManager();
-            var rows = manager.getCheckedRows();
+            var rows = manager.getSelectedRows();
+            console.log(rows);
             if (rows == null || rows.length <= 0) {
                 $.ligerDialog.warn("没有需要打印的产品");
                 return;
@@ -313,18 +313,13 @@
 <body style="padding: 0px; overflow: hidden;">
     <div style="padding: 5px 10px 0px 5px;">
         <form id="form1" onsubmit="return false">
-            <div id="layout1" style="">
-                <div position="left" title="产品类别">
-                    <div id="treediv" style="width: 200px; height: 100%; margin: -1px; float: left; overflow: auto; margin-top: 2px;">
-                        <ul id="tree1"></ul>
-                    </div>
-                </div>
-                <div position="center">
-                    <div id="toolbar" style="margin-top: 10px;"></div>
-                    <div id="maingrid4" style="margin: -1px;"></div>
 
-                </div>
+            <div position="center">
+                <div id="toolbar" style="margin-top: 10px;"></div>
+                <div id="maingrid4" style="margin: -1px;"></div>
+
             </div>
+
         </form>
 
     </div>

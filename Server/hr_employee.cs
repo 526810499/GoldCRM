@@ -16,7 +16,7 @@ namespace XHD.Server
         public static BLL.hr_employee emp = new BLL.hr_employee();
         public static Model.hr_employee model = new Model.hr_employee();
 
- 
+
 
         public hr_employee()
         {
@@ -487,14 +487,20 @@ namespace XHD.Server
                 ext = base64txt.Substring(i, j - i - 1);
             }
             base64txt = base64txt.Substring(base64txt.IndexOf(',') + 1);
+            string saveFile = request["saveFile"].CString("header");
 
             Random rnd = new Random();
             string nowfileName = DateTime.Now.ToString("yyyyMMddHHmmss") + rnd.Next(10000, 99999) + "." + ext;
 
             string filetype = PageValidate.InputText(request["Type"], 50);
 
-            string path = @"/file/header/" + nowfileName;
+            string path1 = @"/file/" + saveFile;
+            string path = path1 + "/" + nowfileName;
 
+            if (!System.IO.Directory.Exists(HttpContext.Current.Server.MapPath(path1)))
+            {
+                System.IO.Directory.CreateDirectory(HttpContext.Current.Server.MapPath(path1));
+            }
 
 
             //过滤特殊字符

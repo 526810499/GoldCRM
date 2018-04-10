@@ -32,9 +32,9 @@
         function f_save() {
             var manager = $("#maingridc4").ligerGetGridManager();
             var fdata = manager.getData();
-            var T_allot_id = $("#T_allot_id").val();
-            if (T_allot_id.length <= 0) {
-                $.ligerDialog.warn('请填写原调拨单号');
+            var T_NowWarehouse_val = $("#T_NowWarehouse_val").val();
+            if (T_NowWarehouse_val.length <= 0) {
+                $.ligerDialog.warn('请选择调度仓库');
                 return false;
             }
             if (fdata.length <= 0) {
@@ -42,7 +42,7 @@
                 return false;
             }
             if ($(form1).valid()) {
-                var sendtxt = "T_allot_id=" + T_allot_id + "&T_Remark=" + $("#T_Remark").val() + "&id=" + getparastr("id");
+                var sendtxt = "T_NowWarehouse_val=" + T_NowWarehouse_val + "&T_Remark=" + $("#T_Remark").val() + "&id=" + getparastr("id");
                 sendtxt += "&PostData=" + JSON.stringify(GetPostData());
                 return sendtxt;
             }
@@ -78,7 +78,7 @@
 
                     rows.push(
                             [
-                             { display: "调拨单号", name: "T_allot_id", type: "text", width: 450, validate: "{required:true}", initValue: obj.allot_id },
+                            { display: "出库仓库", name: "T_NowWarehouse", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_warehouse.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + (obj.NowWarehouse == undefined ? "" : obj.NowWarehouse) + "'}", validate: "{required:true}" }
                             ],
                             [
                              { display: "备注", name: "T_Remark", type: "textarea", cols: 73, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.remark }
@@ -86,10 +86,9 @@
                         );
                     if (obj != null && obj.status >= 0) {
                         rows.push([
-                             { display: "状态", name: "T_Status", type: "select", options: "{width:180,disabled:true,,data:[{id:0,text:'等待提交'},{id:1,text:'等待审核'},{id:2,text:'审核通过'},{id:3,text:'审核不通过'}],selectBoxHeight:50, value:" + obj.status + "}", validate: "{required:false}" }
+                               { display: "状态", name: "T_Status", type: "select", options: "{width:180,onSelected:function(value){},data:[{id:0,text:'等待提交'},{id:1,text:'等待审核'},{id:2,text:'审核通过'},{id:3,text:'审核不通过'}],selectBoxHeight:50, value:" + obj.status + "}", validate: "{required:true}" }
                         ]);
                     }
-
                     if (!obj.discount_amount)
                         obj.discount_amount = 0;
 
@@ -192,43 +191,16 @@
             $("#maingridc4").ligerGetGridManager()._onResize();
         }
 
-        function checkAllotID() {
-            var allotid = $("#T_allot_id").val();
-            var url = ("Product_allot.CheckAllotid.xhd?id=" + allotid);
-            var rs = false;
-            $.ajax({
-                url: url,
-                async: false,
-                dataType: "json",
-                success: function (rdata) {
-                    rs = rdata.isSuccess;
-                    if (rdata.isSuccess) {
-                        $("#T_allot_id").attr("disabled", "true");
-
-                    } else {
-                        $.ligerDialog.warn('请确认原调拨单是单号是否正确');
-
-                    }
-                }
-            });
-            return rs;
-        }
 
         function add() {
-            var r = checkAllotID();
-            if (!r) { return; }
-
-            var allotid = $("#T_allot_id").val();
 
             var buttons = [];
             buttons.push({ text: '保存', onclick: f_getpost });
-            f_openWindow2("product/GetProduct.aspx?status=2&allotid=" + allotid, "选择产品", 1000, 400, buttons, 9003);
+            f_openWindow2("product/GetProduct2.aspx?status=1,2", "选择产品", 1000, 400, buttons, 9003);
         }
 
         function addCode() {
-            var r = checkAllotID();
-            if (!r) { return; }
-            f_openWindow("product/GetCodeProduct.aspx?status=2&allotid=" + $("#T_allot_id").val(), "选择扫码产品", 1000, 400, f_getpost, 9003);
+            f_openWindow("product/GetCodeProduct.aspx?status=1,2", "选择扫码产品", 1000, 400, f_getpost, 9003);
         }
 
         function pro_remove() {

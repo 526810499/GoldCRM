@@ -31,7 +31,7 @@
             $("#maingrid4").ligerGrid({
                 columns: [
                     { display: '出库订单号', name: 'id', align: 'left', width: 300 },
-                    { display: '调拨单号', name: 'allot_id', align: 'left', width: 300 },
+                    { display: '仓库', name: 'NowWarehouseName', align: 'left', width: 300 },
                     { display: '创建人', name: 'CreateName', align: 'left', width: 160 },
                     {
                         display: '创建时间', name: 'create_time', width: 100, align: 'left', render: function (item) {

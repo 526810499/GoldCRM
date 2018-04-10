@@ -24,28 +24,17 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Product_retrieval(");
-            strSql.Append("id,weight,number,createdep_id,category_id,remark,create_time,create_id,status)");
+            strSql.Append("id,createdep_id,remark,create_time,create_id,status)");
             strSql.Append(" values (");
-            strSql.Append("@id,@weight,@number,@createdep_id,@category_id,@remark,@create_time,@create_id,@status)");
+            strSql.Append("@id,@createdep_id,@remark,@create_time,@create_id,@status)");
             SqlParameter[] parameters = {
-                    new SqlParameter("@id", SqlDbType.VarChar,50),
-                    new SqlParameter("@weight", SqlDbType.Decimal,9),
-                    new SqlParameter("@number", SqlDbType.Int,4),
-                    new SqlParameter("@createdep_id", SqlDbType.VarChar,50),
-                    new SqlParameter("@category_id", SqlDbType.VarChar,50),
-                    new SqlParameter("@remark", SqlDbType.NVarChar,50),
-                    new SqlParameter("@create_time", SqlDbType.DateTime),
-                    new SqlParameter("@create_id", SqlDbType.VarChar,50),
-                    new SqlParameter("@status", SqlDbType.Int,4)};
-            parameters[0].Value = model.id;
-            parameters[1].Value = model.weight;
-            parameters[2].Value = model.number;
-            parameters[3].Value = model.createdep_id;
-            parameters[4].Value = model.category_id;
-            parameters[5].Value = model.remark;
-            parameters[6].Value = model.create_time;
-            parameters[7].Value = model.create_id;
-            parameters[8].Value = model.status;
+                    new SqlParameter("@id", SqlDbType.VarChar,50) { Value=model.id},
+                    new SqlParameter("@createdep_id", SqlDbType.VarChar,50) { Value=model.createdep_id},
+                    new SqlParameter("@remark", SqlDbType.NVarChar,50) { Value=model.remark},
+                    new SqlParameter("@create_time", SqlDbType.DateTime) { Value=model.create_time},
+                    new SqlParameter("@create_id", SqlDbType.VarChar,50) { Value=model.create_id},
+                    new SqlParameter("@status", SqlDbType.Int,4) { Value=model.status} };
+
 
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
@@ -64,28 +53,15 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("update Product_retrieval set ");
-            strSql.Append("weight=@weight,");
-            strSql.Append("number=@number,");
             strSql.Append("createdep_id=@createdep_id,");
-            strSql.Append("category_id=@category_id,");
             strSql.Append("remark=@remark,");
             strSql.Append("status=@status");
             strSql.Append(" where id=@id ");
             SqlParameter[] parameters = {
-                    new SqlParameter("@weight", SqlDbType.Decimal,9),
-                    new SqlParameter("@number", SqlDbType.Int,4),
-                    new SqlParameter("@createdep_id", SqlDbType.VarChar,50),
-                    new SqlParameter("@category_id", SqlDbType.VarChar,50),
-                    new SqlParameter("@remark", SqlDbType.NVarChar,50),
-                    new SqlParameter("@status", SqlDbType.Int,4),
-                    new SqlParameter("@id", SqlDbType.VarChar,50)};
-            parameters[0].Value = model.weight;
-            parameters[1].Value = model.number;
-            parameters[2].Value = model.createdep_id;
-            parameters[3].Value = model.category_id;
-            parameters[4].Value = model.remark;
-            parameters[5].Value = model.status;
-            parameters[6].Value = model.id;
+                    new SqlParameter("@id", SqlDbType.VarChar,50) { Value=model.id},
+                    new SqlParameter("@createdep_id", SqlDbType.VarChar,50) { Value=model.createdep_id},
+                    new SqlParameter("@remark", SqlDbType.NVarChar,50) { Value=model.remark},
+                    new SqlParameter("@status", SqlDbType.Int,4) { Value=model.status} };
 
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
@@ -105,8 +81,12 @@ namespace XHD.DAL
         {
 
             StringBuilder strSql = new StringBuilder();
+            strSql.Append("delete from Product_RetrievalDetail ");
+            strSql.Append(" where retrid=@id ");
+
             strSql.Append("delete from Product_retrieval ");
             strSql.Append(" where id=@id ");
+
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50)         };
             parameters[0].Value = id;
@@ -146,7 +126,7 @@ namespace XHD.DAL
         public DataSet GetList(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select id,weight,number,createdep_id,category_id,remark,create_time,create_id,status ");
+            strSql.Append("select id,createdep_id,remark,create_time,create_id,status ");
             strSql.Append(" FROM Product_retrieval ");
             if (strWhere.Trim() != "")
             {
@@ -166,7 +146,7 @@ namespace XHD.DAL
             {
                 strSql.Append(" top " + Top.ToString());
             }
-            strSql.Append(" id,weight,number,createdep_id,category_id,remark,create_time,create_id,status ");
+            strSql.Append(" id,createdep_id,remark,create_time,create_id,status  ");
             strSql.Append(" FROM Product_retrieval ");
             if (strWhere.Trim() != "")
             {
@@ -187,7 +167,6 @@ namespace XHD.DAL
             strSql_total.Append(" SELECT COUNT(id) FROM Product_retrieval(nolock) ");
             strSql_grid.Append("SELECT ");
             strSql_grid.Append("      *");
-            strSql_grid.Append(",(select product_category from Product_category(nolock) where id = w1.category_id) as category_name");
             strSql_grid.Append(",(select dep_name from hr_department(nolock) where id = w1.createdep_id) as depname");
             strSql_grid.Append(" FROM ( SELECT *, ROW_NUMBER() OVER( Order by " + filedOrder + " ) AS n from Product_retrieval");
             if (strWhere.Trim() != "")

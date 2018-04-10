@@ -54,10 +54,10 @@ namespace XHD.DAL
             bool rs = false;
             StringBuilder strSql = new StringBuilder();
             strSql.AppendLine("insert into Product_allotDetail(");
-            strSql.Append("id,allotid,barcode,FromWarehouse,create_id,create_time)");
+            strSql.Append("id,allotid,barcode,FromWarehouse,create_id,create_time,allotType)");
             strSql.Append(" values (");
-            strSql.Append("@id,@allotid,@barcode,@FromWarehouse,@create_id,@create_time)");
-            strSql.AppendLine(" update Product set Status=2,warehouse_id=@NowWarehouse where barcode=@barcode and Status=1");
+            strSql.Append("@id,@allotid,@barcode,@FromWarehouse,@create_id,@create_time,@allotType)");
+            strSql.AppendLine(" update Product set Status=2,warehouse_id=@NowWarehouse where barcode=@barcode and Status=1");//
 
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
@@ -67,6 +67,7 @@ namespace XHD.DAL
                     new SqlParameter("@create_id", SqlDbType.VarChar,50),
                     new SqlParameter("@create_time", SqlDbType.DateTime),
                     new SqlParameter("@NowWarehouse", SqlDbType.Int,4),
+                    new SqlParameter("@allotType", SqlDbType.Int,4),
             };
             parameters[0].Value = model.id;
             parameters[1].Value = model.allotid;
@@ -75,6 +76,7 @@ namespace XHD.DAL
             parameters[4].Value = model.create_id;
             parameters[5].Value = model.create_time;
             parameters[6].Value = model.NowWarehouse;
+            parameters[7].Value = model.allotType;
 
             System.Data.SqlClient.SqlCommand cm = new System.Data.SqlClient.SqlCommand();
 
@@ -231,7 +233,7 @@ namespace XHD.DAL
         {
 
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select  top 1 id,allotid,barcode,FromWarehouse,create_id,create_time from Product_allotDetail ");
+            strSql.Append("select  top 1 id,allotid,barcode,FromWarehouse,create_id,create_time,allotType from Product_allotDetail ");
             strSql.Append(" where id=@id ");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50)         };
@@ -292,7 +294,7 @@ namespace XHD.DAL
         public DataSet GetList(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select id,allotid,barcode,FromWarehouse,create_id,create_time ");
+            strSql.Append("select id,allotid,barcode,FromWarehouse,create_id,create_time,allotType ");
             strSql.Append(" FROM Product_allotDetail ");
             if (strWhere.Trim() != "")
             {

@@ -22,6 +22,10 @@ namespace XHD.Model
         private string _update_id;
         private DateTime _update_time;
 
+        /// <summary>
+        /// 出库分类 0 总部出库单 1门店出库单
+        /// </summary>
+        public int outType { get; set; }
 
         /// <summary>
         /// 调拨到哪个门店部门

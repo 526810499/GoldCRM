@@ -38,9 +38,9 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Product_allot(");
-            strSql.Append("id,remark,NowWarehouse,create_id,create_time,status,update_id,update_time,createdep_id)");
+            strSql.Append("id,remark,NowWarehouse,create_id,create_time,status,update_id,update_time,createdep_id,allotType)");
             strSql.Append(" values (");
-            strSql.Append("@id,@remark,@NowWarehouse,@create_id,@create_time,@status,@update_id,@update_time,@createdep_id)");
+            strSql.Append("@id,@remark,@NowWarehouse,@create_id,@create_time,@status,@update_id,@update_time,@createdep_id,@allotType)");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@remark", SqlDbType.NVarChar,50),
@@ -50,7 +50,8 @@ namespace XHD.DAL
                     new SqlParameter("@status", SqlDbType.Int,4),
                     new SqlParameter("@update_id", SqlDbType.VarChar,50),
                     new SqlParameter("@update_time", SqlDbType.DateTime),
-                    new SqlParameter("@createdep_id",SqlDbType.VarChar,50)
+                    new SqlParameter("@createdep_id",SqlDbType.VarChar,50),
+                   new SqlParameter("@allotType", SqlDbType.Int,4),
             };
             parameters[0].Value = model.id;
             parameters[1].Value = model.Remark;
@@ -61,6 +62,7 @@ namespace XHD.DAL
             parameters[6].Value = model.update_id;
             parameters[7].Value = model.update_time;
             parameters[8].Value = model.createdep_id;
+            parameters[9].Value = model.allotType;
 
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
@@ -171,8 +173,11 @@ namespace XHD.DAL
         {
 
             StringBuilder strSql = new StringBuilder();
+            strSql.Append("delete from Product_allotDetail ");
+            strSql.Append(" where allotid=@id ");
+
             strSql.Append("delete from Product_allot ");
-            strSql.Append(" where id=@id ");
+
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50)         };
             parameters[0].Value = id;
@@ -214,7 +219,7 @@ namespace XHD.DAL
         {
 
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select  top 1 id,NowWarehouse,create_id,create_time,status,update_id,update_time from Product_allot ");
+            strSql.Append("select  top 1 id,NowWarehouse,create_id,create_time,status,update_id,update_time,allotType from Product_allot ");
             strSql.Append(" where id=@id ");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50)         };
@@ -279,7 +284,7 @@ namespace XHD.DAL
         public DataSet GetList(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select id,NowWarehouse,create_id,create_time,status,update_id,update_time,remark ");
+            strSql.Append("select id,NowWarehouse,create_id,create_time,status,update_id,update_time,remark,allotType ");
             strSql.Append(" FROM Product_allot ");
             if (strWhere.Trim() != "")
             {
@@ -299,7 +304,7 @@ namespace XHD.DAL
             {
                 strSql.Append(" top " + Top.ToString());
             }
-            strSql.Append(" id,NowWarehouse,create_id,create_time,status,update_id,update_time,remark ");
+            strSql.Append(" id,NowWarehouse,create_id,create_time,status,update_id,update_time,remark,allotType ");
             strSql.Append(" FROM Product_allot ");
             if (strWhere.Trim() != "")
             {

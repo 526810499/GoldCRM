@@ -26,7 +26,7 @@ namespace XHD.Server
             model.parentid = PageValidate.InputText(request["T_category_parent_val"], 50);
             model.product_category = PageValidate.InputText(request["T_category_name"], 250);
             model.product_icon = PageValidate.InputText(request["T_category_icon"], 250);
-
+            model.CodingBegins= PageValidate.InputText(request["T_CodingBegins"], 50);
             string id = PageValidate.InputText(request["id"], 50);
             string pid = PageValidate.InputText(request["T_category_parent_val"], 50);
             if (PageValidate.checkID(id))
@@ -60,6 +60,8 @@ namespace XHD.Server
 
                 if (dr["parentid"].ToString() != request["T_category_parent_val"])
                     Log_Content += string.Format("【{0}】{1} → {2} \n", "上级类别", dr["parentid"].ToString(), request["T_category_parent_val"]);
+                if (dr["CodingBegins"].ToString() != request["T_CodingBegins"])
+                    Log_Content += string.Format("【{0}】{1} → {2} \n", "CodingBegins", dr["CodingBegins"].ToString(), request["T_CodingBegins"]);
 
                 if (!string.IsNullOrEmpty(Log_Content))
                     Syslog.Add_log(UserID, UserName, IPStreet, EventTitle, EventType, EventID, Log_Content);

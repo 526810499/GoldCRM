@@ -64,7 +64,7 @@
                             return toMoney(item.SalesTotalPrice);
                         }
                     },
-                    { display: '供应商', name: 'supplier_name', width: 100 }
+                    { display: '现存仓库', name: 'warehouse_name', width: 100, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
 
                 ],
                 checkbox: true,
@@ -99,7 +99,7 @@
 
         function doChangeSearch() {
             var v = $("#scode").val();
-            if (v != undefined && v.length == 13) {
+            if (v != undefined && v.length > 10) {
                 doserch();
             }
         }
@@ -113,10 +113,7 @@
             var manager = $("#maingrid4").ligerGetGridManager();
             var serchtxt = "status=" + status + "&scode=" + scode + "&SupplierID=" + SupplierID + "&rnd=" + Math.random()
             var url = ("Product.grid.xhd?" + serchtxt);
-            if (allotid.length > 0) {
-                serchtxt += "&allotid=" + allotid;
-                url = "Product_allot.gridDetail.xhd?" + serchtxt;
-            }
+
             $.get(url, function (rdata, textStatus) {
 
                 var data = eval('(' + rdata + ')');

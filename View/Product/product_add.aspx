@@ -75,15 +75,13 @@
                         if (obj[n] == "null" || obj[n] == null)
                             obj[n] = "";
                     }
-                    //alert(obj.constructor); //String 构造函数
-
-                    //$("#T_product_category").ligerGetComboBoxManager().selectValue(obj.category_id);
+ 
 
                     if (!obj.category_id) {
                         obj.category_id = getparastr("categoryid", "");
                     }
 
-                    if (obj.SupplierID == null || obj.SupplierID == undefined || obj.SupplierID.length <= 0) {
+                    if (obj.SupplierID == null || obj.SupplierID == undefined || obj.SupplierID == 0 || obj.SupplierID.length <= 0) {
                         obj.SupplierID = "";
                     }
 
@@ -106,14 +104,14 @@
                                    ],
                                    [
                                     { display: "附工费", name: "T_AttCosts", type: "text", options: "{width:180,onChangeValue:function(value){ $('#T_AttCosts').val(toMoney(value));SetT_CostsTotal(); }}", validate: "{required:true}", initValue: toMoney(obj.AttCosts) },
-                                    { display: "主石重", name: "T_MainStoneWeight", type: "text", options: "{width:180,onChangeValue:function(value){ $('#T_MainStoneWeight').val(toMoney(value)); }}", validate: "{required:true}", initValue: toMoney(obj.MainStoneWeight) }
+                                    { display: "主石重", name: "T_MainStoneWeight", type: "text", options: "{width:180,onChangeValue:function(value){ $('#T_MainStoneWeight').val(toMoney(value)); }}", validate: "{required:false}", initValue: toMoney(obj.MainStoneWeight) }
                                    ],
                                    [
-                                    { display: "附石重", name: "T_AttStoneWeight", type: "text", options: "{width:180,onChangeValue:function(value){ $('#T_AttStoneWeight').val(toMoney(value)); }}", validate: "{required:true}", initValue: toMoney(obj.AttStoneWeight) },
-                                    { display: "附石数", name: "T_AttStoneNumber", type: "text", options: "{width:180,onChangeValue:function(value){ $('#T_AttStoneNumber').val(toMoney(value)); }}", validate: "{required:true}", initValue: toMoney(obj.AttStoneNumber) }
+                                    { display: "附石重", name: "T_AttStoneWeight", type: "text", options: "{width:180,onChangeValue:function(value){ $('#T_AttStoneWeight').val(toMoney(value)); }}", validate: "{required:false}", initValue: toMoney(obj.AttStoneWeight) },
+                                    { display: "附石数", name: "T_AttStoneNumber", type: "text", options: "{width:180,onChangeValue:function(value){ $('#T_AttStoneNumber').val(toMoney(value)); }}", validate: "{required:false}", initValue: toMoney(obj.AttStoneNumber) }
                                    ],
                                    [
-                                    { display: "石价", name: "T_StonePrice", type: "text", options: "{width:180,onChangeValue:function(value){ $('#T_StonePrice').val(toMoney(value));SetT_Totals(); }}", validate: "{required:true}", initValue: toMoney(obj.StonePrice) },
+                                    { display: "石价", name: "T_StonePrice", type: "text", options: "{width:180,onChangeValue:function(value){ $('#T_StonePrice').val(toMoney(value));SetT_Totals(); }}", validate: "{required:false}", initValue: toMoney(obj.StonePrice) },
                                     { display: "金价小计", name: "T_GoldTotal", type: "text", options: "{width:180,disabled:true,onChangeValue:function(value){ $('#T_GoldTotal').val(toMoney(value)); SetT_Totals(); }}", validate: "{required:true}", initValue: toMoney(obj.GoldTotal) }
                                    ],
                                   [
@@ -121,7 +119,7 @@
                                     { display: "成本总价", name: "T_Totals", type: "text", options: "{width:180,disabled:true,onChangeValue:function(value){ $('#T_Totals').val(toMoney(value)); }}", validate: "{required:true}", initValue: toMoney(obj.Totals) }
                                   ],
                                 [
-                                    { display: "供应商", name: "T_SupplierID", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_supplier.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + obj.SupplierID + "'}", validate: "{required:true}" },
+                                    { display: "供应商", name: "T_SupplierID", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_supplier.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + obj.SupplierID + "'}", validate: "{required:false}" },
                                     { display: "出厂码", name: "T_Sbarcode", type: "text", options: "{width:180}", validate: "{required:false}", initValue: (obj.Sbarcode) },
                                 ],
                                    [{ display: "条形码", name: "T_BarCode", type: "text", options: "{width:180,disabled:true}", validate: "{required:false}", initValue: (obj.BarCode) },

@@ -19,9 +19,7 @@
                 columns: [
                     { display: '类别名称', name: 'product_category', width: 250, align: 'left' },
                     {
-                        display: '图标', name: 'product_icon', width: 50, render: function (item) {
-                            return "<div style='margin-top:8px;'><img src='../" + item.product_icon + "'/></div>";
-                        }
+                        display: '条形码头', name: 'CodingBegins', width: 50
                     }
                 ],
                 dataAction: 'local',
@@ -33,7 +31,6 @@
                 tree: { columnName: 'product_category' },
                 heightDiff: -10,
                 onRClickToSelect: true,
-               
                 onContextmenu: function (parm, e) {
                     actionCustomerID = parm.data.id;
                     menu.show({ top: e.pageY, left: e.pageX });
@@ -42,7 +39,7 @@
 
             });
 
-            
+
 
             initLayout();
             $(window).resize(function () {
@@ -67,7 +64,7 @@
                 menu = $.ligerMenu({
                     width: 120, items: getMenuItems(data)
                 });
-                
+
                 $("#maingrid4").ligerGetGridManager()._onResize();
             });
         }
@@ -75,14 +72,14 @@
 
 
         function add() {
-            f_openWindow("product/product_category_add.aspx", "新增类别", 480, 320,f_save);
+            f_openWindow("product/product_category_add.aspx", "新增类别", 480, 320, f_save);
         }
 
         function edit() {
             var manager = $("#maingrid4").ligerGetGridManager();
             var row = manager.getSelectedRow();
             if (row) {
-                f_openWindow('product/product_category_add.aspx?cid=' + row.id, "修改类别", 480, 320,f_save);
+                f_openWindow('product/product_category_add.aspx?cid=' + row.id, "修改类别", 480, 320, f_save);
             } else {
                 $.ligerDialog.warn('请选择行！');
             }
@@ -97,7 +94,7 @@
                         $.ajax({
                             url: "Product_category.del.xhd", type: "POST",
                             data: { id: row.id, rnd: Math.random() },
-                            dataType:'json',
+                            dataType: 'json',
                             success: function (result) {
                                 $.ligerDialog.closeWaitting();
 
@@ -129,7 +126,7 @@
                 $.ajax({
                     url: "Product_category.save.xhd", type: "POST",
                     data: issave,
-                    dataType:'json',
+                    dataType: 'json',
                     success: function (result) {
                         $.ligerDialog.closeWaitting();
 
@@ -144,7 +141,7 @@
                     },
                     error: function () {
                         $.ligerDialog.closeWaitting();
-                        
+
                     }
                 });
 
@@ -156,17 +153,21 @@
         };
     </script>
     <style type="text/css">
-        .l-leaving { background: #eee; color: #999; }
+        .l-leaving {
+            background: #eee;
+            color: #999;
+        }
     </style>
 
 </head>
 <body>
 
     <form id="form1" onsubmit="return false">
-        <div style="padding:10px;">
+        <div style="padding: 10px;">
             <div id="toolbar"></div>
-            
+
             <div id="maingrid4" style="margin: -1px;"></div>
+            <div></div>
         </div>
     </form>
 

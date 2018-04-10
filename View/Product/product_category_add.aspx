@@ -6,7 +6,7 @@
     <title></title>
     <link href="../lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" />
     <link href="../lib/ligerUI/skins/Gray2014/css/all.css" rel="stylesheet" />
-
+    <link href="../CSS/webuploader.css" rel="stylesheet" />
     <script src="../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
 
@@ -18,22 +18,20 @@
     <script src="../lib/ligerUI2/js/plugins/ligerComboBox.js"></script>
     <script src="../lib/ligerUI2/js/plugins/ligerTree.js"></script>
     <script src="../JS/XHD.js" type="text/javascript"></script>
+    <script src="../JS/webuploader/webuploader.min.js" type="text/javascript"></script>
+
     <script type="text/javascript">
         //图标
-        var jiconlist, winicons, currentComboBox;
+        var winicons, currentComboBox;
         $(function () {
             $.metadata.setType("attr", "validate");
             XHD.validate($(form1));
 
             //$("#T_Contract_name").focus();
             $("form").ligerForm();
-            $("#menuicon").bind("click", f_selectIcon);
-            $("#T_category_icon").bind("click", f_selectIcon);
 
             loadForm(getparastr("cid"));
 
-            jiconlist = $("body > .iconlist:first");
-            if (!jiconlist.length) jiconlist = $('<ul class="iconlist"></ul>').appendTo('body');
         });
 
         function f_save() {
@@ -44,6 +42,8 @@
         }
 
         function loadForm(oaid) {
+
+            f_uploader();
             $.ajax({
                 type: "GET",
                 url: "Product_category.form.xhd", /* 注意后面的名字对应CS的方法名称 */
@@ -58,6 +58,7 @@
                     //alert(obj.constructor); //String 构造函数
                     $("#T_category_name").val(obj.product_category);
                     $("#T_category_icon").val(obj.product_icon);
+                    $("#T_CodingBegins").val(obj.CodingBegins);
                     if (!obj.product_icon)
                         obj.product_icon = 'images/icon/21.png ';
                     $("#menuicon").attr("src", "../" + obj.product_icon);
@@ -81,74 +82,41 @@
             });
         }
 
-        function f_selectIcon() {
-            winicons = $.ligerDialog.open({
-                title: '选取图标',
-                target: jiconlist,
-                width: 400, height: 220, modal: true
-            });
 
-            $.ajax({
-                url: "Sys_base.GetIcons.xhd", type: "get",
-                data: { icontype: "1", rnd: Math.random() },
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) {
-                    var obj = eval(data);
-                    //alert(obj.length);
-                    for (var i = 0, l = obj.length; i < l; i++) {
-                        var src = obj[i];
-                        var reg = /(images\\icon)(.+)/;
-                        var match = reg.exec(src);
-                        // alert(match);
-                        jiconlist.append("<li><img src='../images/icon/" + src.filename + "' /></li>");
-                        if (!match) continue;
-                    }
-
-
-                    $(".iconlist li").live('mouseover', function () {
-                        $(this).addClass("over");
-                    }).live('mouseout', function () {
-                        $(this).removeClass("over");
-                    }).live('click', function () {
-                        if (!winicons) return;
-                        var src = $("img", this).attr("src");
-                        var name = src.substr(src.lastIndexOf("/")).toLowerCase();
-                        $("#menuicon").attr("src", "../images/icon" + name);
-                        $("#T_category_icon").val("images/icon" + name);
-
-                        winicons.close();
-                    });
-                }
-            });
-
+        function startup() {
+            uploader.upload();
         }
 
+        var uploader;
+        function f_uploader() {
+            uploader = WebUploader.create({
+                swf: "../js/webuploader/uploader.swf",
+                server: "CRM_contract_atta.uploadAtth.xhd?savefile=category",
+                pick: "#uploadimg",
+                resize: false,
+                auto: true,
+            });
+
+            uploader.on('fileQueued', function (file) {
+
+            });
+
+            uploader.on('uploadSuccess', function (file, response) {
+                var ico = response.Message;
+                $("#T_category_icon").val(".." + ico);
+                $("#menuicon").attr("src", ".." + ico);
+            });
+
+            uploader.on('uploadError', function (file) {
+            });
+
+            uploader.on('uploadFinished', function (file) {
+
+            });
+        }
 
     </script>
-    <style type="text/css">
-        .iconlist {
-            width: 360px;
-            padding: 3px;
-        }
 
-            .iconlist li {
-                border: 1px solid #FFFFFF;
-                float: left;
-                display: block;
-                padding: 2px;
-                cursor: pointer;
-            }
-
-                .iconlist li.over {
-                    border: 1px solid #516B9F;
-                }
-
-                .iconlist li img {
-                    height: 16px;
-                    height: 16px;
-                }
-    </style>
 
 </head>
 <body style="padding: 0px">
@@ -176,14 +144,26 @@
                 </td>
             </tr>
             <tr>
+                <td height="23" colspan="2">
+                    <div align="left" style="width: 62px">条形码头：</div>
+                </td>
+                <td height="23">
+                    <input type="text" id="T_CodingBegins" name="T_CodingBegins" ltype="text" validate="{required:true}" />
+                </td>
+            </tr>
+            <tr>
                 <td height="23" style="width: 62px">
 
                     <div align="left" style="width: 62px">类别图标：</div>
                 </td>
                 <td height="23" style="width: 27px">
-                    <img id="menuicon" style="width: 16px; height: 16px;" /></td>
-                <td height="23">
-                    <input type="text" id="T_category_icon" name="T_category_icon" ltype="text" ligerui="{width:180}" validate="{required:false}" />
+                    <img id="menuicon" style="width: 25px; height: 25px;" />
+                </td>
+                <td height="23" style="width: 27px">
+                    <div style="text-align: center">
+                        <div id="uploadimg">选择图标</div>
+                    </div>
+                    <input type="hidden" id="T_category_icon" name="T_category_icon" />
                 </td>
             </tr>
 

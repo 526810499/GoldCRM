@@ -30,7 +30,7 @@
                 itemopen: false
             });
             status = getparastr("status", "");
-            SupplierID = getparastr("SupplierID","");
+            SupplierID = getparastr("SupplierID", "");
             allotid = getparastr("allotid", "");
             treemanager = $("#tree1").ligerGetTreeManager();
 
@@ -39,9 +39,6 @@
                 initLayout();
             });
             var url = "Product.grid.xhd?status=" + status + "&SupplierID=" + SupplierID;
-            if (allotid.length > 0) {
-                url = "Product_allot.gridDetail.xhd?allotid=" + allotid;
-            }
             $("#maingrid4").ligerGrid({
                 columns: [
                     { display: '产品名称', name: 'product_name', align: 'left', width: 120 },
@@ -77,7 +74,7 @@
                             return toMoney(item.SalesTotalPrice);
                         }
                     },
-                    { display: '供应商', name: 'supplier_name', width: 100 }
+                   { display: '现存仓库', name: 'warehouse_name', width: 100, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
 
                 ],
                 checkbox: true,
@@ -131,12 +128,8 @@
             var serchtxt = "categoryid=" + cid + "&status=" + status + "&stext=" + $("#stext").val() + "&scode=" + $("#scode").val() + "&SupplierID=" + SupplierID + "&rnd=" + Math.random()
             var manager = $("#maingrid4").ligerGetGridManager();
             var url = "Product.grid.xhd?" + serchtxt;
-            if (allotid.length > 0) {
-                serchtxt += "&allotid=" + allotid;
-                url = "Product_allot.gridDetail.xhd?" + serchtxt;
-            }
-            manager._setUrl(url);
 
+            manager._setUrl(url);
 
         }
 

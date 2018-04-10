@@ -43,7 +43,7 @@ namespace XHD.Server
             model.Sbarcode = PageValidate.InputText(request["T_Sbarcode"], 255);
             model.remarks = PageValidate.InputText(request["T_Remark"], 255);
             model.IsGold = (request["T_GType"].CString("") == "是" ? 1 : 0);
-
+            model.BarCode = PageValidate.InputText(request["T_BarCode"], 50);
 
             string pid = PageValidate.InputText(request["pid"], 50);
             if (PageValidate.checkID(pid))
@@ -63,6 +63,13 @@ namespace XHD.Server
                     return XhdResult.Error("参数不正确，更新失败！").ToString();
 
                 DataRow dr = ds.Tables[0].Rows[0];
+                int status = dr["status"].CInt(0, false);
+                string oldCode = dr["BarCode"].CString("");
+                if (status != 1 && oldCode != model.BarCode.Trim().ToUpper())
+                {
+                    return XhdResult.Error("该商品状态已发生改变,条形码不能修改").ToString();
+                }
+                model.BarCode = model.BarCode.Trim().ToUpper();
                 product.Update(model);
 
                 string UserID = emp_id;
@@ -128,15 +135,35 @@ namespace XHD.Server
                 model.createdep_id = dep_id;
                 model.status = 1;
                 string code = StringPlus.GetRandomLetters() + DateTime.Now.GetHashCode().ToString().Replace("-", "");
-                string T_product_category = request["T_product_category"].CString("HJ");
-                string str = T_product_category.GetSpellCode(true);
-                code = str.PadRight(2, '0').Substring(0, 2) + code;
 
-                model.BarCode = code.ToUpper();
+
+
+                model.BarCode = GetBarCode(model.category_id);
                 product.Add(model);
             }
 
             return XhdResult.Success().ToString();
+        }
+
+        /// <summary>
+        /// 获取条形码
+        /// </summary>
+        /// <param name="categoryid"></param>
+        /// <returns></returns>
+        private string GetBarCode(string categoryid)
+        {
+            string code = StringPlus.GetRandomLetters() + DateTime.Now.GetHashCode().ToString().Replace("-", "");
+
+            string str = "YT";
+            DataSet cds = new BLL.Product_category().GetList("id='" + model.category_id + "'");
+            if (cds != null && cds.Tables.Count > 0)
+            {
+                str = cds.Tables[0].Rows[0]["CodingBegins"].CString("YT");
+            }
+
+            code = (str + code).PadRight(13, '0');
+
+            return code.ToUpper();
         }
 
         public string grid()
@@ -159,16 +186,20 @@ namespace XHD.Server
                 serchtxt += $" and category_id='{PageValidate.InputText(request["categoryid"], 50)}'";
 
             if (!string.IsNullOrEmpty(request["stext"]))
-                serchtxt += $" and product_name like N'%{ PageValidate.InputText(request["stext"], 255) }%'";
+                serchtxt += $" and product_name like N'%{ PageValidate.InputText(request["stext"], 50) }%'";
 
             if (!string.IsNullOrEmpty(request["scode"]))
-                serchtxt += $" and BarCode='{ PageValidate.InputText(request["scode"], 255) }'";
+                serchtxt += $" and BarCode='{ PageValidate.InputText(request["scode"], 50) }'";
+
             if (!string.IsNullOrEmpty(request["status"]))
-                serchtxt += $" and status={request["status"].CInt(0, false)}";
-            if (!string.IsNullOrEmpty(request["status"]) && request["status"].CString("") != "null")
-                serchtxt += $" and status={request["status"].CInt(0, false)}";
+                serchtxt += $" and status in({request["status"].CString("1").Trim(',')}) ";
+
             if (!string.IsNullOrEmpty(request["SupplierID"]) && request["SupplierID"].CString("") != "null")
                 serchtxt += $" and SupplierID='{request["SupplierID"].CString("")}'";
+
+            if (!string.IsNullOrEmpty(request["warehouse_id"]) && request["warehouse_id"].CInt(-1, false) > -1)
+                serchtxt += $" and warehouse_id='{request["warehouse_id"].CString("")}'";
+
             //权限
             serchtxt = GetSQLCreateIDWhere(serchtxt, true);
             DataSet ds = product.GetList(PageSize, PageIndex, serchtxt, sorttext, out Total);

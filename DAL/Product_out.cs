@@ -10,7 +10,7 @@ namespace XHD.DAL
     /// <summary>
     /// 数据访问类:Product_allot
     /// </summary>
-    public class Product_out: BaseTransaction
+    public class Product_out : BaseTransaction
     {
         public Product_out()
         { }
@@ -38,9 +38,9 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Product_out(");
-            strSql.Append("id,remark,allot_id,create_id,create_time,status,update_id,update_time,createdep_id,outdep_id)");
+            strSql.Append("id,remark,allot_id,create_id,create_time,status,update_id,update_time,createdep_id,outdep_id,NowWarehouse,outType)");
             strSql.Append(" values (");
-            strSql.Append("@id,@remark,@allot_id,@create_id,@create_time,@status,@update_id,@update_time,@createdep_id,@outdep_id)");
+            strSql.Append("@id,@remark,@allot_id,@create_id,@create_time,@status,@update_id,@update_time,@createdep_id,@outdep_id,@NowWarehouse,@outType)");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@remark", SqlDbType.NVarChar,50),
@@ -52,6 +52,8 @@ namespace XHD.DAL
                     new SqlParameter("@update_time", SqlDbType.DateTime),
                     new SqlParameter("@createdep_id", SqlDbType.VarChar,50),
                     new SqlParameter("@outdep_id", SqlDbType.VarChar,50),
+                    new SqlParameter("@NowWarehouse", SqlDbType.Int,4),
+                   new SqlParameter("@outType", SqlDbType.Int,4),
             };
             parameters[0].Value = model.id;
             parameters[1].Value = model.Remark;
@@ -63,6 +65,9 @@ namespace XHD.DAL
             parameters[7].Value = model.update_time;
             parameters[8].Value = model.createdep_id;
             parameters[9].Value = model.outdep_id;
+            parameters[10].Value = model.NowWarehouse;
+            parameters[11].Value = model.outType;
+
 
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
@@ -75,7 +80,7 @@ namespace XHD.DAL
             }
         }
 
- 
+
 
         /// <summary>
         /// 更新一条数据
@@ -88,7 +93,7 @@ namespace XHD.DAL
             strSql.Append("status=@status,");
             strSql.Append("update_id=@update_id,");
             strSql.Append("update_time=@update_time,");
-            strSql.Append("remark=@remark");
+            strSql.Append("remark=@remark,NowWarehouse=@NowWarehouse");
             strSql.Append(" where id=@id ");
             SqlParameter[] parameters = {
                     new SqlParameter("@allot_id", SqlDbType.VarChar,50) {Value=model.allot_id },
@@ -96,7 +101,8 @@ namespace XHD.DAL
                     new SqlParameter("@update_id", SqlDbType.VarChar,50) { Value=model.update_id},
                     new SqlParameter("@update_time", SqlDbType.DateTime) { Value=DateTime.Now},
                     new SqlParameter("@id", SqlDbType.VarChar,50) { Value=model.id},
-                    new SqlParameter("@remark", SqlDbType.NVarChar, 50){ Value = model.Remark}
+                    new SqlParameter("@remark", SqlDbType.NVarChar, 50){ Value = model.Remark},
+                    new SqlParameter("@NowWarehouse",SqlDbType.Int,4) { Value=model.NowWarehouse}
               };
 
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
@@ -133,7 +139,7 @@ namespace XHD.DAL
         /// <param name="status"></param>
         /// <param name="remark"></param>
         /// <returns></returns>
-        public bool AuthApproved(string id, string authuser_id, int status,string remark)
+        public bool AuthApproved(string id, string authuser_id, int status, string remark)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("update Product_out set ");
@@ -175,6 +181,7 @@ namespace XHD.DAL
         {
 
             StringBuilder strSql = new StringBuilder();
+            strSql.Append("delete from Product_outDetail where outid=@id ");
             strSql.Append("delete from Product_out ");
             strSql.Append(" where id=@id ");
             SqlParameter[] parameters = {
@@ -218,7 +225,7 @@ namespace XHD.DAL
         {
 
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select  top 1 id,allot_id,create_id,create_time,status,update_id,update_time from Product_out ");
+            strSql.Append("select  top 1 id,allot_id,create_id,create_time,status,update_id,update_time,NowWarehouse,outType from Product_out ");
             strSql.Append(" where id=@id ");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50)         };
@@ -283,7 +290,7 @@ namespace XHD.DAL
         public DataSet GetList(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select id,allot_id,create_id,create_time,status,update_id,update_time,remark ");
+            strSql.Append("select id,allot_id,create_id,create_time,status,update_id,update_time,remark,NowWarehouse,outType ");
             strSql.Append(" FROM Product_out ");
             if (strWhere.Trim() != "")
             {
@@ -345,6 +352,7 @@ namespace XHD.DAL
             strSql_grid.Append("SELECT ");
             strSql_grid.Append("      * ");
             strSql_grid.Append(",(select name from hr_employee where id = w1.create_id) as CreateName");
+            strSql_grid.Append(",(select Product_warehouse from Product_warehouse where id = w1.NowWarehouse) as NowWarehouseName");
             strSql_grid.Append(" FROM (select  *, ROW_NUMBER() OVER( Order by " + filedOrder + " ) AS n from Product_out");
             if (strWhere.Trim() != "")
             {

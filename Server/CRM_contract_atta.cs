@@ -13,7 +13,7 @@ namespace XHD.Server
         private static BLL.CRM_contract_atta atta = new BLL.CRM_contract_atta();
         private static Model.CRM_contract_atta model = new Model.CRM_contract_atta();
 
- 
+
         public CRM_contract_atta()
         {
         }
@@ -48,6 +48,39 @@ namespace XHD.Server
             string dt = GetGridJSON.DataTableToJSON1(ds.Tables[0], Total);
 
             return dt;
+        }
+
+        public string uploadAtth()
+        {
+            HttpPostedFile uploadFile = request.Files[0];
+            string filename = uploadFile.FileName;
+            string sExt = filename.Substring(filename.LastIndexOf(".")).ToLower();
+            DateTime now = DateTime.Now;
+            string nowfileName = now.ToString("yyyyMMddHHmmss") + Assistant.GetRandomNum(6) + sExt;
+
+            string saveFile = request["saveFile"].CString("header");
+
+
+            string ServerUrl = $"~/file/" + saveFile;
+            var savePath = HttpContext.Current.Server.MapPath(ServerUrl);
+
+            try
+            {
+                if (!Directory.Exists(Path.GetDirectoryName(savePath)))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(savePath));
+                }
+            }
+            catch (Exception ex)
+            {
+                Controller.IO.LogManager.Add(ex.ToString());
+            }
+
+            string path = $"~/file/" + saveFile + "/" + nowfileName;
+
+            uploadFile.SaveAs(HttpContext.Current.Server.MapPath(path));
+
+            return XhdResult.Success("/file/" + saveFile + "/" + nowfileName).ToString();
         }
 
         public string upload()
