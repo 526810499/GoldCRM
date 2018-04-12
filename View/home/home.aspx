@@ -16,7 +16,15 @@
     <script src="../lib/ligerUI/js/plugins/ligerToolBar.js"></script>
     <script src="../JS/XHD.js" type="text/javascript"> </script>
     <script src="../JS/echarts-all.js" type="text/javascript"> </script>
-
+    <style>
+        .bevel {
+            font-family: "trebuchet MS", sans-serif;
+            color: #086CC9;
+            font-size: 15px;
+            letter-spacing: 0.6pt;
+            word-spacing: -9.2pt;
+        }
+    </style>
     <script type="text/javascript">
         $(function () {
             f_menu();
@@ -46,7 +54,33 @@
             f_note();
             f_calendar();
             f_todo();
+            CBrihtdayRemind();
         });
+
+        function CBrihtdayRemind() {
+
+            $.getJSON("BusinessToRemindUserConfig.GetTodayRemind.xhd?rnd=" + Math.random(), function (data, textStatus) {
+                if (data.Message != null && data.Message.length > 0) {
+                    $.ligerDialog.tip({
+                        height: 250,
+                        width: 200,
+                        id: "CBrihtdayRemind",
+                        modal: false,
+                        title: "<div class='bevel'>信息提醒</div>", content: "<div class='bevel'>" + data.Message + "</div>",
+                        buttons: [
+                        { text: "<div class='bevel'>今日不在提醒</div>", onclick: function (item, dialog) { DeleteCBrihtdayRemind(); dialog.close(); } }
+                        ]
+                    });
+                    $("#CBrihtdayRemind").next("div").remove();
+
+                    function DeleteCBrihtdayRemind() {
+                        $.ajax({ url: "BusinessToRemindUserConfig.DeleteRemind.xhd?type=1", type: "get", success: function () { } });
+                    }
+                }
+
+            });
+
+        }
 
         function remind() {
             var now = new Date(), hour = now.getHours();
@@ -272,7 +306,12 @@
                 var obj = eval(data);
                 var table = $("<table style='width:100%'></table>");
                 for (var i = 0; i < obj.Rows.length; i++) {
-                    $("<tr><td style='width:25px;text-align:center;'><div style='height:18px;padding-top:5px;overflow:hidden;'><img src='../../images/icon/31.png'></div></td><td><div style='overflow:hidden;height:18px;'><a herf='javascript:void(0)' onclick=\"window.top.f_addTab('mywork_calendar','日程安排','personal/personal/Calendar.aspx')\">" + obj.Rows[i].Subject + "</a></div></td><td width='80'>" + formatTimebytype(obj.Rows[i].StartTime, 'yyyy-MM-dd') + "</td></tr>").appendTo(table);
+                    if (i > 3) {
+                        $("<tr><td style='width:25px;text-align:center;'><div style='height:18px;padding-top:5px;overflow:hidden;'><img src='../../images/icon/31.png'></div></td><td><div style='overflow:hidden;height:18px;'><a herf='javascript:void(0)' style='color:#3366FF' onclick=\"window.top.f_addTab('mywork_calendar','日程安排','personal/personal/Calendar.aspx')\">A More ...</a></div></td><td width='80'> </td></tr>").appendTo(table);
+                        break;
+                    } else {
+                        $("<tr><td style='width:25px;text-align:center;'><div style='height:18px;padding-top:5px;overflow:hidden;'><img src='../../images/icon/31.png'></div></td><td><div style='overflow:hidden;height:18px;'><a herf='javascript:void(0)' onclick=\"window.top.f_addTab('mywork_calendar','日程安排','personal/personal/Calendar.aspx')\">" + obj.Rows[i].Subject + "</a></div></td><td width='80'>" + formatTimebytype(obj.Rows[i].StartTime, 'yyyy-MM-dd') + "</td></tr>").appendTo(table);
+                    }
                 }
                 table.addClass("bodytable2");
                 table.appendTo($("#c_calendar"));
@@ -291,7 +330,9 @@
         }
     </script>
     <style type="text/css">
-        .l-panel { box-shadow: 0px 2px 5px rgba(0,0,0,0.2); }
+        .l-panel {
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 <body style="overflow-y: scroll;">

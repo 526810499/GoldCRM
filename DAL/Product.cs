@@ -295,8 +295,9 @@ namespace XHD.DAL
                 strSql.Append(" top " + Top.ToString());
             }
             strSql.Append(" id, product_name, category_id, status, Weight,  create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, ImgLogo, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID ,IsGold,remarks  ");
-            strSql.Append(@",(select product_category from Product_category where id = Product.category_id) as category_name,
-                            (select product_supplier from Product_supplier where id = Product.SupplierID) as supplier_name ");
+            strSql.Append(",(select product_category from Product_category(nolock) where id = w1.category_id) as category_name");
+            strSql.Append(",(select product_supplier from Product_supplier(nolock) where id = w1.SupplierID) as supplier_name");
+            strSql.Append(",(select product_warehouse from Product_warehouse(nolock) where id = w1.warehouse_id) as warehouse_name");
             strSql.Append(" FROM Product ");
             if (strWhere.Trim() != "")
             {

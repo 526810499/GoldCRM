@@ -10,13 +10,13 @@
     <link href="../CSS/input.css" rel="stylesheet" type="text/css" />
     <script src="../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
-    <script src="../JS/XHD.js" type="text/javascript"></script>
+    <script src="../JS/XHD.js?v=2.0" type="text/javascript"></script>
     <script src="../lib/jquery.form.js" type="text/javascript"></script>
 
     <script type="text/javascript">
 
         var manager = "";
-
+        var updateBtn = false;
         $(function () {
 
             initLayout();
@@ -26,14 +26,23 @@
 
             $("#maingrid4").ligerGrid({
                 columns: [
-                    { display: '产品名称', name: 'product_name', align: 'left', width: 120 },
-                    { display: '产品类别', name: 'category_name', align: 'left', width: 120 },
-                    { display: '条形码', name: 'BarCode', align: 'left', width: 160 },
+                    {
+                        display: '条形码', name: 'BarCode', align: 'left', width: 160, render: function (item) {
+
+                            var html = "<a href='javascript:void(0)' onclick=ViewModel('product','" + item.id + "')>" + item.BarCode + "</a>";
+                            if ($("div"))
+                                return html;
+                        }
+                    },
+                    {
+                        display: '产品名称', name: 'product_name', align: 'left', width: 120
+                    },
                     {
                         display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {
                             return toMoney(item.Weight);
                         }
                     },
+                   { display: '产品类别', name: 'category_name', align: 'left', width: 120 },
                     {
                         display: '进货金价(￥)', name: 'StockPrice', width: 80, align: 'left', render: function (item) {
                             return toMoney(item.StockPrice);
@@ -114,16 +123,34 @@
                 width: '100%',
                 height: '100%',
                 heightDiff: -8,
-                checkbox: false,
+                checkbox: true,
+                frozenCheckbox: true,
+                onSelectRow: function (data, rowindex, rowobj) {
+                    console.log(data);
+                    console.log(rowobj);
+                },
                 onContextmenu: function (parm, e) {
-                    actionCustomerID = parm.data.id;
-                    menu.show({ top: e.pageY, left: e.pageX });
-                    return false;
+                    //actionCustomerID = parm.data.id;
+                    //menu.show({ top: e.pageY, left: e.pageX });
+                    //return false;
                 }
             });
+
+            $("#btn_serch").ligerButton({ text: "搜索", width: 60, click: doserch });
+
+
             toolbar();
 
         });
+
+        function ViewModel(tag, id) {
+            if (updateBtn) {
+                f_openWindow('product/product_add.aspx?pid=' + id, "修改产品", 700, 580, f_save);
+            } else {
+                f_openWindow('product/product_add.aspx?pid=' + id, "查看产品", 700, 580);
+            }
+        }
+
         function toolbar() {
             $.get("toolbar.GetSys.xhd?mid=product_list&rnd=" + Math.random(), function (data, textStatus) {
                 var data = eval('(' + data + ')');
@@ -131,22 +158,33 @@
                 var items = [];
                 var arr = data.Items;
                 for (var i = 0; i < arr.length; i++) {
-                    arr[i].icon = "../" + arr[i].icon;
-                    items.push(arr[i]);
+                    if (arr[i].text != "修改") {
+                        arr[i].icon = "../" + arr[i].icon;
+                        items.push(arr[i]);
+                    } else {
+                        updateBtn = true;
+                    }
                 }
-                items.push({ type: 'textbox', id: 'sfl', text: '分类：' });
-                items.push({ type: 'textbox', id: 'sck', text: '现存仓库：' });
-                items.push({ type: 'textbox', id: 'sstatus', text: '状态：' });
-                items.push({ type: 'textbox', id: 'stext', text: '产品名：' });
-                items.push({ type: 'textbox', id: 'scode', text: '条形码：' });
-                items.push({ type: 'button', text: '搜索', icon: '../images/search.gif', disable: true, click: function () { doserch() } });
+
+                items.push({
+                    id: "sbtn",
+                    type: 'serchbtn',
+                    text: '搜索',
+                    icon: '../images/search.gif',
+                    disable: true,
+                    click: function () {
+                        serchpanel();
+                    }
+                });
 
                 $("#toolbar").ligerToolBar({
                     items: items
                 });
+
                 menu = $.ligerMenu({
                     width: 120, items: getMenuItems(data)
                 });
+
                 $("#sstatus").ligerComboBox({
                     data: [
                     { text: '所有', id: '' },
@@ -156,8 +194,8 @@
                     { text: '已销售', id: '4' }
                     ], valueFieldID: 'status',
                 });
-                $("#stext").ligerTextBox({ width: 200 });
-                $("#scode").ligerTextBox({ width: 250 });
+                $("#stext").ligerTextBox({ width: 240 });
+                $("#scode").ligerTextBox({ width: 240 });
                 $("#sfl").ligerComboBox({
                     width: 150,
                     selectBoxWidth: 240,
@@ -184,30 +222,40 @@
                         checkbox: false
                     },
                 });
+                $("#sbegtime").ligerDateEditor({ showTime: true, labelWidth: 100, labelAlign: 'left' });
+                $("#sendtime").ligerDateEditor({ showTime: true, labelWidth: 100, labelAlign: 'left' });
+                $("#grid").height(document.documentElement.clientHeight - $(".toolbar").height());
+                $('#serchform').ligerForm();
+                $("div[toolbarid='sbtn']").click().hide();
+
                 $("#maingrid4").ligerGetGridManager()._onResize();
             });
         }
 
+        function serchpanel() {
 
+            if ($(".az").css("display") == "none") {
+                $("#grid").css("margin-top", $(".az").height() + "px");
+                $("#maingrid4").ligerGetGridManager()._onResize();
+            }
+            else {
+                $("#grid").css("margin-top", "0px");
+                $("#maingrid4").ligerGetGridManager()._onResize();
+            }
+        }
         //查询
         function doserch() {
             var sendtxt = "&rnd=" + Math.random();
-            var serchtxt = $("#form1 :input").fieldSerialize() + sendtxt;
- 
+            var serchtxt = "scode=" + $("#scode").val();
+            serchtxt += "&stext=" + $("#stext").val();
+            serchtxt += "&status=" + $("#status").val();
             serchtxt += "&categoryid=" + $("#sfl_val").val();
+            serchtxt += "&sbegtime=" + $("#sbegtime").val();
+            serchtxt += "&sendtime=" + $("#sendtime").val();
             serchtxt += "&warehouse_id=" + $("#sck_val").val();
             var manager = $("#maingrid4").ligerGetGridManager();
             manager._setUrl("Product.grid.xhd?" + serchtxt);
         }
-
-        //重置
-        function doclear() {
-            //var serchtxt = $("#serchform :input").reset();
-            $("#form1").each(function () {
-                this.reset();
-            });
-        }
-
 
 
         function edit() {
@@ -264,13 +312,18 @@
         function print() {
             var manager = $("#maingrid4").ligerGetGridManager();
             var rows = manager.getSelectedRows();
-            console.log(rows);
             if (rows == null || rows.length <= 0) {
                 $.ligerDialog.warn("没有需要打印的产品");
                 return;
             }
+            var ids = "";
+            $(rows).each(function (i, v) {
+                ids += v.id + ",";
+            });
+      
+            location.href = "ExportProduct.aspx?ids=" + ids + "&rnd=" + Math.random();
 
-
+         
         }
 
         function f_save(item, dialog) {
@@ -310,18 +363,90 @@
 
     </script>
 </head>
-<body style="padding: 0px; overflow: hidden;">
-    <div style="padding: 5px 10px 0px 5px;">
-        <form id="form1" onsubmit="return false">
+<body>
 
-            <div position="center">
-                <div id="toolbar" style="margin-top: 10px;"></div>
+    <form id="form1" onsubmit="return false">
+
+        <div style="padding: 10px;">
+            <div id="toolbar" style="margin-top: 10px;"></div>
+            <div id="grid">
                 <div id="maingrid4" style="margin: -1px;"></div>
-
             </div>
+        </div>
 
+    </form>
+    <div class="az">
+        <form id='serchform'>
+            <table style='width: 720px'>
+                <tr>
+                    <td>
+                        <div style='width: 40px; text-align: right; float: right'>分类：</div>
+                    </td>
+                    <td>
+                        <input type='select' id='sfl' name='sfl' ltype='text' ligerui='{width:120}' />
+
+                    </td>
+                    <td>
+                        <div style='width: 40px; text-align: right; float: right'>仓库：</div>
+                    </td>
+                    <td>
+                        <div style='float: left'>
+                            <input type='select' id='sck' name='sck' ltype='date' ligerui='{width:120}' />
+                        </div>
+                    </td>
+
+                    <td>
+                        <div style='width: 80px; text-align: right; float: right'>订单状态：</div>
+                    </td>
+                    <td>
+                        <input id='sstatus' name="sstatus" type='text' />
+
+                    </td>
+                    <td>
+                        <div style='width: 60px; text-align: right; float: right'>入库时间：</div>
+                    </td>
+                    <td>
+                        <input type='text' id='sbegtime' name='sbegtime' />
+
+                    </td>
+                    <td>~  
+                    </td>
+                    <td>
+                        <input type='text' id='sendtime' name='sendtime' />
+                    </td>
+                    <td style="width: 20px"></td>
+                </tr>
+                <tr>
+                    <td colspan="11" style="height: 10px"></td>
+                </tr>
+                <tr>
+                    <td colspan="11" style="margin-top: 10px">
+                        <table>
+                            <tr>
+                                <td>条形码： 
+                                </td>
+                                <td>
+                                    <input type='text' id='scode' name='scode' />
+                                </td>
+                                <td style="width: 114px; text-align: right">产品名： 
+                                </td>
+                                <td>
+                                    <input type='text' id='stext' name='stext' />
+                                </td>
+
+                                <td>
+                                    <div id="btn_serch"></div>
+                                    <div id="btn_reset"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+
+
+                </tr>
+
+            </table>
         </form>
-
     </div>
 </body>
 </html>

@@ -45,11 +45,11 @@
                     },
                     { display: '状态', name: 'status' }
                 ],
-                rownumbers:true,
+                rownumbers: true,
                 dataAction: 'server',
                 pageSize: 30,
                 pageSizeOptions: [20, 30, 50, 100],
-                url: "hr_employee.grid.xhd",
+                url: "hr_employee.grid.xhd?rnd=" + Math.random(),
                 width: '100%',
                 height: '100%',
                 //title: "员工列表",
@@ -60,9 +60,7 @@
                     menu.show({ top: e.pageY, left: e.pageX });
                     return false;
                 },
-                //onDblClickRow: function (data, rowindex, rowobj) {
-                //    edit();
-                //},
+
                 rowtype: "status",
                 onAfterShowData: function (grid) {
                     $("tr[rowtype='离职']").addClass("l-leaving").removeClass("l-grid-row-alt");
@@ -89,6 +87,7 @@
                     items.push(arr[i]);
                 }
                 items.push({ type: 'textbox', id: 'stext', text: '姓名：' });
+
                 items.push({ type: 'button', text: '搜索', icon: '../images/search.gif', disable: true, click: function () { doserch() } });
 
                 $("#toolbar").ligerToolBar({
@@ -99,16 +98,18 @@
                     width: 120, items: getMenuItems(data)
                 });
 
-                $("#stext").ligerTextBox({ width: 200, nullText: "输入姓名搜索" })
+                $("#stext").ligerTextBox({ width: 200 })
+    
                 $("#maingrid4").ligerGetGridManager()._onResize();
             });
         }
         //查询
         function doserch() {
-            var sendtxt = "&rnd=" + Math.random();
+            var sendtxt = "&search=1&rnd=" + Math.random();
             var serchtxt = $("#form1 :input").fieldSerialize() + sendtxt;
             //alert(serchtxt);           
             var manager = $("#maingrid4").ligerGetGridManager();
+
 
             manager._setUrl("hr_employee.grid.xhd?" + serchtxt);
         }
@@ -207,7 +208,10 @@
         };
     </script>
     <style type="text/css">
-        .l-leaving { background: #eee; color: #999; }
+        .l-leaving {
+            background: #eee;
+            color: #999;
+        }
     </style>
 
 </head>

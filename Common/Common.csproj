@@ -104,22 +104,12 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="COM.Excel">
-      <HintPath>..\Lib\COM.Excel.dll</HintPath>
-    </Reference>
-    <Reference Include="Excel">
-      <HintPath>..\Lib\Excel.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
     <Reference Include="Microsoft.JScript" />
     <Reference Include="Newtonsoft.Json.Net35">
       <HintPath>..\Lib\Newtonsoft.Json.Net35.dll</HintPath>
     </Reference>
     <Reference Include="OpenSmtp">
       <HintPath>..\Lib\OpenSmtp.dll</HintPath>
-    </Reference>
-    <Reference Include="OWC10Chart">
-      <HintPath>..\Lib\OWC10Chart.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -155,9 +145,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DataCache.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataToExcel.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DEncrypt\DEncrypt.cs">

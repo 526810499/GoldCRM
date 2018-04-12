@@ -227,13 +227,15 @@ namespace XHD.DAL
             strSql.Append("      , Sale_order.[createdep_id] ");
             strSql.Append("      , Sale_order.[vipcard] ");
             strSql.Append("      , Sale_order.[create_id] ");
-            strSql.Append("      , Sale_order.[create_time] ");
+            strSql.Append("      , Sale_order.[create_time],cashier_id,vipcard,createdep_id,PayTheBill ");
             strSql.Append("      , CRM_Customer.cus_name ");
             strSql.Append("      , hr_employee.name as emp_name ");
+            strSql.Append("      , chr.name as cashiername ");
             strSql.Append("      , hr_department.dep_name ");
             strSql.Append("  FROM [dbo].[Sale_order] ");
-            strSql.Append("        INNER JOIN CRM_Customer ON CRM_Customer.id = Sale_order.Customer_id ");
-            strSql.Append("        INNER JOIN hr_employee ON hr_employee.id = Sale_order.emp_id ");
+            strSql.Append("        INNER JOIN CRM_Customer(nolock) ON CRM_Customer.id = Sale_order.Customer_id ");
+            strSql.Append("        INNER JOIN hr_employee(nolock) ON hr_employee.id = Sale_order.emp_id ");
+            strSql.Append("        INNER JOIN hr_employee(nolock) as chr ON chr.id = Sale_order.cashier_id ");
             strSql.Append("        INNER JOIN hr_department(nolock) ON hr_department.id = hr_employee.dep_id ");
             if (strWhere.Trim() != "")
             {
@@ -274,14 +276,15 @@ namespace XHD.DAL
             strSql.Append("      , Sale_order.[create_time] ");
             strSql.Append("      , Sale_order.[createdep_id] ");
             strSql.Append("      , Sale_order.[vipcard] ");
-            strSql.Append("      , CRM_Customer.cus_name ");
+            strSql.Append("      , CRM_Customer.cus_name,cashier_id,vipcard,createdep_id,PayTheBill  ");
             strSql.Append("      , hr_employee.name as emp_name ");
             strSql.Append("      , hr_department.dep_name ");
-            strSql.Append("          ,cashier_id   ");
+            strSql.Append("      , chr.name as cashiername ");
             strSql.Append("  FROM[dbo].[Sale_order] ");
-            strSql.Append("        INNER JOIN CRM_Customer ON CRM_Customer.id = Sale_order.Customer_id ");
-            strSql.Append("        INNER JOIN hr_employee ON hr_employee.id = Sale_order.emp_id ");
-            strSql.Append("        INNER JOIN hr_department ON hr_department.id = hr_employee.dep_id ");
+            strSql.Append("        INNER JOIN CRM_Customer(nolock) ON CRM_Customer.id = Sale_order.Customer_id ");
+            strSql.Append("        INNER JOIN hr_employee(nolock) ON hr_employee.id = Sale_order.emp_id ");
+            strSql.Append("        INNER JOIN hr_employee(nolock) as chr ON chr.id = Sale_order.cashier_id ");
+            strSql.Append("        INNER JOIN hr_department(nolock) ON hr_department.id = hr_employee.dep_id ");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);

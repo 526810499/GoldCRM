@@ -100,6 +100,8 @@
                     if (obj.emp_name == null || obj.emp_name == undefined) {
                         obj.emp_name = getCookie("xhdcrm_uid", "");
                         obj.emp_id = ("<%=XHD.Common.DEncrypt.DEncrypt.Decrypt(HttpUtility.UrlDecode(XHD.Common.CookieHelper.GetValue("uid")))%>");
+                        obj.cashiername = obj.emp_name;
+                        obj.cashier_id = obj.emp_id;
                     }
 
                     rows.push(
@@ -124,8 +126,8 @@
                                 { display: "待收金额", name: "T_arrears", type: "text", options: "{width:180,disabled:true}", validate: "{required:true}", initValue: toMoney(obj.arrears_money) }
                             ],
                             [
-                                { display: "成交人员", name: "T_emp", validate: "{required:true}" },
-                                { display: "收银员", name: "T_cashier", validate: "{required:true}" }
+                                { display: "成交人员", name: "T_emp", validate: "{required:true}", initValue: obj.emp_name },
+                                { display: "收银员", name: "T_cashier", validate: "{required:true}", initValue: obj.cashiername }
                             ],
                             [
                                 { display: "备注", name: "T_details", type: "textarea", cols: 73, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.Order_details }
@@ -167,11 +169,13 @@
                         onBeforeOpen: f_selectCash
                     })
 
+
                     $("#T_emp").val(obj.emp_name);
                     $("#T_emp_val").val(obj.emp_id);
 
-                    $("#T_cashier").val(obj.emp_name);
-                    $("#T_cashier_val").val(obj.emp_id);
+                    $("#T_cashier").val(obj.cashiername);
+                    $("#T_cashier_val").val(obj.cashier_id);
+
                 }
             });
         }

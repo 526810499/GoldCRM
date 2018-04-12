@@ -18,13 +18,13 @@
         var manager = "";
         var treemanager;
         $(function () {
-            $("#layout1").ligerLayout({ leftWidth: 160, height: '100%', allowLeftResize: false, allowLeftCollapse: true, space: 2 ,heightDiff:1});
+            $("#layout1").ligerLayout({ leftWidth: 160, height: '100%', allowLeftResize: false, allowLeftCollapse: true, space: 2, heightDiff: 1 });
             $("#tree1").ligerTree({
                 url: "hr_department.tree.xhd?auth=" + getparastr("auth") + "&rnd=" + Math.random(),
                 onSelect: onSelect,
                 idFieldName: 'id',
                 usericon: 'd_icon',
-                iconpath:'../images/icon/',
+                iconpath: '../images/icon/',
                 checkbox: false,
                 itemopen: false
             });
@@ -75,13 +75,12 @@
 
 
         function onSelect(node) {
-            if (node.data.d_icon == "../images/icon/50.png")
-            {
+            if (node.data.d_icon == "../images/icon/50.png") {
                 $.ligerDialog.error("权限不够。");
                 return;
             }
             var manager = $("#maingrid4").ligerGetGridManager();
-            var url = "hr_employee.grid.xhd?auth=" + getparastr("auth") + "&did=" + node.data.id + "&rnd=" + Math.random();
+            var url = "hr_employee.grid.xhd?auth=" + getparastr("auth") + "&did=" + node.data.id + "&config=" + getparastr("config", "0") + "&rnd=" + Math.random();
             //manager._setUrl(url);
             manager._setUrl(url);
         }
@@ -102,12 +101,12 @@
                 data: serchtxt,
                 dataType: 'json',
                 beforeSend: function () {
-                    
+
                 },
                 success: function (responseText) {
                     //alert("../data/crm_customer.ashx" + serchtxt);
                     manager._setUrl("hr_employee.grid.xhd?" + serchtxt);
-                    
+
                     $.ligerDialog.closeWaitting();
                 },
                 error: function () {
@@ -128,16 +127,16 @@
     <form id="form1" onsubmit="return false">
         <div id="layout1" style="margin: -1px">
             <div position="left" title="组织架构">
-                <div id="treediv" style="width: 160px; height: 100%; margin: -1px; float: left; border: 1px solid #ccc; overflow: auto;padding-top:2px;">
+                <div id="treediv" style="width: 160px; height: 100%; margin: -1px; float: left; border: 1px solid #ccc; overflow: auto; padding-top: 2px;">
                     <ul id="tree1"></ul>
                 </div>
             </div>
             <div position="center">
                 <%--<div style="position: absolute; z-index: 1000; width: 100%">--%>
-                    <div id="toolbar" style="margin-top:10px;"></div>
+                <div id="toolbar" style="margin-top: 10px;"></div>
                 <%--</div>--%>
-               <%-- <div style="position: fixed; width: 100%; margin-top: 30px">--%>
-                    <div id="maingrid4" style="margin: -1px;"></div>
+                <%-- <div style="position: fixed; width: 100%; margin-top: 30px">--%>
+                <div id="maingrid4" style="margin: -1px;"></div>
                 <%--</div>--%>
             </div>
         </div>

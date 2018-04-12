@@ -128,6 +128,9 @@
                     }
                 },
                 onRClickToSelect: true,
+                onDblClickRow: function (data, rowindex, rowobj) {
+                    f_openWindow('sale/order_add.aspx?id=' + data.id, "²é¿´", 1200, 600);
+                },
                 onContextmenu: function (parm, e) {
                     actionCustomerID = parm.data.id;
                     menu.show({ top: e.pageY, left: e.pageX });

@@ -130,11 +130,6 @@
                         }
                     },
                     {
-                        display: '附石数', name: 'AttStoneNumber', width: 50, align: 'right', render: function (item) {
-                            return (item.AttStoneNumber);
-                        }
-                    },
-                    {
                         display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
                             return toMoney(item.CostsTotal);
                         }

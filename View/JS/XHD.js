@@ -52,7 +52,7 @@
     javascript: window.history.forward(1);
 
 })(jQuery);
- 
+
 //货币格式
 
 function toMoney(num, defaults) {
@@ -599,7 +599,7 @@ function view(type, id, id1) {
             width = 730, height = 450, title = "查看联系人", url = "CRM/Customer/Customer_Contact_add.aspx?id=" + id;
             break;
         case "order":
-            width = 770, height = 490, title = "查看订单", url = "sale/order_view.aspx?id=" + id;
+            width = 770, height = 650, title = "查看订单", url = "sale/order_view.aspx?id=" + id;
             break;
         case "contract":
             width = 867, height = 490, title = "查看合同", url = "sale/contract_view.aspx?id=" + id;
@@ -618,6 +618,27 @@ function view(type, id, id1) {
             break;
         case "receivable":
             width = 730, height = 450, title = "应收单", url = 'finance/receivable_add.aspx?id=' + id;
+            break;
+        case "product":
+            width = 730, height = 600, title = "查看商品", url = 'product/product_add.aspx?pid=' + id;
+            break;
+        case "pallot":
+            width = 730, height = 600, title = "查看调拨", url = 'product/Product_allotAdd.aspx?id=' + id;
+            break;
+        case "pout":
+            width = 730, height = 600, title = "查看出库", url = 'product/Product_outAdd.aspx?id=' + id;
+            break;
+        case "pretrieval":
+            width = 730, height = 600, title = "查看订购补货", url = 'product/Product_Retrieval_Add.aspx?id=' + id;
+            break;
+        case "psupplier":
+            width = 730, height = 600, title = "查看供应商", url = 'product/Product_supplier_add.aspx?id=' + id;
+            break;
+        case "pwarehouse":
+            width = 730, height = 600, title = "查看仓库", url = 'product/product_warehouse_add.aspx?id=' + id;
+            break;
+        case "pcategory":
+            width = 730, height = 600, title = "查看商品分类", url = 'product/product_category_add.aspx?cid=' + id;
             break;
 
     }

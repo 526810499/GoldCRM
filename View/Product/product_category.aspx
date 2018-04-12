@@ -12,12 +12,17 @@
     <script src="../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
     <script src="../lib/json2.js" type="text/javascript"></script>
-    <script src="../JS/XHD.js" type="text/javascript"></script>
+    <script src="../JS/XHD.js?v=3" type="text/javascript"></script>
     <script type="text/javascript">
         $(function () {
             $("#maingrid4").ligerGrid({
                 columns: [
-                    { display: '类别名称', name: 'product_category', width: 250, align: 'left' },
+                    {
+                        display: '类别名称', name: 'product_category', width: 250, align: 'left', render: function (item) {
+                            var html = "<a href='javascript:void(0)' onclick=view('pcategory','" + item.id + "')>" + item.product_category + "</a>";
+                            return html;
+                        }
+                    },
                     {
                         display: '条形码头', name: 'CodingBegins', width: 50
                     }
@@ -31,6 +36,9 @@
                 tree: { columnName: 'product_category' },
                 heightDiff: -10,
                 onRClickToSelect: true,
+                onDblClickRow: function (data, rowindex, rowobj) {
+                    f_openWindow('product/product_category_add.aspx?cid=' + data.id, "查看", 1200, 600);
+                },
                 onContextmenu: function (parm, e) {
                     actionCustomerID = parm.data.id;
                     menu.show({ top: e.pageY, left: e.pageX });

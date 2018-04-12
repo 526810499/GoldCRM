@@ -38,6 +38,7 @@
         });
 
         function grid() {
+            var cusername = getparastr("cusername", "");
             $("#maingrid4").ligerGrid({
                 columns: [
                     //{ display: '序号', name: 'id', width: 50, render: function (item, i) { return item.n; } },
@@ -107,7 +108,7 @@
                 dataAction: 'server',
                 pageSize: 30,
                 pageSizeOptions: [20, 30, 50, 100],
-                url: "CRM_Customer.grid.xhd?rnd=" + Math.random(),
+                url: "CRM_Customer.grid.xhd?cusername=" + cusername + "&sday=" + getparastr("sday", "") + "&smonth=" + getparastr("smonth", "") + "&rnd=" + Math.random(),
                 //width: '100%',
                 height: '100%',
                 heightDiff: -11,
@@ -227,7 +228,7 @@
         });
 
         function doserch() {
-            var sendtxt = "&rnd=" + Math.random();
+            var sendtxt = "&search=1&rnd=" + Math.random();
             var serchtxt = $("#serchform :input").fieldSerialize() + sendtxt;
             //alert(serchtxt);           
             var manager = $("#maingrid4").ligerGetGridManager();
@@ -456,10 +457,23 @@
                         </td>
 
                         <td>
-                            <div style='float: right; text-align: right; width: 60px;'>客户来源：</div>
+                            <div style='float: right; text-align: right; width: 60px;'>生日：</div>
                         </td>
                         <td>
-                            <input type='text' id='cus_sourse' name='cus_sourse' />
+                            <select name="smonth" id="smonth" ligeruiid="smonth" style="width: 50px">
+                                <option value="" selected="selected">选择</option>
+                                <% for (int i = 1; i <= 12; i++)
+                                    { %>
+                                <option value="<%=i %>"><%=i %></option>
+                                <%} %>
+                            </select>
+                            <select name="sday" id="sday" ligeruiid="sday" style="width: 50px">
+                                <option value="" selected="selected">选择</option>
+                                <% for (int i = 1; i <= 31; i++)
+                                    { %>
+                                <option value="<%=i %>"><%=i %></option>
+                                <%} %>
+                            </select>
                         </td>
                         <td>
                             <div style='float: right; text-align: right; width: 60px;'>业务员：</div>

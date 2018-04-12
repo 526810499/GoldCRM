@@ -124,8 +124,17 @@ namespace XHD.Server
             string sorttext = " " + sortname + " " + sortorder;
 
             string serchtxt = $" 1=1 ";
-            if (!string.IsNullOrEmpty(request["id"]))
-                serchtxt += " and id='" + PageValidate.InputText(request["id"], 50) + "'";
+            if (!string.IsNullOrEmpty(request["sorderid"]))
+                serchtxt += " and id='" + PageValidate.InputText(request["sorderid"], 50) + "'";
+
+            if (!string.IsNullOrEmpty(request["sdeep_val"]))
+                serchtxt += " and createdep_id='" + PageValidate.InputText(request["sdeep_val"], 50) + "'";
+
+            if (!string.IsNullOrEmpty(request["sbegtime"]))
+                serchtxt += " and create_time>='" + PageValidate.InputText(request["sbegtime"], 50).CDateTime(DateTime.Now, false) + "'";
+
+            if (!string.IsNullOrEmpty(request["sendtime"]))
+                serchtxt += " and create_time<='" + PageValidate.InputText(request["sendtime"], 50).CDateTime(DateTime.Now,false) + "'";
 
             serchtxt = GetSQLCreateIDWhere(serchtxt, true);
 

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Data;
+using System.IO;
 using System.Web;
 using XHD.Common;
 using XHD.Controller;
@@ -200,6 +202,13 @@ namespace XHD.Server
             if (!string.IsNullOrEmpty(request["warehouse_id"]) && request["warehouse_id"].CInt(-1, false) > -1)
                 serchtxt += $" and warehouse_id='{request["warehouse_id"].CString("")}'";
 
+            if (!string.IsNullOrEmpty(request["sbegtime"]))
+                serchtxt += " and create_time>='" + PageValidate.InputText(request["sbegtime"], 50).CDateTime(DateTime.Now, false) + "'";
+
+            if (!string.IsNullOrEmpty(request["sendtime"]))
+                serchtxt += " and create_time<='" + PageValidate.InputText(request["sendtime"], 50).CDateTime(DateTime.Now, false) + "'";
+
+
             //权限
             serchtxt = GetSQLCreateIDWhere(serchtxt, true);
             DataSet ds = product.GetList(PageSize, PageIndex, serchtxt, sorttext, out Total);
@@ -266,5 +275,8 @@ namespace XHD.Server
             return XhdResult.Success().ToString();
 
         }
+
+
+
     }
 }

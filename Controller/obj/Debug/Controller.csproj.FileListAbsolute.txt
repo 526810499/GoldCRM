@@ -179,8 +179,6 @@ F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Debug\XHD.BLL.dl
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Debug\XHD.Common.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Debug\XHD.Model.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Debug\OpenSmtp.dll
-F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Debug\Excel.dll
-F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Debug\COM.Excel.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Debug\Newtonsoft.Json.Net35.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Debug\XHD.Common.pdb
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Debug\XHD.Model.pdb

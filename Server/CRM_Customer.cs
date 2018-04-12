@@ -12,7 +12,7 @@ namespace XHD.Server
         private static BLL.CRM_Customer customer = new BLL.CRM_Customer();
         private static Model.CRM_Customer model = new Model.CRM_Customer();
 
- 
+
         public CRM_Customer()
         {
         }
@@ -42,7 +42,7 @@ namespace XHD.Server
             else
                 serchtxt += " and isDelete=0 ";
 
-            if (!string.IsNullOrEmpty(request["company"])&&request["company"].CString("")!= "输入关键词智能搜索客户")
+            if (!string.IsNullOrEmpty(request["company"]) && request["company"].CString("") != "输入关键词智能搜索客户")
                 serchtxt += $" and cus_name like N'%{PageValidate.InputText(request["company"], 255)}%'";
 
             if (!string.IsNullOrEmpty(request["address"]))
@@ -125,13 +125,29 @@ namespace XHD.Server
                     serchtxt += " and 1=2";
                 }
             }
+
+            if (!string.IsNullOrEmpty(request["cusername"]) && request["search"].CInt(0, false) != 1)
+            {
+                serchtxt += $" and cus_name='{PageValidate.InputText(request["cusername"], 50)}'";
+            }
+
+
+            if (!string.IsNullOrEmpty(request["sday"]))
+            {
+                serchtxt += $" and birthdays={request["sday"].CInt(0, false)}";
+            }
+
+            if (!string.IsNullOrEmpty(request["smonth"]))
+            {
+                serchtxt += $" and birthmonths={request["smonth"].CInt(0, false)}";
+            }
             //权限
             serchtxt += Auth();
 
-            if (!string.IsNullOrEmpty(request["stext"]))
+            if (!string.IsNullOrEmpty(request["stext"]) && request["search"].CInt(0, false) == 1)
             {
                 if (request["stext"] != "输入姓名搜索")
-                    serchtxt += " and name like N'%" + PageValidate.InputText(request["stext"], 255) + "%'";
+                    serchtxt += " and cus_name like N'%" + PageValidate.InputText(request["stext"], 255) + "%'";
             }
             //return request.ServerVariables["http_host"];
             //return serchtxt;
@@ -163,13 +179,13 @@ namespace XHD.Server
             model.xy = PageValidate.InputText(request["T_xy"], 50);
             model.cus_extend = PageValidate.InputText(request["extendjson"], int.MaxValue);
             model.birthday = request["T_birthday"].CDateTime();
-            model.integral = request["T_integral"].CInt(0,false);
+            model.integral = request["T_integral"].CInt(0, false);
             string id = PageValidate.InputText(request["id"], 50);
             if (PageValidate.checkID(id))
             {
                 model.id = id;
 
-                DataSet ds = customer.GetList($"id = '{id}' ");                
+                DataSet ds = customer.GetList($"id = '{id}' ");
 
                 if (ds.Tables[0].Rows.Count == 0)
                     return XhdResult.Error("参数不正确，更新失败！").ToString();
@@ -184,7 +200,7 @@ namespace XHD.Server
 
                     if (!canEdit)
                         return XhdResult.Error("您不具备公客的修改权限！").ToString();
-                    
+
                 }
 
                 bool isupdate = customer.Update(model);
@@ -220,7 +236,7 @@ namespace XHD.Server
                     string EventType = "客户修改";
                     string EventID = model.id;
 
-                    Syslog.Add_log(UserID, UserName, IPStreet, EventTitle, EventType, EventID, logcontent );
+                    Syslog.Add_log(UserID, UserName, IPStreet, EventTitle, EventType, EventID, logcontent);
                 }
 
                 return XhdResult.Success().ToString();
@@ -231,7 +247,7 @@ namespace XHD.Server
                 model.id = id;
                 model.create_id = emp_id;
                 model.create_time = DateTime.Now;
-                
+
                 model.isDelete = 0;
 
                 bool isadd = customer.Add(model);
@@ -285,13 +301,13 @@ namespace XHD.Server
             var order = new BLL.Sale_order();
             var follow = new BLL.CRM_follow();
 
-            int contactcount = 0,  followcount = 0, ordercount = 0;
+            int contactcount = 0, followcount = 0, ordercount = 0;
             contactcount = contact.GetList($"customer_id = '{id}'").Tables[0].Rows.Count;
             followcount = follow.GetList($" Customer_id= '{id}'").Tables[0].Rows.Count;
             ordercount = order.GetList($" Customer_id= '{id}'").Tables[0].Rows.Count;
 
             string returntxt = "此客户已放入回收站。 ";
-            if (contactcount > 0  || followcount > 0 || ordercount > 0)
+            if (contactcount > 0 || followcount > 0 || ordercount > 0)
             {
                 returntxt += "【注意】此客户下含有 ";
                 if (contactcount > 0) returntxt += $"【{contactcount}】联系人 ";
@@ -311,7 +327,7 @@ namespace XHD.Server
 
                 //dataauth
                 var dataauth = new GetDataAuth();
-                DataAuth auth = dataauth.getAuth( emp_id);
+                DataAuth auth = dataauth.getAuth(emp_id);
                 string authid = ds.Tables[0].Rows[0]["emp_id"].ToString();
                 switch (auth.authtype)
                 {
@@ -432,7 +448,7 @@ namespace XHD.Server
                 {
                     //dataauth
                     var dataauth = new GetDataAuth();
-                    DataAuth auth = dataauth.getAuth( emp_id);
+                    DataAuth auth = dataauth.getAuth(emp_id);
                     string authid = ds.Tables[0].Rows[i]["emp_id"].ToString();
                     switch (auth.authtype)
                     {
@@ -455,7 +471,7 @@ namespace XHD.Server
 
                 //context.Response.Write( string.Format("{0}联系人, {2}跟进, {3}订单，{1}合同 ", contactcount, contractcount, followcount, ordercount)+":"+(contactcount > 0 || contractcount > 0 || followcount > 0 || ordercount > 0)+" ");
 
-                if (contactcount > 0 ||  followcount > 0 || ordercount > 0)
+                if (contactcount > 0 || followcount > 0 || ordercount > 0)
                 {
                     failure++;
                 }

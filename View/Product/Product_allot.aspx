@@ -10,7 +10,7 @@
     <link href="../CSS/input.css" rel="stylesheet" type="text/css" />
     <script src="../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
-    <script src="../JS/XHD.js?v=1" type="text/javascript"></script>
+    <script src="../JS/XHD.js?v=3" type="text/javascript"></script>
     <script src="../lib/jquery.form.js" type="text/javascript"></script>
 
     <script type="text/javascript">
@@ -41,7 +41,12 @@
 
             $("#maingrid4").ligerGrid({
                 columns: [
-                    { display: '订单号', name: 'id', align: 'left', width: 350 },
+                    {
+                        display: '订单号', name: 'id', align: 'left', width: 350, render: function (item) {
+                            var html = "<a href='javascript:void(0)' onclick=view('pallot','" + item.id + "')>" + item.id + "</a>";
+                            return html;
+                        }
+                    },
                     { display: '调拨到仓库', name: 'NowWarehouseName', align: 'left', width: 120 },
                     { display: '创建人', name: 'CreateName', align: 'left', width: 160 },
                     {
@@ -119,6 +124,7 @@
                             ],
                             usePager: false,
                             checkbox: false,
+
                             url: "Product_allot.gridDetail.xhd?allotid=" + r.id,
                             width: '99%', height: '180',
                             heightDiff: 0
@@ -216,7 +222,7 @@
             }
         }
 
-
+ 
         function edit() {
             var manager = $("#maingrid4").ligerGetGridManager();
             var rows = manager.getSelectedRow();

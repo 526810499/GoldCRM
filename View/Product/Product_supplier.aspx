@@ -12,12 +12,17 @@
     <script src="../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
     <script src="../lib/json2.js" type="text/javascript"></script>
-    <script src="../JS/XHD.js" type="text/javascript"></script>
+    <script src="../JS/XHD.js?v=4" type="text/javascript"></script>
     <script type="text/javascript">
         $(function () {
             $("#maingrid4").ligerGrid({
                 columns: [
-                    { display: '供应商名称', name: 'product_supplier', width: 250, align: 'left' },
+                    {
+                        display: '供应商名称', name: 'product_supplier', width: 250, align: 'left', render: function (item) {
+                            var html = "<a href='javascript:void(0)' onclick=view('psupplier','" + item.id + "')>" + item.product_supplier + "</a>";
+                            return html;
+                        }
+                    },
                     {
                         display: '联系人', name: 'contact', width: 50,
                     },
@@ -37,7 +42,6 @@
                 height: '100%',
                 heightDiff: -10,
                 onRClickToSelect: true,
-
                 onContextmenu: function (parm, e) {
                     actionCustomerID = parm.data.id;
                     menu.show({ top: e.pageY, left: e.pageX });

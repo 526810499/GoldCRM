@@ -119,6 +119,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessToRemindUserConfig.cs" />
+    <Compile Include="CBirthdayReminder.cs" />
     <Compile Include="CRM_Contact.cs" />
     <Compile Include="CRM_contract.cs" />
     <Compile Include="CRM_contract_atta.cs" />

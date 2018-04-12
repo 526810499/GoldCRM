@@ -39,7 +39,12 @@ namespace XHD.Server
             string sorttext = " " + sortname + " " + sortorder;
 
             string Total;
-            string serchtxt = $"uid != 'admin'  ";
+            string serchtxt = $" 1=1 ";
+
+            if (request["config"].CInt(0, false) != 1)
+            {
+                serchtxt = $"uid != 'admin'  ";
+            }
 
             string did = PageValidate.InputText(request["did"], 50);
             if (PageValidate.checkID(did))

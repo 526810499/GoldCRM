@@ -817,6 +817,7 @@
     <Content Include="Product\Dep\StockOut_Add.aspx" />
     <Content Include="Product\Dep\StockIn.aspx" />
     <Content Include="Product\Dep\StockIn_Add.aspx" />
+    <Content Include="Product\ExportProduct.aspx" />
     <Content Include="Product\GetCodeProduct.aspx" />
     <Content Include="Product\GetProduct2.aspx" />
     <Content Include="Product\GetProduct.aspx" />
@@ -928,7 +929,9 @@
     <Content Include="JS\DragFlow\DragFlow.Render.js" />
     <Content Include="JS\DragFlow\DragFlow.Tools.js" />
     <Content Include="System\sysmanager\GetRole.aspx" />
-    <Content Include="System\sysmanager\TodayBroadcast.aspx" />
+    <Content Include="System\OtherConfig\BusinessToRemind.aspx" />
+    <Content Include="System\OtherConfig\BusinessToRemind_Add.aspx" />
+    <Content Include="System\OtherConfig\TodayBroadcast.aspx" />
     <Content Include="Toolbar\Repeat.aspx" />
     <Content Include="conn.config">
       <SubType>Designer</SubType>
@@ -3009,6 +3012,13 @@
   <ItemGroup>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Product\ExportProduct.aspx.cs">
+      <DependentUpon>ExportProduct.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Product\ExportProduct.aspx.designer.cs">
+      <DependentUpon>ExportProduct.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ueditor\net\App_Code\Config.cs" />

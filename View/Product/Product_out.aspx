@@ -10,7 +10,7 @@
     <link href="../CSS/input.css" rel="stylesheet" type="text/css" />
     <script src="../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
-    <script src="../JS/XHD.js?v=1" type="text/javascript"></script>
+    <script src="../JS/XHD.js?v=3" type="text/javascript"></script>
     <script src="../lib/jquery.form.js" type="text/javascript"></script>
 
     <script type="text/javascript">
@@ -30,7 +30,12 @@
 
             $("#maingrid4").ligerGrid({
                 columns: [
-                    { display: '³ö¿â¶©µ¥ºÅ', name: 'id', align: 'left', width: 300 },
+                    {
+                        display: '³ö¿â¶©µ¥ºÅ', name: 'id', align: 'left', width: 300, render: function (item) {
+                            var html = "<a href='javascript:void(0)' onclick=view('pout','" + item.id + "')>" + item.id + "</a>";
+                            return html;
+                        }
+                    },
                     { display: '²Ö¿â', name: 'NowWarehouseName', align: 'left', width: 300 },
                     { display: '´´½¨ÈË', name: 'CreateName', align: 'left', width: 160 },
                     {
@@ -93,6 +98,7 @@
                             ],
                             usePager: false,
                             checkbox: false,
+
                             url: "Product_out.gridDetail.xhd?outid=" + r.id,
                             width: '99%', height: '180',
                             heightDiff: 0

@@ -121,6 +121,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BBusinessToRemindUserConfig.cs" />
     <Compile Include="BProduct_OldChangeNew.cs" />
     <Compile Include="BProduct_Retrieval.cs" />
     <Compile Include="BProduct_RetrievalDetail.cs" />

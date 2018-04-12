@@ -160,7 +160,7 @@ namespace XHD.Server
 
             //DataSet ds = calendar.GetList(0, "datediff(day,[StartTime],getdate())=0 and datediff(day,[EndTime],getdate())=0 and emp_id=" + int.Parse(emp_id), "[StartTime] desc");
 
-            DataSet ds = calendar.GetList(0,$"'{ DateTime.Now.ToShortDateString() } 23:59:50' >= [StartTime] and '{DateTime.Now.ToShortDateString()} 0:00:00' <= [EndTime] and emp_id='{ emp_id}' ", "[StartTime] desc");
+            DataSet ds = calendar.GetList(5,$"'{ DateTime.Now.ToShortDateString() } 23:59:50' >= [StartTime] and '{DateTime.Now.ToShortDateString()} 0:00:00' <= [EndTime] and emp_id='{ emp_id}' ", "[StartTime] desc");
             return (GetGridJSON.DataTableToJSON(ds.Tables[0]));
         }
 

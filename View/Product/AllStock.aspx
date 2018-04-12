@@ -26,9 +26,17 @@
 
             $("#maingrid4").ligerGrid({
                 columns: [
-                    { display: '产品名称', name: 'product_name', align: 'left', width: 120 },
+                    {
+                        display: '条形码', name: 'BarCode', align: 'left', width: 160, render: function (item) {
+                            var html = "<a href='javascript:void(0)' onclick=view('product','" + item.id + "')>" + item.BarCode + "</a>";
+                            return html;
+                        }
+                    },
+                    {
+                        display: '产品名称', name: 'product_name', align: 'left', width: 120
+                    },
                     { display: '产品类别', name: 'category_name', align: 'left', width: 120 },
-                    { display: '条形码', name: 'BarCode', align: 'left', width: 160 },
+
                     {
                         display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {
                             return toMoney(item.Weight);
@@ -116,9 +124,9 @@
                 heightDiff: -8,
                 checkbox: false,
                 onContextmenu: function (parm, e) {
-                    actionCustomerID = parm.data.id;
-                    menu.show({ top: e.pageY, left: e.pageX });
-                    return false;
+                    //actionCustomerID = parm.data.id;
+                    //menu.show({ top: e.pageY, left: e.pageX });
+                    //return false;
                 }
             });
 
@@ -129,7 +137,7 @@
 
         });
         function toolbar() {
-            $.get("toolbar.GetSys.xhd?mid=product_list&rnd=" + Math.random(), function (data, textStatus) {
+            $.get("toolbar.GetSys.xhd?mid=allstock&rnd=" + Math.random(), function (data, textStatus) {
                 var data = eval('(' + data + ')');
                 //alert(data);
                 var items = [];
@@ -138,12 +146,7 @@
                     arr[i].icon = "../" + arr[i].icon;
                     items.push(arr[i]);
                 }
-                //items.push({ type: 'textbox', id: 'sfl', text: '分类：' });
-                //items.push({ type: 'textbox', id: 'sck', text: '现存仓库：' });
-                //items.push({ type: 'textbox', id: 'sstatus', text: '状态：' });
-                //items.push({ type: 'textbox', id: 'stext', text: '产品名：' });
-                //items.push({ type: 'textbox', id: 'scode', text: '条形码：' });
-                //items.push({ type: 'button', text: '搜索', icon: '../images/search.gif', disable: true, click: function () { doserch() } });
+
                 items.push({
                     id: "sbtn",
                     type: 'serchbtn',
@@ -203,6 +206,7 @@
 
                 $("#grid").height(document.documentElement.clientHeight - $(".toolbar").height());
                 $('#serchform').ligerForm();
+                $("div[toolbarid='sbtn']").click().hide();
 
                 $("#maingrid4").ligerGetGridManager()._onResize();
             });
@@ -236,7 +240,7 @@
             var manager = $("#maingrid4").ligerGetGridManager();
             var rows = manager.getSelectedRow();
             if (rows && rows != undefined) {
-                f_openWindow('product/product_add.aspx?pid=' + rows.id, "修改产品", 700, 580, f_save);
+                f_openWindow('product/product_add.aspx?pid=' + rows.id, "修改产品", 700, 580);
             }
             else {
                 $.ligerDialog.warn('请选择产品！');
@@ -244,87 +248,10 @@
         }
         function add() {
 
-            f_openWindow('product/product_add.aspx?categoryid=', "新增产品", 700, 580, f_save);
+            // f_openWindow('product/product_add.aspx?categoryid=', "新增产品", 700, 580, f_save);
         }
 
-        function del() {
-            var manager = $("#maingrid4").ligerGetGridManager();
-            var row = manager.getSelectedRow();
-            if (row) {
-                $.ligerDialog.confirm("产品删除不能恢复，确定删除？", function (yes) {
-                    if (yes) {
-                        $.ajax({
-                            url: "Product.del.xhd", type: "POST",
-                            data: { id: row.id, rnd: Math.random() },
-                            dataType: 'json',
-                            success: function (result) {
-                                $.ligerDialog.closeWaitting();
 
-                                var obj = eval(result);
-
-                                if (obj.isSuccess) {
-                                    f_load();
-                                }
-                                else {
-                                    $.ligerDialog.error(obj.Message);
-                                }
-                            },
-                            error: function () {
-                                top.$.ligerDialog.closeWaitting();
-                                top.$.ligerDialog.error('删除失败！');
-                            }
-                        });
-                    }
-                })
-            }
-            else {
-                $.ligerDialog.warn("请选择产品");
-            }
-
-        }
-
-        function print() {
-            var manager = $("#maingrid4").ligerGetGridManager();
-            var rows = manager.getSelectedRows();
-            console.log(rows);
-            if (rows == null || rows.length <= 0) {
-                $.ligerDialog.warn("没有需要打印的产品");
-                return;
-            }
-
-
-        }
-
-        function f_save(item, dialog) {
-            var issave = dialog.frame.f_save();
-            if (issave) {
-                dialog.close();
-                $.ligerDialog.waitting('数据保存中,请稍候...');
-                $.ajax({
-                    url: "Product.save.xhd", type: "POST",
-                    data: issave,
-                    dataType: 'json',
-                    success: function (result) {
-                        $.ligerDialog.closeWaitting();
-
-                        var obj = eval(result);
-
-                        if (obj.isSuccess) {
-                            f_load();
-                        }
-                        else {
-                            $.ligerDialog.error(obj.Message);
-                        }
-                        //f_load();     
-                    },
-                    error: function () {
-                        $.ligerDialog.closeWaitting();
-                        $.ligerDialog.error('操作失败！');
-                    }
-                });
-
-            }
-        }
         function f_load() {
             var manager = $("#maingrid4").ligerGetGridManager();
             manager.loadData(true);
