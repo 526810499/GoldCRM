@@ -108,6 +108,18 @@
     <Reference Include="Newtonsoft.Json.Net35">
       <HintPath>..\Lib\Newtonsoft.Json.Net35.dll</HintPath>
     </Reference>
+    <Reference Include="NPOI">
+      <HintPath>..\Lib\npoi\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>..\Lib\npoi\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\Lib\npoi\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats">
+      <HintPath>..\Lib\npoi\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
     <Reference Include="OpenSmtp">
       <HintPath>..\Lib\OpenSmtp.dll</HintPath>
     </Reference>
@@ -132,6 +144,7 @@
     <Compile Include="CookieHelper.cs" />
     <Compile Include="DataToJson.cs" />
     <Compile Include="ECBC_CDKEY.cs" />
+    <Compile Include="ExportHelper.cs" />
     <Compile Include="GetGridJSON.cs" />
     <Compile Include="HttpProc.cs" />
     <Compile Include="Log\Log.cs" />

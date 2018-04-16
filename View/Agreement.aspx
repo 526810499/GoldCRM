@@ -390,7 +390,7 @@
             </span>
         </p>
         <p class="MsoNormal">
-            <span>（</span><span lang="EN-US">7</span><span>）用户出于自愿而使用本软件，您必须了解使用本软件的风险，在尚未购买产品技术服务之前，我们不承诺提供任何形式的技术支持、使用担保，也不承担任何因使用本软件而产生问题的相关责任。</span><span lang="EN-US"><o:p></o:p></span>
+            <span>（</span><span lang="EN-US">7</span><span>）用户出于自愿而使用本软件，您必须了解使用本软件的风险，在尚未购买商品技术服务之前，我们不承诺提供任何形式的技术支持、使用担保，也不承担任何因使用本软件而产生问题的相关责任。</span><span lang="EN-US"><o:p></o:p></span>
         </p>
         <p class="MsoNormal">
             <span lang="EN-US">
@@ -422,7 +422,7 @@
         <p class="MsoNormal">
             <span lang="EN-US">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span>本公司或个人在使用本软件进行短信通讯过程中，将严格遵守国家相关法律、法规，保证本公司或个人短信内容的信息安全，并切实做到：<span lang="EN-US"><o:p></o:p></span></span></p>
         <p class="MsoNormal">
-            <span>一、建立健全本公司或个人产品的内部保障制度、信息安全保密制度、用户信息安全管理制度，建立健全本公司或个人信息安全责任制度和信息发布的审批制度，严格审查本公司或个人产品所发布的信息。<span lang="EN-US"><o:p></o:p></span></span></p>
+            <span>一、建立健全本公司或个人商品的内部保障制度、信息安全保密制度、用户信息安全管理制度，建立健全本公司或个人信息安全责任制度和信息发布的审批制度，严格审查本公司或个人商品所发布的信息。<span lang="EN-US"><o:p></o:p></span></span></p>
         <p class="MsoNormal">
             <span>二、严格遵守《互联网信息服务管理办法》，对使用本软件编辑的短信内容进行把关，保证信息内容的健康、合法。<span lang="EN-US"><o:p></o:p></span></span></p>
         <p class="MsoNormal">

@@ -9,7 +9,7 @@ namespace XHD.DAL
     /// <summary>
     /// 数据访问类:Product
     /// </summary>
-    public partial class Product: BaseTransaction
+    public partial class Product : BaseTransaction
     {
         public Product()
         { }
@@ -209,7 +209,7 @@ namespace XHD.DAL
         }
 
         /// <summary>
-        /// 通过条形码获取产品状态
+        /// 通过条形码获取商品状态
         /// </summary>
         /// <param name="BarCode"></param>
         /// <returns></returns>
@@ -264,7 +264,20 @@ namespace XHD.DAL
             }
         }
 
-
+        /// <summary>
+        /// 获得数据列表
+        /// </summary>
+        public DataSet GetTakeList(string strWhere)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select id, product_name, category_id, status, warehouse_id  ");
+            strSql.Append(" FROM Product(nolock) ");
+            if (strWhere.Trim() != "")
+            {
+                strSql.Append(" where " + strWhere);
+            }
+            return DbHelperSQL.Query(strSql.ToString());
+        }
 
         /// <summary>
         /// 获得数据列表
@@ -272,10 +285,26 @@ namespace XHD.DAL
         public DataSet GetList(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select id, product_name, category_id, status, Weight,  create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, ImgLogo, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks  ");
+            strSql.Append("select id, product_name, category_id, status, Weight,  create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, ImgLogo, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks,warehouse_id ");
             strSql.Append(@",(select product_category from Product_category where id = Product.category_id) as category_name,
                             (select product_supplier from Product_supplier where id = Product.SupplierID) as supplier_name ");
             strSql.Append(" FROM Product ");
+            if (strWhere.Trim() != "")
+            {
+                strSql.Append(" where " + strWhere);
+            }
+            return DbHelperSQL.Query(strSql.ToString());
+        }
+
+
+        /// <summary>
+        /// 获得数据列表
+        /// </summary>
+        public DataSet GetExportList(string strWhere)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select Product.id, BarCode, product_name, category_id, Weight,Product_category.product_category as category_name,  GoldTotal, CostsTotal, Totals, SalesTotalPrice, SalesCostsTotal, remarks,Product.create_time  ");
+            strSql.Append(" FROM Product(nolock) inner join Product_category(nolock) on Product_category.id = Product.category_id ");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);
@@ -314,7 +343,7 @@ namespace XHD.DAL
         {
             StringBuilder strSql_grid = new StringBuilder();
             StringBuilder strSql_total = new StringBuilder();
-            strSql_total.Append(" SELECT COUNT(id) FROM Product ");
+            strSql_total.Append(" SELECT COUNT(id) FROM Product(nolock) ");
             strSql_grid.Append("SELECT ");
             strSql_grid.Append("      n,id, product_name, category_id, status, Weight, create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, ImgLogo, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks ");
             strSql_grid.Append(",(select product_category from Product_category(nolock) where id = w1.category_id) as category_name");
@@ -332,6 +361,35 @@ namespace XHD.DAL
             Total = DbHelperSQL.Query(strSql_total.ToString()).Tables[0].Rows[0][0].ToString();
             return DbHelperSQL.Query(strSql_grid.ToString());
         }
+
+        /// <summary>
+        /// 分页获取数据列表
+        /// </summary>
+        public DataSet GetList(int PageSize, int PageIndex, string strWhere, string filedOrder, out DataTable totalTable)
+        {
+            StringBuilder strSql_grid = new StringBuilder();
+            StringBuilder strSql_total = new StringBuilder();
+            strSql_total.Append(@"select  COUNT(id) as counts,sum(Weight) as Weight,sum(AttCosts) as AttCosts, 
+                                sum(StockPrice) as StockPrice, sum(MainStoneWeight) as MainStoneWeight, sum(AttStoneWeight) as AttStoneWeight, sum(AttStoneNumber) as AttStoneNumber,
+                                sum(StonePrice) as StonePrice, sum(GoldTotal) as GoldTotal, sum(CostsTotal) as CostsTotal, sum(Totals) as Totals FROM Product(nolock) ");
+            strSql_grid.Append("SELECT ");
+            strSql_grid.Append("      n,id, product_name, category_id, status, Weight, create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, ImgLogo, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks ");
+            strSql_grid.Append(",(select product_category from Product_category(nolock) where id = w1.category_id) as category_name");
+            strSql_grid.Append(",(select product_supplier from Product_supplier(nolock) where id = w1.SupplierID) as supplier_name");
+            strSql_grid.Append(",(select product_warehouse from Product_warehouse(nolock) where id = w1.warehouse_id) as warehouse_name");
+            strSql_grid.Append(" FROM ( SELECT id, product_name, category_id, status, Weight, create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, ImgLogo, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks,warehouse_id, ROW_NUMBER() OVER( Order by " + filedOrder + " ) AS n from Product");
+            if (strWhere.Trim() != "")
+            {
+                strSql_grid.Append(" WHERE " + strWhere);
+                strSql_total.Append(" WHERE " + strWhere);
+            }
+            strSql_grid.Append("  ) as w1  ");
+            strSql_grid.Append("WHERE n BETWEEN " + (PageSize * (PageIndex - 1) + 1) + " AND " + PageSize * PageIndex);
+            strSql_grid.Append(" ORDER BY " + filedOrder);
+            totalTable = DbHelperSQL.Query(strSql_total.ToString()).Tables[0];
+            return DbHelperSQL.Query(strSql_grid.ToString());
+        }
+
 
         #endregion  BasicMethod
         #region  ExtensionMethod

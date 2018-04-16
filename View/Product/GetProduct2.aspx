@@ -30,8 +30,8 @@
             var url = "Product.grid.xhd?status=" + status + "&SupplierID=" + SupplierID;
             $("#maingrid4").ligerGrid({
                 columns: [
-                    { display: '产品名称', name: 'product_name', align: 'left', width: 120 },
-                    { display: '产品类别', name: 'category_name', align: 'left', width: 120 },
+                    { display: '商品名称', name: 'product_name', align: 'left', width: 120 },
+                    { display: '商品类别', name: 'category_name', align: 'left', width: 120 },
                     { display: '条形码', name: 'BarCode', align: 'left', width: 160 },
                     {
                         display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {
@@ -77,7 +77,7 @@
                 width: '100%',
                 height: '100%',
                 heightDiff: -2,
-                title: "产品选择",
+                title: "商品选择",
             });
             toolbar();
         });
@@ -85,7 +85,7 @@
             var items = [];
             items.push({ type: 'textbox', id: 'sfl', text: '分类：' });
             items.push({ type: 'textbox', id: 'sck', text: '现存仓库：' });
-            items.push({ type: 'textbox', id: 'stext', text: '产品名：' });
+            items.push({ type: 'textbox', id: 'stext', text: '商品名：' });
             items.push({ type: 'textbox', id: 'scode', text: '条形码：' });
             items.push({ type: 'button', text: '搜索', icon: '../images/search.gif', disable: true, click: function () { doserch() } });
 

@@ -78,17 +78,17 @@ namespace XHD.Server
                 string UserName = emp_name;
                 string IPStreet = request.UserHostAddress;
                 string EventTitle = model.product_name;
-                string EventType = "产品修改";
+                string EventType = "商品修改";
                 string EventID = model.id;
 
                 string Log_Content = null;
 
                 if (dr["category_name"].ToString() != request["T_product_category"])
-                    Log_Content += string.Format("【{0}】{1} → {2} \n", "产品类别", dr["category_name"],
+                    Log_Content += string.Format("【{0}】{1} → {2} \n", "商品类别", dr["category_name"],
                         request["T_product_category"]);
 
                 if (dr["product_name"].ToString() != request["T_product_name"])
-                    Log_Content += string.Format("【{0}】{1} → {2} \n", "产品名字", dr["product_name"],
+                    Log_Content += string.Format("【{0}】{1} → {2} \n", "商品名字", dr["product_name"],
                         request["T_product_name"]);
 
                 if (dr["StockPrice"].ToString() != request["T_StockPrice"])
@@ -182,7 +182,7 @@ namespace XHD.Server
 
             string sorttext = " " + sortname + " " + sortorder;
 
-            string Total;
+            string Total = "0";
             string serchtxt = $" 1=1 ";
             if (!string.IsNullOrEmpty(request["categoryid"]))
                 serchtxt += $" and category_id='{PageValidate.InputText(request["categoryid"], 50)}'";
@@ -211,11 +211,28 @@ namespace XHD.Server
 
             //权限
             serchtxt = GetSQLCreateIDWhere(serchtxt, true);
-            DataSet ds = product.GetList(PageSize, PageIndex, serchtxt, sorttext, out Total);
 
-            string dt = GetGridJSON.DataTableToJSON1(ds.Tables[0], Total);
-            return (dt);
+
+
+            if (request["sum"].CInt(0, false) == 1)
+            {
+                DataTable totalTable = new DataTable();
+                DataSet ds = product.GetList(PageSize, PageIndex, serchtxt, sorttext, out totalTable);
+                foreach (DataRow row in totalTable.Rows)
+                {
+                    Total = row["counts"].CString("0");
+                }
+                return GetGridJSON.DataTableToJSON(ds.Tables[0], Total, totalTable);//
+            }
+            else {
+
+                DataSet ds = product.GetList(PageSize, PageIndex, serchtxt, sorttext, out Total);
+                return GetGridJSON.DataTableToJSON1(ds.Tables[0], Total);//, totalTable
+
+            }
         }
+
+
 
         public string form(string id)
         {
@@ -238,12 +255,12 @@ namespace XHD.Server
 
             var ccod = new BLL.Sale_order_details();
             if (ccod.GetList($"product_id = '{id}'").Tables[0].Rows.Count > 0)
-                return XhdResult.Error("此产品下含有订单，不允许删除！").ToString();
+                return XhdResult.Error("此商品下含有订单，不允许删除！").ToString();
             int status = ds.Tables[0].Rows[0]["status"].CInt(1, false);
 
             if (status != 1)
             {
-                return XhdResult.Error("此产品下含有调拨单，不允许删除！").ToString();
+                return XhdResult.Error("此商品下含有调拨单，不允许删除！").ToString();
             }
 
             bool candel = true;
@@ -260,7 +277,7 @@ namespace XHD.Server
             if (!isdel) return XhdResult.Error("系统错误，删除失败！").ToString();
 
             //日志
-            string EventType = "产品删除";
+            string EventType = "商品删除";
 
             string UserID = emp_id;
             string UserName = emp_name;

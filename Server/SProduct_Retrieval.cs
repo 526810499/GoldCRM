@@ -39,7 +39,7 @@ namespace XHD.Server
             string postData = request["postdata"].CString("");
             if (string.IsNullOrWhiteSpace(postData) && string.IsNullOrWhiteSpace(id))
             {
-                return XhdResult.Error("订购产品不能为空").ToString();
+                return XhdResult.Error("订购商品不能为空").ToString();
             }
             bool result = false;
             postData = HttpUtility.UrlDecode(postData);

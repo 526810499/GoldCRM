@@ -48,10 +48,10 @@ namespace XHD.Server
             {
                 List<Model.ProductAllot> list = JsonDyamicHelper.NetJsonConvertJson<List<Model.ProductAllot>>(postData);
 
-                //新增的必须要有产品
+                //新增的必须要有商品
                 if ((list == null || list.Count <= 0) && string.IsNullOrWhiteSpace(id))
                 {
-                    return XhdResult.Error("产品信息为空,请确认后在操作！").ToString();
+                    return XhdResult.Error("商品信息为空,请确认后在操作！").ToString();
                 }
 
                 if (PageValidate.checkID(id, false))
@@ -109,7 +109,7 @@ namespace XHD.Server
                     model.createdep_id = dep_id;
                     model.create_id = emp_id;
                     model.create_time = DateTime.Now;
-                    id = "DB-" + DateTime.Now.ToString("yy-MM-dd-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
+                    id = "DB-" + DateTime.Now.ToString("yy-MM-dd-HH:mm-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
                     model.id = id;
                     model.status = request["auth"].CInt(0, false) == 1 ? 1 : 0;
 
@@ -168,7 +168,7 @@ namespace XHD.Server
                 {
                     allotBll.Update(model);
                 }
-                return XhdResult.Success(msg+ "产品状态发生改变,请确认后在添加或提交审核").ToString();
+                return XhdResult.Success(msg+ "商品状态发生改变,请确认后在添加或提交审核").ToString();
             }
 
             return XhdResult.Success().ToString();
@@ -299,7 +299,7 @@ namespace XHD.Server
                     return XhdResult.Success().ToString();
                 }
                 else {
-                    return XhdResult.Error("审核处理失败,请确认该单下相应的产品是否发生状态改变").ToString();
+                    return XhdResult.Error("审核处理失败,请确认该单下相应的商品是否发生状态改变").ToString();
                 }
             }
 
@@ -375,7 +375,7 @@ namespace XHD.Server
                     return XhdResult.Success().ToString();
                 }
                 else {
-                    return XhdResult.Error("请确认调度是否正确,调度单下是否有产品").ToString();
+                    return XhdResult.Error("请确认调度是否正确,调度单下是否有商品").ToString();
                 }
             }
 

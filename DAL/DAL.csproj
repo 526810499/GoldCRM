@@ -149,6 +149,8 @@
     <Compile Include="Product_out.cs" />
     <Compile Include="Product_outDetail.cs" />
     <Compile Include="Product_supplier.cs" />
+    <Compile Include="Product_TakeStock.cs" />
+    <Compile Include="Product_TakeStockDetail.cs" />
     <Compile Include="Product_warehouse.cs" />
     <Compile Include="Sale_order.cs" />
     <Compile Include="Sale_order_details.cs" />

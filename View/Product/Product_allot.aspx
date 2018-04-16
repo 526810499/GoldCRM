@@ -88,8 +88,8 @@
                         $(p).append(grid);
                         $(grid).css('margin', 3).ligerGrid({
                             columns: [
-                                { display: '产品名称', name: 'product_name', align: 'left', width: 120 },
-                                { display: '产品类别', name: 'category_name', align: 'left', width: 120 },
+                                { display: '商品名称', name: 'product_name', align: 'left', width: 120 },
+                                { display: '商品类别', name: 'category_name', align: 'left', width: 120 },
                                 { display: '条形码', name: 'BarCode', align: 'left', width: 200 },
                                 {
                                     display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {
@@ -218,7 +218,7 @@
                 f_openWindow2('product/Product_allotAdd.aspx?authbtn=1&id=' + rows.id + "&astatus=" + rows.status, "审核调拨单", 1200, 600, buttons);
             }
             else {
-                $.ligerDialog.warn('请选择产品！');
+                $.ligerDialog.warn('请选择商品！');
             }
         }
 
@@ -235,7 +235,7 @@
                 f_openWindow2('product/Product_allotAdd.aspx?id=' + rows.id + "&astatus=" + rows.status, "修改调拨单", 1200, 600, buttons);
             }
             else {
-                $.ligerDialog.warn('请选择产品！');
+                $.ligerDialog.warn('请选择商品！');
             }
         }
         function add() {

@@ -115,6 +115,51 @@ namespace XHD.DBUtility
 
         #region  执行简单SQL语句
 
+
+        /// <summary>
+        /// sql 2012 新分页
+        /// </summary>
+        /// <param name="PageIndex">当前第几页</param>
+        /// <param name="PageSize">每页大小</param>
+        /// <param name="TableName">查询的表名称</param>
+        /// <param name="Filter">查询字段</param>
+        /// <param name="Where">条件</param>
+        /// <param name="OrderBy">排序</param>
+        /// <returns></returns>
+        public static string GetNewPageSQL(int PageIndex, int PageSize, string TableName, string Filter, string Where, string OrderBy)
+        {
+            int offset = 0;
+            if (PageIndex > 1)
+            {
+                offset = (PageIndex - 1) * PageSize;
+            }
+
+            string sql = "select {0} from {1} {2} order by {3} offset {4} rows fetch next {5} rows only;";
+
+            return string.Format(sql, Filter, TableName, Where, OrderBy, offset, PageSize);
+        }
+
+        /// <summary>
+        /// 执行分页
+        /// </summary>
+        /// <param name="PageIndex">当前页</param>
+        /// <param name="PageSize">每页大小</param>
+        /// <param name="TableName">表</param>
+        /// <param name="Filter">字段</param>
+        /// <param name="Where">条件</param>
+        /// <param name="OrderBy">排序</param>
+        /// <param name="pars">参数</param>
+        /// <returns></returns>
+        public static DataTable ExecutePage(int PageIndex, int PageSize, string TableName, string Filter, string Where, string OrderBy, params SqlParameter[] pars)
+        {
+            string sql = GetNewPageSQL(PageIndex, PageSize, TableName, Filter, Where, OrderBy);
+
+            DataSet ds = Query(sql, pars);
+
+            return ds.Tables[0];
+        }
+
+
         /// <summary>
         ///     执行SQL语句，返回影响的记录数
         /// </summary>
@@ -493,7 +538,7 @@ namespace XHD.DBUtility
             }
         }
 
- 
+
         /// <summary>
         ///     执行查询语句，返回SqlDataReader ( 注意：调用该方法后，一定要对SqlDataReader进行Close )
         /// </summary>

@@ -34,7 +34,7 @@
             f_check();
 
             if (f_postnum() == 0) {
-                $.ligerDialog.warn("请添加产品！");
+                $.ligerDialog.warn("请添加商品！");
                 return;
             }
             var msg = checkPrice();
@@ -265,8 +265,8 @@
         function f_grid() {
             $("#maingrid4").ligerGrid({
                 columns: [
-                    { display: '产品名称', name: 'product_name', align: 'left', width: 150 },
-                    { display: '产品类别', name: 'category_name', align: 'left', width: 150 },
+                    { display: '商品名称', name: 'product_name', align: 'left', width: 150 },
+                    { display: '商品类别', name: 'category_name', align: 'left', width: 150 },
                     { display: '条形码', name: 'BarCode', align: 'left', width: 180 },
                     {
                         display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {
@@ -286,7 +286,7 @@
                 ],
                 allowHideColumn: false,
                 //onAfterEdit: f_onAfterEdit,
-                title: '产品明细',
+                title: '商品明细',
                 usePager: false,
                 //enabledEdit: true,
                 url: "Sale_order_details.grid.xhd?orderid=" + getparastr("id"),
@@ -328,7 +328,7 @@
         }
 
         function add() {
-            f_openWindow("product/GetProduct.aspx?status=3", "选择产品", 1000, 600, f_getpost, 9003);
+            f_openWindow("product/GetProduct.aspx?status=3", "选择商品", 1000, 600, f_getpost, 9003);
         }
         function pro_remove() {
             var manager = $("#maingrid4").ligerGetGridManager();
@@ -341,7 +341,7 @@
         function f_getpost(item, dialog) {
             var rows = null;
             if (!dialog.frame.f_select()) {
-                alert('请选择产品!');
+                alert('请选择商品!');
                 return;
             }
             else {

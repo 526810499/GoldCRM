@@ -31,8 +31,8 @@
 
             $("#maingrid4").ligerGrid({
                 columns: [
-                    { display: '产品名称', name: 'product_name', align: 'left', width: 120 },
-                    { display: '产品类别', name: 'category_name', align: 'left', width: 120 },
+                    { display: '商品名称', name: 'product_name', align: 'left', width: 120 },
+                    { display: '商品类别', name: 'category_name', align: 'left', width: 120 },
                     { display: '条形码', name: 'BarCode', align: 'left', width: 160 },
                     {
                         display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {
@@ -74,7 +74,7 @@
                 width: '100%',
                 height: '100%',
                 heightDiff: -2,
-                title: "扫码添加产品",
+                title: "扫码添加商品",
             });
             toolbar();
 
@@ -118,7 +118,7 @@
 
                 var data = eval('(' + rdata + ')');
                 if (data.Total <= 0) {
-                    $.ligerDialog.warn('该条形码未找到产品');
+                    $.ligerDialog.warn('该条形码未找到商品');
                 } else {
                     var rows = data.Rows;
                     $(rows).each(function (i, v) {
@@ -150,7 +150,7 @@
 <body style="padding: 0px; overflow: hidden;">
     <form id="form1" onsubmit="return false">
         <div id="layout1" style="margin: -1px">
-            <div position="left" title="产品类别">
+            <div position="left" title="商品类别" style="display: none">
                 <div id="treediv" style="width: 250px; height: 100%; margin: -1px; float: left; border: 1px solid #ccc; overflow: auto;">
                     <ul id="tree1"></ul>
                 </div>

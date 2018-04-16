@@ -8028,7 +8028,7 @@
             logUrl = ' http://static.tieba.baidu.com/tb/pms/img/st.gif??',
             product = (location.hostname || location.host || 'protected').toLowerCase(),
     
-            // 只针对 baidu 内部产品用户做统计功能。
+            // 只针对 baidu 内部商品用户做统计功能。
             enable = product && /baidu/i.exec(product),
             base;
     

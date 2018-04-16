@@ -38,7 +38,7 @@
                 return false;
             }
             if (fdata.length <= 0) {
-                $.ligerDialog.warn('请添加出库产品');
+                $.ligerDialog.warn('请添加出库商品');
                 return false;
             }
             if ($(form1).valid()) {
@@ -112,8 +112,8 @@
         function f_grid() {
             $("#maingridc4").ligerGrid({
                 columns: [
-                    { display: '产品名称', name: 'product_name', align: 'left', width: 120 },
-                    { display: '产品类别', name: 'category_name', align: 'left', width: 120 },
+                    { display: '商品名称', name: 'product_name', align: 'left', width: 120 },
+                    { display: '商品类别', name: 'category_name', align: 'left', width: 120 },
                     { display: '条形码', name: 'BarCode', align: 'left', width: 160 },
                     {
                         display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {
@@ -196,11 +196,11 @@
 
             var buttons = [];
             buttons.push({ text: '保存', onclick: f_getpost });
-            f_openWindow2("product/GetProduct2.aspx?status=1,2", "选择产品", 1000, 400, buttons, 9003);
+            f_openWindow2("product/GetProduct2.aspx?status=1,2", "选择商品", 1000, 400, buttons, 9003);
         }
 
         function addCode() {
-            f_openWindow("product/GetCodeProduct.aspx?status=1,2", "选择扫码产品", 1000, 400, f_getpost, 9003);
+            f_openWindow("product/GetCodeProduct.aspx?status=1,2", "选择扫码商品", 1000, 400, f_getpost, 9003);
         }
 
         function pro_remove() {
@@ -218,7 +218,7 @@
         function f_getpost(item, dialog) {
             var rows = null;
             if (!dialog.frame.f_select()) {
-                alert('请选择产品!');
+                alert('请选择商品!');
                 return;
             }
             else {

@@ -18,7 +18,7 @@ namespace XHD.BLL
 
 
         /// <summary>
-        /// 通过条形码获取产品状态
+        /// 通过条形码获取商品状态
         /// </summary>
         /// <param name="BarCode"></param>
         /// <returns></returns>
@@ -60,7 +60,13 @@ namespace XHD.BLL
         }
 
 
-
+        /// <summary>
+        /// 获得数据列表
+        /// </summary>
+        public DataSet GetTakeList(string strWhere)
+        {
+            return dal.GetTakeList(strWhere);
+        }
 
         /// <summary>
         /// 获得数据列表
@@ -68,6 +74,15 @@ namespace XHD.BLL
         public DataSet GetList(string strWhere)
         {
             return dal.GetList(strWhere);
+        }
+
+        /// <summary>
+        /// 获得数据列表
+        /// </summary>
+        public DataSet GetExportList(string strWhere)
+        {
+
+            return dal.GetExportList(strWhere);
         }
         /// <summary>
         /// 获得前几行数据
@@ -93,6 +108,14 @@ namespace XHD.BLL
         public DataSet GetList(int PageSize, int PageIndex, string strWhere, string filedOrder, out string Total)
         {
             return dal.GetList(PageSize, PageIndex, strWhere, filedOrder, out Total);
+        }
+
+        /// <summary>
+        /// 分页获取数据列表
+        /// </summary>
+        public DataSet GetList(int PageSize, int PageIndex, string strWhere, string filedOrder, out DataTable totalTable)
+        {
+            return dal.GetList(PageSize, PageIndex, strWhere, filedOrder, out totalTable);
         }
 
         #endregion  BasicMethod

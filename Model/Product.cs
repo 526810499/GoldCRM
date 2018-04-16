@@ -70,7 +70,7 @@ namespace XHD.Model
             get { return _id; }
         }
         /// <summary>
-        /// 产品名称
+        /// 商品名称
         /// </summary>
         public string product_name
         {
@@ -142,7 +142,7 @@ namespace XHD.Model
             get { return _remarks; }
         }
         /// <summary>
-        /// 产品规格
+        /// 商品规格
         /// </summary>
         public string specifications
         {
@@ -294,6 +294,10 @@ namespace XHD.Model
     [Serializable]
     public  class ProductAllot
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        public string id { get; set; }
         public string warehouse_id { get; set; }
 
         public string BarCode { get; set; }

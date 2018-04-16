@@ -126,6 +126,7 @@
     <Compile Include="Product_category.cs" />
     <Compile Include="Product_out.cs" />
     <Compile Include="Product_supplier.cs" />
+    <Compile Include="Product_TakeStock.cs" />
     <Compile Include="Product_warehouse.cs" />
     <Compile Include="public_news.cs" />
     <Compile Include="public_notice.cs" />

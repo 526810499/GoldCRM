@@ -34,7 +34,7 @@
 
             var data = manager.getData();
             if (data == null || data.length == 0) {
-                $.ligerDialog.warn('请添加订购产品');
+                $.ligerDialog.warn('请添加订购商品');
                 return false;
             }
 

@@ -61,16 +61,6 @@
                             return "<div style='color:#135294'>" + toMoney(item.arrears_money) + "</div>";
                         }, totalSummary: { type: 'sum', render: function (item, i) { return "￥" + item.sum; } }
                     },
-                    //{
-                    //    display: '已开票额（￥）', name: 'invoice_money', width: 100, align: 'right', render: function (item) {
-                    //        return "<div style='color:#135294'>" + toMoney(item.invoice_money) + "</div>";
-                    //    }
-                    //},
-                    //{
-                    //   display: '未开票额（￥）', name: 'arrears_invoice', width: 100, align: 'right', render: function (item) {
-                    //       return "<div style='color:#135294'>" + toMoney(item.arrears_invoice) + "</div>";
-                    //   }
-                    //},
                     {
                         display: '成交时间', name: 'Order_date', width: 90, render: function (item) {
                             return formatTimebytype(item.Order_date, 'yyyy-MM-dd');
@@ -98,8 +88,8 @@
                         $(p).append(grid);
                         $(grid).css('margin', 3).ligerGrid({
                             columns: [
-                                { display: '产品名称', name: 'product_name', align: 'left', width: 150 },
-                                { display: '产品类别', name: 'category_name', align: 'left', width: 150 },
+                                { display: '商品名称', name: 'product_name', align: 'left', width: 150 },
+                                { display: '商品类别', name: 'category_name', align: 'left', width: 150 },
                                 { display: '条形码', name: 'BarCode', align: 'left', width: 180 },
                                 {
                                     display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {

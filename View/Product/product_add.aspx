@@ -33,7 +33,7 @@
             if ($(form1).valid()) {
                 var T_product_category = $("#T_product_category_val").val();
                 if (T_product_category.length <= 0) {
-                    $.ligerDialog.warn('产品分类需选择');
+                    $.ligerDialog.warn('商品分类需选择');
                     return false;
                 }
 
@@ -91,11 +91,11 @@
                         labelWidth: 80, inputWidth: 180, space: 20,
                         fields: [
                             {
-                                display: '产品', type: 'group', icon: '',
+                                display: '商品', type: 'group', icon: '',
                                 rows: [
                                    [
-                                    { display: "产品名称", name: "T_product_name", type: "text", options: "{width:180}", validate: "{required:true}", initValue: obj.product_name },
-                                    { display: "产品类别", name: "T_product_category", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_category.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + obj.category_id + "'}", validate: "{required:true}" }
+                                    { display: "商品名称", name: "T_product_name", type: "text", options: "{width:180}", validate: "{required:true}", initValue: obj.product_name },
+                                    { display: "商品类别", name: "T_product_category", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_category.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + obj.category_id + "'}", validate: "{required:true}" }
                                    ],
                                    [
                                     { display: "进货金价", name: "T_StockPrice", type: "text", options: "{width:180,onChangeValue:function(value){ $('#T_StockPrice').val(toMoney(value));SetT_GoldTotal(); }}", validate: "{required:true}", initValue: toMoney(obj.StockPrice) },
@@ -160,14 +160,14 @@
         function SetT_SalesTotalPrice(value) {
 
             var T_Totals = $("#T_Totals").val();
-            //（2）黄金类产品，生成销售工费（工费小计*3）
+            //（2）黄金类商品，生成销售工费（工费小计*3）
             if (value == 1) {
                 var T_CostsTotal = $("#T_CostsTotal").val();
                 var total = parseFloat(T_CostsTotal.replace(/\$|\,/g, '')) * 3;
                 $("#T_SalesCostsTotal").val(toMoney(total));
                 $("#T_SalesTotalPrice").val(0.00);
             } else {
-                //非黄金类产品（K金，金镶玉，钻石）生成销售单价（成本总价*2.5）
+                //非黄金类商品（K金，金镶玉，钻石）生成销售单价（成本总价*2.5）
                 var total = parseFloat(T_Totals.replace(/\$|\,/g, '')) * 2.5;
                 $("#T_SalesCostsTotal").val(0.00);
                 $("#T_SalesTotalPrice").val(toMoney(total));

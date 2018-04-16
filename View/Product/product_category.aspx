@@ -97,7 +97,7 @@
             var manager = $("#maingrid4").ligerGetGridManager();
             var row = manager.getSelectedRow();
             if (row) {
-                $.ligerDialog.confirm("产品类别删除不能恢复，确定删除？", function (yes) {
+                $.ligerDialog.confirm("商品类别删除不能恢复，确定删除？", function (yes) {
                     if (yes) {
                         $.ajax({
                             url: "Product_category.del.xhd", type: "POST",
@@ -123,7 +123,7 @@
                     }
                 })
             } else {
-                $.ligerDialog.warn("请选择产品类别！");
+                $.ligerDialog.warn("请选择商品类别！");
             }
         }
         function f_save(item, dialog) {

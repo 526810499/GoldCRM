@@ -141,7 +141,7 @@ namespace XHD.Server
                 model.create_time = DateTime.Now;
                 model.arrears_invoice = model.Order_amount;
                 model.invoice_money = 0;
-                model.Serialnumber = "DD-" + DateTime.Now.ToString("yyyy-MM-dd-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
+                model.Serialnumber = "DD-" + DateTime.Now.ToString("yy-MM-dd-HH:mm-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
                 if (model.Order_status_id == "5587BCED-0A36-4EDF-9562-F962A9B1913C")
                 {
                     canAddIntegal = 1;
@@ -156,7 +156,7 @@ namespace XHD.Server
             }
 
 
-            //产品
+            //商品
             string json = request["PostData"].ToLower();
             var js = new JavaScriptSerializer();
 
@@ -203,7 +203,7 @@ namespace XHD.Server
                 return XhdResult.Success().ToString();
             }
             else {
-                return XhdResult.Error("部分订单产品信息处理失败,请确认").ToString();
+                return XhdResult.Error("部分订单商品信息处理失败,请确认").ToString();
             }
 
         }

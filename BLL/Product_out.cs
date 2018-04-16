@@ -44,7 +44,7 @@ namespace XHD.BLL
         }
 
         /// <summary>
-        /// 获取调度单下的产品总数
+        /// 获取调度单下的商品总数
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

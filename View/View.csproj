@@ -60,6 +60,19 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>ueditor\net\Bin\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NPOI, Version=1.2.4.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\npoi\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>..\Lib\npoi\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\Lib\npoi\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats">
+      <HintPath>..\Lib\npoi\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -822,9 +835,12 @@
     <Content Include="Product\GetProduct2.aspx" />
     <Content Include="Product\GetProduct.aspx" />
     <Content Include="Product\AllStock.aspx" />
+    <Content Include="Product\Take\AddProduct.aspx" />
+    <Content Include="Product\Take\Product_check.aspx" />
     <Content Include="Product\Product_out.aspx" />
     <Content Include="Product\Product_allot.aspx" />
     <Content Include="Product\product.aspx" />
+    <Content Include="Product\Take\Product_checkAdd.aspx" />
     <Content Include="Product\Product_outAdd.aspx" />
     <Content Include="Product\Product_allotAdd.aspx" />
     <Content Include="Product\product_add.aspx" />

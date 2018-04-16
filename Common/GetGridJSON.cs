@@ -39,6 +39,20 @@ namespace XHD.Common
             }
         }
 
+        public static string DataTableToJSON(DataTable dt, string Total, DataTable extenData)
+        {
+            if (dt == null || dt.Rows.Count == 0) return @"{""Rows"":[],""Total"":0}";
+            try
+            {
+                object obj = new { Rows = dt, Total = Total, Exten = extenData };
+                return JsonDyamicHelper.NetJsonConvertObject(obj);
+            }
+            catch
+            {
+                return @"{""Rows"":[],""Total"":0}";
+            }
+        }
+
         /// <summary>
         ///     ÆÕÍ¨Êý×éjson
         /// </summary>

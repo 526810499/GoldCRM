@@ -112,7 +112,7 @@
                 f_openWindow('System/sysmanager/Param_City_add.aspx?pid=' + notes.data.id, "新增城市 上级机构【" + notes.data.text + "】", 390, 300, f_save);
             }
             else {
-                $.ligerDialog.warn('请选择产品类别！');
+                $.ligerDialog.warn('请选择商品类别！');
             }
         }
 

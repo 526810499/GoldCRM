@@ -31,7 +31,7 @@ namespace XHD.DAL
         }
 
         /// <summary>
-        /// 获取调拨单下该产品对应订单状态
+        /// 获取调拨单下该商品对应订单状态
         /// </summary>
         /// <param name="allotid"></param>
         /// <param name="barcode"></param>

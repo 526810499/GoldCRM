@@ -14,7 +14,7 @@
     <script src="../lib/jquery.form.js" type="text/javascript"></script>
 
     <script type="text/javascript">
-
+        var checkedCustomer = [];
         var manager = "";
         var updateBtn = false;
         $(function () {
@@ -35,14 +35,14 @@
                         }
                     },
                     {
-                        display: '产品名称', name: 'product_name', align: 'left', width: 120
+                        display: '商品名称', name: 'product_name', align: 'left', width: 120
                     },
                     {
                         display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {
                             return toMoney(item.Weight);
                         }
                     },
-                   { display: '产品类别', name: 'category_name', align: 'left', width: 120 },
+                   { display: '商品类别', name: 'category_name', align: 'left', width: 120 },
                     {
                         display: '进货金价(￥)', name: 'StockPrice', width: 80, align: 'left', render: function (item) {
                             return toMoney(item.StockPrice);
@@ -124,10 +124,11 @@
                 height: '100%',
                 heightDiff: -8,
                 checkbox: true,
-                frozenCheckbox: true,
-                onSelectRow: function (data, rowindex, rowobj) {
-                    console.log(data);
-                    console.log(rowobj);
+                isChecked: f_isChecked,
+                onCheckRow: f_onCheckRow,
+                onCheckAllRow: f_onCheckAllRow,
+                onReload: function () {
+                    checkedCustomer = [];
                 },
                 onContextmenu: function (parm, e) {
                     //actionCustomerID = parm.data.id;
@@ -145,9 +146,9 @@
 
         function ViewModel(tag, id) {
             if (updateBtn) {
-                f_openWindow('product/product_add.aspx?pid=' + id, "修改产品", 700, 580, f_save);
+                f_openWindow('product/product_add.aspx?pid=' + id, "修改商品", 700, 580, f_save);
             } else {
-                f_openWindow('product/product_add.aspx?pid=' + id, "查看产品", 700, 580);
+                f_openWindow('product/product_add.aspx?pid=' + id, "查看商品", 700, 580);
             }
         }
 
@@ -245,6 +246,7 @@
         }
         //查询
         function doserch() {
+            checkedCustomer = [];
             var sendtxt = "&rnd=" + Math.random();
             var serchtxt = "scode=" + $("#scode").val();
             serchtxt += "&stext=" + $("#stext").val();
@@ -262,22 +264,22 @@
             var manager = $("#maingrid4").ligerGetGridManager();
             var rows = manager.getSelectedRow();
             if (rows && rows != undefined) {
-                f_openWindow('product/product_add.aspx?pid=' + rows.id, "修改产品", 700, 580, f_save);
+                f_openWindow('product/product_add.aspx?pid=' + rows.id, "修改商品", 700, 580, f_save);
             }
             else {
-                $.ligerDialog.warn('请选择产品！');
+                $.ligerDialog.warn('请选择商品！');
             }
         }
         function add() {
 
-            f_openWindow('product/product_add.aspx?categoryid=', "新增产品", 700, 580, f_save);
+            f_openWindow('product/product_add.aspx?categoryid=', "新增商品", 700, 580, f_save);
         }
 
         function del() {
             var manager = $("#maingrid4").ligerGetGridManager();
             var row = manager.getSelectedRow();
             if (row) {
-                $.ligerDialog.confirm("产品删除不能恢复，确定删除？", function (yes) {
+                $.ligerDialog.confirm("商品删除不能恢复，确定删除？", function (yes) {
                     if (yes) {
                         $.ajax({
                             url: "Product.del.xhd", type: "POST",
@@ -304,26 +306,26 @@
                 })
             }
             else {
-                $.ligerDialog.warn("请选择产品");
+                $.ligerDialog.warn("请选择商品");
             }
 
         }
 
+
         function print() {
-            var manager = $("#maingrid4").ligerGetGridManager();
-            var rows = manager.getSelectedRows();
-            if (rows == null || rows.length <= 0) {
-                $.ligerDialog.warn("没有需要打印的产品");
+
+            if (checkedCustomer == null || checkedCustomer.length <= 0) {
+                $.ligerDialog.warn("没有需要打印的商品");
                 return;
             }
             var ids = "";
-            $(rows).each(function (i, v) {
-                ids += v.id + ",";
+            $(checkedCustomer).each(function (i, v) {
+                ids += v + ",";
             });
-      
+
             location.href = "ExportProduct.aspx?ids=" + ids + "&rnd=" + Math.random();
 
-         
+
         }
 
         function f_save(item, dialog) {
@@ -359,6 +361,41 @@
         function f_load() {
             var manager = $("#maingrid4").ligerGetGridManager();
             manager.loadData(true);
+        }
+
+        function f_onCheckAllRow(checked) {
+            for (var rowid in this.records) {
+                if (checked)
+                    addCheckedCustomer(this.records[rowid]['id']);
+                else
+                    removeCheckedCustomer(this.records[rowid]['id']);
+            }
+        }
+
+
+        function findCheckedCustomer(id) {
+            for (var i = 0; i < checkedCustomer.length; i++) {
+                if (checkedCustomer[i] == id) return i;
+            }
+            return -1;
+        }
+        function addCheckedCustomer(id) {
+            if (findCheckedCustomer(id) == -1)
+                checkedCustomer.push(id);
+        }
+        function removeCheckedCustomer(id) {
+            var i = findCheckedCustomer(id);
+            if (i == -1) return;
+            checkedCustomer.splice(i, 1);
+        }
+        function f_isChecked(rowdata) {
+            if (findCheckedCustomer(rowdata.id) == -1)
+                return false;
+            return true;
+        }
+        function f_onCheckRow(checked, data) {
+            if (checked) addCheckedCustomer(data.id);
+            else removeCheckedCustomer(data.id);
         }
 
     </script>
@@ -428,7 +465,7 @@
                                 <td>
                                     <input type='text' id='scode' name='scode' />
                                 </td>
-                                <td style="width: 114px; text-align: right">产品名： 
+                                <td style="width: 114px; text-align: right">商品名： 
                                 </td>
                                 <td>
                                     <input type='text' id='stext' name='stext' />

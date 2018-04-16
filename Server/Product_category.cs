@@ -48,12 +48,12 @@ namespace XHD.Server
                 string UserName = emp_name;
                 string IPStreet = request.UserHostAddress;
                 string EventTitle = model.product_category;
-                string EventType = "产品类别修改";
+                string EventType = "商品类别修改";
                 string EventID = model.id;
                 string Log_Content = null;
 
                 if (dr["product_category"].ToString() != request["T_category_name"])
-                    Log_Content += string.Format("【{0}】{1} → {2} \n", "产品类别", dr["product_category"].ToString(), request["T_category_name"]);
+                    Log_Content += string.Format("【{0}】{1} → {2} \n", "商品类别", dr["product_category"].ToString(), request["T_category_name"]);
 
                 if (dr["product_icon"].ToString() != request["T_category_icon"])
                     Log_Content += string.Format("【{0}】{1} → {2} \n", "类别图标", dr["product_icon"].ToString(), request["T_category_icon"]);
@@ -154,7 +154,7 @@ namespace XHD.Server
 
             var product = new BLL.Product();
             if (product.GetList($" category_id = '{id}'").Tables[0].Rows.Count > 0)
-                return XhdResult.Error("此类别下含有产品，不允许删除！").ToString();
+                return XhdResult.Error("此类别下含有商品，不允许删除！").ToString();
 
             if (category.GetList($"parentid = '{id}'").Tables[0].Rows.Count > 0)
                 return XhdResult.Error("此类别下含有下级，不允许删除！").ToString();
@@ -173,7 +173,7 @@ namespace XHD.Server
             if (!isdel) return XhdResult.Error("系统错误！").ToString();
 
             //日志
-            string EventType = "产品类别删除";
+            string EventType = "商品类别删除";
 
             string UserID = emp_id;
             string UserName = emp_name;

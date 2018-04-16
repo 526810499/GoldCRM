@@ -26,8 +26,8 @@
 
             $("#maingrid4").ligerGrid({
                 columns: [
-                    { display: '产品名称', name: 'product_name', align: 'left', width: 120 },
-                    { display: '产品类别', name: 'category_name', align: 'left', width: 120 },
+                    { display: '商品名称', name: 'product_name', align: 'left', width: 120 },
+                    { display: '商品类别', name: 'category_name', align: 'left', width: 120 },
                     { display: '条形码', name: 'BarCode', align: 'left', width: 160 },
                     {
                         display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {
@@ -137,7 +137,7 @@
                 items.push({ type: 'textbox', id: 'sfl', text: '分类：' });
                 items.push({ type: 'textbox', id: 'sck', text: '现存仓库：' });
                 items.push({ type: 'textbox', id: 'sstatus', text: '状态：' });
-                items.push({ type: 'textbox', id: 'stext', text: '产品名：' });
+                items.push({ type: 'textbox', id: 'stext', text: '商品名：' });
                 items.push({ type: 'textbox', id: 'scode', text: '条形码：' });
                 items.push({ type: 'button', text: '搜索', icon: '../../images/search.gif', disable: true, click: function () { doserch() } });
 
@@ -214,22 +214,22 @@
             var manager = $("#maingrid4").ligerGetGridManager();
             var rows = manager.getSelectedRow();
             if (rows && rows != undefined) {
-                f_openWindow('Product/Dep/StockIn_Add.aspx?pid=' + rows.id, "修改产品", 700, 580, f_save);
+                f_openWindow('Product/Dep/StockIn_Add.aspx?pid=' + rows.id, "修改商品", 700, 580, f_save);
             }
             else {
-                $.ligerDialog.warn('请选择产品！');
+                $.ligerDialog.warn('请选择商品！');
             }
         }
         function add() {
 
-            f_openWindow('Product/Dep/StockIn_Add.aspx?categoryid=', "新增产品", 700, 580, f_save);
+            f_openWindow('Product/Dep/StockIn_Add.aspx?categoryid=', "新增商品", 700, 580, f_save);
         }
 
         function del() {
             var manager = $("#maingrid4").ligerGetGridManager();
             var row = manager.getSelectedRow();
             if (row) {
-                $.ligerDialog.confirm("产品删除不能恢复，确定删除？", function (yes) {
+                $.ligerDialog.confirm("商品删除不能恢复，确定删除？", function (yes) {
                     if (yes) {
                         $.ajax({
                             url: "Product.del.xhd", type: "POST",
@@ -256,7 +256,7 @@
                 })
             }
             else {
-                $.ligerDialog.warn("请选择产品");
+                $.ligerDialog.warn("请选择商品");
             }
 
         }
@@ -266,7 +266,7 @@
             var rows = manager.getSelectedRows();
             console.log(rows);
             if (rows == null || rows.length <= 0) {
-                $.ligerDialog.warn("没有需要打印的产品");
+                $.ligerDialog.warn("没有需要打印的商品");
                 return;
             }
 

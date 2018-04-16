@@ -63,54 +63,25 @@ namespace XHD.View.Product
             ids = "'" + ids.Trim(',') + "'";
             ids = ids.Replace(",", "','");
 
-            //string where = $" id in({ids})";
-            //DataSet ds = product.GetList(where);
-            //DataToExcel excel = new DataToExcel();
-            //string absoluFilePath = AppDomain.CurrentDomain.BaseDirectory + "File\\ExcelReport\\Product\\";
-            //if (!Directory.Exists(absoluFilePath))
-            //{
-            //    Directory.CreateDirectory(absoluFilePath);
-            //}
+            string where = $" id in({ids})";
+            DataSet ds = product.GetList(where);
+            string fname = DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls";
+
+            Dictionary<string, string> nameList = new Dictionary<string, string>();
+            nameList.Add("BarCode", "条形码");
+            nameList.Add("product_name", "商品名称");
+            nameList.Add("category_name", "商品分类");
+            nameList.Add("Weight", "重量(克)");
+            nameList.Add("GoldTotal", "金价小计(￥)");
+            nameList.Add("CostsTotal", "工费小计(￥)");
+            nameList.Add("Totals", "成本总价(￥)");
+            nameList.Add("SalesCostsTotal", "销售工费(￥)");
+            nameList.Add("SalesTotalPrice", "销售价格(￥)");
+            nameList.Add("remark", "备注");
+
+            ExportHelper.ExportDataTableToExcel(ds.Tables[0], nameList, nameList.Keys.ToArray(), DateTime.Now.ToString("MMddHHmmss"), fname);
 
 
-            //Hashtable nameList = new Hashtable();
-            //nameList.Add("BarCode", "条形码");
-            //nameList.Add("product_name", "产品名称");
-            //nameList.Add("category_name", "产品分类");
-            //nameList.Add("Weight", "重量(克)");
-            //nameList.Add("GoldTotal", "金价小计(￥)");
-            //nameList.Add("CostsTotal", "工费小计(￥)");
-            //nameList.Add("Totals", "成本总价(￥)");
-            //nameList.Add("SalesCostsTotal", "销售工费(￥)");
-            //nameList.Add("SalesTotalPrice", "销售价格(￥)");
-            ////利用excel对象
-            //DataToExcel dte = new DataToExcel();
-            //string filename = "";
-            //try
-            //{
-            //    if (ds.Tables[0].Rows.Count > 0)
-            //    {
-            //        filename = dte.OutputExcel(ds.Tables[0], "产品导出_" + DateTime.Now.ToString("yyyyMMddHHmmss"), absoluFilePath);
-            //    }
-            //}
-            //catch (Exception error)
-            //{
-            //    dte.KillExcelProcess();
-            //    SoftLog.LogStr(ids + "__error:" + error.ToString(), "ExportProduct");
-            //}
-
-            //if (filename != "")
-            //{
-            //    HttpContext.Current.Response.Clear();
-            //    HttpContext.Current.Response.Buffer = true;
-            //    HttpContext.Current.Response.Charset = "utf-8";
-            //    HttpContext.Current.Response.AppendHeader("Content-Disposition", "attachment;filename="+ filename);
-            //    HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("utf-8");
-
-            //    HttpContext.Current.Response.ContentType = "application/octet-stream";
-            //    HttpContext.Current.Response.WriteFile(absoluFilePath + "\\" + filename);
-
-            //}
             return "";
         }
     }

@@ -76,7 +76,7 @@
                         $(grid).css('margin', 3).ligerGrid({
                             columns: [
                                     //{ display: '序号', width: 30, render: function (item, i) { return i + 1; } },
-                                    { display: '产品名', name: 'product_name', width: 120 },
+                                    { display: '商品名', name: 'product_name', width: 120 },
                                     {
                                         display: '单价', name: 'price', width: 80, type: 'float', align: 'right', render: function (item) {
                                             return toMoney(item.price);

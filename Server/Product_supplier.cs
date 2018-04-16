@@ -141,7 +141,7 @@ namespace XHD.Server
 
             var product = new BLL.Product();
             if (product.GetList($" SupplierID = {id}").Tables[0].Rows.Count > 0)
-                return XhdResult.Error("此供应商下含有产品，不允许删除！").ToString();
+                return XhdResult.Error("此供应商下含有商品，不允许删除！").ToString();
 
             if (category.GetList($"parentid = '{id}'").Tables[0].Rows.Count > 0)
                 return XhdResult.Error("此供应商下含有下级，不允许删除！").ToString();
