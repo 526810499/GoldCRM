@@ -35,16 +35,6 @@
                         }
                     },
                     {
-                        display: '进货金价(￥)', name: 'StockPrice', width: 80, align: 'left', render: function (item) {
-                            return toMoney(item.StockPrice);
-                        }
-                    },
-                    {
-                        display: '附工费(￥)', name: 'AttCosts', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.AttCosts);
-                        }
-                    },
-                    {
                         display: '主石重', name: 'MainStoneWeight', width: 60, align: 'right', render: function (item) {
                             return toMoney(item.MainStoneWeight);
                         }
@@ -60,52 +50,10 @@
                         }
                     },
                     {
-                        display: '石价(￥)', name: 'StonePrice', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.StonePrice);
-                        }
-                    },
-                    {
-                        display: '金价小计(￥)', name: 'GoldTotal', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.GoldTotal);
-                        }
-                    },
-                    {
-                        display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.CostsTotal);
-                        }
-                    },
-                    {
-                        display: '成本总价(￥)', name: 'Totals', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.Totals);
-                        }
-                    },
-                    {
                         display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
                             return toMoney(item.SalesCostsTotal);
                         }
-                    },
-                    {
-                        display: '销售价格(￥)', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.SalesTotalPrice);
-                        }
-                    },
-                    { display: '供应商', name: 'supplier_name', width: 100 },
-                     { display: '现存仓库', name: 'warehouse_name', width: 100, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
-                    {
-                        display: '状态', name: 'status', width: 80, align: 'right', render: function (item) {
-                            switch (item.status) {
-                                case 1:
-                                    return "<span style='color:#0066FF'> 入库 </span>";
-                                case 2:
-                                    return "<span style='color:#00CC66'> 调拨中 </span>";
-                                case 3:
-                                    return "<span style='color:#009900'> 出库中 </span>";
-                                case 4:
-                                    return "<span style='color:#FF3300'> 已销售 </span>";
-                            }
-                        }
                     }
-
                 ],
                 dataAction: 'server',
                 url: "Product.grid.xhd?categoryid=&rnd=" + Math.random(),
@@ -260,26 +208,14 @@
             }
 
         }
-
-        function print() {
-            var manager = $("#maingrid4").ligerGetGridManager();
-            var rows = manager.getSelectedRows();
-            console.log(rows);
-            if (rows == null || rows.length <= 0) {
-                $.ligerDialog.warn("没有需要打印的商品");
-                return;
-            }
-
-
-        }
-
+ 
         function f_save(item, dialog) {
             var issave = dialog.frame.f_save();
             if (issave) {
                 dialog.close();
                 $.ligerDialog.waitting('数据保存中,请稍候...');
                 $.ajax({
-                    url: "Product.save.xhd", type: "POST",
+                    url: "Product.save.xhd?intype=1", type: "POST",
                     data: issave,
                     dataType: 'json',
                     success: function (result) {

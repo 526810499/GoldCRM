@@ -31,12 +31,12 @@
             $("#maingrid4").ligerGrid({
                 columns: [
                     {
-                        display: '出库订单号', name: 'id', align: 'left', width: 300, render: function (item) {
+                        display: '订单号', name: 'id', align: 'left', width: 300, render: function (item) {
                             var html = "<a href='javascript:void(0)' onclick=view('pout','" + item.id + "')>" + item.id + "</a>";
                             return html;
                         }
                     },
-                    { display: '仓库', name: 'NowWarehouseName', align: 'left', width: 300 },
+                    { display: '出库至仓库', name: 'NowWarehouseName', align: 'left', width: 300 },
                     { display: '创建人', name: 'CreateName', align: 'left', width: 160 },
                     {
                         display: '创建时间', name: 'create_time', width: 100, align: 'left', render: function (item) {
@@ -108,7 +108,7 @@
                 },
                 onContextmenu: function (parm, e) {
                     actionCustomerID = parm.data.id;
-                    menu.show({ top: e.pageY, left: e.pageX });
+                   // menu.show({ top: e.pageY, left: e.pageX });
                     return false;
                 }
             });

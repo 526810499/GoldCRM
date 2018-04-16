@@ -80,7 +80,7 @@
  
                     rows.push(
                             [
-                             { display: "µ÷²¦²Ö¿â", name: "T_NowWarehouse", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_warehouse.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + (obj.NowWarehouse == undefined ? whid : obj.NowWarehouse) + "'}", validate: "{required:true}" }
+                             { display: "µ÷²¦ÖÁ²Ö¿â", name: "T_NowWarehouse", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_warehouse.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + (obj.NowWarehouse == undefined ? whid : obj.NowWarehouse) + "'}", validate: "{required:true}" }
                             ],
                             [
                              { display: "±¸×¢", name: "T_Remark", type: "textarea", cols: 73, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.remark }
@@ -154,8 +154,9 @@
         }
 
         function f_loaded() {
+            $(".l-grid-loading").fadeOut();
             if (parseInt(getparastr("astatus", "0")) != 0) {
-                $(".l-grid-loading").fadeOut();
+
                 return;
             }
             if ($("#btn_add").length > 0)

@@ -826,6 +826,8 @@
     <Content Include="lib\ligerUI\skins\Tab\images\win\dialogbtn.gif" />
     <Content Include="lib\ligerUI\skins\Tab\images\win\dialogicon.gif" />
     <Content Include="License.html" />
+    <Content Include="Product\Dep\StockAllot.aspx" />
+    <Content Include="Product\Dep\StockAllot_Add.aspx" />
     <Content Include="Product\Dep\StockOut.aspx" />
     <Content Include="Product\Dep\StockOut_Add.aspx" />
     <Content Include="Product\Dep\StockIn.aspx" />

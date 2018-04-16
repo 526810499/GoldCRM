@@ -64,6 +64,7 @@ namespace XHD.DAL
                 return false;
             }
         }
+
         /// <summary>
         /// 更新一条数据
         /// </summary>
@@ -71,40 +72,17 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("update Product_TakeStock set ");
-            strSql.Append("takeType=@takeType,");
             strSql.Append("status=@status,");
             strSql.Append("update_id=@update_id,");
-            strSql.Append("update_time=@update_time,");
-            strSql.Append("authuser_id=@authuser_id,");
-            strSql.Append("authuser_time=@authuser_time,");
-            strSql.Append("create_time=@create_time,");
-            strSql.Append("create_id=@create_id,");
-            strSql.Append("remark=@remark,");
-            strSql.Append("createdep_id=@createdep_id");
+            strSql.Append("update_time=getdate(),");
+            strSql.Append("remark=@remark");
             strSql.Append(" where id=@id ");
             SqlParameter[] parameters = {
-                    new SqlParameter("@takeType", SqlDbType.Int,4),
-                    new SqlParameter("@status", SqlDbType.Int,4),
-                    new SqlParameter("@update_id", SqlDbType.VarChar,50),
-                    new SqlParameter("@update_time", SqlDbType.DateTime),
-                    new SqlParameter("@authuser_id", SqlDbType.VarChar,50),
-                    new SqlParameter("@authuser_time", SqlDbType.DateTime),
-                    new SqlParameter("@create_time", SqlDbType.DateTime),
-                    new SqlParameter("@create_id", SqlDbType.VarChar,50),
-                    new SqlParameter("@remark", SqlDbType.NVarChar,150),
-                    new SqlParameter("@createdep_id", SqlDbType.VarChar,50),
-                    new SqlParameter("@id", SqlDbType.VarChar,50)};
-            parameters[0].Value = model.takeType;
-            parameters[1].Value = model.status;
-            parameters[2].Value = model.update_id;
-            parameters[3].Value = model.update_time;
-            parameters[4].Value = model.authuser_id;
-            parameters[5].Value = model.authuser_time;
-            parameters[6].Value = model.create_time;
-            parameters[7].Value = model.create_id;
-            parameters[8].Value = model.remark;
-            parameters[9].Value = model.createdep_id;
-            parameters[10].Value = model.id;
+                    new SqlParameter("@status", SqlDbType.Int,4) { Value=model.status},
+                    new SqlParameter("@update_id", SqlDbType.VarChar,50) { Value=model.update_id},
+                    new SqlParameter("@remark", SqlDbType.NVarChar,150) {Value=model.remark},
+                    new SqlParameter("@id", SqlDbType.VarChar,50) { Value=model.id} };
+
 
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
@@ -115,6 +93,56 @@ namespace XHD.DAL
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// 更新一条数据
+        /// </summary>
+        public bool Auth(Model.Product_TakeStock model)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("update Product_TakeStock set ");
+            strSql.Append("status=@status,");
+            strSql.Append("authuser_id=@authuser_id,");
+            strSql.Append("authuser_time=getdate(),");
+            strSql.Append("remark=@remark");
+            strSql.Append(" where id=@id ");
+            SqlParameter[] parameters = {
+                    new SqlParameter("@status", SqlDbType.Int,4) { Value=model.status},
+                    new SqlParameter("@authuser_id", SqlDbType.VarChar,50) { Value=model.authuser_id},
+                    new SqlParameter("@remark", SqlDbType.NVarChar,150) {Value=model.remark},
+                    new SqlParameter("@id", SqlDbType.VarChar,50) { Value=model.id} };
+
+
+            int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
+            if (rows > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// 盘点没有盘点进来的商品
+        /// </summary>
+        /// <param name="takeid"></param>
+        /// <param name="warehouse_id"></param>
+        /// <returns></returns>
+        public int ProductClearingTake(string takeid, int warehouse_id)
+        {
+            SqlParameter[] parameters = {
+                    new SqlParameter("@takeid", SqlDbType.VarChar,50) { Value=takeid},
+                    new SqlParameter("@warehouse_id", SqlDbType.Int,4) { Value=warehouse_id},
+            };
+            string proc = "sp1_ProductTake";
+            int rowsAffected = 0;
+            DbHelperSQL.RunProcedure(proc, parameters, out rowsAffected);
+
+            return rowsAffected;
         }
 
         /// <summary>
@@ -161,6 +189,25 @@ namespace XHD.DAL
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// 获取盘点商品
+        /// </summary>
+        /// <param name="warehouse_id"></param>
+        /// <param name="takeid"></param>
+        /// <returns></returns>
+        public DataSet GetTakeList(int warehouse_id, string takeid)
+        {
+            string sql = @"SELECT p.status,p.BarCode,p.product_name,p.category_id,p.warehouse_id,pt.id AS takedid,pt.takeid,pt.status FROM  dbo.Product(NOLOCK) AS p LEFT JOIN Product_TakeStockDetail(NOLOCK) AS pt ON p.BarCode=pt.BarCode
+WHERE p.warehouse_id=@warehouse_id AND p.status<>4 and pt.takeid=@takeid";
+
+            SqlParameter[] parameters = {
+                    new SqlParameter("@takeid", SqlDbType.VarChar,50) { Value=takeid},
+                    new SqlParameter("@warehouse_id",SqlDbType.Int,4) { Value=warehouse_id}
+            };
+
+            return DbHelperSQL.Query(sql, parameters);
         }
 
         /// <summary>

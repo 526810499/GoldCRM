@@ -15,6 +15,8 @@
     <script src="../JS/XHD.js?v=3" type="text/javascript"></script>
     <script type="text/javascript">
         $(function () {
+            $("#layout1").ligerLayout({ leftWidth: 450, allowLeftResize: false, allowLeftCollapse: false, space: 2, heightDiff: -5 });
+
             $("#maingrid4").ligerGrid({
                 columns: [
                     {
@@ -38,6 +40,9 @@
                 onRClickToSelect: true,
                 onDblClickRow: function (data, rowindex, rowobj) {
                     f_openWindow('product/product_category_add.aspx?cid=' + data.id, "²é¿´", 1200, 600);
+                },
+                onSelectRow: function (data, rowindex, rowobj) {
+                    $("#menuicon").attr("src", "../" + data.product_icon);
                 },
                 onContextmenu: function (parm, e) {
                     actionCustomerID = parm.data.id;
@@ -171,12 +176,23 @@
 <body>
 
     <form id="form1" onsubmit="return false">
-        <div style="padding: 10px;">
-            <div id="toolbar"></div>
 
-            <div id="maingrid4" style="margin: -1px;"></div>
-            <div></div>
+        <div id="layout1" style="margin: -1px">
+
+            <div position="left">
+                <div id="toolbar" style="margin-top: 5px"></div>
+                <div id="maingrid4" style="margin: -1px;"></div>
+
+            </div>
+            <div position="center">
+                <div id="timg">
+                    <img id="menuicon" style="padding: 10px" />
+                </div>
+
+            </div>
         </div>
+
+
     </form>
 
 

@@ -138,6 +138,8 @@
     <Compile Include="Product_allotDetail.cs" />
     <Compile Include="Product_out.cs" />
     <Compile Include="Product_outDetail.cs" />
+    <Compile Include="Product_StockIn.cs" />
+    <Compile Include="Product_StockInDetial.cs" />
     <Compile Include="Product_supplier.cs" />
     <Compile Include="Product_TakeStock.cs" />
     <Compile Include="Product_TakeStockDetail.cs" />

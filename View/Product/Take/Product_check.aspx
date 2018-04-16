@@ -35,7 +35,12 @@
                     { display: '盘点部门', name: 'dep_name', align: 'left', width: 120 },
                     { display: '创建人', name: 'CreateName', align: 'left', width: 120 },
                     {
-                        display: '最后修改时间', name: 'update_time', width: 120, align: 'left', render: function (item) {
+                        display: '创建时间', name: 'create_time', width: 150, align: 'left', render: function (item) {
+                            return formatTime(item.create_time, 'yyyy-MM-dd HH:mm:ss');
+                        }
+                    },
+                    {
+                        display: '修改时间', name: 'update_time', width: 150, align: 'left', render: function (item) {
                             return formatTime(item.update_time);
                         }
                     },
@@ -43,7 +48,7 @@
                         display: '状态', name: 'status', width: 100, align: 'left', render: function (item) {
                             switch (item.status) {
                                 case 0:
-                                    return "<span style='color:#0066FF'> 未生成盘点单 </span>";
+                                    return "<span style='color:#0066FF'> 未提交审核 </span>";
                                 case 1:
                                     return "<span style='color:#00CC66'> 等待审核 </span>";
                                 case 2:
@@ -93,7 +98,7 @@
                                     }
                                 }, {
                                     display: '盘点状态', name: 'Status', align: 'left', width: 160, render: function (item) {
-                                        switch (status) {
+                                        switch (item.status) {
                                             case 1:
                                                 return "正常";
                                                 break;
@@ -104,7 +109,8 @@
                                         }
 
                                     }
-                                }
+                                },
+                               { display: '备注', name: 'remark', align: 'left', width: 180 }
                             ],
                             usePager: false,
                             checkbox: false,
@@ -122,6 +128,9 @@
                     return false;
                 }
             });
+
+            $("#btn_serch").ligerButton({ text: "搜索", width: 60, click: doserch });
+
             toolbar();
 
         });
@@ -134,12 +143,27 @@
                 for (var i = 0; i < arr.length; i++) {
                     arr[i].icon = "../../" + arr[i].icon;
                     items.push(arr[i]);
+
                 }
-                items.push({ type: 'textbox', id: 'sstatus', text: '状态：' });
-                items.push({ type: 'textbox', id: 'sorderid', text: '单号：' });
-                items.push({ type: 'textbox', id: 'scode', text: '条形码：' });
-                items.push({ type: 'textbox', id: 'sck', text: '盘点仓库：' });
-                items.push({ type: 'button', text: '搜索', icon: '../images/search.gif', disable: true, click: function () { doserch() } });
+
+                items.push({
+                    id: "sbtn",
+                    type: 'serchbtn',
+                    text: '搜索',
+                    icon: '../images/search.gif',
+                    disable: true,
+                    click: function () {
+                        serchpanel();
+                    }
+                });
+
+
+
+                //items.push({ type: 'textbox', id: 'sstatus', text: '状态：' });
+                //items.push({ type: 'textbox', id: 'sorderid', text: '单号：' });
+                //items.push({ type: 'textbox', id: 'scode', text: '条形码：' });
+                //items.push({ type: 'textbox', id: 'sck', text: '盘点仓库：' });
+                //items.push({ type: 'button', text: '搜索', icon: '../images/search.gif', disable: true, click: function () { doserch() } });
 
                 $("#toolbar").ligerToolBar({
                     items: items
@@ -149,13 +173,13 @@
                 $("#sstatus").ligerComboBox({
                     data: [
                     { text: '所有', id: '' },
-                    { text: '未生成盘点单', id: '0' },
+                    { text: '未提交审核', id: '0' },
                     { text: '等待审核', id: '1' },
                     { text: '审核通过', id: '2' },
                     { text: '审核不通过', id: '3' }
                     ], valueFieldID: 'status',
                 });
-                $("#sck").ligerComboBox({
+                $("#swarehouse_id").ligerComboBox({
                     width: 150,
                     selectBoxWidth: 240,
                     selectBoxHeight: 200,
@@ -168,10 +192,28 @@
                         checkbox: false
                     },
                 });
+                $("#sbegtime").ligerDateEditor({ showTime: true, labelWidth: 100, labelAlign: 'left' });
+                $("#sendtime").ligerDateEditor({ showTime: true, labelWidth: 100, labelAlign: 'left' });
+                $("#grid").height(document.documentElement.clientHeight - $(".toolbar").height());
+                $('#serchform').ligerForm();
+                $("div[toolbarid='sbtn']").click().hide();
+
                 $("#maingrid4").ligerGetGridManager()._onResize();
             });
         }
 
+
+        function serchpanel() {
+
+            if ($(".az").css("display") == "none") {
+                $("#grid").css("margin-top", $(".az").height() + "px");
+                $("#maingrid4").ligerGetGridManager()._onResize();
+            }
+            else {
+                $("#grid").css("margin-top", "0px");
+                $("#maingrid4").ligerGetGridManager()._onResize();
+            }
+        }
 
         function onSelect(note) {
             doserch();
@@ -179,8 +221,13 @@
         //查询
         function doserch() {
             var sendtxt = "&rnd=" + Math.random();
-            var serchtxt = $("#form1 :input").fieldSerialize() + sendtxt;
-
+            var serchtxt = "status=" + $("#status").val();
+            serchtxt += "&sorderid=" + $("#sorderid").val();
+            serchtxt += "&scode=" + $("#scode").val();
+            serchtxt += "&swarehouse_id=" + $("#swarehouse_id_val").val();
+            serchtxt += "&sbegtime=" + $("#sbegtime").val();
+            serchtxt += "&sendtime=" + $("#sendtime").val();
+            sendtxt += sendtxt;
             var manager = $("#maingrid4").ligerGetGridManager();
             manager._setUrl("Product_TakeStock.grid.xhd?" + serchtxt);
         }
@@ -205,7 +252,7 @@
                 f_openWindow2('product/Take/Product_CheckAdd.aspx?authbtn=1&id=' + rows.id + "&astatus=" + rows.status, "审核盘点单", 1050, 680, buttons);
             }
             else {
-                $.ligerDialog.warn('请选择商品！');
+                $.ligerDialog.warn('请选择盘点单！');
             }
         }
 
@@ -222,14 +269,14 @@
                 f_openWindow2('product/Take/Product_CheckAdd.aspx?id=' + rows.id + "&astatus=" + rows.status, "修改盘点单", 1050, 680, buttons);
             }
             else {
-                $.ligerDialog.warn('请选择商品！');
+                $.ligerDialog.warn('请选择盘点单！');
             }
         }
         function add() {
             var buttons = [];
             buttons.push({ text: '保存', onclick: f_save });
-            buttons.push({ text: '生成盘点单', onclick: create_take });
-            buttons.push({ text: '生成盘点单并提交审核', onclick: f_saveAuth });
+            //buttons.push({ text: '生成盘点单', onclick: create_take });
+            buttons.push({ text: '保存并提交审核', onclick: f_saveAuth });
             f_openWindow2('product/Take/Product_CheckAdd.aspx?astatus=0', "新增盘点单", 1050, 680, buttons);
         }
 
@@ -365,18 +412,81 @@
     </script>
 </head>
 <body style="padding: 0px; overflow: hidden;">
-    <div style="padding: 5px 10px 0px 5px;">
-        <form id="form1" onsubmit="return false">
-            <div id="layout1" style="">
 
-                <div position="center">
-                    <div id="toolbar" style="margin-top: 10px;"></div>
-                    <div id="maingrid4" style="margin: -1px;"></div>
+    <form id="form1" onsubmit="return false">
 
-                </div>
+        <div style="padding: 10px;">
+            <div id="toolbar" style="margin-top: 10px;"></div>
+            <div id="grid">
+                <div id="maingrid4" style="margin: -1px;"></div>
             </div>
-        </form>
+        </div>
 
+    </form>
+
+    <div class="az">
+        <form id='serchform'>
+            <table style='width: 720px'>
+                <tr>
+
+                    <td>
+                        <div style='width: 40px; text-align: right; float: right'>单号：</div>
+                    </td>
+                    <td>
+                        <div style='float: left'>
+                            <input type='text' id='sorderid' name='sorderid' ltype='text' ligerui='{width:120}' />
+                        </div>
+                    </td>
+
+                    <td>
+                        <div style='width: 80px; text-align: right; float: right'>条形码：</div>
+                    </td>
+                    <td>
+                        <input id='scode' name="scode" type='text' /></td>
+                    <td>
+                        <div style='width: 60px; text-align: right; float: right'>盘点仓库：</div>
+                    </td>
+                    <td>
+                        <input type='select' id='swarehouse_id' name='swarehouse_id' ltype='text' ligerui='{width:120}' />
+
+                    </td>
+
+                </tr>
+                <tr>
+                    <td colspan="6" style="height: 20px"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style='width: 80px; text-align: right; float: right'>订单状态：</div>
+                    </td>
+                    <td>
+                        <input type='select' id='sstatus' name='sstatus' ltype='text' ligerui='{width:120}' /></td>
+                    <td colspan="3" style="padding-left: 20px">
+                        <table>
+                            <tr>
+                                <td>创建时间：</td>
+                                <td>
+                                    <input type='text' id='sbegtime' name='sbegtime' />
+
+                                </td>
+                                <td>~  
+                                </td>
+                                <td>
+                                    <input type='text' id='sendtime' name='sendtime' />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <div id="btn_serch"></div>
+                        <div id="btn_reset"></div>
+                    </td>
+                </tr>
+
+            </table>
+        </form>
     </div>
+
+
 </body>
 </html>

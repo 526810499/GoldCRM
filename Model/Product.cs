@@ -301,6 +301,20 @@ namespace XHD.Model
         public string warehouse_id { get; set; }
 
         public string BarCode { get; set; }
+        public int status { get; set; }
+
+        public string remark { get; set; }
+
+
+        /// <summary>
+        /// 商品分类名称
+        /// </summary>
+        public string category_name { get; set; }
+
+        /// <summary>
+        /// 商品名称
+        /// </summary>
+        public string product_name { get; set; }
 
         public string __status { get; set; }
     }

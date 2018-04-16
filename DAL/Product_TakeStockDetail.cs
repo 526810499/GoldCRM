@@ -34,7 +34,8 @@ namespace XHD.DAL
                     new SqlParameter("@barcode", SqlDbType.VarChar,50),
                     new SqlParameter("@taketime", SqlDbType.DateTime),
                     new SqlParameter("@status", SqlDbType.Int,4),
-                    new SqlParameter("@remark", SqlDbType.VarChar,150)};
+                    new SqlParameter("@remark", SqlDbType.VarChar,150),
+            };
             parameters[0].Value = model.id;
             parameters[1].Value = model.takeid;
             parameters[2].Value = model.warehouse_id;
@@ -95,7 +96,7 @@ namespace XHD.DAL
         /// <summary>
         /// 删除一条数据
         /// </summary>
-        public bool Delete(string id,string takeid)
+        public bool Delete(string id, string takeid)
         {
 
             StringBuilder strSql = new StringBuilder();
@@ -178,8 +179,10 @@ namespace XHD.DAL
             strSql_grid.Append("WHERE n BETWEEN " + (PageSize * (PageIndex - 1) + 1) + " AND " + PageSize * PageIndex);
             strSql_grid.Append(" ORDER BY " + filedOrder);
             Total = DbHelperSQL.Query(strSql_total.ToString()).Tables[0].Rows[0][0].ToString();
+
             return DbHelperSQL.Query(strSql_grid.ToString());
         }
+
 
         #endregion  BasicMethod
         #region  ExtensionMethod

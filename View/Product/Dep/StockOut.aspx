@@ -30,8 +30,8 @@
 
             $("#maingrid4").ligerGrid({
                 columns: [
-                    { display: '出库订单号', name: 'id', align: 'left', width: 300 },
-                    { display: '仓库', name: 'NowWarehouseName', align: 'left', width: 300 },
+                    { display: '订单号', name: 'id', align: 'left', width: 300 },
+                    { display: '出库至仓库', name: 'NowWarehouseName', align: 'left', width: 300 },
                     { display: '创建人', name: 'CreateName', align: 'left', width: 160 },
                     {
                         display: '创建时间', name: 'create_time', width: 100, align: 'left', render: function (item) {
@@ -56,7 +56,7 @@
 
                 ],
                 dataAction: 'server',
-                url: "Product_out.grid.xhd?rnd=" + Math.random(),
+                url: "Product_out.grid.xhd?outtype=1&rnd=" + Math.random(),
                 pageSize: 30,
                 pageSizeOptions: [10, 20, 30, 40, 50, 60, 80, 100, 120],
                 width: '100%',
@@ -83,11 +83,6 @@
                                 {
                                     display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
                                         return toMoney(item.CostsTotal);
-                                    }
-                                },
-                                {
-                                    display: '销售价格(￥)', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
-                                        return toMoney(item.SalesTotalPrice);
                                     }
                                 }
                             ],
@@ -153,7 +148,7 @@
         }
         //查询
         function doserch() {
-            var sendtxt = "&rnd=" + Math.random();
+            var sendtxt = "&outtype=1&rnd=" + Math.random();
             var serchtxt = $("#form1 :input").fieldSerialize() + sendtxt;
 
             var manager = $("#maingrid4").ligerGetGridManager();
@@ -257,7 +252,7 @@
                 dialog.close();
                 $.ligerDialog.waitting('数据保存中,请稍候...');
                 $.ajax({
-                    url: "Product_out.save.xhd?auth=" + auth, type: "POST",
+                    url: "Product_out.save.xhd?outtype=1&auth=" + auth, type: "POST",
                     data: issave,
                     dataType: 'json',
                     success: function (result) {

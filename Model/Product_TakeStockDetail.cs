@@ -21,6 +21,9 @@ namespace XHD.Model
         private DateTime _taketime;
         private int _status;
         private string _remark;
+
+ 
+
         /// <summary>
         /// 
         /// </summary>

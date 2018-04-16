@@ -30,6 +30,25 @@ namespace XHD.BLL
         {
             return dal.Update(model);
         }
+        /// <summary>
+        /// 更新一条数据
+        /// </summary>
+        public bool Auth(Model.Product_TakeStock model)
+        {
+            return dal.Auth(model);
+        }
+
+
+        /// <summary>
+        /// 盘点没有盘点进来的商品
+        /// </summary>
+        /// <param name="takeid"></param>
+        /// <param name="warehouse_id"></param>
+        /// <returns></returns>
+        public int ProductClearingTake(string takeid, int warehouse_id)
+        {
+            return dal.ProductClearingTake(takeid, warehouse_id);
+        }
 
         /// <summary>
         /// 删除一条数据
@@ -53,6 +72,16 @@ namespace XHD.BLL
         public DataSet GetList(string strWhere)
         {
             return dal.GetList(strWhere);
+        }
+        /// <summary>
+        /// 获取盘点商品
+        /// </summary>
+        /// <param name="warehouse_id"></param>
+        /// <param name="takeid"></param>
+        /// <returns></returns>
+        public DataSet GetTakeList(int warehouse_id, string takeid)
+        {
+            return dal.GetTakeList(warehouse_id, takeid);
         }
 
         /// <summary>

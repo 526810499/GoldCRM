@@ -57,7 +57,59 @@ namespace XHD.Server
 
                 if (PageValidate.checkID(id, false))
                 {
+                    isAdd = false;
+                    int status = request["auth"].CInt(0, false);
+                    //需要判断是否有审核权限
+                    if (status > 1)
+                    {
+                        if (CheckBtnAuthority(authRightID))
+                        {
+                            return XhdResult.Error("您没有该操作权限,请确认后在操作！").ToString();
+                        }
+                    }
+                    model.status = status;
+                    model.id = id;
+                    DataSet ds = tBll.GetList($" id= '{id}' ");
+                    if (ds.Tables[0].Rows.Count == 0)
+                        return XhdResult.Error("参数不正确，更新失败！").ToString();
 
+                    DataRow dr = ds.Tables[0].Rows[0];
+                    int dstatus = dr["status"].CInt(0, false);
+                    //未提交的状态才能在添加
+                    CanAdd = (dstatus == 0);
+                    CanDel = (dstatus == 0);
+
+                    tBll.Update(model);
+
+                    //状态修改为提交审核的需要在生成下清算
+                    if (model.status == 1 && dstatus == 0)
+                    {
+                        ProductClearingTake(model.id, model.warehouse_id);
+                    }
+
+                    string UserID = emp_id;
+                    string UserName = emp_name;
+                    string IPStreet = request.UserHostAddress;
+                    string EventTitle = "库存盘点";
+                    string EventType = "库存盘点";
+                    string EventID = model.id;
+
+                    string Log_Content = postData;
+
+                    if (dr["warehouse_id"].ToString() != request["T_Warehouse_val"])
+                        Log_Content += string.Format("【{0}】{1} → {2} \n", "NowWarehouse", dr["warehouse_id"],
+                            request["T_Warehouse_val"]);
+
+                    if (dr["remark"].ToString() != request["T_Remark"])
+                        Log_Content += string.Format("【{0}】{1} → {2} \n", "remark", dr["remark"],
+                            request["T_Remark"]);
+                    if (dr["status"].ToString() != model.status.CString(""))
+                        Log_Content += string.Format("【{0}】{1} → {2} \n", "status", dr["status"],
+                          model.status.CString(""));
+
+
+                    if (!string.IsNullOrEmpty(Log_Content))
+                        Syslog.Add_log(UserID, UserName, IPStreet, EventTitle, EventType, EventID, Log_Content);
                 }
                 else {
                     id = "PD-" + DateTime.Now.ToString("yy-MM-dd-HH:mm-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
@@ -66,48 +118,66 @@ namespace XHD.Server
                     model.create_id = emp_id;
                     model.create_time = DateTime.Now;
                     model.createdep_id = dep_id;
+                    model.authuser_id = "";
+                    model.authuser_time = DateTime.Now;
                     tBll.Add(model);
                 }
-                List<Model.ProductAllot> addList = list.Where(m => m.__status == "add").ToList();
-                string where = "";
-                foreach (Model.ProductAllot p in addList)
+
+                List<Model.ProductAllot> ld = list.Where(t => t.__status == "delete").ToList();
+                List<Model.ProductAllot> ladd = list.Where(t => t.__status == "add").ToList();
+
+                if (!CanAdd && ladd != null && ladd.Count >= 0)
                 {
-                    where += "'" + PageValidate.InputText(p.BarCode, 20) + "',";
+                    return XhdResult.Error("盘点单状态已发生改变不能执行添加操作,请确认后在操作！").ToString();
                 }
 
-                DataSet addDs = new DataSet();
-                DataTable addTable = new DataTable();
-                if (!string.IsNullOrWhiteSpace(where))
+                if (!CanDel && ld != null && ld.Count >= 0)
                 {
-                    where = where.Trim(',');
-                    addDs = new BLL.Product().GetTakeList(where);
-                    addTable = addDs.Tables[0];
+                    return XhdResult.Error("盘点单状态已发生改变不能执行删除操作,请确认后在操作！").ToString();
                 }
-
+                BLL.Product pbll = new BLL.Product();
                 //循环添加调拨单订单信息
                 foreach (Model.ProductAllot m in list)
                 {
+                    m.BarCode = PageValidate.InputText(m.BarCode, 50);
                     if (m.__status == "add")
                     {
+                        //如果是正常的需要在确认下，避免被客户端篡改上传
+                        if (m.status == 1)
+                        {
+                            DataSet pds = pbll.GetList($" barcode='{m.BarCode}'");
+                            if (pds.Tables[0].Rows.Count <= 0)
+                            {
+                                msg += "<br/>条形码【" + m.BarCode + "】条形码异常未添加";
+                                continue;
+                            }
+                        }
 
+                        bool r = detailBll.Add(new Model.Product_TakeStockDetail()
+                        {
+                            id = Guid.NewGuid().ToString(),
+                            takeid = model.id,
+                            barcode = m.BarCode,
+                            status = m.status,
+                            taketime = DateTime.Now,
+                            warehouse_id = model.warehouse_id,
+                            remark = m.remark
+                        });
+                        if (!r)
+                        {
+                            msg += "<br/>条形码【" + m.BarCode + "】条形添加失败";
+                        }
                     }
                     else if (m.__status == "delete")
                     {
-                        if (model.status != 0)
-                        {
-                            msg = "已提交审核不能删除";
-                        }
-                        else {
-                            detailBll.Delete(m.id, model.id);
-                        }
+                        bool r = detailBll.Delete(m.id, model.id);
                     }
                 }
-
             }
             catch (Exception error)
             {
                 msg = error.ToString();
-                SoftLog.LogStr(error.ToString(), "SaveOut");
+                SoftLog.LogStr(error.ToString(), "Product_TakeStock");
                 return XhdResult.Error("添加失败,请确认是否重复添加后在操作！").ToString();
             }
 
@@ -137,7 +207,7 @@ namespace XHD.Server
 
             string Total;
             string serchtxt = $" 1=1 ";
-            int warehouse_id = request["sck_val"].CInt(0, false);
+            int warehouse_id = request["swarehouse_id"].CInt(0, false);
 
             if (warehouse_id > 0)
             {
@@ -151,14 +221,20 @@ namespace XHD.Server
 
             if (!string.IsNullOrEmpty(request["scode"]))
             {
-                string scode = request["scode"];
+                string scode = PageValidate.InputText(request["scode"],50);
                 DataSet dsc = detailBll.GetList($" barcode='{scode}'");
-                if (dsc == null || dsc.Tables.Count <= 0)
+                if (dsc == null || dsc.Tables[0].Rows.Count <= 0)
                 {
                     return GetGridJSON.DataTableToJSON1(null, "0");
                 }
                 serchtxt += $" and id='{dsc.Tables[0].Rows[0]["takeid"]}'";
             }
+
+            if (!string.IsNullOrEmpty(request["sbegtime"]))
+                serchtxt += $" and create_time>='{request["sbegtime"].CDateTime(DateTime.Now, false)}'";
+
+            if (!string.IsNullOrEmpty(request["sendtime"]))
+                serchtxt += $" and create_time<='{request["sendtime"].CDateTime(DateTime.Now, false)}'";
 
             serchtxt = GetSQLCreateIDWhere(serchtxt, true);
 
@@ -179,7 +255,7 @@ namespace XHD.Server
             string sortorder = request["sortorder"];
 
             if (string.IsNullOrEmpty(sortname))
-                sortname = " create_time";
+                sortname = " taketime ";
             if (string.IsNullOrEmpty(sortorder))
                 sortorder = "asc";
 
@@ -213,7 +289,7 @@ namespace XHD.Server
         {
             if (!PageValidate.checkID(id, false) || id == "null") return "{}";
             id = PageValidate.InputText(id, 50);
-            DataSet ds = detailBll.GetList($" id= '{id}' ");
+            DataSet ds = tBll.GetList($" id= '{id}' ");
             return DataToJson.DataToJSON(ds);
 
         }
@@ -231,26 +307,54 @@ namespace XHD.Server
             }
             id = PageValidate.InputText(request["id"], 50);
             string remark = PageValidate.InputText(request["remark"], 250);
+
+            bool candel = true;
+            if (uid != "admin")
+            {
+                candel = CheckBtnAuthority(authRightID);
+                if (!candel)
+                    return XhdResult.Error("无此权限！").ToString();
+            }
+
             if (PageValidate.checkID(id, false))
             {
                 int status = request["auth"].CInt(0, false);
-
-                //审核不通过需要释放到锁库
                 if (status != 2)
                 {
                     status = 3;
                 }
-                bool r = false;
+                bool r = tBll.Auth(new Model.Product_TakeStock() { id = id, remark = remark, status = status, authuser_id = emp_id }); ;
                 if (r)
                 {
                     return XhdResult.Success().ToString();
                 }
                 else {
-                    return XhdResult.Error("审核处理失败,请确认该单下相应的商品是否发生状态改变").ToString();
+                    return XhdResult.Error("审核处理失败").ToString();
                 }
             }
 
-            return "";
+            return XhdResult.Error("审核处理异常").ToString();
+        }
+
+        /// <summary>
+        /// 盘点清算，清算没有录入的
+        /// </summary>
+        /// <param name="takeid"></param>
+        /// <param name="warehouse_id"></param>
+        /// <returns></returns>
+        public string ProductClearingTake(string takeid, int warehouse_id)
+        {
+            DataSet ds = tBll.GetList($" id= '{PageValidate.InputText(takeid, 50)}' ");
+            if (ds.Tables[0].Rows.Count < 1)
+                return XhdResult.Error("系统错误，无数据！").ToString();
+
+            if (string.IsNullOrWhiteSpace(takeid) || warehouse_id <= 0)
+            {
+                return XhdResult.Error("系统错误，无数据！").ToString();
+            }
+            int result = tBll.ProductClearingTake(takeid, warehouse_id);
+
+            return XhdResult.Success(result.CString("")).ToString();
         }
 
         /// <summary>
@@ -269,7 +373,7 @@ namespace XHD.Server
             int status = ds.Tables[0].Rows[0]["status"].CInt(0, false);
             if (status == 2)
             {
-                return XhdResult.Error("此出库单已审核通过，不允许删除！").ToString();
+                return XhdResult.Error("盘点单已审核通过，不允许删除！").ToString();
             }
 
 
@@ -286,15 +390,13 @@ namespace XHD.Server
             if (!isdel) return XhdResult.Error("系统错误，删除失败！").ToString();
 
             //日志
-            string EventType = "调拨单删除";
+            string EventType = "盘点单删除";
 
             string UserID = emp_id;
             string UserName = emp_name;
             string IPStreet = request.UserHostAddress;
             string EventID = id;
             string EventTitle = ds.Tables[0].Rows[0]["remark"].ToString();
-
-
 
             Syslog.Add_log(UserID, UserName, IPStreet, EventTitle, EventType, EventID, null);
 

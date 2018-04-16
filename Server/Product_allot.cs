@@ -18,8 +18,8 @@ namespace XHD.Server
 
         public static Model.Product_allot model = new Model.Product_allot();
 
-        private string authRightID = "38ED924E-E025-4FD0-87CB-D148EA2077A8";
-
+        private string authRightID = "";
+        private string delRightID = "";
 
         public Product_allot()
         {
@@ -27,8 +27,19 @@ namespace XHD.Server
 
         public Product_allot(HttpContext context) : base(context)
         {
-            allDataBtnid = "B07133BA-7063-42E9-9AF2-26005AA99FB2";
-            depDataBtnid = "B33D7B1B-50A7-41EF-8D2D-AE3E9D91D19B";
+            if (request["allottype"].CInt(0, false) == 0)
+            {
+                allDataBtnid = "B07133BA-7063-42E9-9AF2-26005AA99FB2";
+                depDataBtnid = "B33D7B1B-50A7-41EF-8D2D-AE3E9D91D19B";
+                authRightID = "38ED924E-E025-4FD0-87CB-D148EA2077A8";
+                delRightID = "0DAC81A8-7C15-4D77-A28F-C6C7468D6287";
+            }
+            else {
+                allDataBtnid = "294AAE10-20CA-48CA-8A06-1116BBFF7C2C";
+                depDataBtnid = "1B0878CB-E20E-4BCA-A0A0-C0F5069167F4";
+                authRightID = "BC43C741-82C3-4FF5-A0CB-C7E28540F454";
+                delRightID = "BE5107DD-34BD-4D9E-87D8-A180B15A3DFF";
+            }
 
         }
 
@@ -38,6 +49,7 @@ namespace XHD.Server
             model.Remark = PageValidate.InputText(request["T_Remark"], 255);
             model.update_id = emp_id;
             model.update_time = DateTime.Now;
+            model.allotType = request["allotType"].CInt(0, false);
             string id = PageValidate.InputText(request["id"], 50);
             string postData = request["postData"].CString("");
             bool isAdd = true;
@@ -123,7 +135,7 @@ namespace XHD.Server
                     {
                         int pstatus = product.GetPorductStatusByBarCode(m.BarCode);
                         //不是出库的不是销售的都可以调拨
-                        if (pstatus == 3|| pstatus == 4)
+                        if (pstatus == 3 || pstatus == 4)
                         {
                             msg += "\r\n 条形码【" + m.BarCode + "】";
                         }
@@ -168,7 +180,7 @@ namespace XHD.Server
                 {
                     allotBll.Update(model);
                 }
-                return XhdResult.Success(msg+ "商品状态发生改变,请确认后在添加或提交审核").ToString();
+                return XhdResult.Success(msg + "商品状态发生改变,请确认后在添加或提交审核").ToString();
             }
 
             return XhdResult.Success().ToString();
@@ -189,7 +201,7 @@ namespace XHD.Server
             string sorttext = " " + sortname + " " + sortorder;
 
             string Total;
-            string serchtxt = $" 1=1 ";
+            string serchtxt = $" allotType=" + request["allottype"].CInt(0, false);
 
 
             if (!string.IsNullOrEmpty(request["whid"]))
@@ -203,9 +215,9 @@ namespace XHD.Server
 
             if (!string.IsNullOrEmpty(request["scode"]))
             {
-                string scode = request["scode"];
+                string scode = PageValidate.InputText(request["scode"], 50);
                 DataSet dsc = allotDetailBll.GetList($" barcode='{scode}'");
-                if (dsc == null || dsc.Tables.Count <= 0)
+                if (dsc == null || dsc.Tables[0].Rows.Count <= 0)
                 {
                     return GetGridJSON.DataTableToJSON1(null, "0");
                 }
@@ -268,7 +280,6 @@ namespace XHD.Server
             id = PageValidate.InputText(id, 50);
             DataSet ds = allotBll.GetList($" id= '{id}' ");
             return DataToJson.DataToJSON(ds);
-
         }
 
         /// <summary>
@@ -331,7 +342,7 @@ namespace XHD.Server
             if (uid != "admin")
             {
 
-                candel = CheckBtnAuthority("0DAC81A8-7C15-4D77-A28F-C6C7468D6287");
+                candel = CheckBtnAuthority(delRightID);
                 if (!candel)
                     return XhdResult.Error("无此权限！").ToString();
             }

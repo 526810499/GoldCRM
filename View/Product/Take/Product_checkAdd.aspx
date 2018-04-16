@@ -54,7 +54,7 @@
             if (data != null) {
 
                 $(data).each(function (i, v) {
-                    var datas = { id: v.id, warehouse_id: v.warehouse_id, BarCode: v.BarCode, __status: v.__status };
+                    var datas = { id: v.id, warehouse_id: v.warehouse_id, BarCode: v.BarCode, __status: v.__status, status: v.status, remark: v.remark, category_name: v.category_name, product_name: v.product_name };
                     items.push(datas);
                 });
             }
@@ -87,7 +87,7 @@
                     } else {
                         rows.push(
                                 [
-                                { display: "盘点仓库", name: "T_Warehouse", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_warehouse.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + (obj.warehouse_id == undefined ? "" : obj.warehouse_id) + "'}", validate: "{required:true}" }
+                                { display: "盘点仓库", name: "T_Warehouse", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_warehouse.tree.xhd?qxz=1&zb=1',idFieldName: 'id',checkbox: false},value:'" + (obj.warehouse_id == undefined ? "" : obj.warehouse_id) + "'}", validate: "{required:true}" }
                                 ],
                                 [
                                 { display: "备注", name: "T_Remark", type: "textarea", cols: 73, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.remark }
@@ -154,7 +154,8 @@
                             }
 
                         }
-                    }
+                    },
+                       { display: '备注', name: 'remark', align: 'left', width: 180 }
                 ],
                 allowHideColumn: false,
                 title: '盘点明细',
@@ -164,14 +165,15 @@
                 width: '100%',
                 height: 500,
                 heightDiff: -1,
-                onLoaded: f_loaded
+                onLoaded: f_loaded,
+
             });
 
         }
 
         function f_loaded() {
+            $(".l-grid-loading").fadeOut();
             if (parseInt(getparastr("astatus", "0")) != 0) {
-                $(".l-grid-loading").fadeOut();
                 return;
             }
             if ($("#btn_add").length > 0)
@@ -185,12 +187,15 @@
                 icon: '../../images/icon/75.png',
                 click: addCode
             });
-            $("#btn_add").ligerButton({
-                width: 80,
-                text: "盘点清算",
-                icon: '../../images/icon/54.png',
-                click: TakeResult
-            });
+
+            if (getparastr("id", "").length > 0) {
+                $("#btn_add").ligerButton({
+                    width: 80,
+                    text: "清算",
+                    icon: '../../images/icon/54.png',
+                    click: ProductClearingTake
+                });
+            }
 
             $("#btn_del").ligerButton({
                 width: 80,
@@ -202,9 +207,18 @@
         }
 
 
-        function TakeResult() {
+        function ProductClearingTake() {
 
-
+            $.ajax({
+                type: "get",
+                url: "Product_TakeStock.ProductClearingTake.xhd", /* 注意后面的名字对应CS的方法名称 */
+                data: { takeid: getparastr("id", ""), warehouse_id: $("#T_Warehouse_val").val(), rnd: Math.random() }, /* 注意参数的格式和名称 */
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    $("#maingridc4").ligerGetGridManager().loadData(true);
+                }
+            });
         }
         var beforeWID = "";
         function addCode() {
@@ -234,7 +248,6 @@
             var manager = $("#maingridc4").ligerGetGridManager();
             manager.deleteSelectedRow();
 
-
             var fdata = manager.getData();
             if (fdata.length <= 0) {
                 $("#T_allot_id").removeAttr("disabled");
@@ -256,10 +269,11 @@
                 var data = manager.getData();
 
                 for (var i = 0; i < rows.length; i++) {
-                    rows[i].product_id = rows[i].id;
+                    rows[i].BarCode = rows[i].BarCode;
                     var add = 1;
+                    console.log(rows[i]);
                     for (var j = 0; j < data.length; j++) {
-                        if (rows[i].product_id == data[j].product_id) {
+                        if (rows[i].BarCode == data[j].BarCode) {
                             add = 0;
                         }
                     }

@@ -47,7 +47,7 @@
                             return html;
                         }
                     },
-                    { display: '调拨到仓库', name: 'NowWarehouseName', align: 'left', width: 120 },
+                    { display: '调拨至仓库', name: 'NowWarehouseName', align: 'left', width: 120 },
                     { display: '创建人', name: 'CreateName', align: 'left', width: 160 },
                     {
                         display: '创建时间', name: 'create_time', width: 50, align: 'left', render: function (item) {
@@ -134,7 +134,7 @@
                 },
                 onContextmenu: function (parm, e) {
                     actionCustomerID = parm.data.id;
-                    menu.show({ top: e.pageY, left: e.pageX });
+                    //menu.show({ top: e.pageY, left: e.pageX });
                     return false;
                 }
             });

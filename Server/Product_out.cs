@@ -17,7 +17,8 @@ namespace XHD.Server
         public static BLL.Product_outDetail allotDetailBll = new BLL.Product_outDetail();
 
         public static Model.Product_out model = new Model.Product_out();
-        private string authRightID = "AFEB4AFD-DF89-4E16-BBCB-407B2227B55B";
+        private string authRightID = "";
+        private string delRightID = "";
 
 
         public Product_out()
@@ -26,15 +27,27 @@ namespace XHD.Server
 
         public Product_out(HttpContext context) : base(context)
         {
-            allDataBtnid = "94676CBB-F382-45C9-A5F3-834F25348C24";
-            depDataBtnid = "B42553AB-9AA5-4EBB-A73E-CA28738182D7";
+            if (request["outtype"].CInt(0, false) == 0)
+            {
+                allDataBtnid = "94676CBB-F382-45C9-A5F3-834F25348C24";
+                depDataBtnid = "B42553AB-9AA5-4EBB-A73E-CA28738182D7";
+                authRightID = "AFEB4AFD-DF89-4E16-BBCB-407B2227B55B";
+                delRightID = "B8494FA6-EE5D-483F-9421-817E2BF2C5A6";
+            }
+            else {
+                allDataBtnid = "DBCD25E0-A7C0-4DC3-9A48-BF3FC05750E7";
+                depDataBtnid = "7B020ED5-692F-4AE8-9B11-BE77BB236FA4";
+                authRightID = "7DEB7DDB-D8C9-4E49-933F-EC7F29904A19";
+                delRightID = "D3D05165-A690-49EF-9B54-BC45E3B912A3";
+            }
+
         }
 
         public string save()
         {
             model.NowWarehouse = request["T_NowWarehouse_val"].CInt(0, false);
             model.Remark = PageValidate.InputText(request["T_Remark"], 255);
-
+            model.outType = request["outtype"].CInt(0, false);
             model.update_id = emp_id;
             model.update_time = DateTime.Now;
             string id = PageValidate.InputText(request["id"], 50);
@@ -188,7 +201,7 @@ namespace XHD.Server
             string sorttext = " " + sortname + " " + sortorder;
 
             string Total;
-            string serchtxt = $" 1=1 ";
+            string serchtxt = $" outtype="+request["outtype"].CInt(0,false);
 
             if (!string.IsNullOrEmpty(request["allotid"]) && request["allotid"] != "null")
             {
@@ -202,9 +215,9 @@ namespace XHD.Server
 
             if (!string.IsNullOrEmpty(request["scode"]))
             {
-                string scode = request["scode"];
+                string scode = PageValidate.InputText(request["scode"], 50);
                 DataSet dsc = allotDetailBll.GetList($" barcode='{scode}'");
-                if (dsc == null || dsc.Tables.Count <= 0)
+                if (dsc == null || dsc.Tables[0].Rows.Count <= 0)
                 {
                     return GetGridJSON.DataTableToJSON1(null, "0");
                 }
@@ -237,7 +250,7 @@ namespace XHD.Server
             string sorttext = " " + sortname + " " + sortorder;
 
             string Total;
-            string serchtxt = $" 1=1 ";
+            string serchtxt = $" outType=" + request["outType"].CInt(0, false);
             if (!string.IsNullOrEmpty(request["outid"]) && request["outid"] != "null")
             {
                 serchtxt += $" and outid='{PageValidate.InputText(request["outid"], 50)}'";
@@ -328,7 +341,7 @@ namespace XHD.Server
             if (uid != "admin")
             {
 
-                candel = CheckBtnAuthority("B8494FA6-EE5D-483F-9421-817E2BF2C5A6");
+                candel = CheckBtnAuthority(delRightID);
                 if (!candel)
                     return XhdResult.Error("无此权限！").ToString();
             }

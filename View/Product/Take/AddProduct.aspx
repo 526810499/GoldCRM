@@ -82,16 +82,17 @@
 
         function doChangeSearch() {
             var v = $("#scode").val();
-            if (v != undefined && v.length > 12) {
+            if (v != undefined && v.length == 13) {
                 doserch();
             }
         }
         var itemsCode = [];
-        var nproduct_id = -1;
+
         //查询
         function doserch() {
             var scode = $("#scode").val();
-            if (itemsCode.indexOf(scode) > -1) {
+            //必须要输入条形码
+            if (scode.length <= 0 || itemsCode.indexOf(scode) > -1) {
                 return false;
             }
             var manager = $("#maingrid4").ligerGetGridManager();
@@ -102,22 +103,23 @@
 
                 var data = eval('(' + rdata + ')');
                 if (data.Total <= 0) {
-                    var nobj = { id: nproduct_id, product_name: "", category_name: "", BarCode: scode, Weight: 0, SalesCostsTotal: 0, SalesTotalPrice: 0, status: 2 };
+                    var nobj = { id: scode, product_name: "", category_name: "", BarCode: scode, Weight: 0, SalesCostsTotal: 0, SalesTotalPrice: 0, status: 2,remark:"没有该商品条形码存在" };
                     itemsCode.push(scode);
                     manager.addRow(nobj);
-                    nproduct_id += -1;
                 } else {
                     var rows = data.Rows;
                     $(rows).each(function (i, v) {
                         //商品状态为已销售，盘盈
                         if (v.status == 4) {
-                            v.status = 4;
+                            v.status = 2;
+                            v.remark = "商品标记为已售";
                         } else {
                             v.status = 1;
+                            v.remark = "";
                         }
-                        manager.addRow(v);
                         if (itemsCode.indexOf(scode) <= -1) {
                             itemsCode.push(scode);
+                            manager.addRow(v);
                         }
                     });
                 }
