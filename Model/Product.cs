@@ -18,7 +18,7 @@ namespace XHD.Model
         private string _category_id;
         private int _status;
         private decimal? _weight;
-        private string _unit;
+        private string _indep_id;
         private decimal? _cost;
         private decimal? _price;
         private decimal? _agio;
@@ -36,7 +36,7 @@ namespace XHD.Model
         private decimal? _coststotal;
         private decimal? _totals;
         private string _sbarcode;
-        private string _imglogo;
+        private string _depopbefwid;
         private string _barcode;
         private int? _outstatus;
         private decimal? _salestotalprice;
@@ -86,7 +86,7 @@ namespace XHD.Model
             get { return _category_id; }
         }
         /// <summary>
-        /// 1 入库 2 调拨 3 出库 4已销售
+        /// 1 入库 101 门店入库 2调拨 201 门店调拨 3出库 301 门店出库 4已销售
         /// </summary>
         public int status
         {
@@ -104,10 +104,10 @@ namespace XHD.Model
         /// <summary>
         /// 重量单位
         /// </summary>
-        public string unit
+        public string indep_id
         {
-            set { _unit = value; }
-            get { return _unit; }
+            set { _indep_id = value; }
+            get { return _indep_id; }
         }
         /// <summary>
         /// 成本价
@@ -246,12 +246,12 @@ namespace XHD.Model
             get { return _sbarcode; }
         }
         /// <summary>
-        /// 图片logo
+        /// 门店操作之前保存的仓库id 出库调拨审核之前保存的仓库id
         /// </summary>
-        public string ImgLogo
+        public string depopbefwid
         {
-            set { _imglogo = value; }
-            get { return _imglogo; }
+            set { _depopbefwid = value; }
+            get { return _depopbefwid; }
         }
         /// <summary>
         /// 条形码
@@ -262,7 +262,7 @@ namespace XHD.Model
             get { return _barcode; }
         }
         /// <summary>
-        /// 出库状态 1未出库 2 已出库
+        /// 出库后 1 入库   2调拨   3出库   4已销售
         /// </summary>
         public int? OutStatus
         {

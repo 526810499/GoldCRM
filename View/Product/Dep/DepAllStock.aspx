@@ -5,13 +5,13 @@
 <head>
     <title></title>
 
-    <link href="../lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" />
-    <link href="../lib/ligerUI/skins/Gray2014/css/all.css" rel="stylesheet" />
-    <link href="../CSS/input.css" rel="stylesheet" type="text/css" />
-    <script src="../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
-    <script src="../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
-    <script src="../JS/XHD.js" type="text/javascript"></script>
-    <script src="../lib/jquery.form.js" type="text/javascript"></script>
+    <link href="../../lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" />
+    <link href="../../lib/ligerUI/skins/Gray2014/css/all.css" rel="stylesheet" />
+    <link href="../../CSS/input.css" rel="stylesheet" type="text/css" />
+    <script src="../../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
+    <script src="../../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
+    <script src="../../JS/XHD.js?v=4" type="text/javascript"></script>
+    <script src="../../lib/jquery.form.js" type="text/javascript"></script>
 
     <script type="text/javascript">
 
@@ -27,7 +27,7 @@
             var columns = [
                    {
                        display: '条形码', name: 'BarCode', align: 'left', width: 160, render: function (item) {
-                           var html = "<a href='javascript:void(0)' onclick=view('product','" + item.id + "')>" + item.BarCode + "</a>";
+                           var html = "<a href='javascript:void(0)' onclick=view('depproduct','" + item.id + "')>" + item.BarCode + "</a>";
                            return html;
                        }
                    },
@@ -40,16 +40,6 @@
                        display: '重量(克)', name: 'Weight', width: 80, align: 'left', render: function (item) {
                            return toMoney(item.Weight);
                        }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='Weight'>" + item.sum + "</span>"; } }
-                   },
-                   {
-                       display: '进货金价(￥)', name: 'StockPrice', width: 80, align: 'left', render: function (item) {
-                           return toMoney(item.StockPrice);
-                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='StockPrice'>" + item.sum + "</span>"; } }
-                   },
-                   {
-                       display: '附工费(￥)', name: 'AttCosts', width: 80, align: 'right', render: function (item) {
-                           return toMoney(item.AttCosts);
-                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='AttCosts'>" + item.sum + "</span>"; } }
                    },
                    {
                        display: '主石重', name: 'MainStoneWeight', width: 60, align: 'right', render: function (item) {
@@ -67,40 +57,14 @@
                        }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='AttStoneNumber'>" + item.sum + "</span>"; } }
                    },
                    {
-                       display: '石价(￥)', name: 'StonePrice', width: 80, align: 'right', render: function (item) {
-                           return toMoney(item.StonePrice);
-                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='StonePrice'>" + item.sum + "</span>"; } }
-                   },
-                   {
-                       display: '金价小计(￥)', name: 'GoldTotal', width: 80, align: 'right', render: function (item) {
-                           return toMoney(item.GoldTotal);
-                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='GoldTotal'>" + item.sum + "</span>"; } }
-                   },
-                   {
                        display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
                            return toMoney(item.CostsTotal);
                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='CostsTotal'>" + item.sum + "</span>"; } }
                    },
-                   {
-                       display: '成本总价(￥)', name: 'Totals', width: 80, align: 'right', render: function (item) {
-                           return toMoney(item.Totals);
-                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='Totals'>" + item.sum + "</span>"; } }
-                   },
-                   {
-                       display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
-                           return toMoney(item.SalesCostsTotal);
-                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='SalesCostsTotal'>" + item.sum + "</span>"; } }
-                   },
-                   {
-                       display: '销售价格(￥)', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
-                           return toMoney(item.SalesTotalPrice);
-                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='SalesTotalPrice'>" + item.sum + "</span>"; } }
-                   },
-                   { display: '现存门店', name: 'indep_name', width: 120, render: function (item) { if (item.indep_name == null) { return "总部" } else { return item.indep_name; } } },
                     { display: '现存仓库', name: 'warehouse_name', width: 120, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
                    {
                        display: '状态', name: 'status', width: 80, align: 'right', render: function (item) {
-                           switch (item.status) {
+                           switch (item.OutStatus) {
                                case 1:
                                    return "<span style='color:#0066FF'> 入库 </span>";
                                case 2:
@@ -118,7 +82,7 @@
             $("#maingrid4").ligerGrid({
                 columns: columns,
                 dataAction: 'server',
-                url: "Product.grid.xhd?sum=1&categoryid=&rnd=" + Math.random(),
+                url: "Product.grid.xhd?sum=1&depdata=1&rnd=" + Math.random(),
                 pageSize: 30,
                 pageSizeOptions: [20, 30, 40, 60, 100, 120, 200],
                 width: '100%',
@@ -149,13 +113,13 @@
 
         });
         function toolbar() {
-            $.get("toolbar.GetSys.xhd?mid=allstock&rnd=" + Math.random(), function (data, textStatus) {
+            $.get("toolbar.GetSys.xhd?mid=depstockall&rnd=" + Math.random(), function (data, textStatus) {
                 var data = eval('(' + data + ')');
                 //alert(data);
                 var items = [];
                 var arr = data.Items;
                 for (var i = 0; i < arr.length; i++) {
-                    arr[i].icon = "../" + arr[i].icon;
+                    arr[i].icon = "../../" + arr[i].icon;
                     items.push(arr[i]);
                 }
 
@@ -163,7 +127,7 @@
                     id: "sbtn",
                     type: 'serchbtn',
                     text: '搜索',
-                    icon: '../images/search.gif',
+                    icon: '../../images/search.gif',
                     disable: true,
                     click: function () {
                         serchpanel();
@@ -249,13 +213,12 @@
         }
         //查询
         function doserch() {
-            var sendtxt = "&sum=1&rnd=" + Math.random();
+            var sendtxt = "&depdata=1&sum=1&rnd=" + Math.random();
             var serchtxt = "scode=" + $("#scode").val();
             serchtxt += "&stext=" + $("#stext").val();
-            serchtxt += "&status=" + $("#status").val();
+            serchtxt += "&soutstatus=" + $("#status").val();
             serchtxt += "&categoryid=" + $("#sfl_val").val();
             serchtxt += "&warehouse_id=" + $("#sck_val").val();
-            serchtxt += "&sindep_id=" + $("#sdep_val").val();
             serchtxt += sendtxt;
             var manager = $("#maingrid4").ligerGetGridManager();
             manager._setUrl("Product.grid.xhd?" + serchtxt);
@@ -266,7 +229,7 @@
             var manager = $("#maingrid4").ligerGetGridManager();
             var rows = manager.getSelectedRow();
             if (rows && rows != undefined) {
-                f_openWindow('product/product_add.aspx?pid=' + rows.id, "查看商品", 700, 580);
+                f_openWindow('product/product_View.aspx?depdata=1&pid=' + rows.id, "查看商品", 700, 580);
             }
             else {
                 $.ligerDialog.warn('请选择商品！');
@@ -312,14 +275,6 @@
                     <td>
                         <div style='float: left'>
                             <input type='select' id='sck' name='sck' ltype='date' ligerui='{width:120}' />
-                        </div>
-                    </td>
-                    <td>
-                        <div style='width: 40px; text-align: right; float: right'>门店：</div>
-                    </td>
-                    <td>
-                        <div style='float: left'>
-                            <input type='select' id='sdep' name='sck' ltype='sdep' ligerui='{width:120}' />
                         </div>
                     </td>
                     <td>

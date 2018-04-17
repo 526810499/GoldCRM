@@ -96,7 +96,7 @@ namespace XHD.Server
                         request["T_StockPrice"]);
 
                 if (dr["Weight"].ToString() != request["T_Weight"])
-                    Log_Content += string.Format("【{0}】{1} → {2} \n", "重量", dr["unit"], request["T_Weight"]);
+                    Log_Content += string.Format("【{0}】{1} → {2} \n", "重量", dr["Weight"], request["T_Weight"]);
 
                 if (dr["remarks"].ToString() != request["T_Remark"])
                     Log_Content += string.Format("【{0}】{1} → {2} \n", "备注", dr["remarks"], request["T_Remark"]);
@@ -196,6 +196,13 @@ namespace XHD.Server
             if (!string.IsNullOrEmpty(request["status"]))
                 serchtxt += $" and status in({request["status"].CString("1").Trim(',')}) ";
 
+
+
+
+
+            if (!string.IsNullOrEmpty(request["soutstatus"]))
+                serchtxt += $" and outStatus={request["soutstatus"].CInt(0, false)} ";
+
             if (!string.IsNullOrEmpty(request["SupplierID"]) && request["SupplierID"].CString("") != "null")
                 serchtxt += $" and SupplierID='{request["SupplierID"].CString("")}'";
 
@@ -208,6 +215,16 @@ namespace XHD.Server
             if (!string.IsNullOrEmpty(request["sendtime"]))
                 serchtxt += " and create_time<='" + PageValidate.InputText(request["sendtime"], 50).CDateTime(DateTime.Now, false) + "'";
 
+            //是否要取门店的
+            if (request["depdata"].CInt(0, false) == 1)
+            {
+                serchtxt += " and indep_id='" + dep_id + "'";
+            }
+
+            if (!string.IsNullOrWhiteSpace(request["sindep_id"]))
+            {
+                serchtxt += " and indep_id='" + PageValidate.InputText(request["sindep_id"], 50) + "'";
+            }
 
             //权限
             serchtxt = GetSQLCreateIDWhere(serchtxt, true);

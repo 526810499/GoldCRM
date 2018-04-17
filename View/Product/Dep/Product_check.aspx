@@ -26,13 +26,12 @@
             $("#maingrid4").ligerGrid({
                 columns: [
                     {
-                        display: '入库单号', name: 'id', align: 'left', width: 300, render: function (item) {
+                        display: '盘点单号', name: 'id', align: 'left', width: 300, render: function (item) {
                             var html = "<a href='javascript:void(0)' onclick=view('ptake','" + item.id + "')>" + item.id + "</a>";
                             return html;
                         }
                     },
-                    { display: '入库仓库', name: 'product_warehouse', align: 'left', width: 200 },
-                    { display: '入库部门', name: 'dep_name', align: 'left', width: 120 },
+                    { display: '盘点仓库', name: 'product_warehouse', align: 'left', width: 200 },
                     { display: '创建人', name: 'CreateName', align: 'left', width: 120 },
                     {
                         display: '创建时间', name: 'create_time', width: 150, align: 'left', render: function (item) {
@@ -40,12 +39,21 @@
                         }
                     },
                     {
+                        display: '修改时间', name: 'update_time', width: 150, align: 'left', render: function (item) {
+                            return formatTime(item.update_time);
+                        }
+                    },
+                    {
                         display: '状态', name: 'status', width: 100, align: 'left', render: function (item) {
                             switch (item.status) {
                                 case 0:
-                                    return "<span style='color:#0066FF'> 未保存提交 </span>";
+                                    return "<span style='color:#0066FF'> 未提交审核 </span>";
                                 case 1:
-                                    return "<span style='color:#00CC66'> 已保存提交 </span>";
+                                    return "<span style='color:#00CC66'> 等待审核 </span>";
+                                case 2:
+                                    return "<span style='color:#009900'> 审核通过 </span>";
+                                case 3:
+                                    return "<span style='color:#FF3300'> 审核不通过 </span>";
                             }
                         }
                     },
@@ -53,7 +61,7 @@
 
                 ],
                 dataAction: 'server',
-                url: "Product_StockIn.grid.xhd?intype=1&rnd=" + Math.random(),
+                url: "Product_TakeStock.grid.xhd?takeType=1&rnd=" + Math.random(),
                 pageSize: 30,
                 pageSizeOptions: [10, 20, 30, 40, 50, 60, 80, 100, 120],
                 width: '100%',
@@ -81,14 +89,27 @@
                                     display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
                                         return toMoney(item.CostsTotal);
                                     }
-                                }
-                                ,
+                                },
+                                 {
+                                     display: '盘点状态', name: 'Status', align: 'left', width: 160, render: function (item) {
+                                         switch (item.status) {
+                                             case 1:
+                                                 return "正常";
+                                                 break;
+                                             case 2:
+                                                 return "<span style='color:blue'>盘盈</span>";
+                                             case 3:
+                                                 return "<span style='color:red'>盘亏</span>";
+                                         }
+
+                                     }
+                                 },
                                { display: '备注', name: 'remark', align: 'left', width: 180 }
                             ],
                             usePager: false,
                             checkbox: false,
 
-                            url: "Product_StockIn.gridDetail.xhd?stockid=" + r.id,
+                            url: "Product_TakeStock.gridDetail.xhd?takeid=" + r.id,
                             width: '99%', height: '180',
                             heightDiff: 0
                         })
@@ -108,7 +129,7 @@
 
         });
         function toolbar() {
-            $.get("toolbar.GetSys.xhd?mid=depstockin&rnd=" + Math.random(), function (data, textStatus) {
+            $.get("toolbar.GetSys.xhd?mid=depproductcheck&rnd=" + Math.random(), function (data, textStatus) {
                 var data = eval('(' + data + ')');
                 //alert(data);
                 var items = [];
@@ -146,8 +167,10 @@
                 $("#sstatus").ligerComboBox({
                     data: [
                     { text: '所有', id: '' },
-                    { text: '未提交', id: '0' },
-                    { text: '提交保存', id: '1' }
+                    { text: '未提交审核', id: '0' },
+                    { text: '等待审核', id: '1' },
+                    { text: '审核通过', id: '2' },
+                    { text: '审核不通过', id: '3' }
                     ], valueFieldID: 'status',
                 });
                 $("#swarehouse_id").ligerComboBox({
@@ -191,16 +214,16 @@
         }
         //查询
         function doserch() {
-            var sendtxt = "&rnd=" + Math.random();
-            var serchtxt = "intype=1&status=" + $("#status").val();
+
+            var serchtxt = "status=" + $("#status").val();
             serchtxt += "&sorderid=" + $("#sorderid").val();
             serchtxt += "&scode=" + $("#scode").val();
             serchtxt += "&swarehouse_id=" + $("#swarehouse_id_val").val();
             serchtxt += "&sbegtime=" + $("#sbegtime").val();
             serchtxt += "&sendtime=" + $("#sendtime").val();
-            sendtxt += sendtxt;
+            sendtxt += "&takeType=1&rnd=" + Math.random();
             var manager = $("#maingrid4").ligerGetGridManager();
-            manager._setUrl("Product_StockIn.grid.xhd?" + serchtxt);
+            manager._setUrl("Product_TakeStock.grid.xhd?" + serchtxt);
         }
 
         //重置
@@ -211,21 +234,21 @@
             });
         }
 
-        //function auth() {
-        //    var manager = $("#maingrid4").ligerGetGridManager();
-        //    var rows = manager.getSelectedRow();
-        //    if (rows && rows != undefined) {
-        //        var buttons = [];
-        //        if (rows.status == 1) {
-        //            buttons.push({ text: '审核通过', onclick: f_saveYesAuth });
-        //            buttons.push({ text: '审核不通过', onclick: f_saveNoAuth });
-        //        }
-        //        f_openWindow2('product/Dep/StockIn_Add.aspx?authbtn=1&id=' + rows.id + "&astatus=" + rows.status, "审核入库单", 1050, 680, buttons);
-        //    }
-        //    else {
-        //        $.ligerDialog.warn('请选择盘点单！');
-        //    }
-        //}
+        function auth() {
+            var manager = $("#maingrid4").ligerGetGridManager();
+            var rows = manager.getSelectedRow();
+            if (rows && rows != undefined) {
+                var buttons = [];
+                if (rows.status == 1) {
+                    buttons.push({ text: '审核通过', onclick: f_saveYesAuth });
+                    buttons.push({ text: '审核不通过', onclick: f_saveNoAuth });
+                }
+                f_openWindow2('product/Take/Product_CheckAdd.aspx?takeType=1&authbtn=1&id=' + rows.id + "&astatus=" + rows.status, "审核盘点单", 1050, 680, buttons);
+            }
+            else {
+                $.ligerDialog.warn('请选择盘点单！');
+            }
+        }
 
 
         function edit() {
@@ -235,20 +258,20 @@
                 var buttons = [];
                 if (rows.status == 0) {
                     buttons.push({ text: '保存', onclick: f_save });
-                    buttons.push({ text: '保存并提交', onclick: f_saveAuth });
+                    buttons.push({ text: '保存并提交审核', onclick: f_saveAuth });
                 }
-                f_openWindow2('product/Dep/StockIn_Add.aspx?id=' + rows.id + "&astatus=" + rows.status, "修改入库单", 1050, 680, buttons);
+                f_openWindow2('product/Take/Product_CheckAdd.aspx?takeType=1&id=' + rows.id + "&astatus=" + rows.status, "修改盘点单", 1050, 680, buttons);
             }
             else {
-                $.ligerDialog.warn('请选择入库单！');
+                $.ligerDialog.warn('请选择盘点单！');
             }
         }
         function add() {
             var buttons = [];
             buttons.push({ text: '保存', onclick: f_save });
             //buttons.push({ text: '生成盘点单', onclick: create_take });
-            buttons.push({ text: '保存并提交', onclick: f_saveAuth });
-            f_openWindow2('product/Dep/StockIn_Add.aspx?astatus=0', "新增入库单", 1050, 680, buttons);
+            buttons.push({ text: '保存并提交审核', onclick: f_saveAuth });
+            f_openWindow2('product/Take/Product_CheckAdd.aspx?takeType=1&astatus=0', "新增盘点单", 1050, 680, buttons);
         }
 
         function create_take() {
@@ -260,16 +283,10 @@
             var manager = $("#maingrid4").ligerGetGridManager();
             var row = manager.getSelectedRow();
             if (row) {
-                var msg = "入库单删除不能恢复，确定删除？";
-                if (row.status == 1) {
-                    $.ligerDialog.warn("已提交保存不能删除");
-                    return false;
-                }
-
-                $.ligerDialog.confirm(msg, function (yes) {
+                $.ligerDialog.confirm("盘点单删除不能恢复，确定删除？", function (yes) {
                     if (yes) {
                         $.ajax({
-                            url: "Product_StockIn.del.xhd", type: "POST",
+                            url: "Product_TakeStock.del.xhd", type: "POST",
                             data: { id: row.id, rnd: Math.random() },
                             dataType: 'json',
                             success: function (result) {
@@ -293,7 +310,7 @@
                 })
             }
             else {
-                $.ligerDialog.warn("请选择入库单");
+                $.ligerDialog.warn("请选择盘点单");
             }
 
         }
@@ -312,7 +329,47 @@
                 dialog.close();
                 $.ligerDialog.waitting('数据保存中,请稍候...');
                 $.ajax({
-                    url: "Product_StockIn.save.xhd?intype=1&auth=" + auth, type: "POST",
+                    url: "Product_TakeStock.save.xhd?takeType=1&auth=" + auth, type: "POST",
+                    data: issave,
+                    dataType: 'json',
+                    success: function (result) {
+                        $.ligerDialog.closeWaitting();
+
+                        var obj = eval(result);
+
+                        if (obj.isSuccess) {
+                            if (obj.Message != null && obj.Message != undefined) {
+                                $.ligerDialog.warn(obj.Message);
+                            }
+                            f_load();
+                        }
+                        else {
+                            $.ligerDialog.error(obj.Message);
+                        }
+                        //f_load();     
+                    },
+                    error: function () {
+                        $.ligerDialog.closeWaitting();
+                        $.ligerDialog.error('操作失败！');
+                    }
+                });
+
+            }
+        }
+
+        function f_saveYesAuth(item, dialog) {
+            UserAuth(item, dialog, 2);
+        }
+        function f_saveNoAuth(item, dialog) {
+            UserAuth(item, dialog, 3);
+        }
+        function UserAuth(item, dialog, auth) {
+            var issave = dialog.frame.f_save();
+            if (issave) {
+                dialog.close();
+                $.ligerDialog.waitting('数据保存中,请稍候...');
+                $.ajax({
+                    url: "Product_TakeStock.Auth.xhd?takeType=1&auth=" + auth, type: "POST",
                     data: issave,
                     dataType: 'json',
                     success: function (result) {

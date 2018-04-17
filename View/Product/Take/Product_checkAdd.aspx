@@ -54,7 +54,7 @@
             if (data != null) {
 
                 $(data).each(function (i, v) {
-                    var datas = { id: v.id, warehouse_id: v.warehouse_id, BarCode: v.BarCode, __status: v.__status, status: v.status, remark: v.remark, category_name: v.category_name, product_name: v.product_name };
+                    var datas = { id: v.id, warehouse_id: v.warehouse_id, BarCode: v.BarCode, __status: v.__status, status: v.status, remark: v.remark };
                     items.push(datas);
                 });
             }
@@ -133,13 +133,8 @@
                         }
                     },
                     {
-                        display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
+                        display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
                             return toMoney(item.CostsTotal);
-                        }
-                    },
-                    {
-                        display: '销售价格(￥)', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.SalesTotalPrice);
                         }
                     }, {
                         display: '盘点状态', name: 'status', align: 'left', width: 160, render: function (item) {
@@ -211,7 +206,7 @@
 
             $.ajax({
                 type: "get",
-                url: "Product_TakeStock.ProductClearingTake.xhd", /* 注意后面的名字对应CS的方法名称 */
+                url: "Product_TakeStock.ProductClearingTake.xhd?takeType=" + getparastr("takeType",0), /* 注意后面的名字对应CS的方法名称 */
                 data: { takeid: getparastr("id", ""), warehouse_id: $("#T_Warehouse_val").val(), rnd: Math.random() }, /* 注意参数的格式和名称 */
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -240,7 +235,7 @@
                     return false;
                 }
                 beforeWID = T_NowWarehouse_val;
-                f_openWindow("product/Take/AddProduct.aspx?warehouse_id=" + T_NowWarehouse_val, "选择扫码商品", 1000, 400, f_getpost, 9003);
+                f_openWindow("product/Take/AddProduct.aspx?depdata=" + getparastr("takeType", 0) + "&warehouse_id=" + T_NowWarehouse_val, "选择扫码商品", 1000, 400, f_getpost, 9003);
             }
         }
 

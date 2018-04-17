@@ -136,7 +136,7 @@
                         }
                     },
                     {
-                        display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
+                        display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
                             return toMoney(item.CostsTotal);
                         }
                     }
@@ -155,8 +155,9 @@
         }
 
         function f_loaded() {
+            $(".l-grid-loading").fadeOut();
             if (parseInt(getparastr("astatus", "0")) != 0) {
-                $(".l-grid-loading").fadeOut();
+
                 return;
             }
             if ($("#btn_add").length > 0)
@@ -170,12 +171,7 @@
                 icon: '../../../../images/icon/75.png',
                 click: addCode
             });
-            $("#btn_add").ligerButton({
-                width: 80,
-                text: "手动添加",
-                icon: '../../../../images/icon/11.png',
-                click: add
-            });
+ 
 
             $("#btn_del").ligerButton({
                 width: 80,
@@ -191,11 +187,11 @@
 
             var buttons = [];
             buttons.push({ text: '保存', onclick: f_getpost });
-            f_openWindow2("product/GetProduct2.aspx?status=1,2", "选择商品", 1000, 400, buttons, 9003);
+            f_openWindow2("product/GetProduct2.aspx?depdata=1&status=1,2,3", "选择商品", 1000, 400, buttons, 9003);
         }
 
         function addCode() {
-            f_openWindow("product/GetCodeProduct.aspx?status=1,2", "选择扫码商品", 1000, 400, f_getpost, 9003);
+            f_openWindow("product/GetCodeProduct.aspx?depdata=1&status=1,2,3", "选择扫码商品", 1000, 400, f_getpost, 9003);
         }
 
         function pro_remove() {
@@ -224,10 +220,10 @@
                 var data = manager.getData();
 
                 for (var i = 0; i < rows.length; i++) {
-                    rows[i].product_id = rows[i].id;
+                    rows[i].BarCode = rows[i].BarCode;
                     var add = 1;
                     for (var j = 0; j < data.length; j++) {
-                        if (rows[i].product_id == data[j].product_id) {
+                        if (rows[i].BarCode == data[j].BarCode) {
                             add = 0;
                         }
                     }

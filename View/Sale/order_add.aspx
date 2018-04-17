@@ -21,11 +21,13 @@
     <script src="../JS/XHD.js?v=1.0" type="text/javascript"></script>
 
     <script type="text/javascript">
+
+        var orderid = "";
         $(function () {
             $.metadata.setType("attr", "validate");
             XHD.validate($(form1));
-
-            loadForm(getparastr("id"));
+            orderid = getparastr("id", "");
+            loadForm(orderid);
 
         });
 
@@ -33,13 +35,9 @@
 
             f_check();
 
-            if (f_postnum() == 0) {
+            if (orderid.length <= 0 && f_postnum() == 0) {
                 $.ligerDialog.warn("请添加商品！");
                 return;
-            }
-            var msg = checkPrice();
-            if (msg.length > 0) {
-                if (!confirm(msg)) { return false; }
             }
 
             var manager = $("#maingrid4").ligerGetGridManager();
@@ -51,29 +49,6 @@
             }
 
         }
-
-        function checkPrice() {
-            var T_total = parseFloat($("#T_total").val().replace(/\$|\,/g, ''));
-            var T_receive = parseFloat($("#T_receive").val().replace(/\$|\,/g, ''));
-            var T_arrears = T_total - T_receive;
-            $("#T_arrears").val(toMoney(T_arrears));
-            var msg = "";
-
-            if (T_receive <= 0) {
-                msg = ("已收金额为0确认要提交订单?");
-            }
-            else if (T_arrears != 0) {
-                msg = ("还有订单金额未支付确认要提交订单?");
-                if (T_arrears < 0) {
-                    msg = "应收金额比实际要收金额高,确认要提交订单?";
-                }
-            }
-
-            return msg;
-        }
-
-
-
 
         function loadForm(oaid) {
             $.ajax({
@@ -119,11 +94,11 @@
                             ],
                             [
                                 { display: "支付方式", name: "T_paytype", type: "select", options: "{width:180,url:'Sys_Param.combo.xhd?type=pay_type',value:'" + obj.pay_type_id + "'}", validate: "{required:true}", initValue: formatTimebytype(obj.import_time, "yyyy-MM-dd") },
-                                { display: "应收金额", name: "T_total", type: "text", options: "{width:180,disabled:true}", validate: "{required:true}", initValue: toMoney(obj.total_amount) }
+                                { display: "支付票据", name: "T_PayTheBill", type: "text", options: "{width:180}", validate: "{required:true}", initValue: (obj.PayTheBill) }
                             ],
                             [
-                                { display: "已收金额", name: "T_receive", type: "text", options: "{width:180,onChangeValue:function(){ arrearsAmount(); }}", validate: "{required:true}", initValue: toMoney2(obj.receive_money) },
-                                { display: "待收金额", name: "T_arrears", type: "text", options: "{width:180,disabled:true}", validate: "{required:true}", initValue: toMoney(obj.arrears_money) }
+                                { display: "应收金额", name: "T_total", type: "text", options: "{width:180,disabled:false}", validate: "{required:true}", initValue: toMoney(obj.total_amount, "") },
+                                { display: "待收金额", name: "T_arrears", type: "text", options: "{width:180,disabled:false}", validate: "{required:true}", initValue: toMoney(obj.arrears_money) }
                             ],
                             [
                                 { display: "成交人员", name: "T_emp", validate: "{required:true}", initValue: obj.emp_name },
@@ -274,6 +249,11 @@
                         }
                     },
                     {
+                        display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.CostsTotal);
+                        }
+                    },
+                    {
                         display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
                             return toMoney(item.SalesCostsTotal);
                         }
@@ -328,7 +308,7 @@
         }
 
         function add() {
-            f_openWindow("product/GetProduct.aspx?status=3", "选择商品", 1000, 600, f_getpost, 9003);
+            f_openWindow("product/GetProduct.aspx?depdata=1&status=1,2,3", "选择商品", 1000, 600, f_getpost, 9003);
         }
         function pro_remove() {
             var manager = $("#maingrid4").ligerGetGridManager();

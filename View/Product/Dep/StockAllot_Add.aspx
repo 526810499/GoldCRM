@@ -156,8 +156,9 @@
             if ($("#btn_add").length > 0)
                 return;
 
-            $(".l-panel-header").append("<div id='headerBtn' style='width:250px;float:right;margin-bottom:2px;'><div id = 'btn_addcode' style='margin-top:2px;'></div><div id = 'btn_del' style='margin-top:2px;'></div></div>");
-
+            $(".l-panel-header").append("<div id='headerBtn' style='width:290px;float:right;margin-bottom:2px;'><div id = 'btn_addcode' style='margin-top:2px;'></div><div id = 'btn_add' style='margin-top:2px;'></div><div id = 'btn_del' style='margin-top:2px;'></div></div>");
+            $(".l-grid-loading").fadeOut();
+ 
             $("#btn_addcode").ligerButton({
                 width: 80,
                 text: "扫码添加",
@@ -174,8 +175,11 @@
             $("#maingridc4").ligerGetGridManager()._onResize();
         }
 
+
+ 
+
         function addCode() {
-            f_openWindow("product/GetCodeProduct.aspx?status=1", "选择扫码商品", 1200, 600, f_getpost, 9003);
+            f_openWindow("product/GetCodeProduct.aspx?depdata=1&status=1,2,3", "选择扫码商品", 1200, 600, f_getpost, 9003);
         }
 
         function pro_remove() {
@@ -199,10 +203,10 @@
                 var data = manager.getData();
 
                 for (var i = 0; i < rows.length; i++) {
-                    rows[i].product_id = rows[i].id;
+                    rows[i].BarCode = rows[i].BarCode;
                     var add = 1;
                     for (var j = 0; j < data.length; j++) {
-                        if (rows[i].product_id == data[j].product_id) {
+                        if (rows[i].BarCode == data[j].BarCode) {
                             add = 0;
                         }
                     }

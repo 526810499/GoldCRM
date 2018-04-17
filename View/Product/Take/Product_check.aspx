@@ -86,17 +86,12 @@
                                         return toMoney(item.Weight);
                                     }
                                 },
-
                                 {
-                                    display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
+                                    display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
                                         return toMoney(item.CostsTotal);
                                     }
                                 },
-                                {
-                                    display: '销售价格(￥)', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
-                                        return toMoney(item.SalesTotalPrice);
-                                    }
-                                }, {
+                                 {
                                     display: '盘点状态', name: 'Status', align: 'left', width: 160, render: function (item) {
                                         switch (item.status) {
                                             case 1:

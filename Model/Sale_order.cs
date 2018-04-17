@@ -39,7 +39,11 @@ namespace XHD.Model
         /// </summary>
         public string createdep_id { get; set; }
 
- 
+        /// <summary>
+        /// 销售票据
+        /// </summary>
+        public string PayTheBill { get; set; }
+
         /// <summary>
         /// 会员卡号
         /// </summary>

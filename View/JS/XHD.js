@@ -622,6 +622,9 @@ function view(type, id, id1) {
         case "product":
             width = 730, height = 600, title = "查看商品", url = 'product/product_add.aspx?pid=' + id;
             break;
+        case "depproduct":
+            width = 730, height = 600, title = "查看商品", url = 'product/product_View.aspx?depdata=1&pid=' + id;
+            break;
         case "pallot":
             width = 730, height = 600, title = "查看调拨", url = 'product/Product_allotAdd.aspx?id=' + id;
             break;

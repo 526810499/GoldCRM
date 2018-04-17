@@ -27,7 +27,7 @@
             $(window).resize(function () {
                 initLayout();
             });
-            var url = "Product.grid.xhd?status=" + status + "&SupplierID=" + SupplierID;
+            var url = "Product.grid.xhd?status=" + status + "&SupplierID=" + SupplierID+"&depdata=" + getparastr("depdata", "");
             $("#maingrid4").ligerGrid({
                 columns: [
                     { display: '商品名称', name: 'product_name', align: 'left', width: 120 },
@@ -54,13 +54,8 @@
                         }
                     },
                     {
-                        display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.SalesCostsTotal);
-                        }
-                    },
-                    {
-                        display: '销售价格(￥)', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.SalesTotalPrice);
+                        display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.CostsTotal);
                         }
                     },
                    { display: '现存仓库', name: 'warehouse_name', width: 100, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } }
@@ -140,7 +135,7 @@
 
             var cid = "";
 
-            var serchtxt = "categoryid=" + $("#sfl_val").val() + "&status=" + status + "&stext=" + $("#stext").val() + "&scode=" + $("#scode").val() + "&warehouse_id=" + $("#sck_val").val() + "&rnd=" + Math.random()
+            var serchtxt = "depdata=" + getparastr("depdata", "") + "&categoryid=" + $("#sfl_val").val() + "&status=" + status + "&stext=" + $("#stext").val() + "&scode=" + $("#scode").val() + "&warehouse_id=" + $("#sck_val").val() + "&rnd=" + Math.random()
             var manager = $("#maingrid4").ligerGetGridManager();
             var url = "Product.grid.xhd?" + serchtxt;
  

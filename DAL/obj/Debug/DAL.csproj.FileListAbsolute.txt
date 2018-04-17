@@ -141,6 +141,7 @@ F:\Visual Studio 2013\XHDCRM\XHDCRM2\DAL\bin\Debug\XHD.DBUtility.pdb
 F:\Visual Studio 2013\XHDCRM\XHDCRM2\DAL\obj\Debug\DAL.csprojResolveAssemblyReference.cache
 F:\Visual Studio 2013\XHDCRM\XHDCRM2\DAL\obj\Debug\XHD.DAL.dll
 F:\Visual Studio 2013\XHDCRM\XHDCRM2\DAL\obj\Debug\XHD.DAL.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\obj\Debug\DAL.csprojResolveAssemblyReference.cache
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Debug\XHD.DAL.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Debug\XHD.DAL.pdb
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Debug\XHD.Common.dll
@@ -153,6 +154,5 @@ F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Debug\IBatisNet.Common.
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Debug\System.Data.SQLite.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Debug\MySql.Data.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\bin\Debug\XHD.Model.pdb
-F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\obj\Debug\DAL.csprojResolveAssemblyReference.cache
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\obj\Debug\XHD.DAL.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DAL\obj\Debug\XHD.DAL.pdb

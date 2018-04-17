@@ -24,7 +24,7 @@
                 columns: [
                     //{ display: '序号', width: 50, render: function (item, i) { return item.n; } },
                     {
-                        display: '订单编号', name: 'Serialnumber', width: 180, render: function (item) {
+                        display: '订单编号', name: 'Serialnumber', width: 250, render: function (item) {
                             var html = "<a href='javascript:void(0)' onclick=view('order','" + item.id + "')>" + item.Serialnumber + "</a>";
                             return html;
                         }
@@ -62,8 +62,8 @@
                         }, totalSummary: { type: 'sum', render: function (item, i) { return "￥" + item.sum; } }
                     },
                     {
-                        display: '成交时间', name: 'Order_date', width: 90, render: function (item) {
-                            return formatTimebytype(item.Order_date, 'yyyy-MM-dd');
+                        display: '成交时间', name: 'Order_date', width: 150, render: function (item) {
+                            return formatTime(item.create_time);
                         }
                     }
 
@@ -109,7 +109,7 @@
                             ],
                             //selectRowButtonOnly: true,
                             usePager: false,
-                            checkbox: true,
+                            checkbox: false,
                             url: "Sale_order_details.grid.xhd?orderid=" + r.id,
                             width: '99%', height: '180',
                             heightDiff: 0

@@ -46,6 +46,7 @@ namespace XHD.DAL
             };
             return DbHelperSQL.ExecuteScalar(sql, parameters).CInt(0, false);
         }
+
         /// <summary>
         /// 增加一条数据
         /// </summary>
@@ -57,8 +58,15 @@ namespace XHD.DAL
             strSql.Append("id,allotid,barcode,FromWarehouse,create_id,create_time,allotType)");
             strSql.Append(" values (");
             strSql.Append("@id,@allotid,@barcode,@FromWarehouse,@create_id,@create_time,@allotType)");
-            strSql.AppendLine(" update Product set Status=2,warehouse_id=@NowWarehouse where barcode=@barcode and Status=1");//
-
+            
+            //门店调拨的时候同步修改门店
+            if (model.allotType == 0)
+            {
+                strSql.AppendLine(" update Product set Status=2,warehouse_id=@NowWarehouse where barcode=@barcode and Status<>4");//
+            }
+            else {
+                strSql.AppendLine(" update Product set depopbefwid=warehouse_id,warehouse_id=@NowWarehouse,OutStatus=2 where barcode=@barcode and Status<>4");//
+            }
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@allotid", SqlDbType.VarChar,50),
@@ -159,13 +167,19 @@ namespace XHD.DAL
         /// <param name="allotid"></param>
         /// <param name="barcode"></param>
         /// <returns></returns>
-        public bool Delete(string allotid, string barcode)
+        public bool Delete(int allotType,string allotid, string barcode)
         {
 
             StringBuilder strSql = new StringBuilder();
             strSql.Append("delete from Product_allotDetail ");
             strSql.Append(" where allotid=@allotid and barcode=@barcode ");
-            strSql.AppendLine(" update Product set Status=1 where barcode=@barcode");
+            if (allotType == 0)
+            {
+                strSql.AppendLine(" update Product set Status=1 where barcode=@barcode");
+            }
+            else {
+                strSql.AppendLine(" update Product set warehouse_id=depopbefwid where barcode=@barcode");
+            }
             SqlParameter[] parameters = {
                     new SqlParameter("@allotid", SqlDbType.VarChar,50) { Value=allotid}  ,
                      new SqlParameter("@barcode", SqlDbType.VarChar,50) { Value=barcode}

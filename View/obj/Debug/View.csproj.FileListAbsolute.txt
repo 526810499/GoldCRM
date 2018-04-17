@@ -328,6 +328,7 @@ F:\Visual Studio 2013\XHDCRM\XHDCRM2\View\obj\Debug\XHD.View.dll
 F:\Visual Studio 2013\XHDCRM\XHDCRM2\View\obj\Debug\XHD.View.pdb
 F:\Visual Studio 2013\XHDCRM\XHDCRM2\View\bin\XHD.Service.dll
 F:\Visual Studio 2013\XHDCRM\XHDCRM2\View\bin\XHD.Service.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\View\obj\Debug\View.csprojResolveAssemblyReference.cache
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\View\bin\XHD.View.dll.config
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\View\bin\XHD.View.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\View\bin\XHD.View.pdb
@@ -359,6 +360,5 @@ F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\View\bin\XHD.Model.pdb
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\View\bin\XHD.Server.pdb
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\View\bin\XHD.DAL.pdb
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\View\bin\XHD.Excel.pdb
-F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\View\obj\Debug\View.csprojResolveAssemblyReference.cache
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\View\obj\Debug\XHD.View.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\View\obj\Debug\XHD.View.pdb

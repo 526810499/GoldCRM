@@ -61,9 +61,9 @@ namespace XHD.BLL
         /// <param name="allotid"></param>
         /// <param name="barcode"></param>
         /// <returns></returns>
-        public bool Delete(string allotid, string barcode)
+        public bool Delete(int allotType,string allotid, string barcode)
         {
-            return dal.Delete(allotid, barcode);
+            return dal.Delete(allotType, allotid, barcode);
         }
         /// <summary>
         /// 删除调一条商品

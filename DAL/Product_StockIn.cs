@@ -106,6 +106,10 @@ namespace XHD.DAL
         {
 
             StringBuilder strSql = new StringBuilder();
+
+            strSql.Append("delete from Product_StockInDetial ");
+            strSql.Append(" where stockid=@id ");
+
             strSql.Append("delete from Product_StockIn ");
             strSql.Append(" where id=@id ");
             SqlParameter[] parameters = {
@@ -122,6 +126,7 @@ namespace XHD.DAL
                 return false;
             }
         }
+
         /// <summary>
         /// 批量删除数据
         /// </summary>

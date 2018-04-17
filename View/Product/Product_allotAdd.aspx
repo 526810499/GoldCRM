@@ -130,13 +130,8 @@
                         }
                     },
                     {
-                        display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
+                        display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
                             return toMoney(item.CostsTotal);
-                        }
-                    },
-                    {
-                        display: '销售价格(￥)', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.SalesTotalPrice);
                         }
                     }
                 ],
@@ -170,13 +165,7 @@
                 icon: '../../images/icon/75.png',
                 click: addCode
             });
-            $("#btn_add").ligerButton({
-                width: 80,
-                text: "手动添加",
-                icon: '../../images/icon/11.png',
-                click: add
-            });
-
+ 
             $("#btn_del").ligerButton({
                 width: 80,
                 text: "删除",
@@ -186,11 +175,7 @@
             $("#maingridc4").ligerGetGridManager()._onResize();
         }
 
-        function add() {
-            var buttons = [];
-            buttons.push({ text: '保存', onclick: f_getpost });
-            f_openWindow2("product/GetProduct2.aspx?status=1", "选择商品", 1200, 600, buttons, 9003);
-        }
+ 
 
         function addCode() {
             f_openWindow("product/GetCodeProduct.aspx?status=1", "选择扫码商品", 1200, 600, f_getpost, 9003);
@@ -217,10 +202,10 @@
                 var data = manager.getData();
 
                 for (var i = 0; i < rows.length; i++) {
-                    rows[i].product_id = rows[i].id;
+                    rows[i].BarCode = rows[i].BarCode;
                     var add = 1;
                     for (var j = 0; j < data.length; j++) {
-                        if (rows[i].product_id == data[j].product_id) {
+                        if (rows[i].BarCode == data[j].BarCode) {
                             add = 0;
                         }
                     }

@@ -122,16 +122,17 @@ namespace XHD.DAL
             SqlParameter[] par = { new SqlParameter("@allotid", SqlDbType.VarChar, 50) { Value = id }, };
             return DbHelperSQL.ExecuteScalar(sql, par).CInt(0, false);
         }
- 
+
         /// <summary>
         /// 审核
         /// </summary>
+        /// <param name="allotType">调拨类型</param>
         /// <param name="id"></param>
         /// <param name="authuser_id"></param>
         /// <param name="status"></param>
         /// <param name="remark"></param>
         /// <returns></returns>
-        public bool AuthApproved(string id, string authuser_id, int status, string remark)
+        public bool AuthApproved(int allotType, string id, string authuser_id, int status, string remark)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("update Product_allot set ");
@@ -144,7 +145,14 @@ namespace XHD.DAL
             //审核不通过需要释放
             if (status == 3)
             {
-                string sql = @"UPDATE payuser SET status=1,warehouse_id=0 FROM dbo.Product AS payuser inner JOIN Product_allotDetail AS bu ON payuser.barcode=bu.barcode WHERE bu.allotid=@id and payuser.status=2 ";
+                string sql = @"UPDATE payuser SET status=1,warehouse_id=0 FROM dbo.Product(nolock) AS payuser inner JOIN Product_allotDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.allotid=@id and payuser.status<>4 ";
+
+                //门店调拨审核不通过需要还原之前的状态
+                if (allotType == 1)
+                {
+                    sql = @"UPDATE payuser SET warehouse_id=depopbefwid FROM dbo.Product(nolock) AS payuser inner JOIN Product_allotDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.allotid=@id ";
+                }
+
                 strSql.AppendLine(sql);
                 rows += CountPorduct(id);
             }
@@ -169,10 +177,13 @@ namespace XHD.DAL
         /// <summary>
         /// 删除一条数据
         /// </summary>
-        public bool Delete(string id)
+        public bool Delete(string id, int allotType)
         {
-
             StringBuilder strSql = new StringBuilder();
+            if (allotType == 1)
+            {
+                strSql.AppendLine(@"UPDATE payuser SET warehouse_id=depopbefwid FROM dbo.Product(nolock) AS payuser inner JOIN Product_allotDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.allotid=@id ");
+            }
             strSql.Append("delete from Product_allotDetail ");
             strSql.Append(" where allotid=@id ");
 
@@ -192,6 +203,7 @@ namespace XHD.DAL
                 return false;
             }
         }
+
         /// <summary>
         /// 批量删除数据
         /// </summary>

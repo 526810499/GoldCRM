@@ -40,15 +40,11 @@
                         }
                     },
                     {
-                        display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.SalesCostsTotal);
+                        display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.CostsTotal);
                         }
                     },
-                    {
-                        display: '销售价格(￥)', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.SalesTotalPrice);
-                        }
-                    }
+                       { display: '备注', name: 'remark', align: 'left', width: 180 }
                 ],
                 checkbox: true,
                 dataAction: 'server',
@@ -74,7 +70,7 @@
 
 
             $("#scode").ligerTextBox({ width: 250, onChangeValue: function (value) { doChangeSearch(); }, onFocus: function () { $("#scode").select(); }, onBlur: function () { doChangeSearch(); } });
-
+            $("#scode").attr("maxlength", 13);
             $("#scode").on('input', function (e) {
                 doChangeSearch();
             });
@@ -92,18 +88,19 @@
         function doserch() {
             var scode = $("#scode").val();
             //必须要输入条形码
-            if (scode.length <= 0 || itemsCode.indexOf(scode) > -1) {
+            if (scode.length < 13 || itemsCode.indexOf(scode) > -1) {
                 return false;
             }
+            var notfindadd = getparastr("notfindadd", 1);
             var manager = $("#maingrid4").ligerGetGridManager();
-            var serchtxt = "status=" + status + "&scode=" + scode + "&SupplierID=" + SupplierID + "&warehouse_id=" + warehouse_id + "&rnd=" + Math.random()
+            var serchtxt = "depdata=" + getparastr("depdata", "") + "&status=" + status + "&scode=" + scode + "&SupplierID=" + SupplierID + "&warehouse_id=" + warehouse_id + "&rnd=" + Math.random()
             var url = ("Product.grid.xhd?" + serchtxt);
 
             $.get(url, function (rdata, textStatus) {
 
                 var data = eval('(' + rdata + ')');
-                if (data.Total <= 0) {
-                    var nobj = { id: scode, product_name: "", category_name: "", BarCode: scode, Weight: 0, SalesCostsTotal: 0, SalesTotalPrice: 0, status: 2,remark:"没有该商品条形码存在" };
+                if (data.Total <= 0 && notfindadd == 1) {
+                    var nobj = { id: scode, product_name: "", category_name: "", BarCode: scode, Weight: 0, SalesCostsTotal: 0, SalesTotalPrice: 0, status: 2, remark: "没有该商品条形码存在" };
                     itemsCode.push(scode);
                     manager.addRow(nobj);
                 } else {

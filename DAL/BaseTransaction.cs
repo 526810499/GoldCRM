@@ -22,9 +22,11 @@ namespace XHD.DAL
             try
             {
                 cm.Transaction = trans;
-                rs = cm.ExecuteNonQuery() == execRows;
-                if (rs)
+                int rows = cm.ExecuteNonQuery();
+
+                if (rows == execRows || execRows == -1)
                 {
+                    rs = true;
                     trans.Commit();
                 }
                 else {

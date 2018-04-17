@@ -20,6 +20,13 @@ namespace XHD.Model
         private string _createdep_id;
         private string _remark;
         private int _warehouse_id;
+
+
+        /// <summary>
+        /// 原来库存
+        /// </summary>
+        public int oldwarehouse_id { get; set; }
+
         /// <summary>
         /// 
         /// </summary>

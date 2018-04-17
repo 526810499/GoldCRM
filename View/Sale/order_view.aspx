@@ -65,10 +65,10 @@
                     }
 
                     rows.push(
-                              [
+                             [
                                 { display: "会员卡号", name: "T_vipcard", type: "text", initValue: obj.vipcard },
                                 { display: "销售门店", name: "T_dept_id", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'hr_department.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + obj.createdep_id + "'}", validate: "{required:true}" }
-                              ],
+                             ],
                             [
                                 { display: "成交时间", name: "T_date", type: "date", options: "{width:180}", validate: "{required:true}", initValue: formatTimebytype(obj.Order_date, "yyyy-MM-dd") },
                                 { display: "订单金额", name: "T_amount", type: "text", options: "{width:180,disabled:true,onChangeValue:function(){ getAmount(); }}", validate: "{required:true}", initValue: toMoney(obj.Order_amount) }
@@ -79,11 +79,11 @@
                             ],
                             [
                                 { display: "支付方式", name: "T_paytype", type: "select", options: "{width:180,url:'Sys_Param.combo.xhd?type=pay_type',value:'" + obj.pay_type_id + "'}", validate: "{required:true}", initValue: formatTimebytype(obj.import_time, "yyyy-MM-dd") },
-                                { display: "应收金额", name: "T_total", type: "text", options: "{width:180,disabled:true}", validate: "{required:true}", initValue: toMoney(obj.total_amount) }
+                                { display: "支付票据", name: "T_PayTheBill", type: "text", options: "{width:180}", validate: "{required:true}", initValue: (obj.PayTheBill) }
                             ],
                             [
-                                { display: "已收金额", name: "T_receive", type: "text", options: "{width:180,onChangeValue:function(){ arrearsAmount(); }}", validate: "{required:true}", initValue: toMoney(obj.receive_money) },
-                                { display: "待收金额", name: "T_arrears", type: "text", options: "{width:180,disabled:true}", validate: "{required:true}", initValue: toMoney(obj.arrears_money) }
+                                { display: "应收金额", name: "T_total", type: "text", options: "{width:180,disabled:false}", validate: "{required:true}", initValue: toMoney(obj.total_amount, "") },
+                                { display: "待收金额", name: "T_arrears", type: "text", options: "{width:180,disabled:false}", validate: "{required:true}", initValue: toMoney(obj.arrears_money) }
                             ],
                             [
                                 { display: "成交人员", name: "T_emp", validate: "{required:true}", initValue: obj.emp_name },

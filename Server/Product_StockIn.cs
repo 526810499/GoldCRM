@@ -1,55 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using System.Text;
 using System.Web;
 using XHD.Common;
 using XHD.Controller;
 
+
 namespace XHD.Server
 {
     /// <summary>
-    /// 出库
+    /// 商品入库
     /// </summary>
-    public class Product_out : BaseCRMServer
+    public class Product_StockIn : BaseCRMServer
     {
         public static BLL.Product product = new BLL.Product();
-        public static BLL.Product_out allotBll = new BLL.Product_out();
-        public static BLL.Product_outDetail allotDetailBll = new BLL.Product_outDetail();
+        public static BLL.Product_StockIn bll = new BLL.Product_StockIn();
+        public static BLL.Product_StockInDetial detailBll = new BLL.Product_StockInDetial();
 
-        public static Model.Product_out model = new Model.Product_out();
+        public static Model.Product_StockIn model = new Model.Product_StockIn();
+
         private string authRightID = "";
         private string delRightID = "";
 
-
-        public Product_out()
+        public Product_StockIn()
         {
         }
 
-        public Product_out(HttpContext context) : base(context)
+        public Product_StockIn(HttpContext context) : base(context)
         {
-            if (request["outtype"].CInt(0, false) == 0)
+            if (request["intype"].CInt(0, false) == 0)
             {
-                allDataBtnid = "94676CBB-F382-45C9-A5F3-834F25348C24";
-                depDataBtnid = "B42553AB-9AA5-4EBB-A73E-CA28738182D7";
-                authRightID = "AFEB4AFD-DF89-4E16-BBCB-407B2227B55B";
-                delRightID = "B8494FA6-EE5D-483F-9421-817E2BF2C5A6";
+                allDataBtnid = "B07133BA-7063-42E9-9AF2-26005AA99FB2";
+                depDataBtnid = "B33D7B1B-50A7-41EF-8D2D-AE3E9D91D19B";
+                authRightID = "38ED924E-E025-4FD0-87CB-D148EA2077A8";
+                delRightID = "0DAC81A8-7C15-4D77-A28F-C6C7468D6287";
             }
             else {
-                allDataBtnid = "DBCD25E0-A7C0-4DC3-9A48-BF3FC05750E7";
-                depDataBtnid = "7B020ED5-692F-4AE8-9B11-BE77BB236FA4";
-                authRightID = "7DEB7DDB-D8C9-4E49-933F-EC7F29904A19";
-                delRightID = "D3D05165-A690-49EF-9B54-BC45E3B912A3";
+                allDataBtnid = "6C83A2E2-030D-478F-B148-F19DC0F63DE8";
+                depDataBtnid = "123CA5A1-FDA7-400C-9075-23384A3BAD14";
+                authRightID = "4C7415E5-70C1-453F-8E9D-11AF41709039";
+                delRightID = "D191B668-BC22-4C77-B410-842D3AFC8352";
             }
 
         }
 
         public string save()
         {
-            model.NowWarehouse = request["T_NowWarehouse_val"].CInt(0, false);
-            model.Remark = PageValidate.InputText(request["T_Remark"], 255);
-            model.outType = request["outtype"].CInt(0, false);
-            model.update_id = emp_id;
-            model.update_time = DateTime.Now;
+            model.warehouse_id = request["T_Warehouse_val"].CInt(0, false);
+            model.remark = PageValidate.InputText(request["T_Remark"], 255);
+            model.inType = request["inType"].CInt(0, false);
             string id = PageValidate.InputText(request["id"], 50);
             string postData = request["postData"].CString("");
             bool isAdd = true;
@@ -80,7 +81,7 @@ namespace XHD.Server
                     }
                     model.status = status;
                     model.id = id;
-                    DataSet ds = allotBll.GetList($" id= '{id}' ");
+                    DataSet ds = bll.GetList($" id= '{id}' ");
                     if (ds.Tables[0].Rows.Count == 0)
                         return XhdResult.Error("参数不正确，更新失败！").ToString();
 
@@ -90,21 +91,21 @@ namespace XHD.Server
                     CanAdd = (dstatus == 0);
                     CanDel = (dstatus == 0);
 
-                    allotBll.Update(model);
+                    bll.Update(model);
 
                     string UserID = emp_id;
                     string UserName = emp_name;
                     string IPStreet = request.UserHostAddress;
-                    string EventTitle = model.Remark;
-                    string EventType = "调拨单修改";
+                    string EventTitle = model.remark;
+                    string EventType = "门店入库单修改";
                     string EventID = model.id;
 
-                    string Log_Content = null;
+                    string Log_Content = postData;
 
 
-                    if (dr["NowWarehouse"].ToString() != request["T_NowWarehouse_val"])
-                        Log_Content += string.Format("【{0}】{1} → {2} \n", "NowWarehouse", dr["NowWarehouse"],
-                            request["T_NowWarehouse_val"]);
+                    if (dr["warehouse_id"].ToString() != request["T_Warehouse_val"])
+                        Log_Content += string.Format("【{0}】{1} → {2} \n", "NowWarehouse", dr["warehouse_id"],
+                            request["T_Warehouse_val"]);
 
                     if (dr["Remark"].ToString() != request["T_Remark"])
                         Log_Content += string.Format("【{0}】{1} → {2} \n", "statusRemark", dr["Remark"],
@@ -118,50 +119,65 @@ namespace XHD.Server
                 }
                 else
                 {
+                    isAdd = false;
                     model.createdep_id = dep_id;
                     model.create_id = emp_id;
                     model.create_time = DateTime.Now;
-                    id = "CK-" + DateTime.Now.ToString("yy-MM-dd-HH-mm-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
+                    id = "RK-" + DateTime.Now.ToString("yy-MM-dd-HH-mm-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
                     model.id = id;
                     model.status = request["auth"].CInt(0, false) == 1 ? 1 : 0;
 
-                    allotBll.Add(model);
+                    bll.Add(model);
+                }
+
+
+                List<Model.ProductAllot> ld = list.Where(t => t.__status == "delete").ToList();
+                List<Model.ProductAllot> ladd = list.Where(t => t.__status == "add").ToList();
+
+                if (!CanAdd && ladd != null && ladd.Count >= 0)
+                {
+                    return XhdResult.Error("入库单状态已发生改变不能执行添加操作,请确认后在操作！").ToString();
+                }
+
+                if (!CanDel && ld != null && ld.Count >= 0)
+                {
+                    return XhdResult.Error("入库单状态已发生改变不能执行删除操作,请确认后在操作！").ToString();
                 }
 
                 //循环添加调拨单订单信息
                 foreach (Model.ProductAllot m in list)
                 {
+                    m.BarCode = PageValidate.InputText(m.BarCode, 50);
                     if (m.__status == "add" && CanAdd)
                     {
                         int pstatus = product.GetPorductStatusByBarCode(m.BarCode);
-                        //总部出库的话则已出库不能在出库，门店的只要是未销售都可以出库
-                        if ((model.outType == 0 && pstatus == 3) || pstatus == 4)
+                        //不是出库的不是销售的都可以调拨
+                        if (pstatus == 4)
                         {
-                            msg += "<br/> 条形码【" + m.BarCode + "】";
+                            msg += "<br/> 条形码【" + m.BarCode + "】异常";
                         }
                         else {
 
-                            bool r = allotDetailBll.Add(new Model.Product_outDetail()
+                            bool r = detailBll.Add(new Model.Product_StockInDetial()
                             {
                                 id = Guid.NewGuid().ToString(),
-                                outid = id,
+                                stockid = id,
                                 barcode = m.BarCode,
-                                create_id = emp_id,
-                                create_time = DateTime.Now,
-                                outType = model.outType,
-                                FromWarehouse = m.warehouse_id
+                                warehouse_id = model.warehouse_id,
+                                createdep_id = dep_id,
+                                remark = "",
+                                oldwarehouse_id = m.warehouse_id.CInt(0, false),
                             });
-
                             if (!r)
                             {
-                                msg += "<br/> 保存时条形码【" + m.BarCode + "】";
+                                msg += "<br/>条形码【" + m.BarCode + "】";
                             }
                         }
                     }
                     else if (m.__status == "delete" && CanDel)
                     {
                         //从调拨中删除调
-                        allotDetailBll.Delete(model.outType, id, m.BarCode);
+                        detailBll.Delete(id, model.id, m.BarCode);
                     }
                 }
 
@@ -169,20 +185,24 @@ namespace XHD.Server
             catch (Exception error)
             {
                 msg = error.ToString();
-                SoftLog.LogStr(error.ToString(), "SaveOut");
+                SoftLog.LogStr(error.ToString(), "Product_StockIn");
                 return XhdResult.Error("添加失败,请确认是否重复添加后在操作！").ToString();
+            }
+            finally
+            {
+                if (model.status == 1)
+                {
+                    bool r = detailBll.UpdateProductWareHouse(model.id, model.warehouse_id, dep_id);
+                    if (!r)
+                    {
+                        msg += "提交保存失败";
+                    }
+                }
             }
 
             if (msg.Length > 0)
             {
-                //添加提交审核的但是商品状态改变的修改状态
-                if (model.status == 1 && isAdd)
-                {
-                    model.status = 0;
-                    allotBll.Update(model);
-                }
-                msg += "<br/>状态发生改变,请确认后在操作！";
-                return XhdResult.Success(msg).ToString();
+                return XhdResult.Success(msg + "<br/>商品状态发生改变,请确认后在操作！").ToString();
             }
 
             return XhdResult.Success().ToString();
@@ -203,12 +223,12 @@ namespace XHD.Server
             string sorttext = " " + sortname + " " + sortorder;
 
             string Total;
-            string serchtxt = $" outtype=" + request["outtype"].CInt(0, false);
+            string serchtxt = $" inType=" + request["inType"].CInt(0, false);
 
-            if (!string.IsNullOrEmpty(request["allotid"]) && request["allotid"] != "null")
-            {
-                serchtxt += $" and allot_id='{PageValidate.InputText(request["allotid"], 50)}'";
-            }
+
+            if (!string.IsNullOrEmpty(request["whid"]))
+                serchtxt += $" and warehouse_id={request["whid"].CInt(0, false)}";
+
             if (!string.IsNullOrEmpty(request["status"]))
                 serchtxt += $" and status={request["status"].CInt(0, false)}";
 
@@ -218,17 +238,16 @@ namespace XHD.Server
             if (!string.IsNullOrEmpty(request["scode"]))
             {
                 string scode = PageValidate.InputText(request["scode"], 50);
-                DataSet dsc = allotDetailBll.GetList($" barcode='{scode}'");
+                DataSet dsc = detailBll.GetList($" barcode='{scode}'");
                 if (dsc == null || dsc.Tables[0].Rows.Count <= 0)
                 {
                     return GetGridJSON.DataTableToJSON1(null, "0");
                 }
-                serchtxt += $" and id='{dsc.Tables[0].Rows[0]["outid"]}'";
+                serchtxt += $" and id='{dsc.Tables[0].Rows[0]["stockid"]}'";
             }
-
             serchtxt = GetSQLCreateIDWhere(serchtxt, true);
 
-            DataSet ds = allotBll.GetList(PageSize, PageIndex, serchtxt, sorttext, out Total);
+            DataSet ds = bll.GetList(PageSize, PageIndex, serchtxt, sorttext, out Total);
             string dt = GetGridJSON.DataTableToJSON1(ds.Tables[0], Total);
             return (dt);
         }
@@ -245,7 +264,7 @@ namespace XHD.Server
             string sortorder = request["sortorder"];
 
             if (string.IsNullOrEmpty(sortname))
-                sortname = " create_time";
+                sortname = " ptd.BarCode ";
             if (string.IsNullOrEmpty(sortorder))
                 sortorder = "asc";
 
@@ -253,19 +272,21 @@ namespace XHD.Server
 
             string Total;
             string serchtxt = $" 1=1 ";
-            if (!string.IsNullOrEmpty(request["outid"]) && request["outid"] != "null")
+            if (!string.IsNullOrEmpty(request["stockid"]) && request["stockid"] != "null")
             {
-                serchtxt += $" and outid='{PageValidate.InputText(request["outid"], 50)}'";
+                serchtxt += $" and stockid='{PageValidate.InputText(request["stockid"], 50)}'";
             }
             else {
                 return GetGridJSON.DataTableToJSON1(new DataTable(), "0");
             }
 
+            if (!string.IsNullOrEmpty(request["warehouse_id"]))
+                serchtxt += $" and warehouse_id={PageValidate.InputText(request["warehouse_id"], 50)}";
 
             if (!string.IsNullOrEmpty(request["id"]))
                 serchtxt += $" and id='{PageValidate.InputText(request["id"], 50)}'";
 
-            DataSet ds = allotDetailBll.GetListProduct(PageSize, PageIndex, serchtxt, sorttext, out Total);
+            DataSet ds = detailBll.GetList(PageSize, PageIndex, serchtxt, sorttext, out Total);
             string dt = GetGridJSON.DataTableToJSON1(ds.Tables[0], Total);
             return (dt);
         }
@@ -279,9 +300,8 @@ namespace XHD.Server
         {
             if (!PageValidate.checkID(id, false) || id == "null") return "{}";
             id = PageValidate.InputText(id, 50);
-            DataSet ds = allotBll.GetList($" id= '{id}' ");
+            DataSet ds = bll.GetList($" id= '{id}' ");
             return DataToJson.DataToJSON(ds);
-
         }
 
         /// <summary>
@@ -299,9 +319,6 @@ namespace XHD.Server
             string remark = PageValidate.InputText(request["remark"], 250);
             if (PageValidate.checkID(id, false))
             {
-                DataSet ds = allotBll.GetList($" id= '{id}' ");
-                if (ds.Tables[0].Rows.Count < 1)
-                    return XhdResult.Error("系统错误，无数据！").ToString();
                 int status = request["auth"].CInt(0, false);
 
                 //审核不通过需要释放到锁库
@@ -309,15 +326,14 @@ namespace XHD.Server
                 {
                     status = 3;
                 }
-                int allottype = ds.Tables[0].Rows[0]["allottype"].CInt(0, false);
-                bool r = allotBll.AuthApproved(allottype, id, emp_id, status, remark);
-                if (r)
-                {
-                    return XhdResult.Success().ToString();
-                }
-                else {
-                    return XhdResult.Error("审核处理失败,请确认该单下相应的商品是否发生状态改变").ToString();
-                }
+                //bool r = bll.AuthApproved(id, emp_id, status, remark);
+                //if (r)
+                //{
+                //    return XhdResult.Success().ToString();
+                //}
+                //else {
+                //    return XhdResult.Error("审核处理失败,请确认该单下相应的商品是否发生状态改变").ToString();
+                //}
             }
 
             return "";
@@ -332,17 +348,17 @@ namespace XHD.Server
         {
             if (!PageValidate.checkID(id, false)) return XhdResult.Error("参数错误！").ToString();
             id = PageValidate.InputText(id, 50);
-            DataSet ds = allotBll.GetList($" id= '{id}' ");
+            DataSet ds = bll.GetList($" id= '{id}' ");
             if (ds.Tables[0].Rows.Count < 1)
                 return XhdResult.Error("系统错误，无数据！").ToString();
 
             int status = ds.Tables[0].Rows[0]["status"].CInt(0, false);
-            int outType = ds.Tables[0].Rows[0]["outType"].CInt(0, false);
+
+            //审核不通过不需要盘点
             if (status == 2)
             {
-                return XhdResult.Error("此出库单已审核通过，不允许删除！").ToString();
+                return XhdResult.Error("此入库单已审核通过，不允许删除！").ToString();
             }
-
 
             bool candel = true;
             if (uid != "admin")
@@ -353,11 +369,11 @@ namespace XHD.Server
                     return XhdResult.Error("无此权限！").ToString();
             }
 
-            bool isdel = allotBll.Delete(id, outType);
+            bool isdel = bll.Delete(id);
             if (!isdel) return XhdResult.Error("系统错误，删除失败！").ToString();
 
             //日志
-            string EventType = "调拨单删除";
+            string EventType = "门店入库单删除";
 
             string UserID = emp_id;
             string UserName = emp_name;
@@ -372,6 +388,8 @@ namespace XHD.Server
             return XhdResult.Success().ToString();
 
         }
+
+
 
 
     }

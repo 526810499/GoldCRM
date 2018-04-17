@@ -44,8 +44,13 @@ namespace XHD.DAL
             strSql.Append("id,outid,barcode,create_id,create_time,FromWarehouse,outType)");
             strSql.Append(" values (");
             strSql.Append("@id,@outid,@barcode,@create_id,@create_time,@FromWarehouse,@outType) ");
-            strSql.AppendLine(" update Product set Status=3 where barcode=@barcode and Status in(1,2); ");
-
+            if (model.outType == 0)
+            {
+                strSql.AppendLine(" update Product set Status=3,depopbefwid=warehouse_id where barcode=@barcode and Status<>4; ");
+            }
+            else {
+                strSql.AppendLine(" update Product set  depopbefwid=warehouse_id,OutStatus=3 where barcode=@barcode and Status<>4; ");
+            }
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@outid", SqlDbType.VarChar,50),
@@ -142,13 +147,19 @@ namespace XHD.DAL
         /// <param name="allotid"></param>
         /// <param name="barcode"></param>
         /// <returns></returns>
-        public bool Delete(string outid, string barcode)
+        public bool Delete(string outid, string barcode, int outType)
         {
 
             StringBuilder strSql = new StringBuilder();
             strSql.Append("delete from Product_outDetail ");
             strSql.Append(" where outid=@outid and barcode=@barcode ");
-            strSql.AppendLine(" update Product set Status=1 where barcode=@barcode");
+            if (outType == 0)
+            {
+                strSql.AppendLine(" update Product set Status=1 where barcode=@barcode");
+            }
+            else {
+                strSql.AppendLine(" update Product set warehouse_id=depopbefwid where barcode=@barcode");
+            }
             SqlParameter[] parameters = {
                     new SqlParameter("@outid", SqlDbType.VarChar,50) { Value=outid}  ,
                      new SqlParameter("@barcode", SqlDbType.VarChar,50) { Value=barcode}

@@ -139,7 +139,7 @@ namespace XHD.DAL
         /// <param name="status"></param>
         /// <param name="remark"></param>
         /// <returns></returns>
-        public bool AuthApproved(string id, string authuser_id, int status, string remark)
+        public bool AuthApproved(int outType, string id, string authuser_id, int status, string remark)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("update Product_out set ");
@@ -152,7 +152,13 @@ namespace XHD.DAL
             //审核不通过需要释放
             if (status == 3)
             {
-                string sql = @"UPDATE payuser SET status=2 FROM dbo.Product AS payuser inner JOIN Product_outDetail AS bu ON payuser.barcode=bu.barcode WHERE bu.allotid=@id and payuser.status=3 ";
+                string sql = @"UPDATE payuser SET status=2 FROM dbo.Product(nolock) AS payuser inner JOIN Product_outDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.outid=@id and payuser.status<>4 ";
+
+                if (outType == 1)
+                {
+                    sql = @"UPDATE payuser SET warehouse_id=depopbefwid  FROM dbo.Product(nolock) AS payuser inner JOIN Product_outDetail AS bu ON payuser.barcode=bu.barcode WHERE bu.outid=@id  ";
+                }
+
                 strSql.AppendLine(sql);
                 rows += CountPorduct(id);
             }
@@ -177,10 +183,15 @@ namespace XHD.DAL
         /// <summary>
         /// 删除一条数据
         /// </summary>
-        public bool Delete(string id)
+        public bool Delete(string id, int outType)
         {
 
             StringBuilder strSql = new StringBuilder();
+
+            if (outType == 1)
+            {
+                strSql.AppendLine("UPDATE payuser SET warehouse_id=depopbefwid  FROM dbo.Product(nolock) AS payuser inner JOIN Product_outDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.outid=@id");
+            }
             strSql.Append("delete from Product_outDetail where outid=@id ");
             strSql.Append("delete from Product_out ");
             strSql.Append(" where id=@id ");
@@ -188,15 +199,13 @@ namespace XHD.DAL
                     new SqlParameter("@id", SqlDbType.VarChar,50)         };
             parameters[0].Value = id;
 
-            int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
-            if (rows > 0)
+            System.Data.SqlClient.SqlCommand cm = new System.Data.SqlClient.SqlCommand();
+            cm.CommandText = strSql.ToString();
+            foreach (SqlParameter p in parameters)
             {
-                return true;
+                cm.Parameters.Add(p);
             }
-            else
-            {
-                return false;
-            }
+            return ExecTran(cm, -1);
         }
         /// <summary>
         /// 批量删除数据

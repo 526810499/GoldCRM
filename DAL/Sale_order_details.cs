@@ -26,7 +26,7 @@ namespace XHD.DAL
             strSql.Append("order_id,product_id,agio,quantity,amount,BarCode)");
             strSql.Append(" values (");
             strSql.Append("@order_id,@product_id,@agio,@quantity,@amount,@BarCode); ");
-            strSql.AppendLine(" update Product set status=4 where id=@product_id; ");
+            strSql.AppendLine(" update Product set status=4,OutStatus=4 where id=@product_id; ");
             SqlParameter[] parameters = {
                     new SqlParameter("@order_id", SqlDbType.VarChar,250),
                     new SqlParameter("@product_id", SqlDbType.VarChar,250),
@@ -117,7 +117,7 @@ namespace XHD.DAL
 
             StringBuilder strSql = new StringBuilder();
             strSql.Append("delete from Sale_order_details where order_id=@order_id and  product_id=@product_id; ");
-            strSql.AppendLine(" update Product set status=3 where id=@product_id; ");
+            strSql.AppendLine(" update Product set status=3,OutStatus=3 where id=@product_id; ");
 
 
             SqlCommand cmd = new SqlCommand();
@@ -129,6 +129,15 @@ namespace XHD.DAL
             return ExecTran(cmd, 2);
         }
 
+        public int GetDetailCount(string OrderID)
+        {
+            string sql = "select count(1) from Sale_order_details(nolock) where order_id=@order_id ";
+            SqlParameter[] par = {
+                new SqlParameter("@order_id",OrderID)
+            };
+
+            return DbHelperSQL.ExecuteScalar(sql, par).CInt(0, false);
+        }
 
         /// <summary>
         /// 获得数据列表
@@ -144,7 +153,7 @@ namespace XHD.DAL
             strSql.Append("      , Sale_order_details.[amount] ");
             strSql.Append("      , Product.product_name ");
             strSql.Append("      , Product.specifications ");
-            strSql.Append("      , Product.unit ");
+            strSql.Append("      , Product.indep_id ");
             strSql.Append("      , Product.BarCode ");
             strSql.Append("      , isnull(Product.SalesCostsTotal,0) as SalesCostsTotal ");
             strSql.Append("      , isnull(Product.SalesTotalPrice,0 ) as SalesTotalPrice");
@@ -178,7 +187,7 @@ namespace XHD.DAL
             strSql.Append("      , Sale_order_details.[amount] ");
             strSql.Append("      , Product.product_name ");
             strSql.Append("      , Product.specifications ");
-            strSql.Append("      , Product.unit ");
+            strSql.Append("      , Product.indep_id ");
             strSql.Append("FROM[dbo].[Sale_order_details] ");
             strSql.Append("  INNER JOIN Product ON Product.id = Sale_order_details.product_id ");
             if (strWhere.Trim() != "")

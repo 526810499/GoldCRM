@@ -121,7 +121,7 @@ namespace XHD.Server
                     model.createdep_id = dep_id;
                     model.create_id = emp_id;
                     model.create_time = DateTime.Now;
-                    id = "DB-" + DateTime.Now.ToString("yy-MM-dd-HH:mm-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
+                    id = "DB-" + DateTime.Now.ToString("yy-MM-dd-HH-mm-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
                     model.id = id;
                     model.status = request["auth"].CInt(0, false) == 1 ? 1 : 0;
 
@@ -134,10 +134,10 @@ namespace XHD.Server
                     if (m.__status == "add" && CanAdd)
                     {
                         int pstatus = product.GetPorductStatusByBarCode(m.BarCode);
-                        //不是出库的不是销售的都可以调拨
-                        if (pstatus == 3 || pstatus == 4)
+                        //不是已销售都可以调拨
+                        if (pstatus == 4)
                         {
-                            msg += "\r\n 条形码【" + m.BarCode + "】";
+                            msg += "<br/> 条形码【" + m.BarCode + "】";
                         }
                         else {
 
@@ -154,14 +154,14 @@ namespace XHD.Server
                             });
                             if (!r)
                             {
-                                msg += "\r\n 条形码【" + m.BarCode + "】";
+                                msg += "<br/> 条形码【" + m.BarCode + "】";
                             }
                         }
                     }
                     else if (m.__status == "delete" && CanDel)
                     {
                         //从调拨中删除调
-                        allotDetailBll.Delete(id, m.BarCode);
+                        allotDetailBll.Delete(model.allotType, id, m.BarCode);
                     }
                 }
 
@@ -178,9 +178,10 @@ namespace XHD.Server
                 //添加提交审核的但是商品状态改变的修改状态
                 if (model.status == 1 && isAdd)
                 {
+                    model.status = 0;
                     allotBll.Update(model);
                 }
-                return XhdResult.Success(msg + "商品状态发生改变,请确认后在添加或提交审核").ToString();
+                return XhdResult.Success(msg + "<br/>商品状态发生改变,请确认后在操作！").ToString();
             }
 
             return XhdResult.Success().ToString();
@@ -297,6 +298,10 @@ namespace XHD.Server
             string remark = PageValidate.InputText(request["remark"], 250);
             if (PageValidate.checkID(id, false))
             {
+                DataSet ds = allotBll.GetList($" id= '{id}' ");
+                if (ds.Tables[0].Rows.Count < 1)
+                    return XhdResult.Error("系统错误，无数据！").ToString();
+
                 int status = request["auth"].CInt(0, false);
 
                 //审核不通过需要释放到锁库
@@ -304,7 +309,7 @@ namespace XHD.Server
                 {
                     status = 3;
                 }
-                bool r = allotBll.AuthApproved(id, emp_id, status, remark);
+                bool r = allotBll.AuthApproved((ds.Tables[0].Rows[0]["alltType"]).CInt(0, false), id, emp_id, status, remark);
                 if (r)
                 {
                     return XhdResult.Success().ToString();
@@ -331,7 +336,7 @@ namespace XHD.Server
                 return XhdResult.Error("系统错误，无数据！").ToString();
 
             int status = ds.Tables[0].Rows[0]["status"].CInt(0, false);
-
+            int allotType = ds.Tables[0].Rows[0]["allotType"].CInt(0, false);
             //审核不通过不需要盘点
             if (status == 2)
             {
@@ -347,7 +352,7 @@ namespace XHD.Server
                     return XhdResult.Error("无此权限！").ToString();
             }
 
-            bool isdel = allotBll.Delete(id);
+            bool isdel = allotBll.Delete(id, allotType);
             if (!isdel) return XhdResult.Error("系统错误，删除失败！").ToString();
 
             //日志

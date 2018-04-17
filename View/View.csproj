@@ -826,6 +826,8 @@
     <Content Include="lib\ligerUI\skins\Tab\images\win\dialogbtn.gif" />
     <Content Include="lib\ligerUI\skins\Tab\images\win\dialogicon.gif" />
     <Content Include="License.html" />
+    <Content Include="Product\Dep\DepAllStock.aspx" />
+    <Content Include="Product\Dep\Product_check.aspx" />
     <Content Include="Product\Dep\StockAllot.aspx" />
     <Content Include="Product\Dep\StockAllot_Add.aspx" />
     <Content Include="Product\Dep\StockOut.aspx" />
@@ -837,6 +839,7 @@
     <Content Include="Product\GetProduct2.aspx" />
     <Content Include="Product\GetProduct.aspx" />
     <Content Include="Product\AllStock.aspx" />
+    <Content Include="Product\product_View.aspx" />
     <Content Include="Product\Take\AddProduct.aspx" />
     <Content Include="Product\Take\Product_check.aspx" />
     <Content Include="Product\Product_out.aspx" />

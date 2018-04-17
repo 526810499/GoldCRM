@@ -38,9 +38,9 @@ namespace XHD.BLL
         /// <param name="authuser_id"></param>
         /// <param name="status"></param>
         /// <returns></returns>
-        public bool AuthApproved(string id, string authuser_id, int status,string remark)
+        public bool AuthApproved(int allotType, string id, string authuser_id, int status, string remark)
         {
-            return dal.AuthApproved(id, authuser_id, status, remark);
+            return dal.AuthApproved(allotType, id, authuser_id, status, remark);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace XHD.BLL
             return dal.CountPorduct(id);
         }
 
- 
+
         /// <summary>
         /// 更新一条数据
         /// </summary>
@@ -65,10 +65,10 @@ namespace XHD.BLL
         /// <summary>
         /// 删除一条数据
         /// </summary>
-        public bool Delete(string id)
+        public bool Delete(string id, int outType)
         {
 
-            return dal.Delete(id);
+            return dal.Delete(id, outType);
         }
         /// <summary>
         /// 删除一条数据

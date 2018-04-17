@@ -15,6 +15,20 @@ namespace XHD.BLL
         public Product_StockInDetial()
         { }
         #region  BasicMethod
+
+
+        /// <summary>
+        /// 修改商品现存仓库
+        /// </summary>
+        /// <param name="stockid"></param>
+        /// <param name="warehouse_id"></param>
+        /// <returns></returns>
+        public bool UpdateProductWareHouse(string stockid, int warehouse_id, string dep_id)
+        {
+            return dal.UpdateProductWareHouse(stockid, warehouse_id, dep_id);
+        }
+
+
         /// <summary>
         /// 增加一条数据
         /// </summary>
@@ -34,10 +48,10 @@ namespace XHD.BLL
         /// <summary>
         /// 删除一条数据
         /// </summary>
-        public bool Delete(string id, string stockid, string barcode, string createdep_id)
+        public bool Delete(string id, string stockid, string barcode)
         {
 
-            return dal.Delete(id, stockid, barcode, createdep_id);
+            return dal.Delete(id, stockid, barcode);
         }
 
         /// <summary>

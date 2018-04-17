@@ -55,8 +55,8 @@
                         }
                     },
                     {
-                        display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.SalesCostsTotal);
+                        display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.CostsTotal);
                         }
                     },
                     { display: '现存仓库', name: 'warehouse_name', width: 100, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
@@ -86,7 +86,7 @@
 
 
             $("#scode").ligerTextBox({ width: 250, onChangeValue: function (value) { doChangeSearch(); }, onFocus: function () { $("#scode").select(); }, onBlur: function () { doChangeSearch(); } });
-
+            $("#scode").attr("maxlength", 13);
             $("#scode").on('input', function (e) {
                 doChangeSearch();
             });
@@ -94,7 +94,7 @@
 
         function doChangeSearch() {
             var v = $("#scode").val();
-            if (v != undefined && v.length > 10) {
+            if (v != undefined && v.length == 13) {
                 doserch();
             }
         }
@@ -102,18 +102,18 @@
         //查询
         function doserch() {
             var scode = $("#scode").val();
-            if (itemsCode.indexOf(scode) > -1) {
+            if (itemsCode.indexOf(scode) > -1 || scode.length < 13) {
                 return false;
             }
             var manager = $("#maingrid4").ligerGetGridManager();
-            var serchtxt = "status=" + status + "&scode=" + scode + "&SupplierID=" + SupplierID + "&rnd=" + Math.random()
+            var serchtxt = "depdata=" + getparastr("depdata", "") + "&status=" + status + "&scode=" + scode + "&SupplierID=" + SupplierID + "&rnd=" + Math.random()
             var url = ("Product.grid.xhd?" + serchtxt);
 
             $.get(url, function (rdata, textStatus) {
 
                 var data = eval('(' + rdata + ')');
                 if (data.Total <= 0) {
-                    $.ligerDialog.warn('该条形码未找到商品');
+                    $.ligerDialog.waitting('该条形码未找到商品!!'); setTimeout(function () { $.ligerDialog.closeWaitting(); }, 400);
                 } else {
                     var rows = data.Rows;
                     $(rows).each(function (i, v) {

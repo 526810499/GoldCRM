@@ -20,7 +20,7 @@ namespace XHD.Server
 
         public static Model.Product_TakeStock model = new Model.Product_TakeStock();
         private string authRightID = "6A0BE2D0-AAB9-472D-8016-D14C9E90F6A8";
-
+        private string delRightID = "6A0BE2D0-AAB9-472D-8016-D14C9E90F6A8";
 
         public Product_TakeStock()
         {
@@ -28,8 +28,20 @@ namespace XHD.Server
 
         public Product_TakeStock(HttpContext context) : base(context)
         {
-            allDataBtnid = "73D96F9F-E5E2-438B-B34A-411A0EA62288";
-            depDataBtnid = "2AA4ABED-ECB2-4F49-B649-ADE2428907B8";
+            if (request["taketype"].CInt(0, false) == 0)
+            {
+                allDataBtnid = "73D96F9F-E5E2-438B-B34A-411A0EA62288";
+                depDataBtnid = "2AA4ABED-ECB2-4F49-B649-ADE2428907B8";
+                delRightID = "540730D4-4046-41AC-A04F-46A9F2205C58";
+                authRightID = "6A0BE2D0-AAB9-472D-8016-D14C9E90F6A8";
+            }
+            else {
+                delRightID = "B9FCB203-4B46-42EC-9DFC-5704574E8A8C";
+                authRightID = "202C1841-BB0E-4591-8C53-78875647E4E2";
+                depDataBtnid = "105EBC81-D637-4E9F-8300-0841D8FEF20F";
+                allDataBtnid = "245ED03C-56A4-41D9-A502-544CE38B31AC";
+
+            }
         }
 
         public string save()
@@ -39,6 +51,7 @@ namespace XHD.Server
 
             model.update_id = emp_id;
             model.update_time = DateTime.Now;
+            model.takeType = request["takeType"].CInt(0, false);
             string id = PageValidate.InputText(request["id"], 50);
             string postData = request["postData"].CString("");
             bool isAdd = true;
@@ -112,7 +125,8 @@ namespace XHD.Server
                         Syslog.Add_log(UserID, UserName, IPStreet, EventTitle, EventType, EventID, Log_Content);
                 }
                 else {
-                    id = "PD-" + DateTime.Now.ToString("yy-MM-dd-HH:mm-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
+                    isAdd = false;
+                    id = "PD-" + DateTime.Now.ToString("yy-MM-dd-HH-mm-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
                     model.id = id;
                     model.status = request["auth"].CInt(0, false) == 1 ? 1 : 0;
                     model.create_id = emp_id;
@@ -181,11 +195,16 @@ namespace XHD.Server
                 return XhdResult.Error("添加失败,请确认是否重复添加后在操作！").ToString();
             }
 
+
             if (msg.Length > 0)
             {
-
-                msg += "状态发生改变,请确认在添加或提交审核";
-                return XhdResult.Success(msg).ToString();
+                //添加提交审核的但是商品状态改变的修改状态
+                if (model.status == 1 && isAdd)
+                {
+                    model.status = 0;
+                    tBll.Update(model);
+                }
+                msg += "状态发生改变,请确认在添加后在提交审核";
             }
 
             return XhdResult.Success().ToString();
@@ -206,7 +225,8 @@ namespace XHD.Server
             string sorttext = " " + sortname + " " + sortorder;
 
             string Total;
-            string serchtxt = $" 1=1 ";
+            int takeType = request["taketype"].CInt(0, false);
+            string serchtxt = $" taketype=" + takeType;
             int warehouse_id = request["swarehouse_id"].CInt(0, false);
 
             if (warehouse_id > 0)
@@ -221,7 +241,7 @@ namespace XHD.Server
 
             if (!string.IsNullOrEmpty(request["scode"]))
             {
-                string scode = PageValidate.InputText(request["scode"],50);
+                string scode = PageValidate.InputText(request["scode"], 50);
                 DataSet dsc = detailBll.GetList($" barcode='{scode}'");
                 if (dsc == null || dsc.Tables[0].Rows.Count <= 0)
                 {
@@ -235,6 +255,7 @@ namespace XHD.Server
 
             if (!string.IsNullOrEmpty(request["sendtime"]))
                 serchtxt += $" and create_time<='{request["sendtime"].CDateTime(DateTime.Now, false)}'";
+
 
             serchtxt = GetSQLCreateIDWhere(serchtxt, true);
 
@@ -381,7 +402,7 @@ namespace XHD.Server
             if (uid != "admin")
             {
 
-                candel = CheckBtnAuthority("540730D4-4046-41AC-A04F-46A9F2205C58");
+                candel = CheckBtnAuthority(delRightID);
                 if (!candel)
                     return XhdResult.Error("无此权限！").ToString();
             }

@@ -43,13 +43,15 @@ namespace XHD.Server
             model.Order_amount = decimal.Parse(request["T_amount"]);
             model.discount_amount = decimal.Parse(request["T_discount"]);
             model.total_amount = decimal.Parse(request["T_total"]);
-            model.receive_money = decimal.Parse(request["T_receive"]);
+            model.receive_money = model.total_amount;// decimal.Parse(request["T_receive"]);
             model.arrears_money = decimal.Parse(request["T_arrears"]);
             model.emp_id = PageValidate.InputText(request["T_emp_val"], 50);
             model.cashier_id = PageValidate.InputText(request["T_cashier_val"], 50);
             model.vipcard = PageValidate.InputText(request["T_vipcard"], 50);
             model.createdep_id = PageValidate.InputText(request["T_dept_id_val"], 50);
+            model.PayTheBill = PageValidate.InputText(request["T_PayTheBill"], 50);
             string id = PageValidate.InputText(request["id"], 50);
+            decimal oldtotal_amount = 0;
             if (PageValidate.checkID(id))
             {
                 model.id = id;
@@ -58,7 +60,7 @@ namespace XHD.Server
                     return XhdResult.Error("参数不正确，更新失败！").ToString();
 
                 DataRow dr = ds.Tables[0].Rows[0];
-
+                oldtotal_amount = dr["oldtotal_amount"].CDecimal(0, false);
                 order.Update(model);
                 //context.Response.Write(model.id );
 
@@ -104,11 +106,11 @@ namespace XHD.Server
                     request["T_total"]
                     );
                 Log_Content += Syslog.get_log_content(
-                 dr["receive_money"].CString(""),
-                  request["T_receive"].CString(""),
-                  "应收金额",
-                 dr["receive_money"].CString(""),
-                  request["T_receive"].CString("")
+                 dr["PayTheBill"].CString(""),
+                  request["T_PayTheBill"].CString(""),
+                  "T_PayTheBill",
+                 dr["PayTheBill"].CString(""),
+                  request["T_PayTheBill"].CString("")
                   );
 
                 Log_Content += Syslog.get_log_content(
@@ -141,7 +143,7 @@ namespace XHD.Server
                 model.create_time = DateTime.Now;
                 model.arrears_invoice = model.Order_amount;
                 model.invoice_money = 0;
-                model.Serialnumber = "DD-" + DateTime.Now.ToString("yy-MM-dd-HH:mm-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
+                model.Serialnumber = "DD-" + DateTime.Now.ToString("yy-MM-dd-HH-mm-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
                 if (model.Order_status_id == "5587BCED-0A36-4EDF-9562-F962A9B1913C")
                 {
                     canAddIntegal = 1;
@@ -294,7 +296,14 @@ namespace XHD.Server
             var receivable = new BLL.Finance_Receivable();
             if (ds.Tables[0].Rows[0]["receive_money"].CDecimal(0, false) > 0)
             {
-                return XhdResult.Error("此订单下含有应收款，不允许删除！").ToString();
+                return XhdResult.Error("此订单下含有收款，不允许删除！").ToString();
+            }
+
+            int rows = new BLL.Sale_order_details().GetDetailCount(id);
+
+            if (rows > 0)
+            {
+                return XhdResult.Error("此订单下含有商品，不允许删除！").ToString();
             }
 
             bool candel = true;

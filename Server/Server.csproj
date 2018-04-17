@@ -125,6 +125,7 @@
     <Compile Include="Product_allot.cs" />
     <Compile Include="Product_category.cs" />
     <Compile Include="Product_out.cs" />
+    <Compile Include="Product_StockIn.cs" />
     <Compile Include="Product_supplier.cs" />
     <Compile Include="Product_TakeStock.cs" />
     <Compile Include="Product_warehouse.cs" />
