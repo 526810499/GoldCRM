@@ -68,11 +68,6 @@
                     }
 
                 ],
-                //groupColumnName: 'Customer_name', groupColumnDisplay: '客户',
-                //groupRender: function (column, display, data) {
-                //    return display + ":" + column + "  （共" + data.length + "条记录。）";
-                //},
-                //defaultCloseGroup: true,
                 dataAction: 'server', pageSize: 30, pageSizeOptions: [10, 20, 30, 40, 50, 60, 80, 100, 120],
                 url: "Sale_order.grid.xhd?rnd=" + Math.random(),
                 width: '100%', height: '100%',
@@ -97,17 +92,16 @@
                                     }
                                 },
                                 {
-                                    display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
-                                        return toMoney(item.SalesCostsTotal);
+                                    display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
+                                        return toMoney(item.CostsTotal);
                                     }
                                 },
                                 {
-                                    display: '销售价格(￥)', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
-                                        return toMoney(item.SalesTotalPrice);
+                                    display: '销售总价', name: 'amount', width: 80, align: 'right', render: function (item) {
+                                        return toMoney(item.amount);
                                     }
                                 }
                             ],
-                            //selectRowButtonOnly: true,
                             usePager: false,
                             checkbox: false,
                             url: "Sale_order_details.grid.xhd?orderid=" + r.id,
@@ -123,7 +117,7 @@
                 },
                 onContextmenu: function (parm, e) {
                     actionCustomerID = parm.data.id;
-                    menu.show({ top: e.pageY, left: e.pageX });
+                   // menu.show({ top: e.pageY, left: e.pageX });
                     return false;
                 }
             });

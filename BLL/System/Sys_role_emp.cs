@@ -6,58 +6,67 @@ using XHD.Common;
 using XHD.Model;
 namespace XHD.BLL
 {
-	/// <summary>
-	/// Sys_role_emp
-	/// </summary>
-	public partial class Sys_role_emp
-	{
-		private readonly XHD.DAL.Sys_role_emp dal=new XHD.DAL.Sys_role_emp();
-		public Sys_role_emp()
-		{}
-		#region  BasicMethod
+    /// <summary>
+    /// Sys_role_emp
+    /// </summary>
+    public partial class Sys_role_emp
+    {
+        private readonly XHD.DAL.Sys_role_emp dal = new XHD.DAL.Sys_role_emp();
+        public Sys_role_emp()
+        { }
+        #region  BasicMethod
 
-		/// <summary>
-		/// 增加一条数据
-		/// </summary>
-		public bool Add(XHD.Model.Sys_role_emp model)
-		{
-			return dal.Add(model);
-		}
+        /// <summary>
+        /// 增加一条数据
+        /// </summary>
+        public bool Add(XHD.Model.Sys_role_emp model)
+        {
+            return dal.Add(model);
+        }
 
-		
-		/// <summary>
-		/// 删除一条数据
-		/// </summary>
-		public bool Delete(string where)
-		{
-			//该表无主键信息，请自定义主键/条件字段
-			return dal.Delete(where);
-		}
 
-		
-		/// <summary>
-		/// 获得数据列表
-		/// </summary>
-		public DataSet GetList(string strWhere)
-		{
-			return dal.GetList(strWhere);
-		}
-		
+        /// <summary>
+        /// 删除一条数据
+        /// </summary>
+        public bool Delete(string where)
+        {
+            //该表无主键信息，请自定义主键/条件字段
+            return dal.Delete(where);
+        }
 
-		/// <summary>
-		/// 获得数据列表
-		/// </summary>
-		public DataSet GetAllList()
-		{
-			return GetList("");
-		}
 
-		
+        /// <summary>
+        /// 获得数据列表
+        /// </summary>
+        public DataSet GetList(string strWhere)
+        {
+            return dal.GetList(strWhere);
+        }
+        /// <summary>
+        /// 检查用户是否有这个角色权限
+        /// </summary>
+        /// <param name="empID"></param>
+        /// <param name="RoleID"></param>
+        /// <returns></returns>
+        public bool CheckUserRoleRight(string empID, string RoleID)
+        {
+            return dal.CheckUserRoleRight(empID, RoleID);
+        }
 
-		#endregion  BasicMethod
-		#region  ExtensionMethod
+        /// <summary>
+        /// 获得数据列表
+        /// </summary>
+        public DataSet GetAllList()
+        {
+            return GetList("");
+        }
 
-		#endregion  ExtensionMethod
-	}
+
+
+        #endregion  BasicMethod
+        #region  ExtensionMethod
+
+        #endregion  ExtensionMethod
+    }
 }
 

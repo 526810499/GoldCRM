@@ -77,6 +77,7 @@
                         obj.emp_id = ("<%=XHD.Common.DEncrypt.DEncrypt.Decrypt(HttpUtility.UrlDecode(XHD.Common.CookieHelper.GetValue("uid")))%>");
                         obj.cashiername = obj.emp_name;
                         obj.cashier_id = obj.emp_id;
+                        
                     }
 
                     rows.push(
@@ -254,21 +255,16 @@
                         }
                     },
                     {
-                        display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.SalesCostsTotal);
-                        }
-                    },
-                    {
-                        display: '销售价格(￥)', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.SalesTotalPrice);
-                        }
+                        display: '销售价格(￥)', name: 'amount', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.amount);
+                        }, editor: { type: 'number' }
                     }
                 ],
                 allowHideColumn: false,
-                //onAfterEdit: f_onAfterEdit,
+                onAfterEdit: f_onAfterEdit,
                 title: '商品明细',
                 usePager: false,
-                //enabledEdit: true,
+                enabledEdit: true,
                 url: "Sale_order_details.grid.xhd?orderid=" + getparastr("id"),
                 width: '100%',
                 height: 350,
@@ -302,7 +298,6 @@
 
         function f_onAfterEdit(e) {
             var manager = $("#maingrid4").ligerGetGridManager();
-            manager.updateCell('amount', e.record.agio * e.record.quantity, e.record);
             $("#T_amount").val(toMoney(manager.getColumnDateByType('amount', 'sum') * 1.0));
             getAmount();
         }

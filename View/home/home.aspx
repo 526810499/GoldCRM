@@ -15,7 +15,7 @@
     <script src="../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
     <script src="../lib/ligerUI/js/plugins/ligerToolBar.js"></script>
     <script src="../JS/XHD.js" type="text/javascript"> </script>
-    <script src="../JS/echarts-all.js" type="text/javascript"> </script>
+    <%--    <script src="../JS/echarts-all.js" type="text/javascript"> </script>--%>
     <style>
         .bevel {
             font-family: "trebuchet MS", sans-serif;
@@ -27,17 +27,20 @@
     </style>
     <script type="text/javascript">
         $(function () {
-            f_menu();
-            // f_message();
-            remind();
-            getUser();
-            setInterval(remind, 30000);
-            portal();
 
-            //$("#a").ligerButton({ text: "客户管理", width: 80, click: notice, icon: "../images/icon/61.png" })
-            //$("#b").ligerButton({ text: "跟进管理", width: 80, click: notice, icon: "../images/icon/3.png" })
-            //$("#c").ligerButton({ text: "日程管理", width: 80, click: notice, icon: "../images/icon/29.png" })
-            //$("#btn-set").ligerButton({ text: "设置", width: 60, click: queckmenu, icon: "../images/icon/77.png" })
+            setInterval(remind, 36000);
+           
+
+            //setTimeout(setTimeoutFun, 1000);
+            setTimeoutFun();
+
+            remind();
+            $("#username").text("【" + urldecode(getCookie("urname")) + "】");
+        });
+
+        //延时执行
+        function setTimeoutFun() {
+            portal();
 
             $("#queckmenu").ligerToolBar({
                 items: [{
@@ -48,14 +51,14 @@
                     click: queckmenu
                 }]
             });
-
+            f_menu();
             f_notice();
             f_news();
             f_note();
             f_calendar();
             f_todo();
             CBrihtdayRemind();
-        });
+        }
 
         function CBrihtdayRemind() {
 
@@ -93,13 +96,6 @@
             else if (hour < 22) { $("#greetings").text("晚上好！") }
             else { $("#greetings").text("夜深了！") }
         }
-        function getUser() {
-            $.getJSON("Sys_base.GetUserInfo.xhd?rnd=" + Math.random(), function (data, textStatus) {
-                //alert(data);
-                $("#username").text("【" + data.name + "】");
-
-            });
-        }
 
         function queckmenu() {
             f_openWindow("home/queckmenu.aspx", "快捷菜单", 600, 400, f_menu_set);
@@ -110,13 +106,8 @@
 
             if (!issave) return;
 
-            //alert(JSON.stringify(issave)); return;
-
-            //if (!issave.length) return;
-
             var count = 0;
             $(issave).each(function (i, item) {
-                //alert(this.__status);
                 if (this.__status != 'delete')
                     count++;
             })

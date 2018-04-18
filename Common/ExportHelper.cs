@@ -111,7 +111,7 @@ namespace XHD.Common
 
                     string Values = row[column].ToString();
                     string ColumnName = column.ColumnName;
- 
+
                     ICell celltemp = dataRow.CreateCell(column.Ordinal);
 
                     switch (column.DataType.ToString())
@@ -217,6 +217,10 @@ namespace XHD.Common
             #endregion
 
             #region 单元格样式
+            IDataFormat dataformat = hssfworkbook.CreateDataFormat();
+            ICellStyle dateStyle = hssfworkbook.CreateCellStyle();
+            dateStyle.DataFormat = dataformat.GetFormat("yyyy-MM-dd HH:mm:ss");
+
             ICellStyle StyleCell = hssfworkbook.CreateCellStyle();//创建单元格的样式
             IFont FontCell = hssfworkbook.CreateFont();//创建字体样式
             FontCell.FontHeightInPoints = 10;
@@ -265,7 +269,7 @@ namespace XHD.Common
                 IRow dataRow = sheet1.CreateRow(rowIndex);
                 foreach (DataColumn column in sourceTable.Columns)
                 {
-                    string Values = row[column].ToString().ToLower();
+                    string Values = row[column].ToString();
                     string ColumnName = column.ColumnName;
                     if (CloumnValues != null)
                     {
@@ -290,6 +294,7 @@ namespace XHD.Common
                                 celltemp.SetCellValue(Values);
                                 break;
                             case "System.DateTime"://日期类型   
+                                celltemp.CellStyle = dateStyle;
                                 DateTime dateV;
                                 DateTime.TryParse(Values, out dateV);
                                 celltemp.SetCellValue(dateV);

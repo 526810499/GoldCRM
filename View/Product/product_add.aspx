@@ -36,11 +36,12 @@
                     $.ligerDialog.warn('商品分类需选择');
                     return false;
                 }
+                var T_product_categoryName = $("#T_product_category").val();
 
                 var T_StockPrice = parseFloat($("#T_StockPrice").val());
                 var T_Weight = parseFloat($("#T_Weight").val());
 
-                if (T_StockPrice <= 0) {
+                if (T_StockPrice <= 0 && T_product_categoryName != "赠送品") {
                     $.ligerDialog.warn('进货金价不能为小于0！');
                     return false;
                 }

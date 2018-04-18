@@ -13,7 +13,7 @@ namespace XHD.Server
         public static BLL.Product_category category = new BLL.Product_category();
         public static Model.Product_category model = new Model.Product_category();
 
- 
+
 
         public Product_category()
         {
@@ -26,7 +26,7 @@ namespace XHD.Server
             model.parentid = PageValidate.InputText(request["T_category_parent_val"], 50);
             model.product_category = PageValidate.InputText(request["T_category_name"], 250);
             model.product_icon = PageValidate.InputText(request["T_category_icon"], 250);
-            model.CodingBegins= PageValidate.InputText(request["T_CodingBegins"], 50);
+            model.CodingBegins = PageValidate.InputText(request["T_CodingBegins"], 50).ToUpper();
             string id = PageValidate.InputText(request["id"], 50);
             string pid = PageValidate.InputText(request["T_category_parent_val"], 50);
             if (PageValidate.checkID(id))
@@ -52,15 +52,15 @@ namespace XHD.Server
                 string EventID = model.id;
                 string Log_Content = null;
 
-                if (dr["product_category"].ToString() != request["T_category_name"])
+                if (dr["product_category"].CString("") != request["T_category_name"])
                     Log_Content += string.Format("【{0}】{1} → {2} \n", "商品类别", dr["product_category"].ToString(), request["T_category_name"]);
 
-                if (dr["product_icon"].ToString() != request["T_category_icon"])
+                if (dr["product_icon"].CString("") != request["T_category_icon"])
                     Log_Content += string.Format("【{0}】{1} → {2} \n", "类别图标", dr["product_icon"].ToString(), request["T_category_icon"]);
 
-                if (dr["parentid"].ToString() != request["T_category_parent_val"])
+                if (dr["parentid"].CString("") != request["T_category_parent_val"])
                     Log_Content += string.Format("【{0}】{1} → {2} \n", "上级类别", dr["parentid"].ToString(), request["T_category_parent_val"]);
-                if (dr["CodingBegins"].ToString() != request["T_CodingBegins"])
+                if (dr["CodingBegins"].CString("") != request["T_CodingBegins"])
                     Log_Content += string.Format("【{0}】{1} → {2} \n", "CodingBegins", dr["CodingBegins"].ToString(), request["T_CodingBegins"]);
 
                 if (!string.IsNullOrEmpty(Log_Content))
@@ -72,10 +72,14 @@ namespace XHD.Server
 
             else
             {
-
+                if (string.IsNullOrWhiteSpace(model.parentid))
+                {
+                    model.parentid = "root";
+                }
                 model.id = Guid.NewGuid().ToString();
                 model.create_id = emp_id;
                 model.create_time = DateTime.Now;
+
                 category.Add(model);
 
             }

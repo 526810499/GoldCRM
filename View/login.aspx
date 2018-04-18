@@ -4,12 +4,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta content="ie=edge chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="renderer" content="webkit">
     <title>{xx}CRM-µÇÂ¼</title>
-    <link rel="shortcut icon" type="image/x-icon" href="images/logo/favicon.ico"/>
-     <link href="lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" />
+    <link rel="shortcut icon" type="image/x-icon" href="images/logo/favicon.ico" />
+    <link href="lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" />
     <link href="lib/ligerUI/skins/Gray2014/css/all.css" rel="stylesheet" />
     <link href="CSS/input.css" rel="stylesheet" type="text/css" />
-   <%-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>--%>
+    <%-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>--%>
     <script src="lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
 
@@ -93,27 +94,27 @@
                     type: 'post', dataType: 'json',
                     url: 'login.check.xhd',
                     data: [
-                      
+
                         { name: 'username', value: uid },
                         { name: 'password', value: $.md5(pwd) },
                         { name: 'validate', value: validate },
                         { name: 'rnd', value: Math.random() }
                     ],
-                    dataType:'json',
+                    dataType: 'json',
                     success: function (result) {
                         $.ligerDialog.closeWaitting();
 
                         var obj = eval(result);
 
-                        if (obj.isSuccess) {                         
-                            SetCookie("xhdcrm_uid", uid, 30);                           
+                        if (obj.isSuccess) {
+                            SetCookie("xhdcrm_uid", uid, 30);
                             location.href = "main.aspx";
                         }
                         else {
                             $("#validate").click();
                             $.ligerDialog.error(obj.Message);
-                            
-                        }                       
+
+                        }
                     },
                     error: function () {
                         $.ligerDialog.closeWaitting();
@@ -134,10 +135,23 @@
 
     </script>
     <style type="text/css">
-        .btn_login_over { filter: alpha(opacity=80); opacity: 0.80; }
-        img { border: none; }
-        .text { border: #d2e2f2 1px solid; height: 19px; }
-        body { BACKGROUND: #fff url(images/login/login_bg.png) repeat-x; }
+        .btn_login_over {
+            filter: alpha(opacity=80);
+            opacity: 0.80;
+        }
+
+        img {
+            border: none;
+        }
+
+        .text {
+            border: #d2e2f2 1px solid;
+            height: 19px;
+        }
+
+        body {
+            BACKGROUND: #fff url(images/login/login_bg.png) repeat-x;
+        }
     </style>
     <script type="text/javascript">
         if (top.location != self.location) top.location = self.location;
@@ -147,7 +161,7 @@
     <form id="form1" name="form1">
         <div style="margin-left: 20px; margin-top: 10px;">
             <a href="#" target="_blank">
-               <%-- <img src="images/logo/logo.png" height="45" alt="crm" />--%>
+                <%-- <img src="images/logo/logo.png" height="45" alt="crm" />--%>
             </a>
         </div>
 

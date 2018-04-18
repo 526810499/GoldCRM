@@ -204,7 +204,7 @@
             if (!$("#maingrid_order")) return;
             g3 = $("#maingrid_order").ligerGrid({
                 columns: [
-                    { display: '订单编号', name: 'Serialnumber', width: 180 },
+                    { display: '订单编号', name: 'Serialnumber', width: 250 },
 
                     {
                         display: '成交人员', width: 100, render: function (item) {

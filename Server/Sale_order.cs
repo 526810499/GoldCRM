@@ -20,9 +20,15 @@ namespace XHD.Server
 
         public Sale_order(HttpContext context) : base(context)
         {
-
-            allDataBtnid = "4C2A57BB-94A5-401A-82AA-24DE1F5DE4DB";
-            depDataBtnid = "1F5A29CE-CE24-4A96-9B98-D72D5AF9B924";
+            if (request["datacount"].CInt(0, false) == 0)
+            {
+                allDataBtnid = "4C2A57BB-94A5-401A-82AA-24DE1F5DE4DB";
+                depDataBtnid = "1F5A29CE-CE24-4A96-9B98-D72D5AF9B924";
+            }
+            else {
+                allDataBtnid = "4C25245E-9253-4D72-890F-5A28FB144998";
+                depDataBtnid = "6D813763-3863-4128-ACC3-E76DC1127A8E";
+            }
         }
 
         public string save()
@@ -51,7 +57,7 @@ namespace XHD.Server
             model.createdep_id = PageValidate.InputText(request["T_dept_id_val"], 50);
             model.PayTheBill = PageValidate.InputText(request["T_PayTheBill"], 50);
             string id = PageValidate.InputText(request["id"], 50);
-            decimal oldtotal_amount = 0;
+
             if (PageValidate.checkID(id))
             {
                 model.id = id;
@@ -60,7 +66,7 @@ namespace XHD.Server
                     return XhdResult.Error("参数不正确，更新失败！").ToString();
 
                 DataRow dr = ds.Tables[0].Rows[0];
-                oldtotal_amount = dr["oldtotal_amount"].CDecimal(0, false);
+
                 order.Update(model);
                 //context.Response.Write(model.id );
 
@@ -210,28 +216,9 @@ namespace XHD.Server
 
         }
 
-        public string grid()
+        private string GetStWhere()
         {
-            int PageIndex = int.Parse(request["page"] == null ? "1" : request["page"]);
-            int PageSize = int.Parse(request["pagesize"] == null ? "30" : request["pagesize"]);
-            string sortname = request["sortname"];
-            string sortorder = request["sortorder"];
-
-            if (string.IsNullOrEmpty(sortname))
-                sortname = " Sale_order.create_time";
-            if (string.IsNullOrEmpty(sortorder))
-                sortorder = "desc";
-
-            string sorttext = $" { sortname } { sortorder}";
-
-            string Total;
             string serchtxt = $" 1=1 ";
-
-            //string issar = request["issarr"];
-            //if (issar == "1")
-            //{
-            //    serchtxt += " and isnull( arrears_money,0)>0";
-            //}
 
             if (PageValidate.checkID(request["customerid"]))
                 serchtxt += $" and Sale_order.Customer_id = '{PageValidate.InputText(request["customerid"], 50)}' ";
@@ -239,8 +226,10 @@ namespace XHD.Server
             if (!string.IsNullOrEmpty(request["T_cus"]))
                 serchtxt += $" and CRM_Customer.cus_name like N'%{ PageValidate.InputText(request["T_cus"], 255)}%'";
 
+
             if (PageValidate.checkID(request["T_Status_val"]))
                 serchtxt += $" and Order_status_id = '{PageValidate.InputText(request["T_Status_val"], 50)}'";
+
 
             if (PageValidate.checkID(request["employee_val"]))
                 serchtxt += $" and Sale_order.emp_id = '{PageValidate.InputText(request["employee_val"], 50)}'";
@@ -256,10 +245,122 @@ namespace XHD.Server
                 serchtxt += $" and Order_date <= '{request["enddate"] }'";
             }
 
-            //权限 
-            //serchtxt += DataAuthUserID("Sale_order.emp_id");
             serchtxt = GetSQLCreateIDWhere(serchtxt, true);
 
+            return serchtxt;
+        }
+
+        private string GetStWhereData(bool isExport)
+        {
+            string serchtxt = $" 1=1 ";
+
+            if (PageValidate.checkID(request["customerid"]))
+                serchtxt += $" and Customer_id = '{PageValidate.InputText(request["customerid"], 50)}' ";
+
+            if (!string.IsNullOrWhiteSpace(request["T_OrderID"]))
+                serchtxt += $" and Serialnumber = '{PageValidate.InputText(request["T_OrderID"], 50)}' ";
+
+            if (!string.IsNullOrEmpty(request["T_cus"]))
+                serchtxt += $" and cus_name like N'%{ PageValidate.InputText(request["T_cus"], 255)}%'";
+
+
+            serchtxt += $" and Order_status_id ='5587BCED-0A36-4EDF-9562-F962A9B1913C' ";
+
+
+            if (PageValidate.checkID(request["employee_val"]))
+                serchtxt += $" and emp_id = '{PageValidate.InputText(request["employee_val"], 50)}'";
+            else if (PageValidate.checkID(request["department_val"]))
+                serchtxt += $" and createdep_id = '{PageValidate.InputText(request["department_val"], 50)}' ";
+
+            if (!string.IsNullOrEmpty(request["startdate"]))
+            {
+                serchtxt += $" and Order_date >= '{ PageValidate.InputText(request["startdate"], 255) }'";
+            }
+            else if (isExport)
+            {
+                serchtxt += $" and Order_date >= '{DateTime.Now.Date.AddDays(-1)}'";
+            }
+
+            if (!string.IsNullOrEmpty(request["enddate"]))
+            {
+                DateTime enddate = DateTime.Parse(request["enddate"]).AddHours(23).AddMinutes(59).AddSeconds(59);
+                serchtxt += $" and Order_date <= '{request["enddate"] }'";
+            }
+            else if (isExport)
+            {
+                serchtxt += $" and Order_date < '{DateTime.Now.Date.AddDays(1)}'";
+            }
+
+            serchtxt = GetSQLCreateIDWhere(serchtxt, true);
+
+            return serchtxt;
+        }
+
+
+        /// <summary>
+        /// 导出数据
+        /// </summary>
+        /// <returns></returns>
+        public DataTable ExportData()
+        {
+            string serchtxt = GetStWhereData(true);
+
+            return order.ExportData(serchtxt);
+        }
+
+        /// <summary>
+        /// 销售数据惠州
+        /// </summary>
+        /// <returns></returns>
+        public string gridData()
+        {
+            int PageIndex = int.Parse(request["page"] == null ? "1" : request["page"]);
+            int PageSize = int.Parse(request["pagesize"] == null ? "30" : request["pagesize"]);
+            string sortname = request["sortname"];
+            string sortorder = request["sortorder"];
+
+            if (string.IsNullOrEmpty(sortname))
+                sortname = " create_time";
+            if (string.IsNullOrEmpty(sortorder))
+                sortorder = "desc";
+
+            string sorttext = $" { sortname } { sortorder}";
+
+            string serchtxt = GetStWhereData();
+
+            string Total = "0";
+
+            DataTable otable = new DataTable();
+
+            DataSet ds = order.GetListData(PageSize, PageIndex, serchtxt, sorttext, out otable);
+            if (otable != null)
+            {
+                Total = otable.Rows[0]["counts"].CString("0");
+            }
+
+            string dt = GetGridJSON.DataTableToJSON(ds.Tables[0], Total, otable);
+            return (dt);
+
+        }
+
+
+
+        public string grid()
+        {
+            int PageIndex = int.Parse(request["page"] == null ? "1" : request["page"]);
+            int PageSize = int.Parse(request["pagesize"] == null ? "30" : request["pagesize"]);
+            string sortname = request["sortname"];
+            string sortorder = request["sortorder"];
+
+            if (string.IsNullOrEmpty(sortname))
+                sortname = " Sale_order.create_time";
+            if (string.IsNullOrEmpty(sortorder))
+                sortorder = "desc";
+
+            string sorttext = $" { sortname } { sortorder}";
+
+            string Total;
+            string serchtxt = GetStWhere();
             DataSet ds = order.GetList(PageSize, PageIndex, serchtxt, sorttext, out Total);
 
             string dt = GetGridJSON.DataTableToJSON1(ds.Tables[0], Total);

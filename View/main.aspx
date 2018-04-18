@@ -9,8 +9,8 @@
     <%--<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>--%>
     <link rel="shortcut icon" type="image/x-icon" href="images/logo/favicon.ico" />
     <link href="lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" />
-    <link href="lib/ligerUI/skins/Gray2014/css/all.css" rel="stylesheet" />
-    <link href="CSS/index/main.css" rel="stylesheet" />
+    <link href="lib/ligerUI/skins/Silvery/css/all.css" rel="stylesheet" />
+    <link href="CSS/index/main.css?v=1" rel="stylesheet" />
 
     <script src="lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
@@ -18,12 +18,22 @@
     <script src="JS/XHD.js" type="text/javascript"></script>
     <style>
         .scroll_div {
-            width: 200px;
+            width: 400px;
             height: 49px;
             margin-left: 1200px;
             margin-top: 12px;
             overflow: hidden;
             white-space: nowrap;
+        }
+
+        .bli {
+            font-family: arial, sans-serif;
+            color: #CFE8D9;
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 0.8pt;
+            word-spacing: 0pt;
+            line-height: 1.1;
         }
 
         #scroll_begin, #scroll_end, #scroll_begin ul, #scroll_end ul, #scroll_begin ul li, #scroll_end ul li {
@@ -102,8 +112,9 @@
                 }
             }
         }
+        var mwaitDialog;
         $(function () {
-            $.ligerDialog.waitting("系统加载中...");
+            mwaitDialog = $.ligerDialog.waitting("系统加载中...");
             //$("#home").attr("src", "home/home.aspx");
             f_user();
 
@@ -130,8 +141,7 @@
             });
             accordion = $("#accordion1").ligerAccordion({ height: height - 32 });
             menu();
-            //setInterval("usertree()", 30000);
-            //setInterval("getsysinfo()", 30000);
+
             checkbrowse();
             setTimeout("getuserinfo()", 3000);
         });
@@ -261,7 +271,8 @@
                 $("#home").attr("src", "home/home.aspx");
                 //$("#pageloading").fadeOut(800);
 
-            })
+                mwaitDialog.close();
+            });
         }
 
 
@@ -328,7 +339,7 @@
                     $("#userheader").attr("src", "/images/noheadimage.jpg");
                 }
             });
-            //GetTodayBroadcast();
+            //  GetTodayBroadcast();
         }
 
 
@@ -425,18 +436,17 @@
         }
 
 
-
-
         function GetTodayBroadcast() {
             $.getJSON("STodayBroadcast.GetTodayBroadcast.xhd?rnd=" + Math.random(), function (data, textStatus) {
                 if (data != null) {
-                    var c = "<li>今日金价:<b>" + data.TodayGlodPrice + "</b></li><li>&nbsp;&nbsp;" + data.OtherBrodcast + "</li>";
+                    var temp = "<li class='bli'>当前单价:<b style='color:red;padding-left:5px'>" + toMoney(data.TodayGlodPrice) + "</b></li><li class='bli'>&nbsp;&nbsp;" + data.OtherBrodcast + "</li>";
+                    var c = temp;
                     c += "<li>&nbsp;&nbsp;</li>";
                     c += "<li>&nbsp;&nbsp;</li>";
-                    c += "<li>今日金价:<b>" + data.TodayGlodPrice + "</b></li><li>&nbsp;&nbsp;" + data.OtherBrodcast + "</li>";
+                    c += temp;
                     c += "<li>&nbsp;&nbsp;</li>";
                     c += "<li>&nbsp;&nbsp;</li>";
-                    c += "<li>今日金价:<b>" + data.TodayGlodPrice + "</b></li><li>&nbsp;&nbsp;" + data.OtherBrodcast + "</li>";
+                    c += temp;
 
                     $("#scroll_begin").html("<ul>" + c + "</ul>");
                     ScrollImgLeft();

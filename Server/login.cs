@@ -53,7 +53,9 @@ namespace XHD.Server
                 if (ds.Tables[0].Rows[0]["canlogin"].ToString() != "1")
                     return XhdResult.Error("账户已限制登录！").ToString();  //不允许登录
 
-                string userid = ds.Tables[0].Rows[0]["ID"].ToString();
+                DataRow rows = ds.Tables[0].Rows[0];
+
+                string userid = rows["ID"].ToString();
                 var ticket = new FormsAuthenticationTicket(
                     1,
                     username,
@@ -71,10 +73,11 @@ namespace XHD.Server
                 cookie.Expires = DateTime.Now.AddMinutes(20);
 
                 Context.Response.Cookies.Add(cookie);
-
-                CookieHelper.Add("udepid", ds.Tables[0].Rows[0]["dep_id"].CString(""));
-                CookieHelper.Add("udepname", ds.Tables[0].Rows[0]["dep_name"].CString(""));
+ 
+                CookieHelper.Add("udepid", rows["dep_id"].CString(""));
+                CookieHelper.Add("udepname", rows["dep_name"].CString(""));
                 CookieHelper.Add("uid", HttpUtility.UrlEncode(DEncrypt.Encrypt(userid)));
+                CookieHelper.Add("urname", HttpUtility.UrlEncode(rows["name"].CString("")));
                 //日志
                 var log = new BLL.Sys_log();
                 var modellog = new Model.Sys_log();

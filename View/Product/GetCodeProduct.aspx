@@ -86,7 +86,7 @@
 
 
             $("#scode").ligerTextBox({ width: 250, onChangeValue: function (value) { doChangeSearch(); }, onFocus: function () { $("#scode").select(); }, onBlur: function () { doChangeSearch(); } });
-            $("#scode").attr("maxlength", 13);
+            $("#scode").attr("maxlength", 14);
             $("#scode").on('input', function (e) {
                 doChangeSearch();
             });
@@ -94,7 +94,7 @@
 
         function doChangeSearch() {
             var v = $("#scode").val();
-            if (v != undefined && v.length == 13) {
+            if (v != undefined && v.length == 14) {
                 doserch();
             }
         }
@@ -102,7 +102,7 @@
         //²éÑ¯
         function doserch() {
             var scode = $("#scode").val();
-            if (itemsCode.indexOf(scode) > -1 || scode.length < 13) {
+            if (itemsCode.indexOf(scode) > -1 || scode.length < 14) {
                 return false;
             }
             var manager = $("#maingrid4").ligerGetGridManager();

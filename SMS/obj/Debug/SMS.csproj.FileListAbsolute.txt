@@ -15,3 +15,4 @@ F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\SMS\bin\Debug\XHD.SMS.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\SMS\bin\Debug\XHD.SMS.pdb
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\SMS\obj\Debug\XHD.SMS.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\SMS\obj\Debug\XHD.SMS.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\SMS\obj\Debug\SMS.csprojResolveAssemblyReference.cache

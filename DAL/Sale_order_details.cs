@@ -157,7 +157,7 @@ namespace XHD.DAL
             strSql.Append("      , Product.BarCode ");
             strSql.Append("      , isnull(Product.SalesCostsTotal,0) as SalesCostsTotal ");
             strSql.Append("      , isnull(Product.SalesTotalPrice,0 ) as SalesTotalPrice");
-            strSql.Append("      , Product.Weight ");
+            strSql.Append("      , Product.Weight,Product.CostsTotal ");
             strSql.Append("      ,Product_category.product_category as category_name ");
             strSql.Append("  FROM[dbo].[Sale_order_details] ");
             strSql.Append("  INNER JOIN Product ON Product.id = Sale_order_details.product_id ");

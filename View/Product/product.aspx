@@ -106,9 +106,9 @@
                                 case 1:
                                     return "<span style='color:#0066FF'> 入库 </span>";
                                 case 2:
-                                    return "<span style='color:#00CC66'> 调拨中 </span>";
+                                    return "<span style='color:#00CC66'> 调拨 </span>";
                                 case 3:
-                                    return "<span style='color:#009900'> 出库中 </span>";
+                                    return "<span style='color:#009900'> 出库 </span>";
                                 case 4:
                                     return "<span style='color:#FF3300'> 已销售 </span>";
                             }
@@ -433,7 +433,7 @@
                     </td>
 
                     <td>
-                        <div style='width: 80px; text-align: right; float: right'>订单状态：</div>
+                        <div style='width: 80px; text-align: right; float: right'>状态：</div>
                     </td>
                     <td>
                         <input id='sstatus' name="sstatus" type='text' />

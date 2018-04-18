@@ -359,6 +359,48 @@ namespace XHD.DAL
             return DbHelperSQL.Query(strSql_grid.ToString());
         }
 
+        /// <summary>
+        /// 导出数据
+        /// </summary>
+        /// <param name="strWhere"></param>
+        /// <returns></returns>
+        public DataTable ExportData(string strWhere)
+        {
+            string sql = "select  ROW_NUMBER() over(order by BarCode) as rows,*,(amount-Totals) as profits,Order_details as Remark from view_SaleOrderData ";
+            if (strWhere.Trim() != "")
+            {
+                sql += " where " + strWhere;
+            }
+
+            return DbHelperSQL.Query(sql).Tables[0];
+        }
+
+        /// <summary>
+        /// 销售明细汇总
+        /// </summary>
+        public DataSet GetListData(int PageSize, int PageIndex, string strWhere, string filedOrder, out DataTable totalTable)
+        {
+            StringBuilder strSql_grid = new StringBuilder();
+            StringBuilder strSql_total = new StringBuilder();
+            strSql_total.Append(@"select  COUNT(1) as counts,sum(Weight) as Weight, sum(CostsTotal) as CostsTotal, sum(Totals) as Totals FROM view_SaleOrderData  ");
+            strSql_grid.Append("SELECT ");
+            strSql_grid.Append("      * ");
+            strSql_grid.Append(" FROM ( SELECT *,ROW_NUMBER() OVER( Order by " + filedOrder + " ) AS n from view_SaleOrderData");
+            if (strWhere.Trim() != "")
+            {
+                strSql_grid.Append(" WHERE " + strWhere);
+                strSql_total.Append(" WHERE " + strWhere);
+            }
+            strSql_grid.Append("  ) as w1  ");
+            strSql_grid.Append("WHERE n BETWEEN " + (PageSize * (PageIndex - 1) + 1) + " AND " + PageSize * PageIndex);
+            strSql_grid.Append(" ORDER BY " + filedOrder);
+
+            totalTable = DbHelperSQL.Query(strSql_total.ToString()).Tables[0];
+            return DbHelperSQL.Query(strSql_grid.ToString());
+        }
+
+
+
         #endregion  BasicMethod
         #region  ExtensionMethod
         /// <summary>

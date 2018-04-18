@@ -33,3 +33,4 @@ F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\bin\Debug\MySql.Data.
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\bin\Debug\System.Data.SQLite.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\obj\Debug\XHD.DBUtility.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\obj\Debug\XHD.DBUtility.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\DBUtility\obj\Debug\DBUtility.csprojResolveAssemblyReference.cache

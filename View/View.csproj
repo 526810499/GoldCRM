@@ -153,6 +153,7 @@
     <Content Include="finance\Receivable_add.aspx" />
     <Content Include="finance\Receive_add.aspx" />
     <Content Include="font\fontawesome-webfont.svg" />
+    <Content Include="Images\logo\headlogo.png" />
     <Content Include="Images\noheader.png" />
     <Content Include="Images\noheaderlarger.png" />
     <Content Include="install\index.aspx" />
@@ -862,6 +863,7 @@
     <Content Include="Sale\contract_add.aspx" />
     <Content Include="Sale\contract_atta.aspx" />
     <Content Include="Sale\GetOrder.aspx" />
+    <Content Include="Sale\SalesData.aspx" />
     <Content Include="Sale\order.aspx" />
     <Content Include="Sale\order_view.aspx" />
     <Content Include="Sale\order_add.aspx" />
@@ -916,8 +918,6 @@
     <Content Include="Images\login\login_02.png" />
     <Content Include="Images\login\login_04.png" />
     <Content Include="Images\login\login_bg.png" />
-    <Content Include="Images\logo\favicon.ico" />
-    <Content Include="Images\logo\xhd75.png" />
     <Content Include="Images\upload.png" />
     <Content Include="Images\XPButtonUploadText_61x22.png" />
     <Content Include="JS\ajaxUpload.js" />
@@ -944,7 +944,6 @@
     <Content Include="System\sysmanager\Param_Provinces.aspx" />
     <Content Include="System\sysmanager\Param_Provinces_add.aspx" />
     <Content Include="Images\IsAccessary.gif" />
-    <Content Include="Images\logo\xhd.png" />
     <Content Include="JS\DragFlow\DragFlow.Init.js" />
     <Content Include="JS\DragFlow\DragFlow.JQuery.js" />
     <Content Include="JS\DragFlow\DragFlow.Render.js" />
@@ -2504,7 +2503,6 @@
     <Content Include="Images\index\menuitem.gif" />
     <Content Include="Images\index\tab-close.gif" />
     <Content Include="Images\index\title_close.gif" />
-    <Content Include="Images\logo\LOGO.png" />
     <Content Include="Images\noheadimage.jpg" />
     <Content Include="Images\personal\miracle.jpg" />
     <Content Include="Images\search.gif" />

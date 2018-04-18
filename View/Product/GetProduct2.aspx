@@ -125,7 +125,7 @@
 
         function doChangeSearch() {
             var v = $("#scode").val();
-            if (v != undefined && v.length == 13) {
+            if (v != undefined && v.length == 14) {
                 doserch();
             }
         }

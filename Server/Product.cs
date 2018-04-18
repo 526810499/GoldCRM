@@ -154,16 +154,16 @@ namespace XHD.Server
         /// <returns></returns>
         private string GetBarCode(string categoryid)
         {
-            string code = StringPlus.GetRandomLetters() + DateTime.Now.GetHashCode().ToString().Replace("-", "");
+            string code = DateTime.Now.GetHashCode().ToString().Replace("-", "");
 
-            string str = "YT";
+            string str = "Y";
             DataSet cds = new BLL.Product_category().GetList("id='" + model.category_id + "'");
             if (cds != null && cds.Tables.Count > 0)
             {
-                str = cds.Tables[0].Rows[0]["CodingBegins"].CString("YT");
+                str = cds.Tables[0].Rows[0]["CodingBegins"].CString("Y");
             }
 
-            code = (str + code).PadRight(13, '0');
+            code = (str + code).PadRight(14, '0');
 
             return code.ToUpper();
         }
