@@ -187,7 +187,7 @@
 
 
         function help(parameters) {
-            $.ligerDialog.question("此界面是{xx}CRM的客户管理界面，上面部分是客户列表，下面部分是跟进。点击客户，可以加载跟进信息。具体请访问官方教程：<br/><br/><a href='http://www.xhdcrm.com/khgl/8.html' target='_blank'>客户管理：客户列表教程</a>", "提示");
+            $.ligerDialog.question("此界面是永坤金行-CRM的客户管理界面，上面部分是客户列表，下面部分是跟进。点击客户，可以加载跟进信息。具体请访问官方教程：<br/><br/><a href='http://www.xhdcrm.com/khgl/8.html' target='_blank'>客户管理：客户列表教程</a>", "提示");
             //$.ligerDialog.open({ height: 200, url: 'http://wwww.xhdcrm.com', width: null });
         }
     </script>

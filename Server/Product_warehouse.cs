@@ -98,11 +98,11 @@ namespace XHD.Server
             str.Append("[");
             if (request["qxz"].CInt(0, false) == 1)
             {
-                str.Append("{\"id\":\"\",\"text\":\"请选择\",\"d_icon\":\"\"},");
+                str.Append("{\"id\":\"\",\"text\":\"==所有==\",\"d_icon\":\"\"},");
             }
             if (request["zb"].CInt(0, false) == 1)
             {
-                str.Append("{\"id\":\"\",\"text\":\"总仓库\",\"d_icon\":\"\"},");
+                str.Append("{\"id\":\"0\",\"text\":\"总仓库\",\"d_icon\":\"\"},");
             }
             bool qb = request["qb"].CInt(0, false) == 1;
             if (qb)

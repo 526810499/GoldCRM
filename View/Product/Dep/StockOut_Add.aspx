@@ -165,13 +165,19 @@
 
             $(".l-panel-header").append("<div id='headerBtn' style='width:290px;float:right;margin-bottom:2px;'><div id = 'btn_addcode' style='margin-top:2px;'></div><div id = 'btn_add' style='margin-top:2px;'></div><div id = 'btn_del' style='margin-top:2px;'></div></div>");
             $(".l-grid-loading").fadeOut();
+
             $("#btn_addcode").ligerButton({
                 width: 80,
                 text: "扫码添加",
                 icon: '../../../../images/icon/75.png',
                 click: addCode
             });
- 
+            $("#btn_add").ligerButton({
+                width: 80,
+                text: "手动添加",
+                icon: '../../../../images/icon/11.png',
+                click: add
+            });
 
             $("#btn_del").ligerButton({
                 width: 80,
@@ -187,11 +193,11 @@
 
             var buttons = [];
             buttons.push({ text: '保存', onclick: f_getpost });
-            f_openWindow2("product/GetProduct2.aspx?depdata=1&status=1,2,3", "选择商品", 1000, 400, buttons, 9003);
+            f_openWindow2("product/GetProduct2.aspx?depdata=1&optype=mdck", "选择商品", 1000, 400, buttons, 9003);
         }
 
         function addCode() {
-            f_openWindow("product/GetCodeProduct.aspx?depdata=1&status=1,2,3", "选择扫码商品", 1000, 400, f_getpost, 9003);
+            f_openWindow("product/GetCodeProduct.aspx?depdata=1&optype=mdck", "选择扫码商品", 1000, 400, f_getpost, 9003);
         }
 
         function pro_remove() {

@@ -143,6 +143,8 @@
     <Content Include="CSS\font-awesome.css" />
     <Content Include="CSS\font-awesome.min.css" />
     <Content Include="CSS\headimg.css" />
+    <Content Include="CSS\login\loginstyle.css" />
+    <Content Include="CSS\login\Particleground.js" />
     <Content Include="CSS\notes.css" />
     <Content Include="finance\getReceivable.aspx" />
     <Content Include="finance\invoice.aspx" />
@@ -154,8 +156,10 @@
     <Content Include="finance\Receive_add.aspx" />
     <Content Include="font\fontawesome-webfont.svg" />
     <Content Include="Images\logo\headlogo.png" />
+    <Content Include="Images\logo\yklogo1.png" />
     <Content Include="Images\noheader.png" />
     <Content Include="Images\noheaderlarger.png" />
+    <Content Include="Images\printBj.png" />
     <Content Include="install\index.aspx" />
     <Content Include="install\install.sql" />
     <Content Include="install\remind.aspx" />
@@ -165,8 +169,12 @@
     <Content Include="JS\bootstrap.min.js" />
     <Content Include="JS\cropper.js" />
     <Content Include="JS\cropper.min.js" />
+    <Content Include="JS\jquery.jqprint-0.3.js" />
     <Content Include="JS\jquery.slimscroll.min.js" />
     <Content Include="JS\ligerDialog.js" />
+    <Content Include="JS\pringAreas\FoesEnd.jpg" />
+    <Content Include="JS\pringAreas\jquery.PrintArea.js" />
+    <Content Include="JS\pringAreas\PrintArea.css" />
     <Content Include="JS\webuploader\Uploader.swf" />
     <Content Include="JS\webuploader\webuploader.js" />
     <Content Include="JS\webuploader\webuploader.min.js" />
@@ -827,6 +835,7 @@
     <Content Include="lib\ligerUI\skins\Tab\images\win\dialogbtn.gif" />
     <Content Include="lib\ligerUI\skins\Tab\images\win\dialogicon.gif" />
     <Content Include="License.html" />
+    <Content Include="login.aspx" />
     <Content Include="Product\Dep\DepAllStock.aspx" />
     <Content Include="Product\Dep\Product_check.aspx" />
     <Content Include="Product\Dep\StockAllot.aspx" />
@@ -840,6 +849,8 @@
     <Content Include="Product\GetProduct2.aspx" />
     <Content Include="Product\GetProduct.aspx" />
     <Content Include="Product\AllStock.aspx" />
+    <Content Include="Product\printCode.aspx" />
+    <Content Include="Product\PrintProduct.aspx" />
     <Content Include="Product\product_View.aspx" />
     <Content Include="Product\Take\AddProduct.aspx" />
     <Content Include="Product\Take\Product_check.aspx" />
@@ -863,6 +874,7 @@
     <Content Include="Sale\contract_add.aspx" />
     <Content Include="Sale\contract_atta.aspx" />
     <Content Include="Sale\GetOrder.aspx" />
+    <Content Include="Sale\printOrder.aspx" />
     <Content Include="Sale\SalesData.aspx" />
     <Content Include="Sale\order.aspx" />
     <Content Include="Sale\order_view.aspx" />
@@ -2982,7 +2994,7 @@
     <Content Include="lib\ligerUI\skins\icons\true.gif" />
     <Content Include="lib\ligerUI\skins\icons\up.gif" />
     <Content Include="lib\ligerUI\skins\ligerui-icons.css" />
-    <Content Include="login.aspx" />
+    <Content Include="login1.aspx" />
     <Content Include="home\GetPortal.aspx" />
     <Content Include="Personal\Message\news.aspx" />
     <Content Include="Personal\Message\news_add.aspx" />
@@ -3070,6 +3082,7 @@
     <Folder Include="Images\upload\logo\" />
     <Folder Include="Images\upload\portrait\" />
     <Folder Include="Images\upload\temp\" />
+    <Folder Include="JS\pringAreas\css\" />
     <Folder Include="lib\ligerUI2\" />
     <Folder Include="lib\ligerUI\skins\cyan\images\dialog\ie6\" />
     <Folder Include="Logs\" />

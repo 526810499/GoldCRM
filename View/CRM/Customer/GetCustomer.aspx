@@ -44,7 +44,7 @@
                 dataAction: 'server',
                 pageSize: 30,
                 pageSizeOptions: [20, 30, 50, 100],
-                url: "CRM_Customer.grid.xhd?rnd=" + Math.random(),
+                url: "CRM_Customer.grid.xhd?rnd=" + Math.random() + "&selfc=" + getparastr("selfc", "0"),
                 width: '100%',
                 height: '100%',
                 title: "客户列表",

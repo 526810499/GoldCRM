@@ -74,7 +74,7 @@
                     //alert(va + ":" + vb)
                     $.ligerDialog.closeWaitting();
                     if (vb < va) {
-                        $.ligerDialog.question("有 " + result.version_name + " 版本可以更新，请前往<br/>    <a href='http://www.xhdcrm.com/down' target='_blank'>{xx}CRM官网</a>   下载更新。", "提示");
+                        $.ligerDialog.question("有 " + result.version_name + " 版本可以更新，请前往<br/>    <a href='http://www.xhdcrm.com/down' target='_blank'>永坤金行-CRM官网</a>   下载更新。", "提示");
                     }
                     else {
                         $.ligerDialog.success("已经是最新版本，无需升级！");

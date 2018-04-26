@@ -162,11 +162,19 @@
             if ($("#btn_add").length > 0)
                 return;
 
-            $(".l-panel-header").append("<div id='headerBtn' style='width:250px;float:right;margin-bottom:2px;'><div id = 'btn_addcode' style='margin-top:2px;'></div><div id = 'btn_del' style='margin-top:2px;'></div></div>");
+            $(".l-panel-header").append("<div id='headerBtn' style='width:290px;float:right;margin-bottom:2px;'><div id = 'btn_addcode' style='margin-top:2px;'></div><div id = 'btn_add' style='margin-top:2px;'></div><div id = 'btn_del' style='margin-top:2px;'></div></div>");
             $(".l-grid-loading").fadeOut();
+
+
+            $("#btn_add").ligerButton({
+                width: 80,
+                text: "手动添加",
+                icon: '../../../../images/icon/11.png',
+                click: add
+            });
             $("#btn_addcode").ligerButton({
                 width: 60,
-                text: "添加",
+                text: "扫码添加",
                 icon: '../../images/icon/75.png',
                 click: addCode
             });
@@ -180,13 +188,50 @@
             $("#maingridc4").ligerGetGridManager()._onResize();
         }
 
+        var beforeFromID = "";
+        function checkAdd() {
+            var T_fromdep_val = $("#T_Warehouse_val").val();
 
+
+            if (T_fromdep_val.length <= 0) {
+                $.ligerDialog.warn('请先选择入库仓库');
+                return false;
+            }
+
+            var manager = $("#maingridc4").ligerGetGridManager();
+            var fdata = manager.getData();
+            if (fdata.length > 0) {
+
+                if (T_fromdep_val.length <= 0) {
+                    var warn = "请先选择调出门店！";
+                    top.$.ligerDialog.warn(warn, "警告【每次调拨只能操作一仓库】", "", 9901);
+                    return false;
+                } else {
+                    if (beforeFromID.length <= 0) {
+                        beforeFromID = T_fromdep_val;
+                    }
+
+                    if (beforeFromID != T_fromdep_val) {
+                        var warn = "入库仓库和已选商品仓库不符！";
+                        top.$.ligerDialog.warn(warn, "警告【每次只能操作一仓库】", "", 9901);
+                        return false;
+                    }
+                }
+            }
+            beforeFromID = T_fromdep_val;
+            return true;
+        }
+
+        function add() {
+            if (checkAdd()) {
+                f_openWindow("product/Take/AddProduct.aspx?code=1&depdata=0&notfindadd=0&optype=mdrk&warehouse_id=" + beforeFromID, "选择商品", 1000, 400, f_getpost, 9003);
+            }
+        }
 
         function addCode() {
-
-
-            f_openWindow("product/Take/AddProduct.aspx?notfindadd=0", "选择扫码商品", 1000, 400, f_getpost, 9003);
-
+            if (checkAdd()) {
+                f_openWindow("product/Take/AddProduct.aspx?depdata=0&notfindadd=0&optype=mdrk&warehouse_id=" + beforeFromID, "选择扫码商品", 1000, 400, f_getpost, 9003);
+            }
         }
 
         function pro_remove() {
@@ -208,7 +253,6 @@
                 return;
             }
             else {
-
                 //过滤重复
                 var manager = $("#maingridc4").ligerGetGridManager();
                 var data = manager.getData();

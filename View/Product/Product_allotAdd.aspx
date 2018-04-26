@@ -77,7 +77,7 @@
                             obj[n] = "";
                     }
                     var rows = [];
- 
+
                     rows.push(
                             [
                              { display: "调拨至仓库", name: "T_NowWarehouse", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_warehouse.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + (obj.NowWarehouse == undefined ? whid : obj.NowWarehouse) + "'}", validate: "{required:true}" }
@@ -159,13 +159,21 @@
 
             $(".l-panel-header").append("<div id='headerBtn' style='width:290px;float:right;margin-bottom:2px;'><div id = 'btn_addcode' style='margin-top:2px;'></div><div id = 'btn_add' style='margin-top:2px;'></div><div id = 'btn_del' style='margin-top:2px;'></div></div>");
             $(".l-grid-loading").fadeOut();
+            $("#btn_add").ligerButton({
+                width: 80,
+                text: "手动添加",
+                icon: '../../images/icon/11.png',
+                click: add
+            });
+
+
             $("#btn_addcode").ligerButton({
                 width: 80,
                 text: "扫码添加",
                 icon: '../../images/icon/75.png',
                 click: addCode
             });
- 
+
             $("#btn_del").ligerButton({
                 width: 80,
                 text: "删除",
@@ -175,7 +183,10 @@
             $("#maingridc4").ligerGetGridManager()._onResize();
         }
 
- 
+
+        function add() {
+            f_openWindow("product/GetProduct2.aspx?status=1", "手动添加商品", 1200, 600, f_getpost, 9003);
+        }
 
         function addCode() {
             f_openWindow("product/GetCodeProduct.aspx?status=1", "选择扫码商品", 1200, 600, f_getpost, 9003);
@@ -190,7 +201,7 @@
         function f_getpost(item, dialog) {
             var rows = null;
             if (!dialog.frame.f_select()) {
- 
+
                 $.ligerDialog.warn('请选择商品');
                 return;
             }

@@ -126,7 +126,7 @@ namespace XHD.Server
                 }
                 else {
                     isAdd = false;
-                    id = "PD-" + DateTime.Now.ToString("yy-MM-dd-HH-mm-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
+                    id = "PD" + DateTime.Now.ToString("yyMMdd") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
                     model.id = id;
                     model.status = request["auth"].CInt(0, false) == 1 ? 1 : 0;
                     model.create_id = emp_id;
@@ -175,7 +175,7 @@ namespace XHD.Server
                             status = m.status,
                             taketime = DateTime.Now,
                             warehouse_id = model.warehouse_id,
-                            remark = m.remark
+                            remark = m.remark.CString("")
                         });
                         if (!r)
                         {
@@ -238,7 +238,7 @@ namespace XHD.Server
 
             if (!string.IsNullOrEmpty(request["sorderid"]))
                 serchtxt += $" and id='{PageValidate.InputText(request["sorderid"], 50)}'";
-
+ 
             if (!string.IsNullOrEmpty(request["scode"]))
             {
                 string scode = PageValidate.InputText(request["scode"], 50);
@@ -247,7 +247,12 @@ namespace XHD.Server
                 {
                     return GetGridJSON.DataTableToJSON1(null, "0");
                 }
-                serchtxt += $" and id='{dsc.Tables[0].Rows[0]["takeid"]}'";
+                string ids = "";
+                foreach (DataRow dr in dsc.Tables[0].Rows)
+                {
+                    ids += $"'{dr["takeid"]}',";
+                }
+                serchtxt += $" and id in({ids.Trim(',')})";
             }
 
             if (!string.IsNullOrEmpty(request["sbegtime"]))
@@ -369,7 +374,7 @@ namespace XHD.Server
             if (ds.Tables[0].Rows.Count < 1)
                 return XhdResult.Error("系统错误，无数据！").ToString();
 
-            if (string.IsNullOrWhiteSpace(takeid) || warehouse_id <= 0)
+            if (string.IsNullOrWhiteSpace(takeid) || warehouse_id < 0)
             {
                 return XhdResult.Error("系统错误，无数据！").ToString();
             }

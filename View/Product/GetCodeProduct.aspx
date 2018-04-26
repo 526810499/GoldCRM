@@ -11,7 +11,7 @@
 
     <script src="../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
-    <script src="../JS/XHD.js" type="text/javascript"></script>
+    <script src="../JS/XHD.js?v=6" type="text/javascript"></script>
     <script type="text/javascript">
 
         var manager = "";
@@ -33,7 +33,7 @@
                 columns: [
                     { display: '商品名称', name: 'product_name', align: 'left', width: 120 },
                     { display: '商品类别', name: 'category_name', align: 'left', width: 120 },
-                    { display: '条形码', name: 'BarCode', align: 'left', width: 160 },
+                    { display: '条形码', name: 'BarCode', align: 'left', width: 120 },
                     {
                         display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {
                             return toMoney(item.Weight);
@@ -50,17 +50,29 @@
                         }
                     },
                     {
-                        display: '附石数', name: 'AttStoneNumber', width: 50, align: 'right', render: function (item) {
-                            return (item.AttStoneNumber);
-                        }
-                    },
-                    {
                         display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
                             return toMoney(item.CostsTotal);
                         }
                     },
+                      { display: '关联门店', name: 'indep_name', width: 120, render: function (item) { if (item.indep_name == null) { return "总部" } else { return item.indep_name; } } },
                     { display: '现存仓库', name: 'warehouse_name', width: 100, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
-
+                    {
+                        display: '状态', name: 'status', width: 80, align: 'right', render: function (item) {
+                            return GetproductStatus(item.status);
+                        }
+                    },
+                    {
+                        display: '审核状态', name: 'authIn', width: 80, align: 'right', render: function (item) {
+                            switch (item.authIn) {
+                                case 101:
+                                    return "<span style='color:#0066FF'> 调拨审核中 </span>";
+                                case 102:
+                                    return "<span style='color:#00CC66'> 出库审核中 </span>";
+                                default:
+                                    return "正常";
+                            }
+                        }
+                    }
                 ],
                 checkbox: true,
                 dataAction: 'server',
@@ -106,7 +118,8 @@
                 return false;
             }
             var manager = $("#maingrid4").ligerGetGridManager();
-            var serchtxt = "depdata=" + getparastr("depdata", "") + "&status=" + status + "&scode=" + scode + "&SupplierID=" + SupplierID + "&rnd=" + Math.random()
+            var serchtxt = "depdata=" + getparastr("depdata", "") + "&status=" + status + "&scode=" + scode + "&SupplierID=" + SupplierID + "&rnd=" + Math.random() + "&sindep_id=" + getparastr("depid", "");
+            serchtxt += "&optype=" + getparastr("optype", "");
             var url = ("Product.grid.xhd?" + serchtxt);
 
             $.get(url, function (rdata, textStatus) {

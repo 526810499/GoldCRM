@@ -38,8 +38,8 @@
                             return html;
                         }
                     },
-                    { display: '成交部门', name: 'F_dep_id', width: 80, render: function (item, i) { return item.dep_name; } },
-                    { display: '成交人员', name: 'emp_id', width: 80, render: function (item, i) { return item.emp_name; } },
+                    { display: '销售门店', name: 'F_dep_id', width: 80, render: function (item, i) { return item.dep_name; } },
+                    { display: '销售人员', name: 'emp_id', width: 80, render: function (item, i) { return item.emp_name; } },
                     {
                         display: '订单状态', name: 'Order_status_id', width: 70, render: function (item, i) {
                             return item.Order_status;
@@ -69,7 +69,7 @@
 
                 ],
                 dataAction: 'server', pageSize: 30, pageSizeOptions: [10, 20, 30, 40, 50, 60, 80, 100, 120],
-                url: "Sale_order.grid.xhd?rnd=" + Math.random(),
+                url: "Sale_order.grid.xhd?rnd=" + Math.random() + "&startdate=<%=DateTime.Now.AddDays(-1).Date%>",
                 width: '100%', height: '100%',
                 heightDiff: -10,
 
@@ -117,7 +117,7 @@
                 },
                 onContextmenu: function (parm, e) {
                     actionCustomerID = parm.data.id;
-                   // menu.show({ top: e.pageY, left: e.pageX });
+                    // menu.show({ top: e.pageY, left: e.pageX });
                     return false;
                 }
             });
@@ -142,6 +142,7 @@
                 }
                 //items.push({ type: 'button', text: '分组展开/关闭', icon: '../images/folder-open.gif', disable: true, click: function () { expand(); } });
                 items.push({
+                    id:"sbtn",
                     type: 'serchbtn',
                     text: '高级搜索',
                     icon: '../images/search.gif',
@@ -156,7 +157,7 @@
                 menu = $.ligerMenu({
                     width: 120, items: getMenuItems(data)
                 });
-
+                $("div[toolbarid='sbtn']").click().hide();
                 $("#maingrid4").ligerGetGridManager()._onResize();
             });
         }
@@ -175,13 +176,13 @@
                 textField: 'text',
                 treeLeafOnly: false,
                 tree: {
-                    url: 'hr_department.tree.xhd?rnd=' + Math.random(),
+                    url: 'hr_department.tree.xhd?qxz=1&rnd=' + Math.random(),
                     idFieldName: 'id',
                     //parentIDFieldName: 'pid',
                     checkbox: false
                 },
                 onSelected: function (newvalue) {
-                    $.get("hr_employee.combo.xhd?did=" + newvalue + "&rnd=" + Math.random(), function (data, textStatus) {
+                    $.get("hr_employee.combo.xhd?qxz=1&did=" + newvalue + "&rnd=" + Math.random(), function (data, textStatus) {
                         e.setData(eval(data));
                     });
                 }
@@ -306,6 +307,18 @@
             manager.loadData(true);
         };
 
+        function prints() {
+            var manager = $("#maingrid4").ligerGetGridManager();
+            var row = manager.getSelectedRow();
+            if (row) {
+                window.open("printOrder.aspx?id=" + row.id);
+            }
+            else {
+                $.ligerDialog.warn("请选择数据");
+            }
+
+        }
+
     </script>
 </head>
 <body>
@@ -324,23 +337,24 @@
             <table style='width: 720px'>
                 <tr>
                     <td>
-                        <div style='width: 60px; text-align: right; float: right'>客户名称：</div>
+                        <div style='width: 60px; text-align: right; float: right'>销售门店：</div>
                     </td>
                     <td>
-                        <input type='text' id='T_cus' name='T_cus' ltype='text' ligerui='{width:120}' /></td>
-
-
-                    <td>
-                        <div style='width: 60px; text-align: right; float: right'>成交时间：</div>
-                    </td>
-                    <td>
+                        <%-- <input type='text' style="display: none" id='T_cus' name='T_cus' ltype='text' ligerui='{width:120}'  />--%>
                         <div style='width: 100px; float: left'>
-                            <input type='text' id='startdate' name='startdate' ltype='date' ligerui='{width:97}' />
-                        </div>
-                        <div style='width: 98px; float: left'>
-                            <input type='text' id='enddate' name='enddate' ltype='date' ligerui='{width:96}' />
+                            <input type='text' id='department' name='department' />
                         </div>
                     </td>
+                    <td>
+                        <div style='width: 60px; text-align: right; float: right'>销售人员：</div>
+                    </td>
+                    <td>
+
+                        <div style='width: 98px; float: left'>
+                            <input type='text' id='employee' name='employee' />
+                        </div>
+                    </td>
+
                     <td></td>
                     <td></td>
                 </tr>
@@ -352,14 +366,14 @@
                         <input id='T_status' name="T_status" type='text' /></td>
 
                     <td>
-                        <div style='width: 60px; text-align: right; float: right'>成交人员：</div>
+                        <div style='width: 60px; text-align: right; float: right'>销售时间：</div>
                     </td>
                     <td>
                         <div style='width: 100px; float: left'>
-                            <input type='text' id='department' name='department' />
+                            <input type='text' id='startdate' name='startdate' ltype='date' value="<%=(DateTime.Now.AddDays(-1).Date).ToString("yyyy-MM-dd") %>" ligerui='{width:97}' />
                         </div>
                         <div style='width: 98px; float: left'>
-                            <input type='text' id='employee' name='employee' />
+                            <input type='text' id='enddate' name='enddate' ltype='date' value="<%=(DateTime.Now.AddDays(1).Date).ToString("yyyy-MM-dd") %>" ligerui='{width:96}' />
                         </div>
                     </td>
                     <td></td>

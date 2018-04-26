@@ -54,8 +54,13 @@ namespace XHD.Server
             model.emp_id = PageValidate.InputText(request["T_emp_val"], 50);
             model.cashier_id = PageValidate.InputText(request["T_cashier_val"], 50);
             model.vipcard = PageValidate.InputText(request["T_vipcard"], 50);
-            model.createdep_id = PageValidate.InputText(request["T_dept_id_val"], 50);
+            model.saledep_id = PageValidate.InputText(request["T_saledep_id_val"], 50);
             model.PayTheBill = PageValidate.InputText(request["T_PayTheBill"], 50);
+            if (string.IsNullOrWhiteSpace(model.saledep_id))
+            {
+                model.saledep_id = dep_id;
+            }
+            model.createdep_id = dep_id;
             string id = PageValidate.InputText(request["id"], 50);
 
             if (PageValidate.checkID(id))
@@ -82,6 +87,7 @@ namespace XHD.Server
                 Syslog.get_log_content(dr["Order_status_id"].ToString(), request["T_status_val"], "订单状态", dr["Order_status"].ToString(), request["T_status"]);
                 Syslog.get_log_content(dr["Order_details"].ToString(), request["T_details"], "订单详情", dr["Order_details"].ToString(), request["T_details"]);
                 Syslog.get_log_content(dr["emp_id"].ToString(), request["T_emp_val"], "成交人员", dr["emp_name"].ToString(), request["T_emp"]);
+                Syslog.get_log_content(dr["saledep_id"].ToString(), request["T_saledep_id_val"], "saledep_id", dr["saledep_id"].ToString(), request["T_saledep_id_val"]);
                 Log_Content += Syslog.get_log_content(
                     DateTime.Parse(dr["Order_date"].ToString()).ToShortDateString(),
                     DateTime.Parse(request["T_date"]).ToShortDateString(),
@@ -149,7 +155,7 @@ namespace XHD.Server
                 model.create_time = DateTime.Now;
                 model.arrears_invoice = model.Order_amount;
                 model.invoice_money = 0;
-                model.Serialnumber = "DD-" + DateTime.Now.ToString("yy-MM-dd-HH-mm-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
+                model.Serialnumber = "DD" + DateTime.Now.ToString("yyMMdd") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
                 if (model.Order_status_id == "5587BCED-0A36-4EDF-9562-F962A9B1913C")
                 {
                     canAddIntegal = 1;
@@ -233,8 +239,9 @@ namespace XHD.Server
 
             if (PageValidate.checkID(request["employee_val"]))
                 serchtxt += $" and Sale_order.emp_id = '{PageValidate.InputText(request["employee_val"], 50)}'";
-            else if (PageValidate.checkID(request["department_val"]))
-                serchtxt += $" and hr_department.id = '{PageValidate.InputText(request["department_val"], 50)}' ";
+
+            if (PageValidate.checkID(request["department_val"]))
+                serchtxt += $" and saledep_id = '{PageValidate.InputText(request["department_val"], 50)}' ";
 
             if (!string.IsNullOrEmpty(request["startdate"]))
                 serchtxt += $" and Order_date >= '{ PageValidate.InputText(request["startdate"], 255) }'";
@@ -243,6 +250,11 @@ namespace XHD.Server
             {
                 DateTime enddate = DateTime.Parse(request["enddate"]).AddHours(23).AddMinutes(59).AddSeconds(59);
                 serchtxt += $" and Order_date <= '{request["enddate"] }'";
+            }
+
+            if (request["user"].CInt(0, false) == 1)
+            {
+                serchtxt += $" and Sale_order.emp_id = '{emp_id }'";
             }
 
             serchtxt = GetSQLCreateIDWhere(serchtxt, true);
@@ -269,8 +281,9 @@ namespace XHD.Server
 
             if (PageValidate.checkID(request["employee_val"]))
                 serchtxt += $" and emp_id = '{PageValidate.InputText(request["employee_val"], 50)}'";
-            else if (PageValidate.checkID(request["department_val"]))
-                serchtxt += $" and createdep_id = '{PageValidate.InputText(request["department_val"], 50)}' ";
+
+            if (PageValidate.checkID(request["department_val"]))
+                serchtxt += $" and saledep_id = '{PageValidate.InputText(request["department_val"], 50)}' ";
 
             if (!string.IsNullOrEmpty(request["startdate"]))
             {
@@ -290,7 +303,10 @@ namespace XHD.Server
             {
                 serchtxt += $" and Order_date < '{DateTime.Now.Date.AddDays(1)}'";
             }
-
+            if (request["user"].CInt(0, false) == 1)
+            {
+                serchtxt += $" and emp_id = '{emp_id }'";
+            }
             serchtxt = GetSQLCreateIDWhere(serchtxt, true);
 
             return serchtxt;
@@ -326,7 +342,7 @@ namespace XHD.Server
 
             string sorttext = $" { sortname } { sortorder}";
 
-            string serchtxt = GetStWhereData();
+            string serchtxt = GetStWhereData(false);
 
             string Total = "0";
 
@@ -379,13 +395,29 @@ namespace XHD.Server
 
         public string form(string id)
         {
-            if (!PageValidate.checkID(id)) return "{}";
+            if (!PageValidate.checkID(id))
+            {
+                DataSet ds1 = order.GetList($"Sale_order.id ='-1'");
+                DataTable table = ds1.Tables[0];
+                DataRow rows = table.NewRow();
+                rows["saledep_id"] = dep_id;
+                rows["Order_date"] = DateTime.Now;
+                rows["Order_status_id"] = "5587BCED-0A36-4EDF-9562-F962A9B1913C";
+                table.Rows.Add(rows);
+                return DataToJson.DataToJSON(ds1);
+            };
             id = PageValidate.InputText(id, 50);
 
             DataSet ds = order.GetList($"Sale_order.id = '{id}' ");
+
+
+
+
             return DataToJson.DataToJSON(ds);
 
         }
+
+
 
         public string del(string id)
         {

@@ -11,7 +11,7 @@
 
     <script src="../../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="../../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
-    <script src="../../JS/XHD.js" type="text/javascript"></script>
+    <script src="../../JS/XHD.js?v=6" type="text/javascript"></script>
     <script type="text/javascript">
 
         var manager = "";
@@ -19,16 +19,23 @@
         var SupplierID = "";
         var allotid = "";
         var warehouse_id = "";
+        var isCode = 0;
         $(function () {
             warehouse_id = getparastr("warehouse_id", "");
             status = getparastr("status", "");
             SupplierID = getparastr("SupplierID", "");
             allotid = getparastr("allotid", "");
+            isCode = getparastr("code", "0");
             initLayout();
             $(window).resize(function () {
                 initLayout();
             });
-
+            var serchtxt = "depdata=" + getparastr("depdata", "") + "&status=" + status + "&warehouse_id=" + warehouse_id;
+            serchtxt += "&optype=" + getparastr("optype", "");
+            var url = ("Product.grid.xhd?" + serchtxt);
+            if (isCode == 0) {
+                url = "";
+            }
             $("#maingrid4").ligerGrid({
                 columns: [
                     { display: '商品名称', name: 'product_name', align: 'left', width: 120 },
@@ -44,9 +51,28 @@
                             return toMoney(item.CostsTotal);
                         }
                     },
-                       { display: '备注', name: 'remark', align: 'left', width: 180 }
+                      { display: '关联门店', name: 'indep_name', width: 120, render: function (item) { if (item.indep_name == null) { return "总部" } else { return item.indep_name; } } },
+                       { display: '备注', name: 'remark', align: 'left', width: 100 },
+                    {
+                        display: '状态', name: 'status', width: 80, align: 'right', render: function (item) {
+                            return GetproductStatus(item.status);
+                        }
+                    },
+                    {
+                        display: '审核状态', name: 'authIn', width: 80, align: 'right', render: function (item) {
+                            switch (item.authIn) {
+                                case 101:
+                                    return "<span style='color:#0066FF'> 调拨审核中 </span>";
+                                case 102:
+                                    return "<span style='color:#00CC66'> 出库审核中 </span>";
+                                default:
+                                    return "正常";
+                            }
+                        }
+                    }
                 ],
                 checkbox: true,
+                url: url,
                 dataAction: 'server',
                 pageSize: 30,
                 pageSizeOptions: [20, 30, 50, 100],
@@ -61,24 +87,45 @@
         });
         function toolbar() {
             var items = [];
+            if (isCode == 1) {
+                items.push({ type: 'textbox', id: 'sfl', text: '分类：' });
+                //items.push({ type: 'textbox', id: 'sck', text: '现存仓库：' });
+                items.push({ type: 'textbox', id: 'stext', text: '商品名：' });
+            }
             items.push({ type: 'textbox', id: 'scode', text: '条形码：' });
             items.push({ type: 'button', text: '搜索', icon: '../../images/search.gif', disable: true, click: function () { doserch() } });
 
             $("#toolbar").ligerToolBar({
                 items: items
             });
-
-
-            $("#scode").ligerTextBox({ width: 250, onChangeValue: function (value) { doChangeSearch(); }, onFocus: function () { $("#scode").select(); }, onBlur: function () { doChangeSearch(); } });
-            $("#scode").attr("maxlength", 14);
+            if (isCode == 1) {
+                $("#sfl").ligerComboBox({
+                    width: 150,
+                    selectBoxWidth: 240,
+                    selectBoxHeight: 200,
+                    valueField: 'id',
+                    textField: 'text',
+                    treeLeafOnly: false,
+                    tree: {
+                        url: 'Product_category.tree.xhd?qxz=1&rnd=' + Math.random(),
+                        idFieldName: 'id',
+                        checkbox: false
+                    },
+                });
+                $("#stext").ligerTextBox({ width: 150 });
+            }
+            $("#scode").ligerTextBox({ width: 150 });
             $("#scode").on('input', function (e) {
                 doChangeSearch();
             });
+
+
+            manager = $("#maingrid4").ligerGetGridManager();
         }
 
         function doChangeSearch() {
             var v = $("#scode").val();
-            if (v != undefined && v.length == 14) {
+            if (v != undefined && v.length == 14 || isCode == 1) {
                 doserch();
             }
         }
@@ -88,34 +135,49 @@
         function doserch() {
             var scode = $("#scode").val();
             //必须要输入条形码
-            if (scode.length < 14 || itemsCode.indexOf(scode) > -1) {
+            if ((scode.length < 14 || itemsCode.indexOf(scode) > -1) && isCode == 0) {
                 return false;
             }
             var notfindadd = getparastr("notfindadd", 1);
             var manager = $("#maingrid4").ligerGetGridManager();
-            var serchtxt = "depdata=" + getparastr("depdata", "") + "&status=" + status + "&scode=" + scode + "&SupplierID=" + SupplierID + "&warehouse_id=" + warehouse_id + "&rnd=" + Math.random()
+            var serchtxt = "depdata=" + getparastr("depdata", "") + "&status=" + status + "&scode=" + scode + "&SupplierID=" + SupplierID + "&rnd=" + Math.random()
+
+            if (isCode == 1) {
+                serchtxt += "&categoryid=" + $("#sfl_val").val();
+            }
+            serchtxt += "&warehouse_id=" + warehouse_id;
+            serchtxt += "&optype=" + getparastr("optype","");
             var url = ("Product.grid.xhd?" + serchtxt);
+
+            if (isCode == 1) {
+                var manager = $("#maingrid4").ligerGetGridManager();
+                manager._setUrl(url);
+                return false;
+            }
 
             $.get(url, function (rdata, textStatus) {
 
                 var data = eval('(' + rdata + ')');
-                if (data.Total <= 0 && notfindadd == 1) {
-                    var nobj = { id: scode, product_name: "", category_name: "", BarCode: scode, Weight: 0, SalesCostsTotal: 0, SalesTotalPrice: 0, status: 2, remark: "没有该商品条形码存在" };
-                    itemsCode.push(scode);
-                    manager.addRow(nobj);
+                if (data.Total <= 0 && notfindadd == 1 && scode.length == 14) {
+                    if (itemsCode.indexOf(scode) <= -1) {
+                        var nobj = { id: scode, product_name: "", category_name: "", BarCode: scode, Weight: 0, SalesCostsTotal: 0, SalesTotalPrice: 0, status: 9999, remark: "库存中未找到商品" };
+                        itemsCode.push(scode);
+                        manager.addRow(nobj);
+                    }
                 } else {
                     var rows = data.Rows;
-                    $(rows).each(function (i, v) {
-                        //商品状态为已销售，盘盈
-                        if (v.status == 4) {
-                            v.status = 2;
-                            v.remark = "商品标记为已售";
-                        } else {
-                            v.status = 1;
-                            v.remark = "";
+
+                    var data = manager.getData();
+                    $(rows).each(function (i, objs) {
+                        var v = objs;
+                        var tcode = scode;
+                        if (isCode == 1) {
+                            tcode = v.BarCode;
                         }
-                        if (itemsCode.indexOf(scode) <= -1) {
-                            itemsCode.push(scode);
+                        var canAdd = true;
+
+                        if (canAdd && itemsCode.indexOf(tcode) <= -1) {
+                            itemsCode.push(tcode);
                             manager.addRow(v);
                         }
                     });

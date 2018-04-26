@@ -222,7 +222,7 @@
             serchtxt += "&swarehouse_id=" + $("#swarehouse_id_val").val();
             serchtxt += "&sbegtime=" + $("#sbegtime").val();
             serchtxt += "&sendtime=" + $("#sendtime").val();
-            sendtxt += sendtxt;
+            serchtxt += sendtxt;
             var manager = $("#maingrid4").ligerGetGridManager();
             manager._setUrl("Product_TakeStock.grid.xhd?" + serchtxt);
         }

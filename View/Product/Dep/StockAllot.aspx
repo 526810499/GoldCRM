@@ -47,7 +47,9 @@
                             return html;
                         }
                     },
-                    { display: '调拨至仓库', name: 'NowWarehouseName', align: 'left', width: 120 },
+                     { display: '调出门店', name: 'fromdep_name', align: 'left', width: 120 },
+                     { display: '调到门店', name: 'todep_name', align: 'left', width: 120 },
+                     { display: '调拨至仓库', name: 'NowWarehouseName', align: 'left', width: 120 },
                     { display: '创建人', name: 'CreateName', align: 'left', width: 160 },
                     {
                         display: '创建时间', name: 'create_time', width: 50, align: 'left', render: function (item) {
@@ -107,15 +109,12 @@
                                     }
                                 },
                                 {
-                                    display: '附石数', name: 'AttStoneNumber', width: 50, align: 'right', render: function (item) {
-                                        return (item.AttStoneNumber);
+                                    display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
+                                        return toMoney(item.CostsTotal);
                                     }
-                                },
-                                {
-                                    display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
-                                        return toMoney(item.SalesCostsTotal);
-                                    }
-                                }
+                                }, { display: '现存仓库', name: 'warehouse_name', width: 100, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
+                                  { display: '关联门店', name: 'indep_name', width: 120, render: function (item) { if (item.indep_name == null) { return "总部" } else { return item.indep_name; } } }
+
                             ],
                             usePager: false,
                             checkbox: false,
@@ -138,7 +137,7 @@
         });
 
         function toolbar() {
-            $.get("toolbar.GetSys.xhd?mid=product_allot&rnd=" + Math.random(), function (data, textStatus) {
+            $.get("toolbar.GetSys.xhd?mid=deepstockallot&rnd=" + Math.random(), function (data, textStatus) {
                 var data = eval('(' + data + ')');
                 //alert(data);
                 var items = [];
@@ -213,7 +212,7 @@
                 f_openWindow2('product/Dep/StockAllot_Add.aspx?authbtn=1&id=' + rows.id + "&astatus=" + rows.status, "审核调拨单", 1200, 600, buttons);
             }
             else {
-                $.ligerDialog.warn('请选择商品！');
+                $.ligerDialog.warn('请选择调度单！');
             }
         }
 
@@ -230,7 +229,7 @@
                 f_openWindow2('product/Dep/StockAllot_Add.aspx?id=' + rows.id + "&astatus=" + rows.status, "修改调拨单", 1200, 600, buttons);
             }
             else {
-                $.ligerDialog.warn('请选择商品！');
+                $.ligerDialog.warn('请选择调度单！');
             }
         }
         function add() {
@@ -276,7 +275,7 @@
                 })
             }
             else {
-                $.ligerDialog.warn("请选择调拨单");
+                $.ligerDialog.warn("请选择调度单");
             }
 
         }

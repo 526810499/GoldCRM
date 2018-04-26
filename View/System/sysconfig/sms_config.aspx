@@ -119,7 +119,7 @@
         <div class="content">
             <table style="width: 100%;" class="bodytable6">
                 <tr>
-                    <td height="23" width="150"  colspan="2">如果需要注册及充值，请联系{xx}CRM官方。QQ:250476029。</td>
+                    <td height="23" width="150"  colspan="2">如果需要注册及充值，请联系永坤金行-CRM官方。QQ:250476029。</td>
                 </tr>
 
                 <tr>
@@ -138,10 +138,10 @@
                 <tr>
                     <td height="23" colspan="2">
                         <p>
-                            <span class="l-verify-star"><strong>{xx}CRM申明：</strong></span><br />
+                            <span class="l-verify-star"><strong>永坤金行-CRM申明：</strong></span><br />
                         1、您如果需要使用短信通道，您必须遵守《信息安全保障责任书》。<br />
-                        2、{xx}CRM只提供短信通道的使用，由于短信使用而产生的法律问题，{xx}CRM概不负责。<br />
-                        3、您如果通过{xx}CRM使用此短信通道，表示您同意以上{xx}CRM的申明。</p>
+                        2、永坤金行-CRM只提供短信通道的使用，由于短信使用而产生的法律问题，永坤金行-CRM概不负责。<br />
+                        3、您如果通过永坤金行-CRM使用此短信通道，表示您同意以上永坤金行-CRM的申明。</p>
                     </td>
                 </tr>
                 <tr>

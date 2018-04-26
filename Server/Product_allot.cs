@@ -46,6 +46,8 @@ namespace XHD.Server
         public string save()
         {
             model.NowWarehouse = request["T_NowWarehouse_val"].CInt(0, false);
+            model.fromdep_id = request["T_fromdep_id_val"].CString("");
+            model.todep_id = request["T_todep_id_val"].CString("");
             model.Remark = PageValidate.InputText(request["T_Remark"], 255);
             model.update_id = emp_id;
             model.update_time = DateTime.Now;
@@ -121,7 +123,7 @@ namespace XHD.Server
                     model.createdep_id = dep_id;
                     model.create_id = emp_id;
                     model.create_time = DateTime.Now;
-                    id = "DB-" + DateTime.Now.ToString("yy-MM-dd-HH-mm-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
+                    id = "DB" + DateTime.Now.ToString("yyMMdd") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
                     model.id = id;
                     model.status = request["auth"].CInt(0, false) == 1 ? 1 : 0;
 
@@ -150,7 +152,9 @@ namespace XHD.Server
                                 FromWarehouse = m.warehouse_id.CInt(0, false),
                                 create_id = emp_id,
                                 create_time = DateTime.Now,
-                                allotType = model.allotType
+                                allotType = model.allotType,
+                                ToWarehouse = model.NowWarehouse
+
                             });
                             if (!r)
                             {
@@ -201,8 +205,9 @@ namespace XHD.Server
 
             string sorttext = " " + sortname + " " + sortorder;
 
-            string Total;
-            string serchtxt = $" allotType=" + request["allottype"].CInt(0, false);
+            string Total = "";
+            int allotType = request["allottype"].CInt(0, false);
+            string serchtxt = $" allotType=" + allotType;
 
 
             if (!string.IsNullOrEmpty(request["whid"]))
@@ -217,12 +222,17 @@ namespace XHD.Server
             if (!string.IsNullOrEmpty(request["scode"]))
             {
                 string scode = PageValidate.InputText(request["scode"], 50);
-                DataSet dsc = allotDetailBll.GetList($" barcode='{scode}'");
+                DataSet dsc = allotDetailBll.GetList($" barcode='{scode}' and allotType={allotType}");
                 if (dsc == null || dsc.Tables[0].Rows.Count <= 0)
                 {
                     return GetGridJSON.DataTableToJSON1(null, "0");
                 }
-                serchtxt += $" and id='{dsc.Tables[0].Rows[0]["allotid"]}'";
+                string ids = "";
+                foreach (DataRow dr in dsc.Tables[0].Rows)
+                {
+                    ids += $"'{dr["allotid"]}',";
+                }
+                serchtxt += $" and id in({ids.Trim(',')})";
             }
             serchtxt = GetSQLCreateIDWhere(serchtxt, true);
 
@@ -299,7 +309,8 @@ namespace XHD.Server
             if (PageValidate.checkID(id, false))
             {
                 DataSet ds = allotBll.GetList($" id= '{id}' ");
-                if (ds.Tables[0].Rows.Count < 1)
+                DataRow rows = ds.Tables[0].Rows[0];
+                if (rows == null)
                     return XhdResult.Error("系统错误，无数据！").ToString();
 
                 int status = request["auth"].CInt(0, false);
@@ -309,7 +320,8 @@ namespace XHD.Server
                 {
                     status = 3;
                 }
-                bool r = allotBll.AuthApproved((ds.Tables[0].Rows[0]["alltType"]).CInt(0, false), id, emp_id, status, remark);
+ 
+                bool r = allotBll.AuthApproved(rows["allotType"].CInt(0, false), id, emp_id, status, remark, rows["todep_id"].CString(""));
                 if (r)
                 {
                     return XhdResult.Success().ToString();
@@ -337,7 +349,7 @@ namespace XHD.Server
 
             int status = ds.Tables[0].Rows[0]["status"].CInt(0, false);
             int allotType = ds.Tables[0].Rows[0]["allotType"].CInt(0, false);
-            //审核不通过不需要盘点
+
             if (status == 2)
             {
                 return XhdResult.Error("此调拨单已审核通过，不允许删除！").ToString();

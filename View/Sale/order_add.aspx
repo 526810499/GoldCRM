@@ -15,14 +15,15 @@
     <script src="../lib/jquery-validation/jquery.metadata.js" type="text/javascript"></script>
     <script src="../lib/jquery-validation/messages_cn.js" type="text/javascript"></script>
     <script src="../lib/ligerUI/js/common.js" type="text/javascript"></script>
-    <script src="../lib/ligerUI2/js/plugins/ligerComboBox.js"></script>
-    <script src="../lib/ligerUI2/js/plugins/ligerTree.js"></script>
+
     <script src="../lib/jquery.form.js" type="text/javascript"></script>
     <script src="../JS/XHD.js?v=1.0" type="text/javascript"></script>
-
+    <script src="../lib/ligerUI2/js/plugins/ligerComboBox.js"></script>
+    <script src="../lib/ligerUI2/js/plugins/ligerTree.js"></script>
     <script type="text/javascript">
 
         var orderid = "";
+
         $(function () {
             $.metadata.setType("attr", "validate");
             XHD.validate($(form1));
@@ -59,31 +60,24 @@
                 dataType: "json",
                 success: function (result) {
                     var obj = eval(result);
-                    for (var n in obj) {
-                        if (obj[n] == "null" || obj[n] == null)
-                            obj[n] = "";
-                    }
                     var rows = [];
-
                     var customer_id = obj.Customer_id || getparastr("customer_id");
                     if (!customer_id) {
                         rows.push([{ display: "客户", name: "T_customer", validate: "{required:true}", width: 465 }]);
                     }
-                    if (obj.createdep_id == null || obj.createdep_id == undefined) {
-                        obj.createdep_id = getCookie("udepid", "");
-                    }
+
                     if (obj.emp_name == null || obj.emp_name == undefined) {
                         obj.emp_name = getCookie("xhdcrm_uid", "");
                         obj.emp_id = ("<%=XHD.Common.DEncrypt.DEncrypt.Decrypt(HttpUtility.UrlDecode(XHD.Common.CookieHelper.GetValue("uid")))%>");
                         obj.cashiername = obj.emp_name;
                         obj.cashier_id = obj.emp_id;
-                        
                     }
+                    var dname = (decodeURI(getCookie("udepname", "")));
 
                     rows.push(
                               [
                                 { display: "会员卡号", name: "T_vipcard", type: "text", initValue: obj.vipcard },
-                                { display: "销售门店", name: "T_dept_id", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'hr_department.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + obj.createdep_id + "'}", validate: "{required:true}" }
+                                { display: "销售门店", name: "T_saledep_id", type: "select", options: "{width:180,treeLeafOnly: false,disabled:true,tree:{url:'hr_department.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false,value:'" + obj.saledep_id + "',emptyText:'" + dname + "'}}", initValue: dname, validate: "{required:true}" }
                               ],
                             [
                                 { display: "成交时间", name: "T_date", type: "date", options: "{width:180}", validate: "{required:true}", initValue: formatTimebytype(obj.Order_date, "yyyy-MM-dd") },
@@ -145,13 +139,13 @@
                         onBeforeOpen: f_selectCash
                     })
 
-
                     $("#T_emp").val(obj.emp_name);
                     $("#T_emp_val").val(obj.emp_id);
 
                     $("#T_cashier").val(obj.cashiername);
                     $("#T_cashier_val").val(obj.cashier_id);
 
+ 
                 }
             });
         }
@@ -303,7 +297,7 @@
         }
 
         function add() {
-            f_openWindow("product/GetProduct.aspx?depdata=1&status=1,2,3", "选择商品", 1000, 600, f_getpost, 9003);
+            f_openWindow("product/GetProduct2.aspx?depdata=1&status=1,101", "选择商品", 1000, 600, f_getpost, 9003);
         }
         function pro_remove() {
             var manager = $("#maingrid4").ligerGetGridManager();

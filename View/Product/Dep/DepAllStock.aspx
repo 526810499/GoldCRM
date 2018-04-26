@@ -10,7 +10,7 @@
     <link href="../../CSS/input.css" rel="stylesheet" type="text/css" />
     <script src="../../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="../../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
-    <script src="../../JS/XHD.js?v=4" type="text/javascript"></script>
+    <script src="../../JS/XHD.js?v=6" type="text/javascript"></script>
     <script src="../../lib/jquery.form.js" type="text/javascript"></script>
 
     <script type="text/javascript">
@@ -62,20 +62,16 @@
                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='CostsTotal'>" + item.sum + "</span>"; } }
                    },
                     { display: '现存仓库', name: 'warehouse_name', width: 120, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
-                   {
-                       display: '状态', name: 'status', width: 80, align: 'right', render: function (item) {
-                           switch (item.OutStatus) {
-                               case 1:
-                                   return "<span style='color:#0066FF'> 入库 </span>";
-                               case 2:
-                                   return "<span style='color:#00CC66'> 调拨中 </span>";
-                               case 3:
-                                   return "<span style='color:#009900'> 出库中 </span>";
-                               case 4:
-                                   return "<span style='color:#FF3300'> 已销售 </span>";
-                           }
-                       }
-                   }
+                    {
+                        display: '总状态', name: 'status', width: 80, align: 'right', render: function (item) {
+                            return GetproductStatus(item.status);
+                        }
+                    },
+                  {
+                      display: '门店状态', name: 'OutStatus', width: 80, align: 'right', render: function (item) {
+                          return GetproductStatus(item.OutStatus);
+                      }
+                  }
             ];
 
 
@@ -143,13 +139,7 @@
                 });
 
                 $("#sstatus").ligerComboBox({
-                    data: [
-                    { text: '所有', id: '' },
-                    { text: '入库', id: '1' },
-                    { text: '调拨', id: '2' },
-                    { text: '出库', id: '3' },
-                    { text: '已销售', id: '4' }
-                    ], valueFieldID: 'status',
+                    data: productStatus, valueFieldID: 'status',
                 });
                 $("#stext").ligerTextBox({ width: 200 });
                 $("#scode").ligerTextBox({ width: 250 });

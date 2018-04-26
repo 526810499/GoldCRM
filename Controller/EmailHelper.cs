@@ -211,7 +211,7 @@ namespace XHD.Controller
 
             MailMessage mm = new MailMessage(); //实例化一个邮件类
             mm.Priority = MailPriority.Normal; //邮件的优先级，分为 Low, Normal, High，通常用 Normal即可
-            mm.From = new MailAddress(this.FromEmailAddress, "{xx}CRM", Encoding.GetEncoding(936));
+            mm.From = new MailAddress(this.FromEmailAddress, "永坤金行-CRM", Encoding.GetEncoding(936));
 
             //收件人
             if (!string.IsNullOrEmpty(this.ToList))

@@ -20,8 +20,15 @@ namespace XHD.Server
 
         public Product(HttpContext context) : base(context)
         {
-            allDataBtnid = "1992FBF3-206A-4DE5-A1C4-1EB3A4F597D8";
-            depDataBtnid = "ADE0DF75-65F1-4D8A-93C9-597D60140046";
+            if (request["allstock"].CInt(0, false) == 1)
+            {
+                allDataBtnid = "9596C821-74CC-462A-BB32-B5B65FF47012";
+                depDataBtnid = "35666543-AAD2-43CA-81A7-8A6E9314442C";
+            }
+            else {
+                allDataBtnid = "1992FBF3-206A-4DE5-A1C4-1EB3A4F597D8";
+                depDataBtnid = "ADE0DF75-65F1-4D8A-93C9-597D60140046";
+            }
         }
 
         public string save()
@@ -38,7 +45,7 @@ namespace XHD.Server
             model.GoldTotal = request["T_GoldTotal"].CDecimal(0, false);
             model.CostsTotal = request["T_CostsTotal"].CDecimal(0, false);
             model.Totals = request["T_Totals"].CDecimal(0, false);
-
+            model.indep_id = "7C881F36-3597-483B-BC71-EB5D7CFDA2C7";
             model.SalesTotalPrice = request["T_SalesTotalPrice"].CDecimal(0, false);
             model.SalesCostsTotal = request["T_SalesCostsTotal"].CDecimal(0, false);
             model.SupplierID = request["T_SupplierID_val"].CInt(0, false);
@@ -66,6 +73,7 @@ namespace XHD.Server
 
                 DataRow dr = ds.Tables[0].Rows[0];
                 int status = dr["status"].CInt(0, false);
+
                 string oldCode = dr["BarCode"].CString("");
                 if (status != 1 && oldCode != model.BarCode.Trim().ToUpper())
                 {
@@ -175,6 +183,22 @@ namespace XHD.Server
             string sortname = request["sortname"];
             string sortorder = request["sortorder"];
 
+            if (sortname == "category_name")
+            {
+                sortname = "category_id";
+            }
+            if (sortname == "supplier_name")
+            {
+                sortname = "SupplierID";
+            }
+            if (sortname == "warehouse_name")
+            {
+                sortname = "warehouse_id";
+            }
+            if (sortname == "indep_name")
+            {
+                sortname = "indep_id";
+            }
             if (string.IsNullOrEmpty(sortname))
                 sortname = " create_time";
             if (string.IsNullOrEmpty(sortorder))
@@ -191,13 +215,10 @@ namespace XHD.Server
                 serchtxt += $" and product_name like N'%{ PageValidate.InputText(request["stext"], 50) }%'";
 
             if (!string.IsNullOrEmpty(request["scode"]))
-                serchtxt += $" and BarCode='{ PageValidate.InputText(request["scode"], 50) }'";
+                serchtxt += $" and BarCode like N'{ PageValidate.InputText(request["scode"], 50) }%'";
 
             if (!string.IsNullOrEmpty(request["status"]))
                 serchtxt += $" and status in({request["status"].CString("1").Trim(',')}) ";
-
-
-
 
 
             if (!string.IsNullOrEmpty(request["soutstatus"]))
@@ -205,9 +226,11 @@ namespace XHD.Server
 
             if (!string.IsNullOrEmpty(request["SupplierID"]) && request["SupplierID"].CString("") != "null")
                 serchtxt += $" and SupplierID='{request["SupplierID"].CString("")}'";
-
-            if (!string.IsNullOrEmpty(request["warehouse_id"]) && request["warehouse_id"].CInt(-1, false) > -1)
+            int wid = request["warehouse_id"].CInt(-1, false);
+            if (!string.IsNullOrEmpty(request["warehouse_id"]) && wid > -1)
+            {
                 serchtxt += $" and warehouse_id='{request["warehouse_id"].CString("")}'";
+            }
 
             if (!string.IsNullOrEmpty(request["sbegtime"]))
                 serchtxt += " and create_time>='" + PageValidate.InputText(request["sbegtime"], 50).CDateTime(DateTime.Now, false) + "'";
@@ -215,20 +238,43 @@ namespace XHD.Server
             if (!string.IsNullOrEmpty(request["sendtime"]))
                 serchtxt += " and create_time<='" + PageValidate.InputText(request["sendtime"], 50).CDateTime(DateTime.Now, false) + "'";
 
-            //是否要取门店的
-            if (request["depdata"].CInt(0, false) == 1)
-            {
-                serchtxt += " and indep_id='" + dep_id + "'";
-            }
 
             if (!string.IsNullOrWhiteSpace(request["sindep_id"]))
             {
                 serchtxt += " and indep_id='" + PageValidate.InputText(request["sindep_id"], 50) + "'";
             }
 
-            //权限
-            serchtxt = GetSQLCreateIDWhere(serchtxt, true);
+            //操作类型 
+            string optype = request["optype"].CString("");
 
+            //门店入库则状态不能是总部入库或者是已销售的
+            if (optype == "mdrk")
+            {
+                serchtxt += $" and status not in(1,4) and indep_id in('7C881F36-3597-483B-BC71-EB5D7CFDA2C7','{dep_id}') and outStatus<>1 ";
+            }
+
+            //门店出库则状态不能为总部操作状态，取不能是已销售的
+            if (optype == "mdck")
+            {
+                serchtxt += $" and status not in(1,2,3,4) and outStatus<>3 ";
+            }
+
+            //门店调拨 状态不能为总部操作状态，取不能是已销售的
+            if (optype == "mddb")
+            {
+                serchtxt += $" and status not in(1,2,3,4) and outStatus<>2  ";
+            }
+
+            //是否要取门店的
+            if (request["depdata"].CInt(0, false) == 1)
+            {
+                serchtxt += " and indep_id='" + dep_id + "'";
+            }
+            else if (optype != "mdrk")
+            {
+                //权限
+                serchtxt = GetSQLCreateIDWhere(serchtxt, true);
+            }
 
 
             if (request["sum"].CInt(0, false) == 1)
@@ -309,6 +355,46 @@ namespace XHD.Server
             return XhdResult.Success().ToString();
 
         }
+
+
+        #region 打印商品条形码
+        /// <summary>
+        /// 导出商品条形码
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        public string ExportPrint()
+        {
+            bool candel = CheckIsAdmin();
+
+            if (!candel)
+            {
+                candel = CheckBtnAuthority("0DBE7337-D4D3-4895-8C8F-5E0A4ECEEE0A");
+            }
+            if (!candel)
+            {
+                return null;
+            }
+
+
+            string ids = System.Web.HttpContext.Current.Request["ids"];
+            ids = PageValidate.InputText(ids, 50000);
+            if (string.IsNullOrWhiteSpace(ids)) { return null; }
+            ids = "'" + ids.Trim(',') + "'";
+            ids = ids.Replace(",", "','");
+
+            string where = $" id in({ids})";
+            DataSet ds = product.GetList(where);
+            if (ds != null && ds.Tables[0].Rows != null && ds.Tables[0].Rows.Count > 0)
+            {
+                return JsonDyamicHelper.NetJsonConvertObject(ds.Tables[0]);
+            }
+            else {
+                return null;
+            }
+        }
+
+        #endregion
 
 
 

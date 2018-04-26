@@ -4,9 +4,9 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>{xx}CRM</title>
-    <meta http-equiv="X-UA-Compatible" content="ie=edge chrome=1" />
-    <%--<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>--%>
+    <title>永坤金行-CRM</title>
+    <meta name="renderer" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
     <link rel="shortcut icon" type="image/x-icon" href="images/logo/favicon.ico" />
     <link href="lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" />
     <link href="lib/ligerUI/skins/Silvery/css/all.css" rel="stylesheet" />
@@ -88,7 +88,7 @@
 
         <div position="bottom">
 
-            <div style="text-align: center; font-size: 12px;">©2015 <a href="#" target="_blank">{xx}CRM</a> 版权所有 v2.0</div>
+            <div style="text-align: center; font-size: 12px;">©2015 <a href="#" target="_blank">永坤金行-CRM</a> 版权所有 v2.0</div>
 
         </div>
     </div>
@@ -429,7 +429,7 @@
                         sysinfo[rows[i].sys_key] = rows[i].sys_value;
                     }
 
-                    document.title = sysinfo["sys_name"] + "-{xx}CRM";
+                    document.title = sysinfo["sys_name"] + "-永坤金行-CRM";
                     $("#logo").attr("src", sysinfo["sys_logo"]);
                 }
             });

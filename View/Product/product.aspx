@@ -10,7 +10,7 @@
     <link href="../CSS/input.css" rel="stylesheet" type="text/css" />
     <script src="../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
-    <script src="../JS/XHD.js?v=2.0" type="text/javascript"></script>
+    <script src="../JS/XHD.js?v=6" type="text/javascript"></script>
     <script src="../lib/jquery.form.js" type="text/javascript"></script>
 
     <script type="text/javascript">
@@ -102,15 +102,18 @@
                      { display: '现存仓库', name: 'warehouse_name', width: 100, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
                     {
                         display: '状态', name: 'status', width: 80, align: 'right', render: function (item) {
-                            switch (item.status) {
-                                case 1:
-                                    return "<span style='color:#0066FF'> 入库 </span>";
-                                case 2:
-                                    return "<span style='color:#00CC66'> 调拨 </span>";
-                                case 3:
-                                    return "<span style='color:#009900'> 出库 </span>";
-                                case 4:
-                                    return "<span style='color:#FF3300'> 已销售 </span>";
+                            return GetproductStatus(item.status);
+                        }
+                    },
+                    {
+                        display: '审核状态', name: 'authIn', width: 80, align: 'right', render: function (item) {
+                            switch (item.authIn) {
+                                case 101:
+                                    return "<span style='color:#0066FF'> 调拨审核中 </span>";
+                                case 102:
+                                    return "<span style='color:#00CC66'> 出库审核中 </span>";
+                                default:
+                                    return "正常";
                             }
                         }
                     }
@@ -187,13 +190,7 @@
                 });
 
                 $("#sstatus").ligerComboBox({
-                    data: [
-                    { text: '所有', id: '' },
-                    { text: '入库', id: '1' },
-                    { text: '调拨', id: '2' },
-                    { text: '出库', id: '3' },
-                    { text: '已销售', id: '4' }
-                    ], valueFieldID: 'status',
+                    data: productStatus, valueFieldID: 'status',
                 });
                 $("#stext").ligerTextBox({ width: 240 });
                 $("#scode").ligerTextBox({ width: 240 });
@@ -312,10 +309,10 @@
         }
 
 
-        function print() {
+        function ExcelDC() {
 
             if (checkedCustomer == null || checkedCustomer.length <= 0) {
-                $.ligerDialog.warn("没有需要打印的商品");
+                $.ligerDialog.warn("没有需要导出的商品");
                 return;
             }
             var ids = "";
@@ -326,6 +323,22 @@
             location.href = "ExportProduct.aspx?ids=" + ids + "&rnd=" + Math.random();
 
 
+        }
+
+
+
+        function prints() {
+
+            if (checkedCustomer == null || checkedCustomer.length <= 0) {
+                $.ligerDialog.warn("没有需要打印的商品");
+                return;
+            }
+            var ids = "";
+            $(checkedCustomer).each(function (i, v) {
+                ids += v + ",";
+            });
+
+            window.open("PrintProduct.aspx?ids=" + ids + "&rnd=" + Math.random());
         }
 
         function f_save(item, dialog) {

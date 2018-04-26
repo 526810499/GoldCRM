@@ -22,9 +22,9 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Product(");
-            strSql.Append("id,product_name,category_id,status,Weight,indep_id,cost,price,agio,remarks,specifications,create_id,create_time,AttCosts,StockPrice,MainStoneWeight,AttStoneWeight,AttStoneNumber,StonePrice,GoldTotal,CostsTotal,Totals,Sbarcode,depopbefwid,BarCode,OutStatus,SalesTotalPrice,SalesCostsTotal,IsGold,SupplierID,createdep_id)");
+            strSql.Append("id,product_name,category_id,status,Weight,indep_id,cost,price,authIn,remarks,specifications,create_id,create_time,AttCosts,StockPrice,MainStoneWeight,AttStoneWeight,AttStoneNumber,StonePrice,GoldTotal,CostsTotal,Totals,Sbarcode,depopbefwid,BarCode,OutStatus,SalesTotalPrice,SalesCostsTotal,IsGold,SupplierID,createdep_id,warehouse_id)");
             strSql.Append(" values (");
-            strSql.Append("@id,@product_name,@category_id,@status,@Weight,@indep_id,@cost,@price,@agio,@remarks,@specifications,@create_id,@create_time,@AttCosts,@StockPrice,@MainStoneWeight,@AttStoneWeight,@AttStoneNumber,@StonePrice,@GoldTotal,@CostsTotal,@Totals,@Sbarcode,@depopbefwid,@BarCode,@OutStatus,@SalesTotalPrice,@SalesCostsTotal,@IsGold,@SupplierID,@createdep_id)");
+            strSql.Append("@id,@product_name,@category_id,@status,@Weight,@indep_id,@cost,@price,@authIn,@remarks,@specifications,@create_id,@create_time,@AttCosts,@StockPrice,@MainStoneWeight,@AttStoneWeight,@AttStoneNumber,@StonePrice,@GoldTotal,@CostsTotal,@Totals,@Sbarcode,@depopbefwid,@BarCode,@OutStatus,@SalesTotalPrice,@SalesCostsTotal,@IsGold,@SupplierID,@createdep_id,0)");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@product_name", SqlDbType.VarChar,250),
@@ -34,7 +34,7 @@ namespace XHD.DAL
                     new SqlParameter("@indep_id", SqlDbType.VarChar,250),
                     new SqlParameter("@cost", SqlDbType.Decimal,9),
                     new SqlParameter("@price", SqlDbType.Decimal,9),
-                    new SqlParameter("@agio", SqlDbType.Decimal,9),
+                    new SqlParameter("@authIn", SqlDbType.Int,4),
                     new SqlParameter("@remarks", SqlDbType.VarChar,2000),
                     new SqlParameter("@specifications", SqlDbType.VarChar,250),
                     new SqlParameter("@create_id", SqlDbType.VarChar,50),
@@ -66,7 +66,7 @@ namespace XHD.DAL
             parameters[5].Value = model.indep_id;
             parameters[6].Value = model.cost;
             parameters[7].Value = model.price;
-            parameters[8].Value = model.agio;
+            parameters[8].Value = model.AuthIn.CInt(0, false);
             parameters[9].Value = model.remarks;
             parameters[10].Value = model.specifications;
             parameters[11].Value = model.create_id;
@@ -113,7 +113,7 @@ namespace XHD.DAL
             strSql.Append("indep_id=@indep_id,");
             strSql.Append("cost=@cost,");
             strSql.Append("price=@price,");
-            strSql.Append("agio=@agio,");
+            //strSql.Append("authIn=@authIn,");
             strSql.Append("remarks=@remarks,");
             strSql.Append("specifications=@specifications,");
             strSql.Append("create_id=@create_id,");
@@ -143,7 +143,7 @@ namespace XHD.DAL
                     new SqlParameter("@indep_id", SqlDbType.VarChar,250),
                     new SqlParameter("@cost", SqlDbType.Decimal,9),
                     new SqlParameter("@price", SqlDbType.Decimal,9),
-                    new SqlParameter("@agio", SqlDbType.Decimal,9),
+                    new SqlParameter("@authIn", SqlDbType.Int,4),
                     new SqlParameter("@remarks", SqlDbType.VarChar,2000),
                     new SqlParameter("@specifications", SqlDbType.VarChar,250),
                     new SqlParameter("@create_id", SqlDbType.VarChar,50),
@@ -174,7 +174,7 @@ namespace XHD.DAL
             parameters[4].Value = model.indep_id;
             parameters[5].Value = model.cost;
             parameters[6].Value = model.price;
-            parameters[7].Value = model.agio;
+            parameters[7].Value = model.AuthIn.CInt(0, false);
             parameters[8].Value = model.remarks;
             parameters[9].Value = model.specifications;
             parameters[10].Value = model.create_id;
@@ -285,10 +285,10 @@ namespace XHD.DAL
         public DataSet GetList(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select id, product_name, category_id, status, Weight,  create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, depopbefwid, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks,warehouse_id ");
+            strSql.Append("select remarks,id, product_name, category_id, status, Weight,  create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, depopbefwid, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks,warehouse_id,authIn ");
             strSql.Append(@",(select product_category from Product_category where id = Product.category_id) as category_name,
                             (select product_supplier from Product_supplier where id = Product.SupplierID) as supplier_name ");
-            strSql.Append(" FROM Product ");
+            strSql.Append(" FROM Product(nolock) ");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);
@@ -323,7 +323,7 @@ namespace XHD.DAL
             {
                 strSql.Append(" top " + Top.ToString());
             }
-            strSql.Append(" id, product_name, category_id, status, Weight,  create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, depopbefwid, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID ,IsGold,remarks  ");
+            strSql.Append(" id, product_name, category_id, status, Weight,  create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, depopbefwid, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID ,IsGold,remarks,authIn  ");
             strSql.Append(",(select product_category from Product_category(nolock) where id = w1.category_id) as category_name");
             strSql.Append(",(select product_supplier from Product_supplier(nolock) where id = w1.SupplierID) as supplier_name");
             strSql.Append(",(select product_warehouse from Product_warehouse(nolock) where id = w1.warehouse_id) as warehouse_name");
@@ -343,14 +343,15 @@ namespace XHD.DAL
         {
             StringBuilder strSql_grid = new StringBuilder();
             StringBuilder strSql_total = new StringBuilder();
+
             strSql_total.Append(" SELECT COUNT(id) FROM Product(nolock) ");
             strSql_grid.Append("SELECT ");
-            strSql_grid.Append("      n,id, product_name, category_id, status, Weight, create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, depopbefwid, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks ");
+            strSql_grid.Append("      n,id,authIn, product_name, category_id, status, Weight, create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, depopbefwid, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks ");
             strSql_grid.Append(",(select product_category from Product_category(nolock) where id = w1.category_id) as category_name");
             strSql_grid.Append(",(select product_supplier from Product_supplier(nolock) where id = w1.SupplierID) as supplier_name");
             strSql_grid.Append(",(select product_warehouse from Product_warehouse(nolock) where id = w1.warehouse_id) as warehouse_name");
             strSql_grid.Append(",(select name from hr_employee where id = w1.indep_id) as indep_name");
-            strSql_grid.Append(" FROM ( SELECT id, product_name, category_id, status, Weight, create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, depopbefwid, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks,warehouse_id,indep_id, ROW_NUMBER() OVER( Order by " + filedOrder + " ) AS n from Product");
+            strSql_grid.Append(" FROM ( SELECT id, product_name,authIn, category_id, status, Weight, create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, depopbefwid, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks,warehouse_id,indep_id, ROW_NUMBER() OVER( Order by " + filedOrder + " ) AS n from Product");
             if (strWhere.Trim() != "")
             {
                 strSql_grid.Append(" WHERE " + strWhere);
@@ -370,16 +371,17 @@ namespace XHD.DAL
         {
             StringBuilder strSql_grid = new StringBuilder();
             StringBuilder strSql_total = new StringBuilder();
+
             strSql_total.Append(@"select  COUNT(id) as counts,sum(Weight) as Weight,sum(AttCosts) as AttCosts, 
                                 sum(StockPrice) as StockPrice, sum(MainStoneWeight) as MainStoneWeight, sum(AttStoneWeight) as AttStoneWeight, sum(AttStoneNumber) as AttStoneNumber,
                                 sum(StonePrice) as StonePrice, sum(GoldTotal) as GoldTotal, sum(CostsTotal) as CostsTotal, sum(Totals) as Totals FROM Product(nolock) ");
             strSql_grid.Append("SELECT ");
-            strSql_grid.Append("      n,id, product_name, category_id, status, Weight, create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, depopbefwid, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks ");
+            strSql_grid.Append("      n,id,authIn, product_name, category_id, status, Weight, create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, depopbefwid, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks ");
             strSql_grid.Append(",(select product_category from Product_category(nolock) where id = w1.category_id) as category_name");
             strSql_grid.Append(",(select product_supplier from Product_supplier(nolock) where id = w1.SupplierID) as supplier_name");
             strSql_grid.Append(",(select product_warehouse from Product_warehouse(nolock) where id = w1.warehouse_id) as warehouse_name");
             strSql_grid.Append(",(select dep_name from hr_department where id = w1.indep_id) as indep_name");
-            strSql_grid.Append(" FROM ( SELECT id, product_name, category_id, status, Weight, create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, depopbefwid, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks,warehouse_id, indep_id,ROW_NUMBER() OVER( Order by " + filedOrder + " ) AS n from Product");
+            strSql_grid.Append(" FROM ( SELECT id,authIn, product_name, category_id, status, Weight, create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, depopbefwid, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks,warehouse_id, indep_id,ROW_NUMBER() OVER( Order by " + filedOrder + " ) AS n from Product");
             if (strWhere.Trim() != "")
             {
                 strSql_grid.Append(" WHERE " + strWhere);

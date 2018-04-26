@@ -27,6 +27,18 @@ namespace XHD.DAL
             strSql.Append("id,create_id,create_time,status,remark,createdep_id,inType,warehouse_id)");
             strSql.Append(" values (");
             strSql.Append("@id,@create_id,@create_time,@status,@remark,@createdep_id,@inType,@warehouse_id)");
+
+            int pstatus = 1;
+            if (model.status == 1)
+            {
+                if (model.inType == 1)
+                {
+                    pstatus = 101;
+                }
+
+                strSql.Append(@"UPDATE payuser SET  payuser.status=@pstatus,authIn=0,payuser.warehouse_id=@warehouse_id,OutStatus=1 FROM dbo.Product(nolock) AS payuser inner JOIN Product_StockInDetial(nolock) AS bu ON payuser.barcode = bu.barcode WHERE bu.stockid=@id  ");
+            }
+
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@create_id", SqlDbType.VarChar,50),
@@ -35,7 +47,9 @@ namespace XHD.DAL
                     new SqlParameter("@remark", SqlDbType.NVarChar,50),
                     new SqlParameter("@createdep_id", SqlDbType.VarChar,50),
                     new SqlParameter("@inType", SqlDbType.Int,4),
-                    new SqlParameter("@warehouse_id", SqlDbType.Int,4)};
+                    new SqlParameter("@warehouse_id", SqlDbType.Int,4),
+                     new SqlParameter("@pstatus", SqlDbType.Int,4),
+            };
             parameters[0].Value = model.id;
             parameters[1].Value = model.create_id;
             parameters[2].Value = model.create_time;
@@ -44,6 +58,7 @@ namespace XHD.DAL
             parameters[5].Value = model.createdep_id;
             parameters[6].Value = model.inType;
             parameters[7].Value = model.warehouse_id;
+            parameters[8].Value = pstatus;
 
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
@@ -70,6 +85,18 @@ namespace XHD.DAL
             strSql.Append("inType=@inType,");
             strSql.Append("warehouse_id=@warehouse_id");
             strSql.Append(" where id=@id ");
+            int pstatus = 1;
+            if (model.status == 1)
+            {
+                if (model.inType == 1)
+                {
+                    pstatus = 101;
+                }
+
+                strSql.Append(@"UPDATE payuser SET  payuser.status=@pstatus,authIn=0,payuser.warehouse_id=@warehouse_id,OutStatus=1 FROM dbo.Product(nolock) AS payuser inner JOIN Product_StockInDetial(nolock) AS bu ON payuser.barcode = bu.barcode WHERE bu.stockid=@id  ");
+            }
+
+
             SqlParameter[] parameters = {
                     new SqlParameter("@create_id", SqlDbType.VarChar,50),
                     new SqlParameter("@create_time", SqlDbType.DateTime),
@@ -78,7 +105,9 @@ namespace XHD.DAL
                     new SqlParameter("@createdep_id", SqlDbType.VarChar,50),
                     new SqlParameter("@inType", SqlDbType.Int,4),
                     new SqlParameter("@warehouse_id", SqlDbType.Int,4),
-                    new SqlParameter("@id", SqlDbType.VarChar,50)};
+                    new SqlParameter("@id", SqlDbType.VarChar,50),
+                    new SqlParameter("@pstatus", SqlDbType.Int,4),
+            };
             parameters[0].Value = model.create_id;
             parameters[1].Value = model.create_time;
             parameters[2].Value = model.status;
@@ -87,6 +116,7 @@ namespace XHD.DAL
             parameters[5].Value = model.inType;
             parameters[6].Value = model.warehouse_id;
             parameters[7].Value = model.id;
+            parameters[8].Value = pstatus;
 
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)

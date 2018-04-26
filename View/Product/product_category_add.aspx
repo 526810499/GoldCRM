@@ -34,6 +34,8 @@
 
         });
 
+
+
         function f_save() {
             if ($(form1).valid()) {
                 var sendtxt = "&id=" + getparastr("cid");
@@ -156,16 +158,17 @@
 
                     <div align="left" style="width: 62px">类别图标：</div>
                 </td>
-                <td height="23" style="width: 27px">
+                <td height="23" style="width: 27px" class="sbimg">
                     <img id="menuicon" style="width: 25px; height: 25px;" />
                 </td>
                 <td height="23" style="width: 27px">
-                    <div style="text-align: center">
-                        <div id="uploadimg">选择图标</div>
-                    </div>
+
+                    <div id="uploadimg">请点击这个位置上传图标</div>
+
                     <input type="hidden" id="T_category_icon" name="T_category_icon" />
                 </td>
             </tr>
+     
 
         </table>
     </form>

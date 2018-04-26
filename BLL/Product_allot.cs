@@ -38,9 +38,9 @@ namespace XHD.BLL
         /// <param name="authuser_id"></param>
         /// <param name="status"></param>
         /// <returns></returns>
-        public bool AuthApproved(int allotType, string id, string authuser_id, int status, string remark)
+        public bool AuthApproved(int allotType, string id, string authuser_id, int status, string remark, string todep_id)
         {
-            return dal.AuthApproved(allotType, id, authuser_id, status, remark);
+            return dal.AuthApproved(allotType, id, authuser_id, status, remark, todep_id);
         }
 
         /// <summary>

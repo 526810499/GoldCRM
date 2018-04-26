@@ -53,20 +53,17 @@ namespace XHD.DAL
         public bool Add(Model.Product_allotDetail model)
         {
             bool rs = false;
+            int rows = 2;
             StringBuilder strSql = new StringBuilder();
             strSql.AppendLine("insert into Product_allotDetail(");
-            strSql.Append("id,allotid,barcode,FromWarehouse,create_id,create_time,allotType)");
+            strSql.Append("id,allotid,barcode,FromWarehouse,create_id,create_time,allotType,ToWarehouse)");
             strSql.Append(" values (");
-            strSql.Append("@id,@allotid,@barcode,@FromWarehouse,@create_id,@create_time,@allotType)");
-            
-            //门店调拨的时候同步修改门店
-            if (model.allotType == 0)
-            {
-                strSql.AppendLine(" update Product set Status=2,warehouse_id=@NowWarehouse where barcode=@barcode and Status<>4");//
-            }
-            else {
-                strSql.AppendLine(" update Product set depopbefwid=warehouse_id,warehouse_id=@NowWarehouse,OutStatus=2 where barcode=@barcode and Status<>4");//
-            }
+            strSql.Append("@id,@allotid,@barcode,@FromWarehouse,@create_id,@create_time,@allotType,@ToWarehouse)");
+
+
+            strSql.AppendLine(" update Product set authIn=101 where barcode=@barcode and Status<>4");//
+
+
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@allotid", SqlDbType.VarChar,50),
@@ -76,6 +73,7 @@ namespace XHD.DAL
                     new SqlParameter("@create_time", SqlDbType.DateTime),
                     new SqlParameter("@NowWarehouse", SqlDbType.Int,4),
                     new SqlParameter("@allotType", SqlDbType.Int,4),
+                   new SqlParameter("@ToWarehouse", SqlDbType.Int,4),
             };
             parameters[0].Value = model.id;
             parameters[1].Value = model.allotid;
@@ -85,7 +83,7 @@ namespace XHD.DAL
             parameters[5].Value = model.create_time;
             parameters[6].Value = model.NowWarehouse;
             parameters[7].Value = model.allotType;
-
+            parameters[8].Value = model.ToWarehouse;
             System.Data.SqlClient.SqlCommand cm = new System.Data.SqlClient.SqlCommand();
 
             cm.CommandText = strSql.ToString();
@@ -94,7 +92,7 @@ namespace XHD.DAL
                 cm.Parameters.Add(p);
             }
 
-            rs = ExecTran(cm, 2);
+            rs = ExecTran(cm, rows);
             return rs;
 
         }
@@ -167,7 +165,7 @@ namespace XHD.DAL
         /// <param name="allotid"></param>
         /// <param name="barcode"></param>
         /// <returns></returns>
-        public bool Delete(int allotType,string allotid, string barcode)
+        public bool Delete(int allotType, string allotid, string barcode)
         {
 
             StringBuilder strSql = new StringBuilder();
@@ -177,9 +175,9 @@ namespace XHD.DAL
             {
                 strSql.AppendLine(" update Product set Status=1 where barcode=@barcode");
             }
-            else {
-                strSql.AppendLine(" update Product set warehouse_id=depopbefwid where barcode=@barcode");
-            }
+            //else {
+            //    strSql.AppendLine(" update Product set warehouse_id=depopbefwid where barcode=@barcode");
+            //}
             SqlParameter[] parameters = {
                     new SqlParameter("@allotid", SqlDbType.VarChar,50) { Value=allotid}  ,
                      new SqlParameter("@barcode", SqlDbType.VarChar,50) { Value=barcode}

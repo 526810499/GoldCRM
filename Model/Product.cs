@@ -21,7 +21,7 @@ namespace XHD.Model
         private string _indep_id;
         private decimal? _cost;
         private decimal? _price;
-        private decimal? _agio;
+        private int? _authIn;
         private string _remarks;
         private string _specifications;
         private string _create_id;
@@ -102,7 +102,7 @@ namespace XHD.Model
             get { return _weight; }
         }
         /// <summary>
-        /// 重量单位
+        /// 关联门店
         /// </summary>
         public string indep_id
         {
@@ -126,12 +126,12 @@ namespace XHD.Model
             get { return _price; }
         }
         /// <summary>
-        /// 折扣
+        /// 审核中
         /// </summary>
-        public decimal? agio
+        public int? AuthIn
         {
-            set { _agio = value; }
-            get { return _agio; }
+            set { _authIn = value; }
+            get { return _authIn; }
         }
         /// <summary>
         /// 备注
@@ -246,7 +246,7 @@ namespace XHD.Model
             get { return _sbarcode; }
         }
         /// <summary>
-        /// 门店操作之前保存的仓库id 出库调拨审核之前保存的仓库id
+        /// 门店操作之前保存的仓库id 出库调拨审核中之前保存的仓库id
         /// </summary>
         public string depopbefwid
         {

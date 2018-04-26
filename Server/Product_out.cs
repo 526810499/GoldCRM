@@ -121,7 +121,7 @@ namespace XHD.Server
                     model.createdep_id = dep_id;
                     model.create_id = emp_id;
                     model.create_time = DateTime.Now;
-                    id = "CK-" + DateTime.Now.ToString("yy-MM-dd-HH-mm-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
+                    id = "CK" + DateTime.Now.ToString("yyMMdd") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
                     model.id = id;
                     model.status = request["auth"].CInt(0, false) == 1 ? 1 : 0;
 
@@ -149,7 +149,9 @@ namespace XHD.Server
                                 create_id = emp_id,
                                 create_time = DateTime.Now,
                                 outType = model.outType,
-                                FromWarehouse = m.warehouse_id
+                                FromWarehouse = m.warehouse_id,
+                                ToWarehouse=model.NowWarehouse.CString(""),
+
                             });
 
                             if (!r)
@@ -201,9 +203,9 @@ namespace XHD.Server
                 sortorder = "asc";
 
             string sorttext = " " + sortname + " " + sortorder;
-
+            int outtype = request["outtype"].CInt(0, false);
             string Total;
-            string serchtxt = $" outtype=" + request["outtype"].CInt(0, false);
+            string serchtxt = $" outtype=" + outtype;
 
             if (!string.IsNullOrEmpty(request["allotid"]) && request["allotid"] != "null")
             {
@@ -215,15 +217,22 @@ namespace XHD.Server
             if (!string.IsNullOrEmpty(request["sorderid"]))
                 serchtxt += $" and id='{PageValidate.InputText(request["sorderid"], 50)}'";
 
+ 
+
             if (!string.IsNullOrEmpty(request["scode"]))
             {
                 string scode = PageValidate.InputText(request["scode"], 50);
-                DataSet dsc = allotDetailBll.GetList($" barcode='{scode}'");
+                DataSet dsc = allotDetailBll.GetList($" barcode='{scode}' and outtype={outtype}");
                 if (dsc == null || dsc.Tables[0].Rows.Count <= 0)
                 {
                     return GetGridJSON.DataTableToJSON1(null, "0");
                 }
-                serchtxt += $" and id='{dsc.Tables[0].Rows[0]["outid"]}'";
+                string ids = "";
+                foreach (DataRow dr in dsc.Tables[0].Rows)
+                {
+                    ids += $"'{dr["outid"]}',";
+                }
+                serchtxt += $" and id in({ids.Trim(',')})";
             }
 
             serchtxt = GetSQLCreateIDWhere(serchtxt, true);
@@ -309,8 +318,8 @@ namespace XHD.Server
                 {
                     status = 3;
                 }
-                int allottype = ds.Tables[0].Rows[0]["allottype"].CInt(0, false);
-                bool r = allotBll.AuthApproved(allottype, id, emp_id, status, remark);
+                int outType = ds.Tables[0].Rows[0]["outType"].CInt(0, false);
+                bool r = allotBll.AuthApproved(outType, id, emp_id, status, remark);
                 if (r)
                 {
                     return XhdResult.Success().ToString();

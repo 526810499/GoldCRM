@@ -27,30 +27,21 @@ namespace XHD.View.Product
             int exportType = 0;
             if (!IsPostBack)
             {
-                bool candel = true;
-                if (employee.uid != "admin")
-                {
-                    //controll auth
-                    var getauth = new GetAuthorityByUid();
-                    candel = getauth.GetBtnAuthority(employee.id, "0DBE7337-D4D3-4895-8C8F-5E0A4ECEEE0A");
 
-                }
-                //导出数据类型 0 条形码导出  1销售利润表导出 2销售明细导出
+                //导出数据类型 0 条形码导出  1销售利润表导出 
                 exportType = Request["etype"].CInt(0, false);
-                if (candel)
+
+                switch (exportType)
                 {
-                    switch (exportType)
-                    {
-                        case 0:
-                            Export();
-                            break;
-                        case 1:
-                            ExportOrderLiR();
-                            break;
-                        case 2:
-                            break;
-                    }
+                    case 0:
+                        Export();
+                        break;
+                    case 1:
+                        ExportOrderLiR();
+                        break;
+       
                 }
+
 
             }
 
@@ -137,13 +128,20 @@ namespace XHD.View.Product
         /// <returns></returns>
         private string ExportOrderLiR()
         {
-            bool candel = CheckBtnAuthority("BBD22C8B-D44E-4075-A26D-9D1FCE256166");
+            string rid = "003E7F31-1407-4828-A3E9-32DFA10A5BA8";
+            int userData = Request["user"].CInt(0, false);
+            if (userData == 1)
+            {
+                rid = "5181CD41-1933-440D-ADAE-82D44E859D11";
+            }
+            bool candel = CheckBtnAuthority(rid);
 
             if (!candel)
             {
                 ExportError("无此权限");
                 return "";
             }
+
             Server.Sale_order sbll = new XHD.Server.Sale_order(HttpContext.Current);
             DataTable table = sbll.ExportData();
             if (table != null && table.Rows.Count > 0)
@@ -163,7 +161,7 @@ namespace XHD.View.Product
                 nameList.Add("category_name", "商品分类");
                 nameList.Add("BarCode", "条形码");
                 nameList.Add("Weight", "重量(克)");
-                if (right)
+                if (right && userData == 0)
                 {
                     nameList.Add("StockPrice", "进货价(￥)");
                     nameList.Add("Totals", "成本总价(￥)");
@@ -187,6 +185,43 @@ namespace XHD.View.Product
             }
 
             return "";
+        }
+
+        #endregion
+
+
+        #region 打印商品条形码
+        /// <summary>
+        /// 导出商品条形码
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        public string ExportPrint()
+        {
+
+            bool candel = CheckBtnAuthority("0DBE7337-D4D3-4895-8C8F-5E0A4ECEEE0A");
+
+            if (!candel)
+            {
+                return null;
+            }
+
+
+            string ids = Request["ids"];
+            ids = PageValidate.InputText(ids, 50000);
+            if (string.IsNullOrWhiteSpace(ids)) { return null; }
+            ids = "'" + ids.Trim(',') + "'";
+            ids = ids.Replace(",", "','");
+
+            string where = $" id in({ids})";
+            DataSet ds = product.GetList(where);
+            if (ds != null && ds.Tables[0].Rows != null && ds.Tables[0].Rows.Count > 0)
+            {
+                return JsonDyamicHelper.NetJsonConvertObject(ds.Tables[0]);
+            }
+            else {
+                return null;
+            }
         }
 
         #endregion

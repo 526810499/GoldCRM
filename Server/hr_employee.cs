@@ -461,6 +461,10 @@ namespace XHD.Server
             System.Text.StringBuilder str = new System.Text.StringBuilder();
 
             str.Append("[");
+            if (request["qxz"].CInt(0, false) == 1)
+            {
+                str.Append("{\"id\":\"\",\"text\":\"==所有==\",\"d_icon\":\"\"},");
+            }
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {
                 str.Append("{id:'" + ds.Tables[0].Rows[i]["id"].ToString() + "',text:'" + ds.Tables[0].Rows[i]["name"] + "'},");

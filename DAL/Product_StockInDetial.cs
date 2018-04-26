@@ -67,7 +67,7 @@ namespace XHD.DAL
         public bool UpdateProductWareHouse(string stockid, int warehouse_id, string dep_id)
         {
             string sql = @"
-                    UPDATE p SET p.indep_id=@dep_id,OutStatus=1,p.warehouse_id=@warehouse_id
+                    UPDATE p SET p.indep_id=@dep_id,OutStatus=1,p.status=101,p.warehouse_id=@warehouse_id
                     FROM dbo.Product AS p 
                     INNER  JOIN Product_StockInDetial AS pst ON p.BarCode=pst.BarCode 
                     WHERE pst.stockid=@stockid ";

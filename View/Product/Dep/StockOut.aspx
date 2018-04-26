@@ -105,7 +105,7 @@
 
         });
         function toolbar() {
-            $.get("toolbar.GetSys.xhd?mid=product_out&rnd=" + Math.random(), function (data, textStatus) {
+            $.get("toolbar.GetSys.xhd?mid=depstockout&rnd=" + Math.random(), function (data, textStatus) {
                 var data = eval('(' + data + ')');
                 //alert(data);
                 var items = [];
@@ -175,7 +175,7 @@
                 f_openWindow2('product/Dep/StockOut_Add.aspx?authbtn=1&id=' + rows.id + "&astatus=" + rows.status, "审核出库单", 1050, 680, buttons);
             }
             else {
-                $.ligerDialog.warn('请选择商品！');
+                $.ligerDialog.warn('请选择调度单！');
             }
         }
 
@@ -192,7 +192,7 @@
                 f_openWindow2('product/Dep/StockOut_Add.aspx?id=' + rows.id + "&astatus=" + rows.status, "修改出库单", 1050, 680, buttons);
             }
             else {
-                $.ligerDialog.warn('请选择商品！');
+                $.ligerDialog.warn('请选择调度单！');
             }
         }
         function add() {
@@ -233,7 +233,7 @@
                 })
             }
             else {
-                $.ligerDialog.warn("请选择出库单");
+                $.ligerDialog.warn("请选择调度单");
             }
 
         }

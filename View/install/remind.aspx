@@ -28,7 +28,7 @@
 <head>
     <meta content="ie=8 chrome=1" http-equiv="X-UA-Compatible">
     <meta http-equiv="content-type" content="text/html; charset=gb2312">
-    <title>{xx}CRM-安装</title>   
+    <title>永坤金行-CRM-安装</title>   
     <script src="../lib/jquery/jquery-1.3.2.min.js" type="text/javascript"></script>  
     <script type="text/javascript">
           $(function () {
@@ -58,7 +58,7 @@
             <table id="__01" width="732" height="358" border="0" cellpadding="0" cellspacing="0">
                 <tr>
                     <td>
-                        <h2>欢迎使用{xx}CRM</h2>
+                        <h2>欢迎使用永坤金行-CRM</h2>
 
                         <table class="auto-style1">
                             <tr>

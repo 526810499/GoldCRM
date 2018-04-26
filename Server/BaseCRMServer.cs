@@ -118,7 +118,7 @@ namespace XHD.Server
             {
                 where += $" and ";
             }
-            where += $" and create_id='{ emp_id }'";
+            where += $"  create_id='{ emp_id }'";
 
             return where;
         }

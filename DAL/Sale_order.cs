@@ -39,9 +39,9 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Sale_order(");
-            strSql.Append("id,Serialnumber,Customer_id,Order_date,pay_type_id,Order_status_id,Order_amount,discount_amount,total_amount,emp_id,receive_money,arrears_money,invoice_money,arrears_invoice,Order_details,create_id,create_time,cashier_id,vipcard,createdep_id,PayTheBill)");
+            strSql.Append("id,Serialnumber,Customer_id,Order_date,pay_type_id,Order_status_id,Order_amount,discount_amount,total_amount,emp_id,receive_money,arrears_money,invoice_money,arrears_invoice,Order_details,create_id,create_time,cashier_id,vipcard,createdep_id,PayTheBill,saledep_id)");
             strSql.Append(" values (");
-            strSql.Append("@id,@Serialnumber,@Customer_id,@Order_date,@pay_type_id,@Order_status_id,@Order_amount,@discount_amount,@total_amount,@emp_id,@receive_money,@arrears_money,@invoice_money,@arrears_invoice,@Order_details,@create_id,@create_time,@cashier_id,@vipcard,@createdep_id,@PayTheBill)");
+            strSql.Append("@id,@Serialnumber,@Customer_id,@Order_date,@pay_type_id,@Order_status_id,@Order_amount,@discount_amount,@total_amount,@emp_id,@receive_money,@arrears_money,@invoice_money,@arrears_invoice,@Order_details,@create_id,@create_time,@cashier_id,@vipcard,@createdep_id,@PayTheBill,@saledep_id)");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@Serialnumber", SqlDbType.VarChar,250),
@@ -64,6 +64,7 @@ namespace XHD.DAL
                    new SqlParameter("@vipcard", SqlDbType.VarChar,50),
                   new SqlParameter("@createdep_id", SqlDbType.VarChar,50),
                   new SqlParameter("@PayTheBill",SqlDbType.NVarChar,50),
+                 new SqlParameter("@saledep_id",SqlDbType.NVarChar,50),
             };
             parameters[0].Value = model.id;
             parameters[1].Value = model.Serialnumber;
@@ -86,6 +87,7 @@ namespace XHD.DAL
             parameters[18].Value = model.vipcard;
             parameters[19].Value = model.createdep_id;
             parameters[20].Value = model.PayTheBill;
+            parameters[21].Value = model.saledep_id;
 
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
@@ -117,7 +119,7 @@ namespace XHD.DAL
             strSql.Append("vipcard=@vipcard,");
             strSql.Append("receive_money=@receive_money,");
             strSql.Append("arrears_money=@arrears_money,");
-            strSql.Append(" createdep_id=@createdep_id,PayTheBill=@PayTheBill  ");
+            strSql.Append(" createdep_id=@createdep_id,PayTheBill=@PayTheBill,saledep_id=@saledep_id  ");
             strSql.Append(" where id=@id ");
             SqlParameter[] parameters = {
                     new SqlParameter("@Order_date", SqlDbType.DateTime),
@@ -135,6 +137,7 @@ namespace XHD.DAL
                     new SqlParameter("@arrears_money", SqlDbType.Decimal,9),
                     new SqlParameter("@createdep_id", SqlDbType.VarChar,50),
                     new SqlParameter("@PayTheBill", SqlDbType.VarChar,50),
+                   new SqlParameter("@saledep_id", SqlDbType.VarChar,50),
                };
             parameters[0].Value = model.Order_date;
             parameters[1].Value = model.pay_type_id;
@@ -151,6 +154,7 @@ namespace XHD.DAL
             parameters[12].Value = model.arrears_money;
             parameters[13].Value = model.createdep_id;
             parameters[14].Value = model.PayTheBill;
+            parameters[15].Value = model.saledep_id;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {
@@ -235,12 +239,12 @@ namespace XHD.DAL
             strSql.Append("      , CRM_Customer.cus_name ");
             strSql.Append("      , hr_employee.name as emp_name ");
             strSql.Append("      , chr.name as cashiername ");
-            strSql.Append("      , hr_department.dep_name ");
+            strSql.Append("      , hr_department.dep_name,saledep_id ");
             strSql.Append("  FROM [dbo].[Sale_order] ");
             strSql.Append("        INNER JOIN CRM_Customer(nolock) ON CRM_Customer.id = Sale_order.Customer_id ");
             strSql.Append("        INNER JOIN hr_employee(nolock) ON hr_employee.id = Sale_order.emp_id ");
             strSql.Append("        INNER JOIN hr_employee(nolock) as chr ON chr.id = Sale_order.cashier_id ");
-            strSql.Append("        INNER JOIN hr_department(nolock) ON hr_department.id = hr_employee.dep_id ");
+            strSql.Append("        INNER JOIN hr_department(nolock) ON hr_department.id = saledep_id ");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);
@@ -282,13 +286,13 @@ namespace XHD.DAL
             strSql.Append("      , Sale_order.[vipcard] ");
             strSql.Append("      , CRM_Customer.cus_name,cashier_id,vipcard,createdep_id,PayTheBill  ");
             strSql.Append("      , hr_employee.name as emp_name ");
-            strSql.Append("      , hr_department.dep_name ");
+            strSql.Append("      , hr_department.dep_name ,saledep_id");
             strSql.Append("      , chr.name as cashiername ");
             strSql.Append("  FROM[dbo].[Sale_order] ");
             strSql.Append("        INNER JOIN CRM_Customer(nolock) ON CRM_Customer.id = Sale_order.Customer_id ");
             strSql.Append("        INNER JOIN hr_employee(nolock) ON hr_employee.id = Sale_order.emp_id ");
             strSql.Append("        INNER JOIN hr_employee(nolock) as chr ON chr.id = Sale_order.cashier_id ");
-            strSql.Append("        INNER JOIN hr_department(nolock) ON hr_department.id = hr_employee.dep_id ");
+            strSql.Append("        INNER JOIN hr_department(nolock) ON hr_department.id = saledep_id ");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);
@@ -334,12 +338,12 @@ namespace XHD.DAL
             strSql_inner.Append("      , Sale_order.[vipcard],PayTheBill  ");
             strSql_inner.Append("      , CRM_Customer.cus_name ");
             strSql_inner.Append("      , hr_employee.name as emp_name ");
-            strSql_inner.Append("      , hr_department.dep_name  ,cashier_id ");
+            strSql_inner.Append("      , hr_department.dep_name  ,cashier_id,saledep_id ");
             strSql_inner.Append("  FROM[dbo].[Sale_order] ");
             strSql_inner.Append("        INNER JOIN CRM_Customer ON CRM_Customer.id = Sale_order.Customer_id ");
             strSql_inner.Append("        INNER JOIN hr_employee ON hr_employee.id = Sale_order.emp_id ");
             strSql_inner.Append("        INNER JOIN hr_department ON hr_department.id = hr_employee.dep_id ");
-            strSql_inner.Append("        INNER JOIN hr_department(nolock) as xsdep ON xsdep.id = Sale_order.createdep_id ");
+            strSql_inner.Append("        INNER JOIN hr_department(nolock) as xsdep ON xsdep.id = Sale_order.saledep_id ");
             if (strWhere.Trim() != "")
             {
                 strSql_inner.Append(" WHERE " + strWhere);

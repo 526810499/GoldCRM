@@ -18,13 +18,14 @@ namespace XHD.Server
         public static BLL.BProduct_OldChangeNew bll = new BLL.BProduct_OldChangeNew();
         public static Model.Product_OldChangeNew model = new Model.Product_OldChangeNew();
 
- 
+
 
         public SProduct_OldChangeNew()
         {
         }
 
-        public SProduct_OldChangeNew(HttpContext context) : base(context) {
+        public SProduct_OldChangeNew(HttpContext context) : base(context)
+        {
 
             allDataBtnid = "B15C597D-A9B8-438C-82B5-FAC22BBF9916";
             depDataBtnid = "266106C6-9D13-4607-8FFF-A39EC03DDC04";
@@ -83,7 +84,7 @@ namespace XHD.Server
 
                 if (row["costsTotalPrice"].ToString() != request["T_costsTotalPrice"])
                     Log_Content += string.Format("【{0}】{1} → {2} \n", "costsTotalPrice", row["costsTotalPrice"].ToString(), request["T_costsTotalPrice"]);
- 
+
                 if (row["discount"].ToString() != request["T_discount"])
                     Log_Content += string.Format("【{0}】{1} → {2} \n", "discount", row["discount"].ToString(), request["T_discount"]);
 
@@ -98,11 +99,10 @@ namespace XHD.Server
                     Syslog.Add_log(UserID, UserName, IPStreet, EventTitle, EventType, EventID, Log_Content);
 
             }
-
             else
             {
                 model.createdep_id = dep_id;
-                model.id = "HX-" + DateTime.Now.ToString("yy-MM-dd-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
+                model.id = "HX" + DateTime.Now.ToString("yyMMdd") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
                 model.status = 1;
                 model.create_id = emp_id;
                 model.create_time = DateTime.Now;
@@ -179,7 +179,7 @@ namespace XHD.Server
             string UserName = emp_name;
             string IPStreet = request.UserHostAddress;
             string EventID = id.CString("");
-            string EventTitle = row["oldWeight"].CString("") + "_" + row["oldTotalPrice"].CString("") + "_" + row["oldCharge"].CString("")+ row["newWeight"].CString("") + "_" + row["newTotalPrice"].CString("") + "_" + row["costsTotalPrice"].CString("");
+            string EventTitle = row["oldWeight"].CString("") + "_" + row["oldTotalPrice"].CString("") + "_" + row["oldCharge"].CString("") + row["newWeight"].CString("") + "_" + row["newTotalPrice"].CString("") + "_" + row["costsTotalPrice"].CString("");
 
             Syslog.Add_log(UserID, UserName, IPStreet, EventTitle, EventType, EventID, null);
 

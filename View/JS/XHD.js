@@ -53,6 +53,37 @@
 
 })(jQuery);
 
+var productStatus = [
+                    { text: '所有', id: '' },
+                    { text: '入库', id: '1' },
+                    { text: '门店入库', id: '101' },
+                    { text: '调拨', id: '2' },
+                    { text: '门店调拨', id: '102' },
+                    { text: '出库', id: '3' },
+                    { text: '门店出库', id: '103' },
+                    { text: '已销售', id: '4' }
+];
+
+function GetproductStatus(status) {
+    switch (status) {
+        case 1:
+            return "<span style='color:#0066FF'> 入库 </span>";
+        case 101:
+            return "<span style='color:#0066FF'> 门店入库 </span>";
+        case 2:
+            return "<span style='color:#00CC66'> 调拨中 </span>";
+        case 102:
+            return "<span style='color:#00CC66'> 门店调拨中 </span>";
+        case 3:
+            return "<span style='color:#009900'> 出库 </span>";
+        case 103:
+            return "<span style='color:#009900'> 门店出库 </span>";
+        case 4:
+            return "<span style='color:#FF3300'> 已销售 </span>";
+    }
+
+}
+
 //货币格式
 
 function toMoney(num, defaults) {

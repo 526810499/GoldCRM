@@ -149,22 +149,27 @@ namespace XHD.DAL
             strSql.Append("remark=@remark");
             strSql.Append(" where id=@id ");
             int rows = 1;
-            //审核不通过需要释放
-            if (status == 3)
+            rows += CountPorduct(id);
+            int pstatus = 3;
+            //审核 通过需要同步信息
+            if (status == 2)
             {
-                string sql = @"UPDATE payuser SET status=2 FROM dbo.Product(nolock) AS payuser inner JOIN Product_outDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.outid=@id and payuser.status<>4 ";
-
                 if (outType == 1)
                 {
-                    sql = @"UPDATE payuser SET warehouse_id=depopbefwid  FROM dbo.Product(nolock) AS payuser inner JOIN Product_outDetail AS bu ON payuser.barcode=bu.barcode WHERE bu.outid=@id  ";
+                    pstatus = 103;
                 }
-
+                string sql = @"UPDATE payuser SET payuser.authIn=0,payuser.status=@pstatus,warehouse_id=bu.ToWarehouse FROM dbo.Product(nolock) AS payuser inner JOIN Product_outDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.outid=@id and payuser.status<>4 ";
                 strSql.AppendLine(sql);
-                rows += CountPorduct(id);
+
+            }
+            else {
+                string sql = @"UPDATE payuser SET payuser.authIn=0  FROM dbo.Product(nolock) AS payuser inner JOIN Product_outDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.outid=@id and payuser.status<>4 ";
+                strSql.AppendLine(sql);
             }
 
             SqlParameter[] parameters = {
                     new SqlParameter("@status", SqlDbType.Int,4) { Value=status},
+                     new SqlParameter("@pstatus", SqlDbType.Int,4) { Value=pstatus},
                     new SqlParameter("@authuser_id", SqlDbType.VarChar,50) { Value=authuser_id},
                     new SqlParameter("@authuser_time", SqlDbType.DateTime) { Value=DateTime.Now},
                    new SqlParameter("@remark", SqlDbType.NVarChar,50) { Value=remark},

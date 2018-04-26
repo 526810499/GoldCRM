@@ -7,8 +7,11 @@ body, html {
 }
 
 #header {
+ 
+    height: 52px;
+    background-image: url(../../images/logo/yklogo.png);
+    background-repeat: no-repeat;
     background-color: #02b9e3;
-    height: 54px;
 }
 
 .right {

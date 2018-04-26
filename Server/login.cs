@@ -75,7 +75,7 @@ namespace XHD.Server
                 Context.Response.Cookies.Add(cookie);
  
                 CookieHelper.Add("udepid", rows["dep_id"].CString(""));
-                CookieHelper.Add("udepname", rows["dep_name"].CString(""));
+                CookieHelper.Add("udepname", HttpUtility.UrlEncode(rows["dep_name"].CString("")));
                 CookieHelper.Add("uid", HttpUtility.UrlEncode(DEncrypt.Encrypt(userid)));
                 CookieHelper.Add("urname", HttpUtility.UrlEncode(rows["name"].CString("")));
                 //日志

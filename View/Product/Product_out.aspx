@@ -181,7 +181,7 @@
                 f_openWindow2('product/Product_outAdd.aspx?authbtn=1&id=' + rows.id + "&astatus=" + rows.status, "审核出库单", 1050, 680, buttons);
             }
             else {
-                $.ligerDialog.warn('请选择商品！');
+                $.ligerDialog.warn('请选择调度单！');
             }
         }
 
@@ -198,7 +198,7 @@
                 f_openWindow2('product/Product_outAdd.aspx?id=' + rows.id + "&astatus=" + rows.status, "修改出库单", 1050, 680, buttons);
             }
             else {
-                $.ligerDialog.warn('请选择商品！');
+                $.ligerDialog.warn('请选择调度单！');
             }
         }
         function add() {
@@ -239,7 +239,7 @@
                 })
             }
             else {
-                $.ligerDialog.warn("请选择出库单");
+                $.ligerDialog.warn("请选择调度单");
             }
 
         }

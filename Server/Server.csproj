@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseCRMServer.cs" />
+    <Compile Include="BaseNetPage.cs" />
     <Compile Include="BusinessToRemindUserConfig.cs" />
     <Compile Include="CRM_Contact.cs" />
     <Compile Include="CRM_contract.cs" />

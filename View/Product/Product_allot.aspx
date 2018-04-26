@@ -213,7 +213,7 @@
                 f_openWindow2('product/Product_allotAdd.aspx?authbtn=1&id=' + rows.id + "&astatus=" + rows.status, "审核调拨单", 1200, 600, buttons);
             }
             else {
-                $.ligerDialog.warn('请选择商品！');
+                $.ligerDialog.warn('请选择调度单！');
             }
         }
 
@@ -230,7 +230,7 @@
                 f_openWindow2('product/Product_allotAdd.aspx?id=' + rows.id + "&astatus=" + rows.status, "修改调拨单", 1200, 600, buttons);
             }
             else {
-                $.ligerDialog.warn('请选择商品！');
+                $.ligerDialog.warn('请选择调度单！');
             }
         }
         function add() {
@@ -276,7 +276,7 @@
                 })
             }
             else {
-                $.ligerDialog.warn("请选择调拨单");
+                $.ligerDialog.warn("请选择调度单");
             }
 
         }

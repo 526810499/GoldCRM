@@ -16,8 +16,10 @@
     <script src="../JS/XHD.js" type="text/javascript"></script>
     <script type="text/javascript">
         var ExtenData;
+        var user = 0;
         $(function () {
             initLayout();
+            user = getparastr("user", "0");
             $(window).resize(function () {
                 initLayout();
             });
@@ -30,6 +32,7 @@
                             return html;
                         }
                     },
+                      { display: '条形码', name: 'BarCode', align: 'left', width: 180 },
                     {
                         display: '客户', name: 'Customer_id', width: 260, render: function (item) {
                             var html = "<a href='javascript:void(0)' onclick=view('customer','" + item.Customer_id + "')>";
@@ -39,9 +42,9 @@
                             return html;
                         }
                     },
-                     { display: '商品名称', name: 'product_name', align: 'left', width: 150 },
-                    { display: '商品类别', name: 'category_name', align: 'left', width: 150 },
-                    { display: '条形码', name: 'BarCode', align: 'left', width: 180, totalSummary: { type: 'total', render: function (item) { return "<span id='tspan'>合计:</span>"; } } },
+                    { display: '商品名称', name: 'product_name', align: 'left', width: 150 },
+                    { display: '商品类别', name: 'category_name', align: 'left', width: 150, totalSummary: { type: 'total', render: function (item) { return "<span id='tspan'>合计:</span>"; } } },
+
                     {
                         display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {
                             return toMoney(item.Weight);
@@ -66,7 +69,7 @@
                     }
                 ],
                 dataAction: 'server', pageSize: 30, pageSizeOptions: [10, 20, 30, 40, 50, 60, 80, 100, 120],
-                url: "Sale_order.gridData.xhd?datacount=1&rnd=" + Math.random(),
+                url: "Sale_order.gridData.xhd?user=" + user + "&datacount=1&rnd=" + Math.random() + "&startdate=<%=DateTime.Now.AddDays(-1).Date%>",
                 width: '100%', height: '100%',
                 heightDiff: -10,
                 onSuccess: function (data, grid) {
@@ -94,6 +97,10 @@
         });
 
         function toolbar() {
+            var mid = "saleorderdata";
+            if (user == 1) {
+                mid = "userorderdata";
+            }
             $.get("toolbar.GetSys.xhd?mid=saleorderdata&rnd=" + Math.random(), function (data, textStatus) {
                 var data = eval('(' + data + ')');
 
@@ -126,28 +133,32 @@
         }
 
         function initSerchForm() {
-            $("#T_OrderID").ligerTextBox({ width: 200 });
-            $("#T_cus").ligerTextBox({ width: 200 });
-            var d = $('#T_status').ligerComboBox({ width: 120, url: "Sys_Param.combo.xhd?type=order_status&rnd=" + Math.random() });
-            var e = $('#employee').ligerComboBox({ width: 96 });
-            var f = $('#department').ligerComboBox({
-                width: 97,
-                selectBoxWidth: 240,
-                selectBoxHeight: 200,
-                valueField: 'id',
-                textField: 'text',
-                treeLeafOnly: false,
-                tree: {
-                    url: 'hr_department.tree.xhd?rnd=' + Math.random(),
-                    idFieldName: 'id',
-                    checkbox: false
-                },
-                onSelected: function (newvalue) {
-                    $.get("hr_employee.combo.xhd?did=" + newvalue + "&rnd=" + Math.random(), function (data, textStatus) {
-                        e.setData(eval(data));
-                    });
-                }
-            });
+            $("#T_OrderID").ligerTextBox({ width: 190 });
+
+            if (user == 0) {
+
+                var e = $('#employee').ligerComboBox({ width: 96 });
+                var f = $('#department').ligerComboBox({
+                    width: 97,
+                    selectBoxWidth: 240,
+                    selectBoxHeight: 200,
+                    valueField: 'id',
+                    textField: 'text',
+                    treeLeafOnly: false,
+                    tree: {
+                        url: 'hr_department.tree.xhd?qxz=1&rnd=' + Math.random(),
+                        idFieldName: 'id',
+                        checkbox: false
+                    },
+                    onSelected: function (newvalue) {
+                        $.get("hr_employee.combo.xhd?qxz=1&did=" + newvalue + "&rnd=" + Math.random(), function (data, textStatus) {
+                            e.setData(eval(data));
+                        });
+                    }
+                });
+            } else {
+                $(".truser").hide();
+            }
 
         }
         function serchpanel() {
@@ -162,7 +173,7 @@
             }
         }
         function doserch() {
-            var sendtxt = "&datacount=1&rnd=" + Math.random();
+            var sendtxt = "&user=" + user + "&datacount=1&rnd=" + Math.random();
             var serchtxt = $("#serchform :input").fieldSerialize() + sendtxt;
             var manager = $("#maingrid4").ligerGetGridManager();
             manager._setUrl("Sale_order.gridData.xhd?" + serchtxt);
@@ -192,6 +203,7 @@
         }
 
         function exports() {
+
             var sendtxt = "&etype=1&datacount=1&rnd=" + Math.random();
             var serchtxt = $("#serchform :input").fieldSerialize() + sendtxt;
 
@@ -219,47 +231,44 @@
     </form>
     <div class="az">
         <form id='serchform'>
-            <table style='width: 720px'>
+            <table>
                 <tr>
-                    <td>
-                        <div style='width: 60px; text-align: right; float: right'>客户名称：</div>
+                    <td class="truser">
+                        <div style='width: 60px; text-align: right; float: right'>销售门店：</div>
+                    </td>
+                    <td class="truser">
+
+                        <div style='width: 100px; float: left'>
+                            <input type='text' id='department' name='department' />
+                        </div>
+                    </td>
+                    <td class="truser">
+                        <div style='width: 60px; text-align: right; float: right'>销售人员：</div>
+                    </td>
+                    <td class="truser">
+
+                        <div style='width: 98px; float: left'>
+                            <input type='text' id='employee' name='employee' />
+                        </div>
                     </td>
                     <td>
-                        <input type='text' id='T_cus' name='T_cus' ltype='text' ligerui='{width:120}' /></td>
-
-
-                    <td>
-                        <div style='width: 120px; text-align: right; float: right'>成交时间：</div>
+                        <div style='width: 60px; text-align: right; float: right'>订单号：</div>
                     </td>
-                    <td>
+                    <td style="width: 200px">
+
+                        <div style='width: 98px; float: left'>
+                            <input type='text' id='T_OrderID' name='T_OrderID' />
+                        </div>
+                    </td>
+                   <td style="width: 65px">
+                        <div style='width: 60px;'>销售时间：</div>
+                    </td>
+                  <td style="width: 215px">
                         <div style='width: 100px; float: left'>
                             <input type='text' id='startdate' name='startdate' ltype='date' value="<%=(DateTime.Now.AddDays(-1).Date).ToString("yyyy-MM-dd") %>" ligerui='{width:97}' />
                         </div>
                         <div style='width: 98px; float: left'>
                             <input type='text' id='enddate' name='enddate' ltype='date' value="<%=(DateTime.Now.AddDays(1).Date).ToString("yyyy-MM-dd") %>" ligerui='{width:96}' />
-                        </div>
-                    </td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr style="height: 10px">
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>
-                        <div style='width: 60px; text-align: right; float: right'>订单号：</div>
-                    </td>
-                    <td>
-                        <input id='T_OrderID' name="T_OrderID" type='text' /></td>
-                    <td>
-                        <div style='width: 120px; text-align: right; float: right'>成交(部门/人员)：</div>
-                    </td>
-                    <td>
-                        <div style='width: 100px; float: left'>
-                            <input type='text' id='department' name='department' />
-                        </div>
-                        <div style='width: 98px; float: left'>
-                            <input type='text' id='employee' name='employee' />
                         </div>
                     </td>
                     <td></td>

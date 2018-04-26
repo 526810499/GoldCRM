@@ -25,7 +25,7 @@
 <head>
     <meta content="ie=8 chrome=1" http-equiv="X-UA-Compatible">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <title>{xx}CRM-安装</title>
+    <title>永坤金行-CRM-安装</title>
 
     <link href="../CSS/input.css" rel="stylesheet" />
     <link href="../lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" />
@@ -97,7 +97,7 @@
             <table class="bodytable3" id="Table1" width="732" height="358" border="0" cellpadding="0" cellspacing="0">
                 <tr>
                     <td style="height:40px;">
-                        <span style="font-size: 28px; font-weight: bolder;">欢迎使用{xx}CRM</span>
+                        <span style="font-size: 28px; font-weight: bolder;">欢迎使用永坤金行-CRM</span>
                     </td>
                 </tr>
                 <tr>

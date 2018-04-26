@@ -26,10 +26,16 @@ namespace XHD.Model
         /// </summary>
         public int outType { get; set; }
 
+
+        /// <summary>
+        /// 去哪个个仓库
+        /// </summary>
+        public string ToWarehouse { get; set; }
+
         /// <summary>
         /// 来自哪个仓库，原仓库
         /// </summary>
-       public string FromWarehouse { get; set; }
+        public string FromWarehouse { get; set; }
 
         /// <summary>
         /// 

@@ -25,7 +25,7 @@
 <head>
     <meta content="ie=8 chrome=1" http-equiv="X-UA-Compatible">
     <meta http-equiv="content-type" content="text/html; charset=gb2312">
-    <title>{xx}CRM-安装</title>
+    <title>永坤金行-CRM-安装</title>
     <link href="../lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" />
     <link href="../lib/ligerUI/skins/Gray2014/css/all.css" rel="stylesheet" />
     <link href="../CSS/input.css" rel="stylesheet" />
@@ -57,7 +57,7 @@
             <table id="__01" width="732" height="358" border="0" cellpadding="0" cellspacing="0">
                 <tr>
                     <td style="height: 40px;">
-                        <span style="font-size: 28px; font-weight: bolder;">欢迎使用{xx}CRM</span>
+                        <span style="font-size: 28px; font-weight: bolder;">欢迎使用永坤金行-CRM</span>
                     </td>
                 </tr>
                 <tr>
@@ -74,10 +74,10 @@
                             </tr>
                         </table>
                         <p>
-                            <span style="-webkit-text-stroke-width: 0px; color: rgb(0, 0, 0); display: inline !important; float: none; font: 12px/25px 宋体, SimSun; font-size-adjust: none; font-stretch: normal; letter-spacing: normal; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px;">&nbsp; {xx}CRM是一款开源免费的客户关系管理系统，是为帮助企业快速成长发展而开发的一款优秀的CRM客户关系管理系统，能帮助您管理客户与销售，能协同进行工作，并能方便的进行二次开发与扩展，是您企业信息化进程最佳的选择。</span>
+                            <span style="-webkit-text-stroke-width: 0px; color: rgb(0, 0, 0); display: inline !important; float: none; font: 12px/25px 宋体, SimSun; font-size-adjust: none; font-stretch: normal; letter-spacing: normal; text-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px;">&nbsp; 永坤金行-CRM是一款开源免费的客户关系管理系统，是为帮助企业快速成长发展而开发的一款优秀的CRM客户关系管理系统，能帮助您管理客户与销售，能协同进行工作，并能方便的进行二次开发与扩展，是您企业信息化进程最佳的选择。</span>
                         </p>
                         <p>
-                            &nbsp;&nbsp; {xx}CRM能在手机和平板等移动设备上使用，对于业务员来说，非常方便。&nbsp; &nbsp;
+                            &nbsp;&nbsp; 永坤金行-CRM能在手机和平板等移动设备上使用，对于业务员来说，非常方便。&nbsp; &nbsp;
                            
                         </p>
                         <p>

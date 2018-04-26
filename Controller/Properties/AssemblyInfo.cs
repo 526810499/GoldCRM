@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的常规信息通过以下
 // 特性集控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("{xx}CRM控制系统")]
-[assembly: AssemblyDescription("{xx}CRM控制系统")]
+[assembly: AssemblyTitle("永坤金行-CRM控制系统")]
+[assembly: AssemblyDescription("永坤金行-CRM控制系统")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("{xx}软件")]
-[assembly: AssemblyProduct("{xx}CRM")]
+[assembly: AssemblyProduct("永坤金行-CRM")]
 [assembly: AssemblyCopyright("http://www.xhdcrm.com")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

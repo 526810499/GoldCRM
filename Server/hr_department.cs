@@ -77,7 +77,7 @@ namespace XHD.Server
             str.Append("[");
             if (request["qxz"].CInt(0, false) == 1)
             {
-                str.Append("{\"id\":\"\",\"text\":\"请选择\",\"d_icon\":\"\"},");
+                str.Append("{\"id\":\"\",\"text\":\"==所有==\",\"d_icon\":\"\"},");
             }
             str.Append(GetTreeString("root", ds.Tables[0]));
             str.Replace(",", "", str.Length - 1, 1);

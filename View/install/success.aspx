@@ -14,7 +14,7 @@
 <head>
     <meta content="ie=8 chrome=1" http-equiv="X-UA-Compatible">
     <meta http-equiv="content-type" content="text/html; charset=gb2312">
-    <title>{xx}CRM-安装</title>
+    <title>永坤金行-CRM-安装</title>
 
     <link href="../CSS/input.css" rel="stylesheet" />
     <script src="../lib/jquery/jquery-1.3.2.min.js" type="text/javascript"></script>
@@ -46,7 +46,7 @@
             <table class="bodytable3" id="Table1" width="732" height="358" border="0" cellpadding="0" cellspacing="0">
                  <tr>
                     <td style="height:40px;">
-                        <span style="font-size: 28px; font-weight: bolder;">欢迎使用{xx}CRM</span>
+                        <span style="font-size: 28px; font-weight: bolder;">欢迎使用永坤金行-CRM</span>
                     </td>
                 </tr>
                 <tr>
@@ -56,7 +56,7 @@
                             <tr>
                                 <td style="width: 400px;">
                                     <p>
-                                        <span style="color: #ff0; font-weight: bolder;">Success:</span>系统配置成功，现在开始您的{xx}CRM办公之旅吧！
+                                        <span style="color: #ff0; font-weight: bolder;">Success:</span>系统配置成功，现在开始您的永坤金行-CRM办公之旅吧！
                                     </p>
                                 </td>
                                 <td style="width: 300px; text-align: center;">

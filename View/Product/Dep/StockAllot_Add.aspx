@@ -34,6 +34,22 @@
         function f_save() {
             var manager = $("#maingridc4").ligerGetGridManager();
             var fdata = manager.getData();
+            var T_fromdep_val = $("#T_fromdep_id_val").val();
+            var T_todep_val = $("#T_todep_id_val").val();
+            if (T_fromdep_val.length <= 0) {
+                $.ligerDialog.warn('请先选择调出门店');
+                return false;
+            }
+            if (T_todep_val.length <= 0) {
+                $.ligerDialog.warn('请先选择调入门店');
+                return false;
+            }
+
+            if (T_fromdep_val == T_todep_val) {
+                top.$.ligerDialog.warn("调出以调入同一门店无需操作", "调出以调入同一门店无需操作", "", 9901);
+                return false;
+            }
+
             var T_NowWarehouse_val = $("#T_NowWarehouse_val").val();
             if (T_NowWarehouse_val.length <= 0) {
                 $.ligerDialog.warn('请选择调度仓库');
@@ -77,8 +93,16 @@
                             obj[n] = "";
                     }
                     var rows = [];
- 
+                    //if (obj.fromdep_id == null || obj.fromdep_id == undefined) {
+                    //    obj.fromdep_id = getCookie("udepid", "");
+                    //}
                     rows.push(
+                            [
+                                  { display: "调出门店", name: "T_fromdep_id", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'hr_department.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + (obj.fromdep_id == undefined ? "" : obj.fromdep_id) + "'}", validate: "{required:true}" }
+                            ],
+                            [
+                              { display: "调至门店", name: "T_todep_id", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'hr_department.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + (obj.todep_id == undefined ? "" : obj.todep_id) + "'}", validate: "{required:true}" }
+                            ],
                             [
                              { display: "调拨至仓库", name: "T_NowWarehouse", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_warehouse.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + (obj.NowWarehouse == undefined ? whid : obj.NowWarehouse) + "'}", validate: "{required:true}" }
                             ],
@@ -130,10 +154,11 @@
                         }
                     },
                     {
-                        display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
+                        display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
                             return toMoney(item.CostsTotal);
                         }
-                    }
+                    }, { display: '现存仓库', name: 'warehouse_name', width: 100, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
+                      { display: '关联门店', name: 'indep_name', width: 120, render: function (item) { if (item.indep_name == null) { return "总部" } else { return item.indep_name; } } },
                 ],
                 allowHideColumn: false,
                 title: '商品明细',
@@ -158,14 +183,19 @@
 
             $(".l-panel-header").append("<div id='headerBtn' style='width:290px;float:right;margin-bottom:2px;'><div id = 'btn_addcode' style='margin-top:2px;'></div><div id = 'btn_add' style='margin-top:2px;'></div><div id = 'btn_del' style='margin-top:2px;'></div></div>");
             $(".l-grid-loading").fadeOut();
- 
+
             $("#btn_addcode").ligerButton({
                 width: 80,
                 text: "扫码添加",
                 icon: '../../../../images/icon/75.png',
                 click: addCode
             });
-
+            $("#btn_add").ligerButton({
+                width: 80,
+                text: "手动添加",
+                icon: '../../../../images/icon/11.png',
+                click: add
+            });
             $("#btn_del").ligerButton({
                 width: 80,
                 text: "删除",
@@ -176,10 +206,63 @@
         }
 
 
- 
+
 
         function addCode() {
-            f_openWindow("product/GetCodeProduct.aspx?depdata=1&status=1,2,3", "选择扫码商品", 1200, 600, f_getpost, 9003);
+
+            if (checkAdd()) {
+                f_openWindow("product/GetCodeProduct.aspx?depdata=1&depid=" + beforeFromID + "&optype=mddb", "选择扫码商品", 1200, 600, f_getpost, 9003);
+            }
+
+        }
+        var beforeFromID = "";
+        function checkAdd() {
+            var T_fromdep_val = $("#T_fromdep_id_val").val();
+            var T_todep_val = $("#T_todep_id_val").val();
+
+            if (T_fromdep_val.length <= 0) {
+                $.ligerDialog.warn('请先选择调出门店');
+                return false;
+            }
+            if (T_todep_val.length <= 0) {
+                $.ligerDialog.warn('请先选择调入门店');
+                return false;
+            }
+
+            if (T_fromdep_val == T_todep_val) {
+                top.$.ligerDialog.warn("调出以调入同一门店无需操作", "调出以调入同一门店无需操作", "", 9901);
+                return false;
+            }
+
+            var manager = $("#maingridc4").ligerGetGridManager();
+            var fdata = manager.getData();
+            if (fdata.length > 0) {
+                if (T_fromdep_val.length <= 0) {
+                    var warn = "请先选择调出门店！";
+                    top.$.ligerDialog.warn(warn, "警告【每次调拨只能操作一门店】", "", 9901);
+                    return false;
+                } else {
+                    if (beforeFromID.length <= 0) {
+                        beforeFromID = T_fromdep_val;
+                    }
+
+                    if (beforeFromID != T_fromdep_val) {
+                        var warn = "调出门店和已选商品门店不符！";
+                        top.$.ligerDialog.warn(warn, "警告【每次调拨只能操作一门店】", "", 9901);
+                        return false;
+                    }
+                }
+            }
+            beforeFromID = T_fromdep_val;
+            return true;
+        }
+
+        function add() {
+
+            if (checkAdd()) {
+                f_openWindow("product/GetProduct2.aspx?depdata=1&depid=" + beforeFromID + "&optype=mddb", "选择商品", 1200, 600, f_getpost, 9003);
+            }
+
         }
 
         function pro_remove() {
@@ -191,7 +274,7 @@
         function f_getpost(item, dialog) {
             var rows = null;
             if (!dialog.frame.f_select()) {
- 
+
                 $.ligerDialog.warn('请选择商品');
                 return;
             }

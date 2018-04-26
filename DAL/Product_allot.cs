@@ -38,9 +38,9 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Product_allot(");
-            strSql.Append("id,remark,NowWarehouse,create_id,create_time,status,update_id,update_time,createdep_id,allotType)");
+            strSql.Append("id,remark,NowWarehouse,create_id,create_time,status,update_id,update_time,createdep_id,allotType,fromdep_id,todep_id)");
             strSql.Append(" values (");
-            strSql.Append("@id,@remark,@NowWarehouse,@create_id,@create_time,@status,@update_id,@update_time,@createdep_id,@allotType)");
+            strSql.Append("@id,@remark,@NowWarehouse,@create_id,@create_time,@status,@update_id,@update_time,@createdep_id,@allotType,@fromdep_id,@todep_id)");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@remark", SqlDbType.NVarChar,50),
@@ -52,6 +52,8 @@ namespace XHD.DAL
                     new SqlParameter("@update_time", SqlDbType.DateTime),
                     new SqlParameter("@createdep_id",SqlDbType.VarChar,50),
                    new SqlParameter("@allotType", SqlDbType.Int,4),
+                    new SqlParameter("@fromdep_id",SqlDbType.VarChar,50),
+                    new SqlParameter("@todep_id",SqlDbType.VarChar,50),
             };
             parameters[0].Value = model.id;
             parameters[1].Value = model.Remark;
@@ -63,7 +65,8 @@ namespace XHD.DAL
             parameters[7].Value = model.update_time;
             parameters[8].Value = model.createdep_id;
             parameters[9].Value = model.allotType;
-
+            parameters[10].Value = model.fromdep_id;
+            parameters[11].Value = model.todep_id;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {
@@ -131,8 +134,9 @@ namespace XHD.DAL
         /// <param name="authuser_id"></param>
         /// <param name="status"></param>
         /// <param name="remark"></param>
+        /// <param name="inDepID">调拨到的门店</param>
         /// <returns></returns>
-        public bool AuthApproved(int allotType, string id, string authuser_id, int status, string remark)
+        public bool AuthApproved(int allotType, string id, string authuser_id, int status, string remark, string inDepID)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("update Product_allot set ");
@@ -142,26 +146,31 @@ namespace XHD.DAL
             strSql.Append("remark=@remark");
             strSql.Append(" where id=@id ");
             int rows = 1;
-            //审核不通过需要释放
-            if (status == 3)
+            rows += CountPorduct(id);
+            //门店调拨 
+            if (status == 2)
             {
-                string sql = @"UPDATE payuser SET status=1,warehouse_id=0 FROM dbo.Product(nolock) AS payuser inner JOIN Product_allotDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.allotid=@id and payuser.status<>4 ";
-
-                //门店调拨审核不通过需要还原之前的状态
-                if (allotType == 1)
+                if (allotType == 0)
                 {
-                    sql = @"UPDATE payuser SET warehouse_id=depopbefwid FROM dbo.Product(nolock) AS payuser inner JOIN Product_allotDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.allotid=@id ";
+                    strSql.Append(@"UPDATE payuser SET   payuser.status=2,payuser.authIn=0,payuser.warehouse_id =bu.ToWarehouse,OutStatus = 2 FROM dbo.Product(nolock) AS payuser inner JOIN Product_allotDetail(nolock) AS bu ON payuser.barcode = bu.barcode WHERE bu.allotid = @id  ");
                 }
-
-                strSql.AppendLine(sql);
-                rows += CountPorduct(id);
+                else {
+                    strSql.Append(@"UPDATE payuser SET    payuser.status=102,authIn=0,payuser.indep_id=@indep_id, payuser.warehouse_id =bu.ToWarehouse,OutStatus = 2 FROM dbo.Product(nolock) AS payuser inner JOIN Product_allotDetail(nolock) AS bu ON payuser.barcode = bu.barcode WHERE bu.allotid = @id  ");
+                }
             }
+            else {
+                string sql = @"UPDATE payuser SET authIn=0  FROM dbo.Product(nolock) AS payuser inner JOIN Product_outDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.outid=@id and payuser.status<>4 ";
+                strSql.AppendLine(sql);
+            }
+
+
 
             SqlParameter[] parameters = {
                     new SqlParameter("@status", SqlDbType.Int,4) { Value=status},
                     new SqlParameter("@authuser_id", SqlDbType.VarChar,50) { Value=authuser_id},
                     new SqlParameter("@authuser_time", SqlDbType.DateTime) { Value=DateTime.Now},
                    new SqlParameter("@remark", SqlDbType.NVarChar,50) { Value=remark},
+                     new SqlParameter("@indep_id", SqlDbType.NVarChar,50) { Value=inDepID},
                     new SqlParameter("@id", SqlDbType.VarChar,50) { Value=id},
               };
 
@@ -180,10 +189,7 @@ namespace XHD.DAL
         public bool Delete(string id, int allotType)
         {
             StringBuilder strSql = new StringBuilder();
-            if (allotType == 1)
-            {
-                strSql.AppendLine(@"UPDATE payuser SET warehouse_id=depopbefwid FROM dbo.Product(nolock) AS payuser inner JOIN Product_allotDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.allotid=@id ");
-            }
+
             strSql.Append("delete from Product_allotDetail ");
             strSql.Append(" where allotid=@id ");
 
@@ -231,7 +237,7 @@ namespace XHD.DAL
         {
 
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select  top 1 id,NowWarehouse,create_id,create_time,status,update_id,update_time,allotType from Product_allot ");
+            strSql.Append("select  top 1 id,NowWarehouse,create_id,create_time,status,update_id,update_time,allotType,fromdep_id,todep_id from Product_allot ");
             strSql.Append(" where id=@id ");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50)         };
@@ -296,7 +302,7 @@ namespace XHD.DAL
         public DataSet GetList(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select id,NowWarehouse,create_id,create_time,status,update_id,update_time,remark,allotType ");
+            strSql.Append("select id,NowWarehouse,create_id,create_time,status,update_id,update_time,remark,allotType,fromdep_id,todep_id ");
             strSql.Append(" FROM Product_allot ");
             if (strWhere.Trim() != "")
             {
@@ -316,7 +322,7 @@ namespace XHD.DAL
             {
                 strSql.Append(" top " + Top.ToString());
             }
-            strSql.Append(" id,NowWarehouse,create_id,create_time,status,update_id,update_time,remark,allotType ");
+            strSql.Append(" id,NowWarehouse,create_id,create_time,status,update_id,update_time,remark,allotType,fromdep_id,todep_id ");
             strSql.Append(" FROM Product_allot ");
             if (strWhere.Trim() != "")
             {
@@ -332,7 +338,7 @@ namespace XHD.DAL
         public int GetRecordCount(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select count(1) FROM Product_allot ");
+            strSql.Append("select count(1) FROM Product_allot(nolock) ");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);
@@ -354,12 +360,14 @@ namespace XHD.DAL
         {
             StringBuilder strSql_grid = new StringBuilder();
             StringBuilder strSql_total = new StringBuilder();
-            strSql_total.Append(" SELECT COUNT(id) FROM Product_allot ");
+            strSql_total.Append(" SELECT COUNT(id) FROM Product_allot(nolock) ");
             strSql_grid.Append("SELECT ");
             strSql_grid.Append("      * ");
             strSql_grid.Append(",(select name from hr_employee where id = w1.create_id) as CreateName");
             strSql_grid.Append(",(select Product_warehouse from Product_warehouse where id = w1.NowWarehouse) as NowWarehouseName");
-            strSql_grid.Append(" FROM (select  *, ROW_NUMBER() OVER( Order by " + filedOrder + " ) AS n from Product_allot");
+            strSql_grid.Append(",(select dep_name from hr_department(nolock) where id = w1.fromdep_id) as fromdep_name");
+            strSql_grid.Append(",(select dep_name from hr_department(nolock) where id = w1.todep_id) as todep_name");
+            strSql_grid.Append(" FROM (select  *, ROW_NUMBER() OVER( Order by " + filedOrder + " ) AS n from Product_allot(nolock)");
             if (strWhere.Trim() != "")
             {
                 strSql_grid.Append(" WHERE " + strWhere);

@@ -76,7 +76,7 @@ namespace XHD.Server
             }
             else
             {
-                model.id = "DG-" + DateTime.Now.ToString("yy-MM-dd-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
+                model.id = "DG" + DateTime.Now.ToString("yyMMdd") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
                 model.status = 1;
                 model.create_id = emp_id;
                 model.create_time = DateTime.Now;

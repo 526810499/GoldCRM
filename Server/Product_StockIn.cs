@@ -71,14 +71,14 @@ namespace XHD.Server
                 {
                     isAdd = false;
                     int status = request["auth"].CInt(0, false);
-                    //需要判断是否有审核权限
-                    if (status > 1)
-                    {
-                        if (CheckBtnAuthority(authRightID))
-                        {
-                            return XhdResult.Error("您没有该操作权限,请确认后在操作！").ToString();
-                        }
-                    }
+                    ////需要判断是否有审核权限
+                    //if (status > 1)
+                    //{
+                    //    if (CheckBtnAuthority(authRightID))
+                    //    {
+                    //        return XhdResult.Error("您没有该操作权限,请确认后在操作！").ToString();
+                    //    }
+                    //}
                     model.status = status;
                     model.id = id;
                     DataSet ds = bll.GetList($" id= '{id}' ");
@@ -123,7 +123,7 @@ namespace XHD.Server
                     model.createdep_id = dep_id;
                     model.create_id = emp_id;
                     model.create_time = DateTime.Now;
-                    id = "RK-" + DateTime.Now.ToString("yy-MM-dd-HH-mm-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
+                    id = "RK" + DateTime.Now.ToString("yyMMdd") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
                     model.id = id;
                     model.status = request["auth"].CInt(0, false) == 1 ? 1 : 0;
 
@@ -234,6 +234,7 @@ namespace XHD.Server
 
             if (!string.IsNullOrEmpty(request["sorderid"]))
                 serchtxt += $" and id='{PageValidate.InputText(request["sorderid"], 50)}'";
+ 
 
             if (!string.IsNullOrEmpty(request["scode"]))
             {
@@ -243,8 +244,14 @@ namespace XHD.Server
                 {
                     return GetGridJSON.DataTableToJSON1(null, "0");
                 }
-                serchtxt += $" and id='{dsc.Tables[0].Rows[0]["stockid"]}'";
+                string ids = "";
+                foreach (DataRow dr in dsc.Tables[0].Rows)
+                {
+                    ids += $"'{dr["stockid"]}',";
+                }
+                serchtxt += $" and id in({ids.Trim(',')})";
             }
+
             serchtxt = GetSQLCreateIDWhere(serchtxt, true);
 
             DataSet ds = bll.GetList(PageSize, PageIndex, serchtxt, sorttext, out Total);

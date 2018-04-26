@@ -21,6 +21,15 @@ namespace XHD.Model
         private int _status;
         private string _update_id;
         private DateTime _update_time;
+        /// <summary>
+        /// 从什么仓库调拨
+        /// </summary>
+        public string fromdep_id { get; set; }
+
+        /// <summary>
+        /// 调拨到什么仓库
+        /// </summary>
+        public string todep_id { get; set; }
 
 
         /// <summary>
@@ -45,7 +54,7 @@ namespace XHD.Model
         }
 
         /// <summary>
-        /// 
+        /// 调拨到哪个仓库
         /// </summary>
         public int NowWarehouse
         {

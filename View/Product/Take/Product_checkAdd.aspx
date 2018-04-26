@@ -54,7 +54,7 @@
             if (data != null) {
 
                 $(data).each(function (i, v) {
-                    var datas = { id: v.id, warehouse_id: v.warehouse_id, BarCode: v.BarCode, __status: v.__status, status: v.status, remark: v.remark };
+                    var datas = { id: v.id, warehouse_id: v.warehouse_id, BarCode: v.BarCode, __status: v.__status, status: v.status, remark: v.remark, CostsTotal: v.CostsTotal };
                     items.push(datas);
                 });
             }
@@ -78,7 +78,7 @@
                     if (oaid.length > 0) {
                         rows.push(
                            [
-                           { display: "盘点仓库", name: "T_Warehouse", type: "select", options: "{width:180,disabled:true,treeLeafOnly: false,tree:{url:'Product_warehouse.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + (obj.warehouse_id == undefined ? "" : obj.warehouse_id) + "'}", validate: "{required:true}" }
+                           { display: "盘点仓库", name: "T_Warehouse", type: "select", options: "{width:180,disabled:true,treeLeafOnly: false,tree:{url:'Product_warehouse.tree.xhd?qxz=1&zb=1',idFieldName: 'id',checkbox: false},value:'" + (obj.warehouse_id == undefined ? "0" : obj.warehouse_id) + "'}", validate: "{required:true}" }
                            ],
                            [
                             { display: "备注", name: "T_Remark", type: "textarea", cols: 73, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.remark }
@@ -87,7 +87,7 @@
                     } else {
                         rows.push(
                                 [
-                                { display: "盘点仓库", name: "T_Warehouse", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_warehouse.tree.xhd?qxz=1&zb=1',idFieldName: 'id',checkbox: false},value:'" + (obj.warehouse_id == undefined ? "" : obj.warehouse_id) + "'}", validate: "{required:true}" }
+                                { display: "盘点仓库", name: "T_Warehouse", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_warehouse.tree.xhd?qxz=1&zb=1',idFieldName: 'id',checkbox: false},value:'" + (obj.warehouse_id == undefined ? "0" : obj.warehouse_id) + "'}", validate: "{required:true}" }
                                 ],
                                 [
                                 { display: "备注", name: "T_Remark", type: "textarea", cols: 73, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.remark }
@@ -174,17 +174,25 @@
             if ($("#btn_add").length > 0)
                 return;
 
-            $(".l-panel-header").append("<div id='headerBtn' style='width:270px;float:right;margin-bottom:2px;'><div id = 'btn_add' style='margin-top:2px;'></div><div id = 'btn_addcode' style='margin-top:2px;'></div><div id = 'btn_del' style='margin-top:2px;'></div></div>");
+            $(".l-panel-header").append("<div id='headerBtn' style='width:400px;float:right;margin-bottom:2px;'><div id = 'btn_add' style='margin-top:2px;'></div><div id = 'btn_addcode' style='margin-top:2px;'></div><div id = 'btn_js' style='margin-top:2px;'></div><div id = 'btn_del' style='margin-top:2px;'></div></div>");
             $(".l-grid-loading").fadeOut();
             $("#btn_addcode").ligerButton({
-                width: 60,
-                text: "添加",
+                width: 90,
+                text: "扫码添加",
                 icon: '../../images/icon/75.png',
                 click: addCode
             });
 
+            $("#btn_add").ligerButton({
+                width: 80,
+                text: "手动添加",
+                icon: '../../images/icon/11.png',
+                click: add
+            });
+
+
             if (getparastr("id", "").length > 0) {
-                $("#btn_add").ligerButton({
+                $("#btn_js").ligerButton({
                     width: 80,
                     text: "清算",
                     icon: '../../images/icon/54.png',
@@ -206,7 +214,7 @@
 
             $.ajax({
                 type: "get",
-                url: "Product_TakeStock.ProductClearingTake.xhd?takeType=" + getparastr("takeType",0), /* 注意后面的名字对应CS的方法名称 */
+                url: "Product_TakeStock.ProductClearingTake.xhd?takeType=" + getparastr("takeType", 0), /* 注意后面的名字对应CS的方法名称 */
                 data: { takeid: getparastr("id", ""), warehouse_id: $("#T_Warehouse_val").val(), rnd: Math.random() }, /* 注意参数的格式和名称 */
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -215,8 +223,17 @@
                 }
             });
         }
+
+
+
+        function add() {
+            var T_NowWarehouse_val = $("#T_Warehouse_val").val();
+            if (CheckAdd()) {
+                f_openWindow("product/Take/AddProduct.aspx?code=1&depdata=" + getparastr("takeType", 0) + "&warehouse_id=" + T_NowWarehouse_val, "手动添加商品", 1000, 400, f_getpost, 9003);
+            }
+        }
         var beforeWID = "";
-        function addCode() {
+        function CheckAdd() {
             var T_NowWarehouse_val = $("#T_Warehouse_val").val();
             if (T_NowWarehouse_val.length <= 0) {
                 var warn = "请先选择盘点仓库！";
@@ -235,7 +252,15 @@
                     return false;
                 }
                 beforeWID = T_NowWarehouse_val;
-                f_openWindow("product/Take/AddProduct.aspx?depdata=" + getparastr("takeType", 0) + "&warehouse_id=" + T_NowWarehouse_val, "选择扫码商品", 1000, 400, f_getpost, 9003);
+
+            }
+            return true;
+        }
+
+        function addCode() {
+            var T_NowWarehouse_val = $("#T_Warehouse_val").val();
+            if (CheckAdd()) {
+                f_openWindow("product/Take/AddProduct.aspx?code=0&depdata=" + getparastr("takeType", 0) + "&warehouse_id=" + T_NowWarehouse_val, "选择扫码商品", 1000, 400, f_getpost, 9003);
             }
         }
 
@@ -264,9 +289,20 @@
                 var data = manager.getData();
 
                 for (var i = 0; i < rows.length; i++) {
+
+                    //商品状态为已销售，盘盈
+                    if (rows[i].status == 4) {
+                        rows[i].status = 2;
+                        rows[i].remark = "商品标记为已售";
+                    } else if (rows[i].status == 9999) {
+                        rows[i].status = 2;
+                    } else {
+                        rows[i].status = 1;
+                        rows[i].remark = "";
+                    }
+
                     rows[i].BarCode = rows[i].BarCode;
                     var add = 1;
-                    console.log(rows[i]);
                     for (var j = 0; j < data.length; j++) {
                         if (rows[i].BarCode == data[j].BarCode) {
                             add = 0;

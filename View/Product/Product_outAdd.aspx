@@ -165,7 +165,12 @@
                 icon: '../../images/icon/75.png',
                 click: addCode
             });
-
+            $("#btn_add").ligerButton({
+                width: 80,
+                text: "手动添加",
+                icon: '../../images/icon/11.png',
+                click: add
+            });
 
             $("#btn_del").ligerButton({
                 width: 80,
@@ -176,6 +181,10 @@
             $("#maingridc4").ligerGetGridManager()._onResize();
         }
 
+
+        function add() {
+            f_openWindow("product/GetProduct2.aspx?status=1,2", "手动添加商品", 1000, 400, f_getpost, 9003);
+        }
 
  
         function addCode() {

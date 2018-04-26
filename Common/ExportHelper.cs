@@ -226,16 +226,15 @@ namespace XHD.Common
             FontCell.FontHeightInPoints = 10;
             FontCell.FontName = "Arial";
 
-            if (IsLine == true)
-            {
-                StyleCell.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
-                StyleCell.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
-                StyleCell.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
-                StyleCell.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
-                //边框颜色  
-                StyleCell.BottomBorderColor = HSSFColor.OliveGreen.Black.Index;
-                StyleCell.TopBorderColor = HSSFColor.OliveGreen.Black.Index;
-            }
+
+            StyleCell.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
+            StyleCell.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
+            StyleCell.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
+            StyleCell.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
+            //边框颜色  
+            StyleCell.BottomBorderColor = HSSFColor.OliveGreen.Black.Index;
+            StyleCell.TopBorderColor = HSSFColor.OliveGreen.Black.Index;
+
             StyleCell.SetFont(FontCell);
             StyleCell.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Left;//横样式
             StyleCell.VerticalAlignment = VerticalAlignment.Center;//垂直样式

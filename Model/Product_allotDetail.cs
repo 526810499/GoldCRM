@@ -22,6 +22,12 @@ namespace XHD.Model
         private string _create_id;
         private DateTime _create_time;
 
+
+        /// <summary>
+        /// 到哪个仓库
+        /// </summary>
+        public int ToWarehouse { get; set; }
+
         /// <summary>
         /// 调拨类型 0 总部调拨单 1 门店调拨单
         /// </summary>

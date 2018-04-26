@@ -41,16 +41,12 @@ namespace XHD.DAL
             bool rs = false;
             StringBuilder strSql = new StringBuilder();
             strSql.AppendLine("insert into Product_outDetail(");
-            strSql.Append("id,outid,barcode,create_id,create_time,FromWarehouse,outType)");
+            strSql.Append("id,outid,barcode,create_id,create_time,FromWarehouse,outType,ToWarehouse)");
             strSql.Append(" values (");
-            strSql.Append("@id,@outid,@barcode,@create_id,@create_time,@FromWarehouse,@outType) ");
-            if (model.outType == 0)
-            {
-                strSql.AppendLine(" update Product set Status=3,depopbefwid=warehouse_id where barcode=@barcode and Status<>4; ");
-            }
-            else {
-                strSql.AppendLine(" update Product set  depopbefwid=warehouse_id,OutStatus=3 where barcode=@barcode and Status<>4; ");
-            }
+            strSql.Append("@id,@outid,@barcode,@create_id,@create_time,@FromWarehouse,@outType,@ToWarehouse) ");
+
+            strSql.AppendLine(" update Product set authIn=102 where barcode=@barcode and Status<>4");//
+
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@outid", SqlDbType.VarChar,50),
@@ -59,6 +55,7 @@ namespace XHD.DAL
                     new SqlParameter("@create_time", SqlDbType.DateTime),
                     new SqlParameter("@FromWarehouse", SqlDbType.Int,4),
                     new SqlParameter("@outType", SqlDbType.Int,4),
+                    new SqlParameter("@ToWarehouse", SqlDbType.Int,4),
 
             };
             parameters[0].Value = model.id;
@@ -68,6 +65,7 @@ namespace XHD.DAL
             parameters[4].Value = model.create_time;
             parameters[5].Value = model.FromWarehouse.CInt(0, false);
             parameters[6].Value = model.outType;
+            parameters[7].Value = model.ToWarehouse.CInt(0, false);
 
             System.Data.SqlClient.SqlCommand cm = new System.Data.SqlClient.SqlCommand();
 
@@ -153,13 +151,7 @@ namespace XHD.DAL
             StringBuilder strSql = new StringBuilder();
             strSql.Append("delete from Product_outDetail ");
             strSql.Append(" where outid=@outid and barcode=@barcode ");
-            if (outType == 0)
-            {
-                strSql.AppendLine(" update Product set Status=1 where barcode=@barcode");
-            }
-            else {
-                strSql.AppendLine(" update Product set warehouse_id=depopbefwid where barcode=@barcode");
-            }
+
             SqlParameter[] parameters = {
                     new SqlParameter("@outid", SqlDbType.VarChar,50) { Value=outid}  ,
                      new SqlParameter("@barcode", SqlDbType.VarChar,50) { Value=barcode}
@@ -171,7 +163,7 @@ namespace XHD.DAL
             {
                 cm.Parameters.Add(p);
             }
-            return ExecTran(cm, 2);
+            return ExecTran(cm, 1);
         }
 
         /// <summary>

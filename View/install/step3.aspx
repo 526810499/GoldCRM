@@ -25,7 +25,7 @@
 <head>
     <meta content="ie=8 chrome=1" http-equiv="X-UA-Compatible">
     <meta http-equiv="content-type" content="text/html; charset=gb2312">
-    <title>{xx}CRM-安装</title>
+    <title>永坤金行-CRM-安装</title>
 
     <link href="../CSS/input.css" rel="stylesheet" />
     <link href="../lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" />
@@ -77,7 +77,7 @@
                             btn_next.setDisabled();
                         }
                         else if (result == "warn:dbname") {
-                            $.ligerDialog.warn('已存在名为"' + $("#t_db_name").val() + '"的数据库,请保证此数据库下无{xx}CRM的相关表。<br/>已连接成功，可以开始配置。');
+                            $.ligerDialog.warn('已存在名为"' + $("#t_db_name").val() + '"的数据库,请保证此数据库下无永坤金行-CRM的相关表。<br/>已连接成功，可以开始配置。');
                             btn_next.setEnabled();
                         }
                         else if (result == "false:dbfile") {
@@ -123,7 +123,7 @@
                     },
                     error: function () {
                         $.ligerDialog.closeWaitting();
-                        $.ligerDialog.error("配置失败！系统错误。<br/>1、请检查此账号是否有创建数据库的权限。<br/>2、如已创建数据库，请保证此数据库下无{xx}CRM的相关表。<br/>3、联系{xx}CRM官方技术人员解决。");
+                        $.ligerDialog.error("配置失败！系统错误。<br/>1、请检查此账号是否有创建数据库的权限。<br/>2、如已创建数据库，请保证此数据库下无永坤金行-CRM的相关表。<br/>3、联系永坤金行-CRM官方技术人员解决。");
                     }
                 });
             }
@@ -153,7 +153,7 @@
             <table class="bodytable3" id="Table1" width="732" height="358" border="0" cellpadding="0" cellspacing="0">
                  <tr>
                     <td style="height:40px;">
-                        <span style="font-size: 28px; font-weight: bolder;">欢迎使用{xx}CRM</span>
+                        <span style="font-size: 28px; font-weight: bolder;">欢迎使用永坤金行-CRM</span>
                     </td>
                 </tr>
                 <tr>

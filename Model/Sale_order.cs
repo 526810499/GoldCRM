@@ -45,6 +45,11 @@ namespace XHD.Model
         public string PayTheBill { get; set; }
 
         /// <summary>
+        /// 销售部门
+        /// </summary>
+        public string saledep_id { get; set; }
+
+        /// <summary>
         /// 会员卡号
         /// </summary>
         public string vipcard { get; set; }
