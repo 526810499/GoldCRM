@@ -148,5 +148,19 @@ namespace XHD.Server
         }
 
 
+        /// <summary>
+        /// 获取跨部门的部门ID
+        /// </summary>
+        /// <returns></returns>
+        protected string TransDepartmentID()
+        {
+            string depid = dep_id;
+            GetDataAuth dataauth = new GetDataAuth();
+
+            depid = dataauth.TransDepartmentID(emp_id, dep_id, 0);
+
+            return depid;
+        }
+
     }
 }

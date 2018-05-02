@@ -32,17 +32,13 @@
         function f_save() {
             var manager = $("#maingridc4").ligerGetGridManager();
             var fdata = manager.getData();
-            var T_NowWarehouse_val = $("#T_Warehouse_val").val();
-            if (T_NowWarehouse_val.length <= 0) {
-                $.ligerDialog.warn('请选择入库仓库');
-                return false;
-            }
+ 
             if (fdata.length <= 0) {
                 $.ligerDialog.warn('请添加入库商品');
                 return false;
             }
             if ($(form1).valid()) {
-                var sendtxt = "T_Warehouse_val=" + T_NowWarehouse_val + "&T_Remark=" + $("#T_Remark").val() + "&id=" + getparastr("id", "");
+                var sendtxt = "T_Remark=" + $("#T_Remark").val() + "&id=" + getparastr("id", "");
                 sendtxt += "&PostData=" + JSON.stringify(GetPostData());
                 return sendtxt;
             }
@@ -75,26 +71,13 @@
                             obj[n] = "";
                     }
                     var rows = [];
-                    if (oaid.length > 0) {
-                        rows.push(
-                           [
-                           { display: "入库仓库", name: "T_Warehouse", type: "select", options: "{width:180,disabled:true,treeLeafOnly: false,tree:{url:'Product_warehouse.tree.xhd',idFieldName: 'id',checkbox: false},value:'" + (obj.warehouse_id == undefined ? "" : obj.warehouse_id) + "'}", validate: "{required:true}" }
-                           ],
-                           [
-                            { display: "备注", name: "T_Remark", type: "textarea", cols: 73, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.remark }
-                           ]
-                       );
-                    } else {
-                        rows.push(
-                                [
-                                { display: "入库仓库", name: "T_Warehouse", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_warehouse.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + (obj.warehouse_id == undefined ? "" : obj.warehouse_id) + "'}", validate: "{required:true}" }
-                                ],
-                                [
-                                { display: "备注", name: "T_Remark", type: "textarea", cols: 73, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.remark }
-                                ]
-                            );
-                    }
 
+                    rows.push(
+
+                            [
+                            { display: "备注", name: "T_Remark", type: "textarea", cols: 73, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.remark }
+                            ]
+                        );
 
                     if (obj != null && obj.status >= 0) {
                         rows.push([
@@ -223,15 +206,13 @@
         }
 
         function add() {
-            if (checkAdd()) {
-                f_openWindow("product/Take/AddProduct.aspx?code=1&depdata=0&notfindadd=0&optype=mdrk&warehouse_id=" + beforeFromID, "选择商品", 1000, 400, f_getpost, 9003);
-            }
+
+            f_openWindow("product/Take/AddProduct.aspx?code=1&depdata=0&notfindadd=0&optype=mdrk", "选择商品", 1000, 400, f_getpost, 9003);
+
         }
 
         function addCode() {
-            if (checkAdd()) {
-                f_openWindow("product/Take/AddProduct.aspx?depdata=0&notfindadd=0&optype=mdrk&warehouse_id=" + beforeFromID, "选择扫码商品", 1000, 400, f_getpost, 9003);
-            }
+            f_openWindow("product/Take/AddProduct.aspx?depdata=0&notfindadd=0&optype=mdrk", "选择扫码商品", 1000, 400, f_getpost, 9003);
         }
 
         function pro_remove() {

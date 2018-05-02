@@ -28,8 +28,8 @@ namespace XHD.Server
             model.RoleSort = int.Parse(request["T_RoleOrder"]);
             model.RoleDscript = PageValidate.InputText(request["T_Descript"], 255);
 
-            model.DataAuth = int.Parse(request["T_auth_val"]);
-            model.PublicAuth = int.Parse(request["T_public_val"]);
+            model.DataAuth =  (request["T_auth_val"]).CInt(2,false);
+            model.PublicAuth =  (request["T_public_val"]).CInt(1,false);
 
             string id = PageValidate.InputText(request["id"], 50);
             if (PageValidate.checkID(id))

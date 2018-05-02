@@ -27,7 +27,7 @@ namespace XHD.Server
 
         public Product_out(HttpContext context) : base(context)
         {
-            if (request["outtype"].CInt(0, false) == 0)
+            if (context.Request["outtype"].CInt(0, false) == 0)
             {
                 allDataBtnid = "94676CBB-F382-45C9-A5F3-834F25348C24";
                 depDataBtnid = "B42553AB-9AA5-4EBB-A73E-CA28738182D7";
@@ -76,7 +76,7 @@ namespace XHD.Server
                     //需要判断是否有审核权限
                     if (status > 1)
                     {
-                        if (CheckBtnAuthority(authRightID))
+                        if (!CheckBtnAuthority(authRightID))
                         {
                             return XhdResult.Error("您没有该操作权限,请确认后在操作！").ToString();
                         }
@@ -221,7 +221,7 @@ namespace XHD.Server
             if (!string.IsNullOrEmpty(request["sorderid"]))
                 serchtxt += $" and id='{PageValidate.InputText(request["sorderid"], 50)}'";
 
- 
+
 
             if (!string.IsNullOrEmpty(request["scode"]))
             {
@@ -298,13 +298,46 @@ namespace XHD.Server
         }
 
         /// <summary>
+        /// 打印出库单
+        /// </summary>
+        /// <param name="outids"></param>
+        /// <returns></returns>
+        public string ExportPrint(string outids)
+        {
+            if (!PageValidate.checkID(outids, false) || outids == "null") return "{}";
+            outids = PageValidate.InputText(outids, 25000);
+            bool candel = CheckIsAdmin();
+
+            if (!candel)
+            {
+                candel = CheckBtnAuthority("208BCAE3-F1CC-4335-98A8-9B6358A0CAA7");
+            }
+            if (!candel)
+            {
+                return null;
+            }
+            outids = "'" + outids.Trim(',') + "'";
+            outids = outids.Replace(",", "','");
+
+            string where = $" outid in({outids})";
+            DataSet ds = allotDetailBll.GetList2(where);
+            if (ds != null && ds.Tables[0].Rows != null && ds.Tables[0].Rows.Count > 0)
+            {
+                return JsonDyamicHelper.NetJsonConvertObject(ds.Tables[0]);
+            }
+            else {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// 审核
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public string Auth(string id)
         {
-            if (CheckBtnAuthority(authRightID))
+            if (!CheckBtnAuthority(authRightID))
             {
                 return XhdResult.Error("您没有该操作权限,请确认后在操作！").ToString();
             }

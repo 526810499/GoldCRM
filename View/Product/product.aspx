@@ -99,9 +99,9 @@
                         }
                     },
                     { display: '¹©Ó¦ÉÌ', name: 'supplier_name', width: 100 },
-                     { display: 'ÏÖ´æ²Ö¿â', name: 'warehouse_name', width: 100, render: function (item) { if (item.warehouse_name == null) { return '×Ü²Ö¿â'; } else { return item.warehouse_name; } } },
+                     //{ display: 'ÏÖ´æ²Ö¿â', name: 'warehouse_name', width: 100, render: function (item) { if (item.warehouse_name == null) { return '×Ü²Ö¿â'; } else { return item.warehouse_name; } } },
                     {
-                        display: '×´Ì¬', name: 'status', width: 80, align: 'right', render: function (item) {
+                        display: 'µ±Ç°×´Ì¬', name: 'status', width: 80, align: 'right', render: function (item) {
                             return GetproductStatus(item.status);
                         }
                     },
@@ -207,19 +207,19 @@
                         checkbox: false
                     },
                 });
-                $("#sck").ligerComboBox({
-                    width: 150,
-                    selectBoxWidth: 240,
-                    selectBoxHeight: 200,
-                    valueField: 'id',
-                    textField: 'text',
-                    treeLeafOnly: false,
-                    tree: {
-                        url: 'Product_warehouse.tree.xhd?zb=1&qxz=1&rnd=' + Math.random(),
-                        idFieldName: 'id',
-                        checkbox: false
-                    },
-                });
+                //$("#sck").ligerComboBox({
+                //    width: 150,
+                //    selectBoxWidth: 240,
+                //    selectBoxHeight: 200,
+                //    valueField: 'id',
+                //    textField: 'text',
+                //    treeLeafOnly: false,
+                //    tree: {
+                //        url: 'Product_warehouse.tree.xhd?zb=1&qxz=1&rnd=' + Math.random(),
+                //        idFieldName: 'id',
+                //        checkbox: false
+                //    },
+                //});
                 $("#sbegtime").ligerDateEditor({ showTime: true, labelWidth: 100, labelAlign: 'left' });
                 $("#sendtime").ligerDateEditor({ showTime: true, labelWidth: 100, labelAlign: 'left' });
                 $("#grid").height(document.documentElement.clientHeight - $(".toolbar").height());
@@ -251,7 +251,7 @@
             serchtxt += "&categoryid=" + $("#sfl_val").val();
             serchtxt += "&sbegtime=" + $("#sbegtime").val();
             serchtxt += "&sendtime=" + $("#sendtime").val();
-            serchtxt += "&warehouse_id=" + $("#sck_val").val();
+            //serchtxt += "&warehouse_id=" + $("#sck_val").val();
             var manager = $("#maingrid4").ligerGetGridManager();
             manager._setUrl("Product.grid.xhd?" + serchtxt);
         }
@@ -436,14 +436,14 @@
                         <input type='select' id='sfl' name='sfl' ltype='text' ligerui='{width:120}' />
 
                     </td>
-                    <td>
+                    <%--                    <td>
                         <div style='width: 40px; text-align: right; float: right'>²Ö¿â£º</div>
                     </td>
                     <td>
                         <div style='float: left'>
                             <input type='select' id='sck' name='sck' ltype='date' ligerui='{width:120}' />
                         </div>
-                    </td>
+                    </td>--%>
 
                     <td>
                         <div style='width: 80px; text-align: right; float: right'>×´Ì¬£º</div>

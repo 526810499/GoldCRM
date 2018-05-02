@@ -28,7 +28,7 @@ namespace XHD.Server
 
         public Product_TakeStock(HttpContext context) : base(context)
         {
-            if (request["taketype"].CInt(0, false) == 0)
+            if (context.Request["taketype"].CInt(0, false) == 0)
             {
                 allDataBtnid = "73D96F9F-E5E2-438B-B34A-411A0EA62288";
                 depDataBtnid = "2AA4ABED-ECB2-4F49-B649-ADE2428907B8";
@@ -75,7 +75,7 @@ namespace XHD.Server
                     //需要判断是否有审核权限
                     if (status > 1)
                     {
-                        if (CheckBtnAuthority(authRightID))
+                        if (!CheckBtnAuthority(authRightID))
                         {
                             return XhdResult.Error("您没有该操作权限,请确认后在操作！").ToString();
                         }
@@ -93,12 +93,6 @@ namespace XHD.Server
                     CanDel = (dstatus == 0);
 
                     tBll.Update(model);
-
-                    //状态修改为提交审核的需要在生成下清算
-                    if (model.status == 1 && dstatus == 0)
-                    {
-                        ProductClearingTake(model.id, model.warehouse_id);
-                    }
 
                     string UserID = emp_id;
                     string UserName = emp_name;
@@ -175,7 +169,8 @@ namespace XHD.Server
                             status = m.status,
                             taketime = DateTime.Now,
                             warehouse_id = model.warehouse_id,
-                            remark = m.remark.CString("")
+                            remark = m.remark.CString(""),
+                            createdep_id = model.createdep_id,
                         });
                         if (!r)
                         {
@@ -205,6 +200,13 @@ namespace XHD.Server
                     tBll.Update(model);
                 }
                 msg += "状态发生改变,请确认在添加后在提交审核";
+            }
+            else {
+                //状态修改为提交审核的需要在生成下清算
+                if (model.status == 1)
+                {
+                    SaveProductClearingTake(model.id, model.warehouse_id, model.createdep_id);
+                }
             }
 
             return XhdResult.Success().ToString();
@@ -238,7 +240,7 @@ namespace XHD.Server
 
             if (!string.IsNullOrEmpty(request["sorderid"]))
                 serchtxt += $" and id='{PageValidate.InputText(request["sorderid"], 50)}'";
- 
+
             if (!string.IsNullOrEmpty(request["scode"]))
             {
                 string scode = PageValidate.InputText(request["scode"], 50);
@@ -327,20 +329,12 @@ namespace XHD.Server
         /// <returns></returns>
         public string Auth(string id)
         {
-            if (CheckBtnAuthority(authRightID))
+            if (!CheckBtnAuthority(authRightID))
             {
                 return XhdResult.Error("您没有该操作权限,请确认后在操作！").ToString();
             }
             id = PageValidate.InputText(request["id"], 50);
             string remark = PageValidate.InputText(request["remark"], 250);
-
-            bool candel = true;
-            if (uid != "admin")
-            {
-                candel = CheckBtnAuthority(authRightID);
-                if (!candel)
-                    return XhdResult.Error("无此权限！").ToString();
-            }
 
             if (PageValidate.checkID(id, false))
             {
@@ -368,17 +362,28 @@ namespace XHD.Server
         /// <param name="takeid"></param>
         /// <param name="warehouse_id"></param>
         /// <returns></returns>
-        public string ProductClearingTake(string takeid, int warehouse_id)
+        public string ProductClearingTake(string takeid)
+        {
+            return SaveProductClearingTake(takeid, 0, dep_id);
+        }
+
+        /// <summary>
+        /// 盘点清算，清算没有录入的
+        /// </summary>
+        /// <param name="takeid"></param>
+        /// <param name="warehouse_id"></param>
+        /// <returns></returns>
+        public string SaveProductClearingTake(string takeid, int warehouse_id, string createdep_id)
         {
             DataSet ds = tBll.GetList($" id= '{PageValidate.InputText(takeid, 50)}' ");
             if (ds.Tables[0].Rows.Count < 1)
                 return XhdResult.Error("系统错误，无数据！").ToString();
 
-            if (string.IsNullOrWhiteSpace(takeid) || warehouse_id < 0)
+            if (string.IsNullOrWhiteSpace(takeid))
             {
                 return XhdResult.Error("系统错误，无数据！").ToString();
             }
-            int result = tBll.ProductClearingTake(takeid, warehouse_id);
+            int result = tBll.ProductClearingTake(takeid, warehouse_id, createdep_id);
 
             return XhdResult.Success(result.CString("")).ToString();
         }
@@ -390,6 +395,15 @@ namespace XHD.Server
         /// <returns></returns>
         public string del(string id)
         {
+            bool candel = true;
+            if (uid != "admin")
+            {
+
+                candel = CheckBtnAuthority(delRightID);
+                if (!candel)
+                    return XhdResult.Error("无此权限！").ToString();
+            }
+
             if (!PageValidate.checkID(id, false)) return XhdResult.Error("参数错误！").ToString();
             id = PageValidate.InputText(id, 50);
             DataSet ds = tBll.GetList($" id= '{id}' ");
@@ -401,17 +415,7 @@ namespace XHD.Server
             {
                 return XhdResult.Error("盘点单已审核通过，不允许删除！").ToString();
             }
-
-
-            bool candel = true;
-            if (uid != "admin")
-            {
-
-                candel = CheckBtnAuthority(delRightID);
-                if (!candel)
-                    return XhdResult.Error("无此权限！").ToString();
-            }
-
+ 
             bool isdel = tBll.Delete(id);
             if (!isdel) return XhdResult.Error("系统错误，删除失败！").ToString();
 

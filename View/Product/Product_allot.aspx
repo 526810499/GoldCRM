@@ -18,21 +18,21 @@
         var manager = "";
         var treemanager;
         $(function () {
-            $("#layout1").ligerLayout({ leftWidth: 200, allowLeftResize: false, allowLeftCollapse: true, space: 2, heightDiff: -5 });
-            $("#tree1").ligerTree({
-                url: 'Product_warehouse.tree.xhd?qb=1&rnd=' + Math.random(),
-                onSelect: onSelect,
-                idFieldName: 'id',
-                //parentIDFieldName: 'pid',
-                usericon: 'd_icon',
-                checkbox: false,
-                itemopen: false,
-                onSuccess: function () {
-                    //$(".l-first div:first").click();
-                }
-            });
+            //$("#layout1").ligerLayout({ leftWidth: 200, allowLeftResize: false, allowLeftCollapse: true, space: 2, heightDiff: -5 });
+            //$("#tree1").ligerTree({
+            //    url: 'Product_warehouse.tree.xhd?qb=1&rnd=' + Math.random(),
+            //    onSelect: onSelect,
+            //    idFieldName: 'id',
+            //    //parentIDFieldName: 'pid',
+            //    usericon: 'd_icon',
+            //    checkbox: false,
+            //    itemopen: false,
+            //    onSuccess: function () {
+            //        //$(".l-first div:first").click();
+            //    }
+            //});
 
-            treemanager = $("#tree1").ligerGetTreeManager();
+            //treemanager = $("#tree1").ligerGetTreeManager();
 
             initLayout();
             $(window).resize(function () {
@@ -182,12 +182,7 @@
         function doserch() {
             var sendtxt = "&rnd=" + Math.random();
             var serchtxt = $("#form1 :input").fieldSerialize() + sendtxt;
-            var tdata = treemanager.getSelected();
-            var cid = "";
-            if (tdata != null && tdata.data != null) {
-                cid = tdata.data.id;
-            }
-            serchtxt += "&whid=" + cid;
+
             var manager = $("#maingrid4").ligerGetGridManager();
             manager._setUrl("Product_allot.grid.xhd?" + serchtxt);
         }
@@ -217,7 +212,7 @@
             }
         }
 
- 
+
         function edit() {
             var manager = $("#maingrid4").ligerGetGridManager();
             var rows = manager.getSelectedRow();
@@ -234,15 +229,10 @@
             }
         }
         function add() {
-            var notes = $("#tree1").ligerGetTreeManager().getSelected();
-            var whid = "";
-            if (notes != null && notes != undefined) {
-                whid = notes.data.id;
-            }
             var buttons = [];
             buttons.push({ text: '保存', onclick: f_save });
             buttons.push({ text: '保存并提交审核', onclick: f_saveAuth });
-            f_openWindow2('product/Product_allotAdd.aspx?astatus=0&whid=' + whid, "新增调拨单", 1200, 600, buttons);
+            f_openWindow2('product/Product_allotAdd.aspx?astatus=0', "新增调拨单", 1200, 600, buttons);
         }
 
         function del() {
@@ -371,8 +361,19 @@
 
     </script>
 </head>
-<body style="padding: 0px; overflow: hidden;">
-    <div style="padding: 5px 10px 0px 5px;">
+<body>
+
+    <form id="form1" onsubmit="return false">
+
+        <div style="padding: 10px;">
+            <div id="toolbar" style="margin-top: 10px;"></div>
+            <div id="grid">
+                <div id="maingrid4" style="margin: -1px;"></div>
+            </div>
+        </div>
+
+    </form>
+    <%--    <div style="padding: 5px 10px 0px 5px;">
         <form id="form1" onsubmit="return false">
             <div id="layout1" style="">
                 <div position="left" title="仓库">
@@ -387,6 +388,6 @@
             </div>
         </form>
 
-    </div>
+    </div>--%>
 </body>
 </html>

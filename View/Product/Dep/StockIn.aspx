@@ -31,8 +31,8 @@
                             return html;
                         }
                     },
-                    { display: '入库仓库', name: 'product_warehouse', align: 'left', width: 200 },
-                    { display: '入库部门', name: 'dep_name', align: 'left', width: 120 },
+                    //{ display: '入库仓库', name: 'product_warehouse', align: 'left', width: 200 },
+                    { display: '入库门店', name: 'dep_name', align: 'left', width: 120 },
                     { display: '创建人', name: 'CreateName', align: 'left', width: 120 },
                     {
                         display: '创建时间', name: 'create_time', width: 150, align: 'left', render: function (item) {
@@ -195,7 +195,7 @@
             var serchtxt = "intype=1&status=" + $("#status").val();
             serchtxt += "&sorderid=" + $("#sorderid").val();
             serchtxt += "&scode=" + $("#scode").val();
-            serchtxt += "&swarehouse_id=" + $("#swarehouse_id_val").val();
+            //serchtxt += "&swarehouse_id=" + $("#swarehouse_id_val").val();
             serchtxt += "&sbegtime=" + $("#sbegtime").val();
             serchtxt += "&sendtime=" + $("#sendtime").val();
             sendtxt += sendtxt;
@@ -269,7 +269,7 @@
                 $.ligerDialog.confirm(msg, function (yes) {
                     if (yes) {
                         $.ajax({
-                            url: "Product_StockIn.del.xhd", type: "POST",
+                            url: "Product_StockIn.del.xhd?intype=1", type: "POST",
                             data: { id: row.id, rnd: Math.random() },
                             dataType: 'json',
                             success: function (result) {
@@ -380,40 +380,33 @@
                     </td>
                     <td>
                         <input id='scode' name="scode" type='text' /></td>
-                    <td>
+                    <%--                    <td>
                         <div style='width: 60px; text-align: right; float: right'>盘点仓库：</div>
                     </td>
                     <td>
                         <input type='select' id='swarehouse_id' name='swarehouse_id' ltype='text' ligerui='{width:120}' />
 
-                    </td>
+                    </td>--%>
 
-                </tr>
-                <tr>
-                    <td colspan="6" style="height: 20px"></td>
-                </tr>
-                <tr>
+
                     <td>
-                        <div style='width: 80px; text-align: right; float: right'>订单状态：</div>
+                        <div style='width: 80px; text-align: right; float: right'>状态：</div>
                     </td>
                     <td>
                         <input type='select' id='sstatus' name='sstatus' ltype='text' ligerui='{width:120}' /></td>
-                    <td colspan="3" style="padding-left: 20px">
-                        <table>
-                            <tr>
-                                <td>创建时间：</td>
-                                <td>
-                                    <input type='text' id='sbegtime' name='sbegtime' />
-
-                                </td>
-                                <td>~  
-                                </td>
-                                <td>
-                                    <input type='text' id='sendtime' name='sendtime' />
-                                </td>
-                            </tr>
-                        </table>
+                    <td>
+                        <div style='width: 80px; text-align: right; float: right'>时间：</div>
                     </td>
+                    <td>
+                        <input type='text' id='sbegtime' name='sbegtime' />
+
+                    </td>
+                    <td>~  
+                    </td>
+                    <td>
+                        <input type='text' id='sendtime' name='sendtime' />
+                    </td>
+
                     <td>
                         <div id="btn_serch"></div>
                         <div id="btn_reset"></div>

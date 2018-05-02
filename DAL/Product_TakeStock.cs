@@ -132,11 +132,12 @@ namespace XHD.DAL
         /// <param name="takeid"></param>
         /// <param name="warehouse_id"></param>
         /// <returns></returns>
-        public int ProductClearingTake(string takeid, int warehouse_id)
+        public int ProductClearingTake(string takeid, int warehouse_id, string createdep_id)
         {
             SqlParameter[] parameters = {
                     new SqlParameter("@takeid", SqlDbType.VarChar,50) { Value=takeid},
                     new SqlParameter("@warehouse_id", SqlDbType.Int,4) { Value=warehouse_id},
+                    new SqlParameter("@createdep_id",SqlDbType.VarChar,50) { Value=createdep_id}
             };
             string proc = "sp1_ProductTake";
             int rowsAffected = 0;

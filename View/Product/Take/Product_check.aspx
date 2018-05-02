@@ -31,7 +31,7 @@
                             return html;
                         }
                     },
-                    { display: '盘点仓库', name: 'product_warehouse', align: 'left', width: 200 },
+                    //{ display: '盘点仓库', name: 'product_warehouse', align: 'left', width: 200 },
                     { display: '盘点部门', name: 'dep_name', align: 'left', width: 120 },
                     { display: '创建人', name: 'CreateName', align: 'left', width: 120 },
                     {
@@ -92,19 +92,19 @@
                                     }
                                 },
                                  {
-                                    display: '盘点状态', name: 'Status', align: 'left', width: 160, render: function (item) {
-                                        switch (item.status) {
-                                            case 1:
-                                                return "正常";
-                                                break;
-                                            case 2:
-                                                return "<span style='color:blue'>盘盈</span>";
-                                            case 3:
-                                                return "<span style='color:red'>盘亏</span>";
-                                        }
+                                     display: '盘点状态', name: 'Status', align: 'left', width: 160, render: function (item) {
+                                         switch (item.status) {
+                                             case 1:
+                                                 return "正常";
+                                                 break;
+                                             case 2:
+                                                 return "<span style='color:blue'>盘盈</span>";
+                                             case 3:
+                                                 return "<span style='color:red'>盘亏</span>";
+                                         }
 
-                                    }
-                                },
+                                     }
+                                 },
                                { display: '备注', name: 'remark', align: 'left', width: 180 }
                             ],
                             usePager: false,
@@ -163,8 +163,8 @@
                 $("#toolbar").ligerToolBar({
                     items: items
                 });
-                $("#sorderid").ligerTextBox({ width: 200 });
-                $("#scode").ligerTextBox({ width: 250 });
+                $("#sorderid").ligerTextBox({ width: 180 });
+                $("#scode").ligerTextBox({ width: 180 });
                 $("#sstatus").ligerComboBox({
                     data: [
                     { text: '所有', id: '' },
@@ -174,19 +174,19 @@
                     { text: '审核不通过', id: '3' }
                     ], valueFieldID: 'status',
                 });
-                $("#swarehouse_id").ligerComboBox({
-                    width: 150,
-                    selectBoxWidth: 240,
-                    selectBoxHeight: 200,
-                    valueField: 'id',
-                    textField: 'text',
-                    treeLeafOnly: false,
-                    tree: {
-                        url: 'Product_warehouse.tree.xhd?zb=1&qxz=1&rnd=' + Math.random(),
-                        idFieldName: 'id',
-                        checkbox: false
-                    },
-                });
+                //$("#swarehouse_id").ligerComboBox({
+                //    width: 150,
+                //    selectBoxWidth: 240,
+                //    selectBoxHeight: 200,
+                //    valueField: 'id',
+                //    textField: 'text',
+                //    treeLeafOnly: false,
+                //    tree: {
+                //        url: 'Product_warehouse.tree.xhd?zb=1&qxz=1&rnd=' + Math.random(),
+                //        idFieldName: 'id',
+                //        checkbox: false
+                //    },
+                //});
                 $("#sbegtime").ligerDateEditor({ showTime: true, labelWidth: 100, labelAlign: 'left' });
                 $("#sendtime").ligerDateEditor({ showTime: true, labelWidth: 100, labelAlign: 'left' });
                 $("#grid").height(document.documentElement.clientHeight - $(".toolbar").height());
@@ -219,7 +219,7 @@
             var serchtxt = "status=" + $("#status").val();
             serchtxt += "&sorderid=" + $("#sorderid").val();
             serchtxt += "&scode=" + $("#scode").val();
-            serchtxt += "&swarehouse_id=" + $("#swarehouse_id_val").val();
+            //serchtxt += "&swarehouse_id=" + $("#swarehouse_id_val").val();
             serchtxt += "&sbegtime=" + $("#sbegtime").val();
             serchtxt += "&sendtime=" + $("#sendtime").val();
             serchtxt += sendtxt;
@@ -438,40 +438,33 @@
                     </td>
                     <td>
                         <input id='scode' name="scode" type='text' /></td>
-                    <td>
+                    <%--                    <td>
                         <div style='width: 60px; text-align: right; float: right'>盘点仓库：</div>
                     </td>
                     <td>
                         <input type='select' id='swarehouse_id' name='swarehouse_id' ltype='text' ligerui='{width:120}' />
 
-                    </td>
+                    </td>--%>
 
-                </tr>
-                <tr>
-                    <td colspan="6" style="height: 20px"></td>
-                </tr>
-                <tr>
                     <td>
-                        <div style='width: 80px; text-align: right; float: right'>订单状态：</div>
+                        <div style='width: 80px; text-align: right; float: right'>状态：</div>
                     </td>
                     <td>
                         <input type='select' id='sstatus' name='sstatus' ltype='text' ligerui='{width:120}' /></td>
-                    <td colspan="3" style="padding-left: 20px">
-                        <table>
-                            <tr>
-                                <td>创建时间：</td>
-                                <td>
-                                    <input type='text' id='sbegtime' name='sbegtime' />
 
-                                </td>
-                                <td>~  
-                                </td>
-                                <td>
-                                    <input type='text' id='sendtime' name='sendtime' />
-                                </td>
-                            </tr>
-                        </table>
+                    <td>
+                        <div style='width: 40px; text-align: right; float: right'>时间：</div>
                     </td>
+                    <td>
+                        <input type='text' id='sbegtime' name='sbegtime' />
+
+                    </td>
+                    <td>~  
+                    </td>
+                    <td>
+                        <input type='text' id='sendtime' name='sendtime' />
+                    </td>
+
                     <td>
                         <div id="btn_serch"></div>
                         <div id="btn_reset"></div>

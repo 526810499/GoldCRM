@@ -70,10 +70,10 @@
 
                                     ],
                                   
-                                     [
-                                        { display: "数据权限", name: "T_auth", type: "select", options: "{width:180,data:data1, value: " + obj.DataAuth + "}", validate: "{required:true}" },
-                                        { display: "公客修改", name: "T_public", type: "select", options: "{width:180,data:[{id:0,text:'否'},{id:1,text:'是'}],selectBoxHeight:50, value: " + obj.PublicAuth + "}", validate: "{required:true}" }
-                                     ],
+                                     //[
+                                     //   { display: "数据权限", name: "T_auth", type: "select", options: "{width:180,data:data1, value: " + obj.DataAuth + "}", validate: "{required:true}" },
+                                     //   { display: "公客修改", name: "T_public", type: "select", options: "{width:180,data:[{id:0,text:'否'},{id:1,text:'是'}],selectBoxHeight:50, value: " + obj.PublicAuth + "}", validate: "{required:true}" }
+                                     //],
                                     [
                                         { display: "备注", name: "T_Descript", type: "textarea", cols: 74, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.RoleDscript }
                                     ]

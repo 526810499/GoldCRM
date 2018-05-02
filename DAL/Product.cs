@@ -22,9 +22,9 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Product(");
-            strSql.Append("id,product_name,category_id,status,Weight,indep_id,cost,price,authIn,remarks,specifications,create_id,create_time,AttCosts,StockPrice,MainStoneWeight,AttStoneWeight,AttStoneNumber,StonePrice,GoldTotal,CostsTotal,Totals,Sbarcode,depopbefwid,BarCode,OutStatus,SalesTotalPrice,SalesCostsTotal,IsGold,SupplierID,createdep_id,warehouse_id)");
+            strSql.Append("id,product_name,category_id,status,Weight,indep_id,cost,price,authIn,remarks,specifications,create_id,create_time,AttCosts,StockPrice,MainStoneWeight,AttStoneWeight,AttStoneNumber,StonePrice,GoldTotal,CostsTotal,Totals,Sbarcode,depopbefwid,BarCode,OutStatus,SalesTotalPrice,SalesCostsTotal,IsGold,SupplierID,createdep_id,warehouse_id,OutStatus)");
             strSql.Append(" values (");
-            strSql.Append("@id,@product_name,@category_id,@status,@Weight,@indep_id,@cost,@price,@authIn,@remarks,@specifications,@create_id,@create_time,@AttCosts,@StockPrice,@MainStoneWeight,@AttStoneWeight,@AttStoneNumber,@StonePrice,@GoldTotal,@CostsTotal,@Totals,@Sbarcode,@depopbefwid,@BarCode,@OutStatus,@SalesTotalPrice,@SalesCostsTotal,@IsGold,@SupplierID,@createdep_id,0)");
+            strSql.Append("@id,@product_name,@category_id,@status,@Weight,@indep_id,@cost,@price,@authIn,@remarks,@specifications,@create_id,@create_time,@AttCosts,@StockPrice,@MainStoneWeight,@AttStoneWeight,@AttStoneNumber,@StonePrice,@GoldTotal,@CostsTotal,@Totals,@Sbarcode,@depopbefwid,@BarCode,@OutStatus,@SalesTotalPrice,@SalesCostsTotal,@IsGold,@SupplierID,@createdep_id,0,0)");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@product_name", SqlDbType.VarChar,250),
@@ -350,7 +350,7 @@ namespace XHD.DAL
             strSql_grid.Append(",(select product_category from Product_category(nolock) where id = w1.category_id) as category_name");
             strSql_grid.Append(",(select product_supplier from Product_supplier(nolock) where id = w1.SupplierID) as supplier_name");
             strSql_grid.Append(",(select product_warehouse from Product_warehouse(nolock) where id = w1.warehouse_id) as warehouse_name");
-            strSql_grid.Append(",(select name from hr_employee where id = w1.indep_id) as indep_name");
+            strSql_grid.Append(",(select dep_name from hr_department where id = w1.indep_id) as indep_name");
             strSql_grid.Append(" FROM ( SELECT id, product_name,authIn, category_id, status, Weight, create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, depopbefwid, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks,warehouse_id,indep_id, ROW_NUMBER() OVER( Order by " + filedOrder + " ) AS n from Product");
             if (strWhere.Trim() != "")
             {

@@ -22,6 +22,10 @@ namespace XHD.Model
         private int _status;
         private string _remark;
 
+        /// <summary>
+        /// 盘点部门
+        /// </summary>
+        public string createdep_id { get; set;}
  
 
         /// <summary>

@@ -66,8 +66,8 @@ namespace XHD.DAL
             parameters[5].Value = model.FromWarehouse.CInt(0, false);
             parameters[6].Value = model.outType;
             parameters[7].Value = model.ToWarehouse.CInt(0, false);
-            
-            parameters[8].Value=model.todep_id;
+
+            parameters[8].Value = model.todep_id;
 
             System.Data.SqlClient.SqlCommand cm = new System.Data.SqlClient.SqlCommand();
 
@@ -281,6 +281,21 @@ namespace XHD.DAL
             StringBuilder strSql = new StringBuilder();
             strSql.Append("select id,outid,barcode,create_id,create_time,FromWarehouse,outType,todep_id ");
             strSql.Append(" FROM Product_outDetail ");
+            if (strWhere.Trim() != "")
+            {
+                strSql.Append(" where " + strWhere);
+            }
+            return DbHelperSQL.Query(strSql.ToString());
+        }
+
+        /// <summary>
+        /// 获得数据列表
+        /// </summary>
+        public DataSet GetList2(string strWhere)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select Product.BarCode,Product.product_name,Product.Weight,Product.CostsTotal,Product.CostsTotal,Product_outDetail.create_time ");
+            strSql.Append(" FROM Product_outDetail(nolock) inner join Product(nolock) on Product_outDetail.barCode=Product.BarCode ");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);

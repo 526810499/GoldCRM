@@ -45,9 +45,9 @@ namespace XHD.BLL
         /// <param name="takeid"></param>
         /// <param name="warehouse_id"></param>
         /// <returns></returns>
-        public int ProductClearingTake(string takeid, int warehouse_id)
+        public int ProductClearingTake(string takeid, int warehouse_id,string createdep_id)
         {
-            return dal.ProductClearingTake(takeid, warehouse_id);
+            return dal.ProductClearingTake(takeid, warehouse_id, createdep_id);
         }
 
         /// <summary>

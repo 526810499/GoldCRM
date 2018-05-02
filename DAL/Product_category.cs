@@ -22,9 +22,9 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Product_category(");
-            strSql.Append("id,product_category,parentid,product_icon,create_id,create_time,CodingBegins)");
+            strSql.Append("id,product_category,parentid,product_icon,create_id,create_time,CodingBegins,Counts)");
             strSql.Append(" values (");
-            strSql.Append("@id,@product_category,@parentid,@product_icon,@create_id,@create_time,@CodingBegins)");
+            strSql.Append("@id,@product_category,@parentid,@product_icon,@create_id,@create_time,@CodingBegins,@Counts)");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@product_category", SqlDbType.VarChar,250),
@@ -32,7 +32,8 @@ namespace XHD.DAL
                     new SqlParameter("@product_icon", SqlDbType.VarChar,250),
                     new SqlParameter("@create_id", SqlDbType.VarChar,50),
                     new SqlParameter("@create_time", SqlDbType.DateTime),
-                    new SqlParameter("@CodingBegins",SqlDbType.VarChar,50)
+                    new SqlParameter("@CodingBegins",SqlDbType.VarChar,50),
+                    new SqlParameter("@Counts",SqlDbType.Int,4)
             };
             parameters[0].Value = model.id;
             parameters[1].Value = model.product_category;
@@ -41,6 +42,7 @@ namespace XHD.DAL
             parameters[4].Value = model.create_id;
             parameters[5].Value = model.create_time;
             parameters[6].Value = model.CodingBegins;
+            parameters[7].Value = 10000;
 
 
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
@@ -145,6 +147,23 @@ namespace XHD.DAL
             return DbHelperSQL.Query(strSql.ToString());
         }
 
+        /// <summary>
+        /// 获取当前这个分类ID
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
+        public int GetCategoryCounts(string ID) {
+            string sql = @" 
+                        DECLARE @MaxCount INT
+                        update Product_category set Counts=isnull(Counts,10000)+1,@MaxCount=(isnull(Counts,10000)+1) where id=@id 
+                        select @MaxCount
+                      ";
+            SqlParameter[] parameters = {
+                    new SqlParameter("@id", SqlDbType.VarChar,50)           };
+            parameters[0].Value = ID;
+
+            return DbHelperSQL.ExecuteScalar(sql,parameters).CInt(0,false);
+        }
 
         /// <summary>
         /// 获得前几行数据

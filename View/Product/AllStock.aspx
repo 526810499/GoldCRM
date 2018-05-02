@@ -97,7 +97,7 @@
                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='SalesTotalPrice'>" + item.sum + "</span>"; } }
                    },
                    { display: '关联门店', name: 'indep_name', width: 120, render: function (item) { if (item.indep_name == null) { return "总部" } else { return item.indep_name; } } },
-                    { display: '现存仓库', name: 'warehouse_name', width: 120, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
+                    //{ display: '现存仓库', name: 'warehouse_name', width: 120, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
                    {
                        display: '状态', name: 'status', width: 80, align: 'right', render: function (item) {
                            return GetproductStatus(item.status);
@@ -175,7 +175,7 @@
 
                     isMultiSelect: true,
                     width: 150,
-                    split:",",
+                    split: ",",
                 });
                 $("#stext").ligerTextBox({ width: 200 });
                 $("#scode").ligerTextBox({ width: 250 });
@@ -192,19 +192,19 @@
                         checkbox: false
                     },
                 });
-                $("#sck").ligerComboBox({
-                    width: 150,
-                    selectBoxWidth: 240,
-                    selectBoxHeight: 200,
-                    valueField: 'id',
-                    textField: 'text',
-                    treeLeafOnly: false,
-                    tree: {
-                        url: 'Product_warehouse.tree.xhd?zb=1&qxz=1&rnd=' + Math.random(),
-                        idFieldName: 'id',
-                        checkbox: false
-                    },
-                });
+                //$("#sck").ligerComboBox({
+                //    width: 150,
+                //    selectBoxWidth: 240,
+                //    selectBoxHeight: 200,
+                //    valueField: 'id',
+                //    textField: 'text',
+                //    treeLeafOnly: false,
+                //    tree: {
+                //        url: 'Product_warehouse.tree.xhd?zb=1&qxz=1&rnd=' + Math.random(),
+                //        idFieldName: 'id',
+                //        checkbox: false
+                //    },
+                //});
                 $("#sdep").ligerComboBox({
                     width: 150,
                     selectBoxWidth: 240,
@@ -244,7 +244,7 @@
             serchtxt += "&stext=" + $("#stext").val();
             serchtxt += "&status=" + $("#status").val();
             serchtxt += "&categoryid=" + $("#sfl_val").val();
-            serchtxt += "&warehouse_id=" + $("#sck_val").val();
+            //serchtxt += "&warehouse_id=" + $("#sck_val").val();
             serchtxt += "&sindep_id=" + $("#sdep_val").val();
             serchtxt += sendtxt;
             var manager = $("#maingrid4").ligerGetGridManager();
@@ -296,14 +296,14 @@
                     </td>
                     <td>
                         <input type='select' id='sfl' name='sfl' ltype='text' ligerui='{width:120}' /></td>
-                    <td>
+                    <%--                    <td>
                         <div style='width: 40px; text-align: right; float: right'>仓库：</div>
                     </td>
                     <td>
                         <div style='float: left'>
                             <input type='select' id='sck' name='sck' ltype='date' ligerui='{width:120}' />
                         </div>
-                    </td>
+                    </td>--%>
                     <td>
                         <div style='width: 40px; text-align: right; float: right'>门店：</div>
                     </td>
@@ -313,7 +313,7 @@
                         </div>
                     </td>
                     <td>
-                        <div style='width: 80px; text-align: right; float: right'>订单状态：</div>
+                        <div style='width: 80px; text-align: right; float: right'>状态：</div>
                     </td>
                     <td>
                         <input id='sstatus' name="sstatus" type='text' /></td>
@@ -322,18 +322,13 @@
                         <div style='width: 60px; text-align: right; float: right'>商品名：</div>
                     </td>
                     <td>
-
-
                         <input type='text' id='stext' name='stext' />
-
                     </td>
                     <td>
                         <div style='width: 60px; text-align: right; float: right'>条形码：</div>
                     </td>
                     <td>
-
                         <input type='text' id='scode' name='scode' />
-
                     </td>
                     <td></td>
                     <td>

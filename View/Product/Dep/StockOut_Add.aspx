@@ -39,17 +39,17 @@
                 return false;
             }
 
-            var T_NowWarehouse_val = $("#T_NowWarehouse_val").val();
-            if (T_NowWarehouse_val.length <= 0) {
-                $.ligerDialog.warn('请选择仓库');
-                return false;
-            }
+            //var T_NowWarehouse_val = $("#T_NowWarehouse_val").val();
+            //if (T_NowWarehouse_val.length <= 0) {
+            //    $.ligerDialog.warn('请选择仓库');
+            //    return false;
+            //}
             if (fdata.length <= 0) {
                 $.ligerDialog.warn('请添加出库商品');
                 return false;
             }
             if ($(form1).valid()) {
-                var sendtxt = "T_NowWarehouse_val=" + T_NowWarehouse_val + "&T_Remark=" + $("#T_Remark").val() + "&id=" + getparastr("id") + "&T_todep_id_val=" + T_todep_id_val;
+                var sendtxt = "T_Remark=" + $("#T_Remark").val() + "&id=" + getparastr("id") + "&T_todep_id_val=" + T_todep_id_val;
                 sendtxt += "&PostData=" + JSON.stringify(GetPostData());
                 return sendtxt;
             }
@@ -88,9 +88,9 @@
                             [
                             { display: "出库至门店", name: "T_todep_id", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'hr_department.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + (obj.todep_id == undefined ? "" : obj.todep_id) + "'}", validate: "{required:true}" }
                             ],
-                            [
-                            { display: "出库至仓库", name: "T_NowWarehouse", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_warehouse.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + (obj.NowWarehouse == undefined ? "" : obj.NowWarehouse) + "'}", validate: "{required:true}" }
-                            ],
+                            //[
+                            //{ display: "出库至仓库", name: "T_NowWarehouse", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_warehouse.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + (obj.NowWarehouse == undefined ? "" : obj.NowWarehouse) + "'}", validate: "{required:true}" }
+                            //],
                             [
                              { display: "备注", name: "T_Remark", type: "textarea", cols: 73, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.remark }
                             ]

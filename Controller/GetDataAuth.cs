@@ -1,5 +1,6 @@
 ﻿
 
+using System.Collections.Generic;
 using System.Data;
 using XHD.BLL;
 using XHD.Common;
@@ -11,11 +12,45 @@ namespace XHD.Controller
         private static BLL.Sys_role role = new Sys_role();
         private static BLL.hr_employee emp = new hr_employee();
         private static BLL.Sys_role_emp roleemp = new Sys_role_emp();
-        private static BLL.hr_department  dep = new hr_department();
+        private static BLL.hr_department dep = new hr_department();
         private static BLL.Sys_data_authority dataauth = new Sys_data_authority();
 
         public GetDataAuth()
         {
+        }
+
+        /// <summary>
+        /// 获取跨部操作权限
+        /// </summary>
+        /// <param name="empid"></param>
+        /// <param name="emdepid"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public string TransDepartmentID(string empid, string emdepid, int type)
+        {
+            string RoleIDs = GetRoleidByUID(empid);
+
+            DataSet ds = dataauth.GetList($" Role_id in {RoleIDs}");
+            List<string> list = new List<string>();
+            list.Add(empid);
+            string result = $"'{empid}',";
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    string depid = ds.Tables[0].Rows[i]["dep_id"].CString("");
+                    if (list.Contains(depid))
+                    {
+                        continue;
+                    }
+                    list.Add(depid);
+                    result += $"'{depid}',";
+                }
+            }
+
+            return result.Trim(',');
+
         }
 
         /// <summary>
@@ -36,7 +71,7 @@ namespace XHD.Controller
                 {
                     if (int.Parse(ds.Tables[0].Rows[i]["PublicAuth"].ToString()) > temp)
                         temp = int.Parse(ds.Tables[0].Rows[i]["PublicAuth"].ToString());
-                }                
+                }
             }
 
             if (temp == 0)
@@ -61,10 +96,10 @@ namespace XHD.Controller
         /// <param name="empid"></param>
         /// <param name="authtype"></param>
         /// <returns></returns>
-        public DataAuth getAuth(string empid,int authtype)
+        public DataAuth getAuth(string empid, int authtype)
         {
             DataAuth da = new DataAuth();
-            
+
             da.emp_id = empid;
 
             if (authtype == 999)//特殊权限标记
@@ -72,7 +107,7 @@ namespace XHD.Controller
                 da.authtype = 5;
                 return da;
             }
-            
+
             DataSet ds1 = emp.GetList(string.Format("id = '{0}'", empid));
             if (ds1.Tables[0].Rows[0]["uid"].ToString() == "admin") //管理员不受权限控制
             {
@@ -145,7 +180,7 @@ namespace XHD.Controller
         private string get_depall_emp_ids(string dep_id)
         {
             if (!PageValidate.checkID(dep_id)) return "";
-            
+
             DataSet ds = dep.GetAllList();
 
             string deplist = GetTasks.GetDepTask(dep_id, ds.Tables[0]);
@@ -193,7 +228,7 @@ namespace XHD.Controller
         private string GetRoleidByUID(string uid)
         {
             if (PageValidate.checkID(uid))
-            {                
+            {
                 DataSet ds = roleemp.GetList($"empID = '{uid}'");
 
                 if (ds.Tables[0].Rows.Count > 0)
@@ -219,7 +254,7 @@ namespace XHD.Controller
     }
 
     public class DataAuth
-    {       
+    {
         public string emp_id { get; set; }
         public int authtype { get; set; }
         public string authtext { get; set; }

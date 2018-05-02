@@ -143,6 +143,9 @@
     <Content Include="CSS\font-awesome.css" />
     <Content Include="CSS\font-awesome.min.css" />
     <Content Include="CSS\headimg.css" />
+    <Content Include="CSS\index\ligerToolBar.js" />
+    <Content Include="CSS\index\logo.jpg" />
+    <Content Include="CSS\index\logo.png" />
     <Content Include="CSS\login\dl_bg_pic.jpg" />
     <Content Include="CSS\login\loginstyle.css" />
     <Content Include="CSS\login\logo.png" />
@@ -838,6 +841,7 @@
     <Content Include="lib\ligerUI\skins\Tab\images\win\dialogicon.gif" />
     <Content Include="License.html" />
     <Content Include="login.aspx" />
+    <Content Include="main1.aspx" />
     <Content Include="Product\Dep\DepAllStock.aspx" />
     <Content Include="Product\Dep\Product_check.aspx" />
     <Content Include="Product\Dep\StockAllot.aspx" />
@@ -851,7 +855,7 @@
     <Content Include="Product\GetProduct2.aspx" />
     <Content Include="Product\GetProduct.aspx" />
     <Content Include="Product\AllStock.aspx" />
-    <Content Include="Product\printCode.aspx" />
+    <Content Include="Product\PrintOutProduct.aspx" />
     <Content Include="Product\PrintProduct.aspx" />
     <Content Include="Product\product_View.aspx" />
     <Content Include="Product\Take\AddProduct.aspx" />

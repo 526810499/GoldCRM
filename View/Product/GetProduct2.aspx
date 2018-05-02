@@ -56,7 +56,7 @@
                         }
                     },
                       { display: '关联门店', name: 'indep_name', width: 120, render: function (item) { if (item.indep_name == null) { return "总部" } else { return item.indep_name; } } },
-                   { display: '现存仓库', name: 'warehouse_name', width: 100, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
+                   //{ display: '现存仓库', name: 'warehouse_name', width: 100, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
                 {
                     display: '状态', name: 'status', width: 80, align: 'right', render: function (item) {
                         return GetproductStatus(item.status);
@@ -93,7 +93,7 @@
         function toolbar() {
             var items = [];
             items.push({ type: 'textbox', id: 'sfl', text: '分类：' });
-            items.push({ type: 'textbox', id: 'sck', text: '现存仓库：' });
+            //items.push({ type: 'textbox', id: 'sck', text: '现存仓库：' });
             items.push({ type: 'textbox', id: 'stext', text: '商品名：' });
             items.push({ type: 'textbox', id: 'scode', text: '条形码：' });
             items.push({ type: 'button', text: '搜索', icon: '../images/search.gif', disable: true, click: function () { doserch() } });
@@ -115,20 +115,20 @@
                     checkbox: false
                 },
             });
-            $("#sck").ligerComboBox({
-                width: 150,
-                selectBoxWidth: 240,
-                selectBoxHeight: 200,
-                valueField: 'id',
-                textField: 'text',
-                treeLeafOnly: false,
-                tree: {
-                    url: 'Product_warehouse.tree.xhd?zb=1&qxz=1&rnd=' + Math.random(),
-                    idFieldName: 'id',
-                    //parentIDFieldName: 'pid',
-                    checkbox: false
-                },
-            });
+            //$("#sck").ligerComboBox({
+            //    width: 150,
+            //    selectBoxWidth: 240,
+            //    selectBoxHeight: 200,
+            //    valueField: 'id',
+            //    textField: 'text',
+            //    treeLeafOnly: false,
+            //    tree: {
+            //        url: 'Product_warehouse.tree.xhd?zb=1&qxz=1&rnd=' + Math.random(),
+            //        idFieldName: 'id',
+            //        //parentIDFieldName: 'pid',
+            //        checkbox: false
+            //    },
+            //});
 
             $("#stext").ligerTextBox({ width: 150 });
             $("#scode").ligerTextBox({ width: 150 });
@@ -150,8 +150,8 @@
             var cid = "";
 
             var serchtxt = "depdata=" + getparastr("depdata", "") + "&categoryid=" + $("#sfl_val").val() + "&status=" + status +
-                "&stext=" + $("#stext").val() + "&scode=" + $("#scode").val() + "&warehouse_id=" + $("#sck_val").val()
-                + "&rnd=" + Math.random() + "&sindep_id=" + getparastr("depid", "");
+                "&stext=" + $("#stext").val() + "&scode=" + $("#scode").val()
+                + "&rnd=" + Math.random() + "&sindep_id=" + getparastr("depid", "");// + "&warehouse_id=" + $("#sck_val").val()
 
             serchtxt += "&optype=" + getparastr("optype", "");
             serchtxt += "&warehouse_id=" + getparastr("warehouse_id", "");

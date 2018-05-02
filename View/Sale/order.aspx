@@ -142,7 +142,7 @@
                 }
                 //items.push({ type: 'button', text: '分组展开/关闭', icon: '../images/folder-open.gif', disable: true, click: function () { expand(); } });
                 items.push({
-                    id:"sbtn",
+                    id: "sbtn",
                     type: 'serchbtn',
                     text: '高级搜索',
                     icon: '../images/search.gif',
@@ -356,6 +356,9 @@
                     </td>
 
                     <td></td>
+                    <td></td>
+                </tr>
+                <tr style="height: 10px">
                     <td></td>
                 </tr>
                 <tr>

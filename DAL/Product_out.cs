@@ -158,7 +158,7 @@ namespace XHD.DAL
                 {
                     pstatus = 103;
                 }
-                string sql = @"UPDATE payuser SET payuser.indep_id=bu.todep_id,payuser.authIn=0,payuser.status=@pstatus,warehouse_id=bu.ToWarehouse FROM dbo.Product(nolock) AS payuser inner JOIN Product_outDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.outid=@id and payuser.status<>4 ";
+                string sql = @"UPDATE payuser SET payuser.indep_id=bu.todep_id,payuser.authIn=0,payuser.status=@pstatus,warehouse_id=bu.ToWarehouse,payuser.outStatus=3 FROM dbo.Product(nolock) AS payuser inner JOIN Product_outDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.outid=@id and payuser.status<>4 ";
                 strSql.AppendLine(sql);
 
             }

@@ -61,7 +61,7 @@
                            return toMoney(item.CostsTotal);
                        }, totalSummary: { type: 'sum', render: function (item, i) { return "£¤<span id='CostsTotal'>" + item.sum + "</span>"; } }
                    },
-                    { display: 'ÏÖ´æ²Ö¿â', name: 'warehouse_name', width: 120, render: function (item) { if (item.warehouse_name == null) { return '×Ü²Ö¿â'; } else { return item.warehouse_name; } } },
+                    //{ display: 'ÏÖ´æ²Ö¿â', name: 'warehouse_name', width: 120, render: function (item) { if (item.warehouse_name == null) { return '×Ü²Ö¿â'; } else { return item.warehouse_name; } } },
                     {
                         display: '×Ü×´Ì¬', name: 'status', width: 80, align: 'right', render: function (item) {
                             return GetproductStatus(item.status);
@@ -156,19 +156,19 @@
                         checkbox: false
                     },
                 });
-                $("#sck").ligerComboBox({
-                    width: 150,
-                    selectBoxWidth: 240,
-                    selectBoxHeight: 200,
-                    valueField: 'id',
-                    textField: 'text',
-                    treeLeafOnly: false,
-                    tree: {
-                        url: 'Product_warehouse.tree.xhd?zb=1&qxz=1&rnd=' + Math.random(),
-                        idFieldName: 'id',
-                        checkbox: false
-                    },
-                });
+                //$("#sck").ligerComboBox({
+                //    width: 150,
+                //    selectBoxWidth: 240,
+                //    selectBoxHeight: 200,
+                //    valueField: 'id',
+                //    textField: 'text',
+                //    treeLeafOnly: false,
+                //    tree: {
+                //        url: 'Product_warehouse.tree.xhd?zb=1&qxz=1&rnd=' + Math.random(),
+                //        idFieldName: 'id',
+                //        checkbox: false
+                //    },
+                //});
                 $("#sdep").ligerComboBox({
                     width: 150,
                     selectBoxWidth: 240,
@@ -208,7 +208,7 @@
             serchtxt += "&stext=" + $("#stext").val();
             serchtxt += "&soutstatus=" + $("#status").val();
             serchtxt += "&categoryid=" + $("#sfl_val").val();
-            serchtxt += "&warehouse_id=" + $("#sck_val").val();
+            //serchtxt += "&warehouse_id=" + $("#sck_val").val();
             serchtxt += sendtxt;
             var manager = $("#maingrid4").ligerGetGridManager();
             manager._setUrl("Product.grid.xhd?" + serchtxt);
@@ -259,16 +259,9 @@
                     </td>
                     <td>
                         <input type='select' id='sfl' name='sfl' ltype='text' ligerui='{width:120}' /></td>
+
                     <td>
-                        <div style='width: 40px; text-align: right; float: right'>²Ö¿â£º</div>
-                    </td>
-                    <td>
-                        <div style='float: left'>
-                            <input type='select' id='sck' name='sck' ltype='date' ligerui='{width:120}' />
-                        </div>
-                    </td>
-                    <td>
-                        <div style='width: 80px; text-align: right; float: right'>¶©µ¥×´Ì¬£º</div>
+                        <div style='width: 80px; text-align: right; float: right'>×´Ì¬£º</div>
                     </td>
                     <td>
                         <input id='sstatus' name="sstatus" type='text' /></td>

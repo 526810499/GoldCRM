@@ -24,9 +24,9 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Product_TakeStockDetail(");
-            strSql.Append("id,takeid,warehouse_id,barcode,taketime,status,remark)");
+            strSql.Append("id,takeid,warehouse_id,barcode,taketime,status,remark,createdep_id)");
             strSql.Append(" values (");
-            strSql.Append("@id,@takeid,@warehouse_id,@barcode,@taketime,@status,@remark)");
+            strSql.Append("@id,@takeid,@warehouse_id,@barcode,@taketime,@status,@remark,@createdep_id)");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@takeid", SqlDbType.VarChar,50),
@@ -35,6 +35,7 @@ namespace XHD.DAL
                     new SqlParameter("@taketime", SqlDbType.DateTime),
                     new SqlParameter("@status", SqlDbType.Int,4),
                     new SqlParameter("@remark", SqlDbType.VarChar,150),
+                    new SqlParameter("@createdep_id", SqlDbType.VarChar,50),
             };
             parameters[0].Value = model.id;
             parameters[1].Value = model.takeid;
@@ -43,7 +44,7 @@ namespace XHD.DAL
             parameters[4].Value = model.taketime;
             parameters[5].Value = model.status;
             parameters[6].Value = model.remark;
-
+            parameters[7].Value = model.createdep_id;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {

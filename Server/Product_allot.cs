@@ -27,7 +27,7 @@ namespace XHD.Server
 
         public Product_allot(HttpContext context) : base(context)
         {
-            if (request["allottype"].CInt(0, false) == 0)
+            if (context.Request["allottype"].CInt(0, false) == 0)
             {
                 allDataBtnid = "B07133BA-7063-42E9-9AF2-26005AA99FB2";
                 depDataBtnid = "B33D7B1B-50A7-41EF-8D2D-AE3E9D91D19B";
@@ -75,7 +75,7 @@ namespace XHD.Server
                     //需要判断是否有审核权限
                     if (status > 1)
                     {
-                        if (CheckBtnAuthority(authRightID))
+                        if (!CheckBtnAuthority(authRightID))
                         {
                             return XhdResult.Error("您没有该操作权限,请确认后在操作！").ToString();
                         }
@@ -301,7 +301,7 @@ namespace XHD.Server
         /// <returns></returns>
         public string Auth(string id)
         {
-            if (CheckBtnAuthority(authRightID))
+            if (!CheckBtnAuthority(authRightID))
             {
                 return XhdResult.Error("您没有该操作权限,请确认后在操作！").ToString();
             }

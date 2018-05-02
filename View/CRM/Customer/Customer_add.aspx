@@ -35,7 +35,7 @@
                 var extendform = $('#formextend').serializeForm();
                 var extendjson = JSON.stringify(extendform);
 
-                var sendtxt = "&Action=save&id=" + getparastr("cid");
+                var sendtxt = "&T_private_val=1&Action=save&id=" + getparastr("cid");
                 sendtxt += "&extendjson=" + extendjson;
 
                 return $("form :input").fieldSerialize() + sendtxt;
@@ -97,7 +97,7 @@
                                         { display: "备注", name: "T_remarks", type: "text", options: "{width:465}", width: 469, initValue: obj.Remarks },
                                     ],
                                     [
-                                        { display: "状态", name: "T_private", type: "select", options: "{width:180,data:[{id:0,text:'私客'},{id:1,text:'公客'}],selectBoxHeight:50,value:'" + obj.isPrivate + "'}", validate: "{required:true}" },
+                                        //{ display: "状态", name: "T_private", type: "select", options: "{width:180,data:[{id:0,text:'私客'},{id:1,text:'公客'}],selectBoxHeight:50,value:'" + obj.isPrivate + "'}", validate: "{required:true}" },
                                         { display: "业务员", name: "T_employee", validate: "{required:true}" }
                                     ]
                                 ]

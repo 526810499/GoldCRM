@@ -7,13 +7,13 @@
     <meta charset="utf-8" />
     <script type="text/javascript">
         $(function () {
-            
+
             var id = getparastr("id", "")
 
             loadForm();
 
             function loadForm() {
-                if (id == "") { alert("参数为空"); return false;}
+                if (id == "") { alert("参数为空"); return false; }
                 $.ajax({
                     type: "get",
                     url: "Sale_order.form.xhd",
@@ -50,6 +50,7 @@
                         if (result != null && result.Rows.length > 0) {
                             var detail = result.Rows;
                             var datas = "<table>";
+                            var datas2 = "";
                             $(detail).each(function (i, v) {
                                 datas += "<tr>";
                                 datas += "<td style='width:130px'>" + v.BarCode + "</td>";
@@ -59,10 +60,16 @@
 
                                 datas += "</tr>";
                             });
+                            datas2 = datas;
                             datas += "</table>";
                             $("#odetail").append(datas);
-                            $("#cw").append(datas);
-                            $("#other").append(datas);
+
+                            datas2 += "<tr>";
+                            datas2 += "<td  colospan='4'>销售人：" + $("#yyy").text() + "&nbsp;&nbsp;收银员：" + $("#syy").text() + "</td></tr>";
+
+                            datas2 += "</table>";
+                            $("#cw").append(datas2);
+                            $("#other").append(datas2);
                         }
                     }
                 });
@@ -111,6 +118,6 @@
             }, 1000);
         });
 
-  </script>
+    </script>
 </body>
 </html>

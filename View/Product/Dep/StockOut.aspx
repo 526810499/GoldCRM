@@ -33,11 +33,11 @@
                     { display: '订单号', name: 'id', align: 'left', width: 300 },
 
                     { display: '出库至门店', name: 'todep_name', align: 'left', width: 300 },
-                    { display: '出库至仓库', name: 'NowWarehouseName', align: 'left', width: 300 },
+                    //{ display: '出库至仓库', name: 'NowWarehouseName', align: 'left', width: 300 },
                     { display: '创建人', name: 'CreateName', align: 'left', width: 160 },
                     {
                         display: '创建时间', name: 'create_time', width: 100, align: 'left', render: function (item) {
-                            return toMoney(item.Weight);
+                            return formatTime(item.create_time);
                         }
                     },
                     {
@@ -211,7 +211,7 @@
                 $.ligerDialog.confirm("出库单删除不能恢复，确定删除？", function (yes) {
                     if (yes) {
                         $.ajax({
-                            url: "Product_out.del.xhd", type: "POST",
+                            url: "Product_out.del.xhd?outtype=1", type: "POST",
                             data: { id: row.id, rnd: Math.random() },
                             dataType: 'json',
                             success: function (result) {
@@ -294,7 +294,7 @@
                 dialog.close();
                 $.ligerDialog.waitting('数据保存中,请稍候...');
                 $.ajax({
-                    url: "Product_out.Auth.xhd?auth=" + auth, type: "POST",
+                    url: "Product_out.Auth.xhd?outtype=1&auth=" + auth, type: "POST",
                     data: issave,
                     dataType: 'json',
                     success: function (result) {

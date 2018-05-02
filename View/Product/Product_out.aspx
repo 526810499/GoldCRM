@@ -40,7 +40,7 @@
                     { display: '创建人', name: 'CreateName', align: 'left', width: 160 },
                     {
                         display: '创建时间', name: 'create_time', width: 100, align: 'left', render: function (item) {
-                            return toMoney(item.Weight);
+                            return formatTime(item.create_time);
                         }
                     },
                     {
@@ -103,13 +103,14 @@
                 },
                 onContextmenu: function (parm, e) {
                     actionCustomerID = parm.data.id;
-                   // menu.show({ top: e.pageY, left: e.pageX });
+                    // menu.show({ top: e.pageY, left: e.pageX });
                     return false;
                 }
             });
             toolbar();
 
         });
+
         function toolbar() {
             $.get("toolbar.GetSys.xhd?mid=product_out&rnd=" + Math.random(), function (data, textStatus) {
                 var data = eval('(' + data + ')');
@@ -239,7 +240,7 @@
                 })
             }
             else {
-                $.ligerDialog.warn("请选择调度单");
+                $.ligerDialog.warn("请选择出库单");
             }
 
         }
@@ -326,6 +327,19 @@
             }
         }
 
+
+
+        function prints() {
+
+            var manager = $("#maingrid4").ligerGetGridManager();
+            var row = manager.getSelectedRow();
+            if (row) {
+                window.open("PrintOutProduct.aspx?stime=" + (row.create_time) + "&outids=" + row.id + "&rnd=" + Math.random());
+            }
+            else {
+                $.ligerDialog.warn("请选择出库单");
+            }
+        }
 
         function f_load() {
             var manager = $("#maingrid4").ligerGetGridManager();

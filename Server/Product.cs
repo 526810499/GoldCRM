@@ -20,7 +20,7 @@ namespace XHD.Server
 
         public Product(HttpContext context) : base(context)
         {
-            if (request["allstock"].CInt(0, false) == 1)
+            if (context.Request["allstock"].CInt(0, false) == 1)
             {
                 allDataBtnid = "9596C821-74CC-462A-BB32-B5B65FF47012";
                 depDataBtnid = "35666543-AAD2-43CA-81A7-8A6E9314442C";
@@ -144,7 +144,6 @@ namespace XHD.Server
                 model.id = Guid.NewGuid().ToString();
                 model.createdep_id = dep_id;
                 model.status = 1;
-                string code = StringPlus.GetRandomLetters() + DateTime.Now.GetHashCode().ToString().Replace("-", "");
 
 
 
@@ -163,15 +162,15 @@ namespace XHD.Server
         private string GetBarCode(string categoryid)
         {
             string code = DateTime.Now.GetHashCode().ToString().Replace("-", "");
-
+            BLL.Product_category cbll = new BLL.Product_category();
             string str = "Y";
-            DataSet cds = new BLL.Product_category().GetList("id='" + model.category_id + "'");
+            DataSet cds = cbll.GetList("id='" + model.category_id + "'");
             if (cds != null && cds.Tables.Count > 0)
             {
                 str = cds.Tables[0].Rows[0]["CodingBegins"].CString("Y");
             }
-
-            code = (str + code).PadRight(14, '0');
+            int counts = cbll.GetCategoryCounts(categoryid);
+            code = string.Format("{0}{1}{2}", str, DateTime.Now.Year, counts);//.PadRight(14, '0')
 
             return code.ToUpper();
         }
@@ -262,18 +261,23 @@ namespace XHD.Server
             //门店调拨 状态不能为总部操作状态，取不能是已销售的
             if (optype == "mddb")
             {
-                serchtxt += $" and status not in(1,2,3,4) and outStatus<>2   and indep_id='{ dep_id }' ";
+                //门店调拨需要判断跨门店权限
+                string depids = TransDepartmentID();
+
+                serchtxt += $" and status not in(1,2,3,4) and outStatus<>2   and indep_id in({ depids }) ";
             }
 
             //是否要取门店的
-            if (request["depdata"].CInt(0, false) == 1)
+            if (string.IsNullOrWhiteSpace(optype))
             {
-                serchtxt += " and indep_id='" + dep_id + "'";
-            }
-            else if (string.IsNullOrWhiteSpace(optype))
-            {
-                //权限
-                serchtxt = GetSQLCreateIDWhere(serchtxt, true);
+                if (request["depdata"].CInt(0, false) == 1)
+                {
+                    serchtxt += " and indep_id='" + dep_id + "'";
+                }
+                else {
+                    //权限
+                    serchtxt = GetSQLCreateIDWhere(serchtxt, true);
+                }
             }
 
 
