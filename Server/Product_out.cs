@@ -48,6 +48,9 @@ namespace XHD.Server
             model.NowWarehouse = request["T_NowWarehouse_val"].CInt(0, false);
             model.Remark = PageValidate.InputText(request["T_Remark"], 255);
             model.outType = request["outtype"].CInt(0, false);
+
+            model.outdep_id = request["T_todep_id_val"].CString("");
+            model.todep_id = model.outdep_id;
             model.update_id = emp_id;
             model.update_time = DateTime.Now;
             string id = PageValidate.InputText(request["id"], 50);
@@ -150,7 +153,8 @@ namespace XHD.Server
                                 create_time = DateTime.Now,
                                 outType = model.outType,
                                 FromWarehouse = m.warehouse_id,
-                                ToWarehouse=model.NowWarehouse.CString(""),
+                                ToWarehouse = model.NowWarehouse.CString(""),
+                                todep_id = model.outdep_id
 
                             });
 

@@ -34,9 +34,9 @@
         function f_save() {
             var manager = $("#maingridc4").ligerGetGridManager();
             var fdata = manager.getData();
-            var T_NowWarehouse_val = $("#T_NowWarehouse_val").val();
+            var T_NowWarehouse_val = $("#T_todep_id_val").val();
             if (T_NowWarehouse_val.length <= 0) {
-                $.ligerDialog.warn('请选择调度仓库');
+                $.ligerDialog.warn('请选择调至门店');
                 return false;
             }
             if (fdata.length <= 0) {
@@ -80,7 +80,7 @@
 
                     rows.push(
                             [
-                             { display: "调拨至仓库", name: "T_NowWarehouse", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_warehouse.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + (obj.NowWarehouse == undefined ? whid : obj.NowWarehouse) + "'}", validate: "{required:true}" }
+                             { display: "调拨至门店", name: "T_todep_id", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'hr_department.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + (obj.todep_id ==undefined  ? whid : obj.todep_id) + "'}", validate: "{required:true}" }
                             ],
                             [
                              { display: "备注", name: "T_Remark", type: "textarea", cols: 73, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.remark }
@@ -185,11 +185,11 @@
 
 
         function add() {
-            f_openWindow("product/GetProduct2.aspx?status=1", "手动添加商品", 1200, 600, f_getpost, 9003);
+            f_openWindow("product/GetProduct2.aspx?status=1&optype=zbdb", "手动添加商品", 1200, 600, f_getpost, 9003);
         }
 
         function addCode() {
-            f_openWindow("product/GetCodeProduct.aspx?status=1", "选择扫码商品", 1200, 600, f_getpost, 9003);
+            f_openWindow("product/GetCodeProduct.aspx?status=1&optype=zbdb", "选择扫码商品", 1200, 600, f_getpost, 9003);
         }
 
         function pro_remove() {

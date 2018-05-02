@@ -6,7 +6,7 @@
     <meta name="renderer" content="webkit" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
     <meta name="renderer" content="webkit" />
-    <title>永坤金行-CRM-登录</title>
+<%--    <title>永坤金行-CRM-登录</title>--%>
     <link rel="shortcut icon" type="image/x-icon" href="images/logo/favicon.ico" />
     <link href="lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" />
     <link href="lib/ligerUI/skins/Gray2014/css/all.css" rel="stylesheet" />
@@ -141,10 +141,7 @@
 <body>
     <form id="form1" name="form1">
         <dl class="admin_login">
-            <dt>
-                <strong>黄金管理系统</strong>
-                <em>Management System</em>
-            </dt>
+ 
             <dd class="user_icon">
 
                 <input id="T_uid" name="T_uid" type="text" placeholder="账号" class="login_txtbx" />

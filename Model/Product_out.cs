@@ -53,6 +53,11 @@ namespace XHD.Model
         }
 
         /// <summary>
+        /// 到那个门店
+        /// </summary>
+        public string todep_id { get; set; }
+
+        /// <summary>
         /// 
         /// </summary>
         public int NowWarehouse

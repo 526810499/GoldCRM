@@ -152,10 +152,10 @@ namespace XHD.DAL
             {
                 if (allotType == 0)
                 {
-                    strSql.Append(@"UPDATE payuser SET   payuser.status=2,payuser.authIn=0,payuser.warehouse_id =bu.ToWarehouse,OutStatus = 2 FROM dbo.Product(nolock) AS payuser inner JOIN Product_allotDetail(nolock) AS bu ON payuser.barcode = bu.barcode WHERE bu.allotid = @id  ");
+                    strSql.Append(@"UPDATE payuser SET   payuser.indep_id=bu.todep_id,payuser.status=2,payuser.authIn=0,payuser.warehouse_id =bu.ToWarehouse,OutStatus = 2 FROM dbo.Product(nolock) AS payuser inner JOIN Product_allotDetail(nolock) AS bu ON payuser.barcode = bu.barcode WHERE bu.allotid = @id  ");
                 }
                 else {
-                    strSql.Append(@"UPDATE payuser SET    payuser.status=102,authIn=0,payuser.indep_id=@indep_id, payuser.warehouse_id =bu.ToWarehouse,OutStatus = 2 FROM dbo.Product(nolock) AS payuser inner JOIN Product_allotDetail(nolock) AS bu ON payuser.barcode = bu.barcode WHERE bu.allotid = @id  ");
+                    strSql.Append(@"UPDATE payuser SET   payuser.status=102,authIn=0,payuser.indep_id=@indep_id, payuser.warehouse_id =bu.ToWarehouse,OutStatus = 2 FROM dbo.Product(nolock) AS payuser inner JOIN Product_allotDetail(nolock) AS bu ON payuser.barcode = bu.barcode WHERE bu.allotid = @id  ");
                 }
             }
             else {

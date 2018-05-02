@@ -158,12 +158,12 @@ namespace XHD.DAL
                 {
                     pstatus = 103;
                 }
-                string sql = @"UPDATE payuser SET payuser.authIn=0,payuser.status=@pstatus,warehouse_id=bu.ToWarehouse FROM dbo.Product(nolock) AS payuser inner JOIN Product_outDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.outid=@id and payuser.status<>4 ";
+                string sql = @"UPDATE payuser SET payuser.indep_id=bu.todep_id,payuser.authIn=0,payuser.status=@pstatus,warehouse_id=bu.ToWarehouse FROM dbo.Product(nolock) AS payuser inner JOIN Product_outDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.outid=@id and payuser.status<>4 ";
                 strSql.AppendLine(sql);
 
             }
             else {
-                string sql = @"UPDATE payuser SET payuser.authIn=0  FROM dbo.Product(nolock) AS payuser inner JOIN Product_outDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.outid=@id and payuser.status<>4 ";
+                string sql = @"UPDATE payuser SET  payuser.indep_id=bu.todep_id,payuser.authIn=0  FROM dbo.Product(nolock) AS payuser inner JOIN Product_outDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.outid=@id and payuser.status<>4 ";
                 strSql.AppendLine(sql);
             }
 
@@ -304,7 +304,7 @@ namespace XHD.DAL
         public DataSet GetList(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select id,allot_id,create_id,create_time,status,update_id,update_time,remark,NowWarehouse,outType ");
+            strSql.Append("select id,allot_id,create_id,create_time,status,update_id,update_time,remark,NowWarehouse,outType,outdep_id,outdep_id as todep_id ");
             strSql.Append(" FROM Product_out ");
             if (strWhere.Trim() != "")
             {
@@ -362,12 +362,14 @@ namespace XHD.DAL
         {
             StringBuilder strSql_grid = new StringBuilder();
             StringBuilder strSql_total = new StringBuilder();
-            strSql_total.Append(" SELECT COUNT(id) FROM Product_out ");
+            strSql_total.Append(" SELECT COUNT(id) FROM Product_out(nolock) ");
             strSql_grid.Append("SELECT ");
             strSql_grid.Append("      * ");
             strSql_grid.Append(",(select name from hr_employee where id = w1.create_id) as CreateName");
             strSql_grid.Append(",(select Product_warehouse from Product_warehouse where id = w1.NowWarehouse) as NowWarehouseName");
-            strSql_grid.Append(" FROM (select  *, ROW_NUMBER() OVER( Order by " + filedOrder + " ) AS n from Product_out");
+
+            strSql_grid.Append(",(select dep_name from hr_department(nolock) where id = w1.outdep_id) as todep_name");
+            strSql_grid.Append(" FROM (select  *, ROW_NUMBER() OVER( Order by " + filedOrder + " ) AS n from Product_out(nolock)");
             if (strWhere.Trim() != "")
             {
                 strSql_grid.Append(" WHERE " + strWhere);

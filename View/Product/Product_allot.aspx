@@ -47,7 +47,7 @@
                             return html;
                         }
                     },
-                    { display: '调拨至仓库', name: 'NowWarehouseName', align: 'left', width: 120 },
+                    { display: '调拨至门店', name: 'todep_name', align: 'left', width: 120 },
                     { display: '创建人', name: 'CreateName', align: 'left', width: 160 },
                     {
                         display: '创建时间', name: 'create_time', width: 50, align: 'left', render: function (item) {

@@ -9,9 +9,8 @@ body, html {
 #header {
  
     height: 52px;
-    background-image: url(../../images/logo/yklogo.png);
     background-repeat: no-repeat;
-    background-color: #02b9e3;
+    background-color: #D80335;
 }
 
 .right {
@@ -20,19 +19,18 @@ body, html {
 
 .logoContent {
     float: left;
-    width: 400px;
     line-height: 50px;
     padding-left: 10px;
 }
 
     .logoContent span {
         font-size: x-large;
-        color: white;
+        color: #ffee08;
     }
 
 .navright {
     float: right;
-    color: white;
+    color: #ffc600;
     width: 255px;
     line-height: 50px;
     padding-right: 10px;
@@ -75,8 +73,8 @@ body, html {
 }
 
 .userover {
-    background-color: #8FD2EC;
-    color: #fff;
+    background-color: #FCD659;
+    color: #d8a803;
 }
 
 .user {

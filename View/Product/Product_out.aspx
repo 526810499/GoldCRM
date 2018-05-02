@@ -36,7 +36,7 @@
                             return html;
                         }
                     },
-                    { display: '出库至仓库', name: 'NowWarehouseName', align: 'left', width: 300 },
+                    { display: '出库至门店', name: 'todep_name', align: 'left', width: 300 },
                     { display: '创建人', name: 'CreateName', align: 'left', width: 160 },
                     {
                         display: '创建时间', name: 'create_time', width: 100, align: 'left', render: function (item) {

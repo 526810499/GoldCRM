@@ -153,7 +153,8 @@ namespace XHD.Server
                                 create_id = emp_id,
                                 create_time = DateTime.Now,
                                 allotType = model.allotType,
-                                ToWarehouse = model.NowWarehouse
+                                ToWarehouse = model.NowWarehouse,
+                                todep_id=model.todep_id,
 
                             });
                             if (!r)

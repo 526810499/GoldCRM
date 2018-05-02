@@ -56,9 +56,9 @@ namespace XHD.DAL
             int rows = 2;
             StringBuilder strSql = new StringBuilder();
             strSql.AppendLine("insert into Product_allotDetail(");
-            strSql.Append("id,allotid,barcode,FromWarehouse,create_id,create_time,allotType,ToWarehouse)");
+            strSql.Append("id,allotid,barcode,FromWarehouse,create_id,create_time,allotType,ToWarehouse,todep_id)");
             strSql.Append(" values (");
-            strSql.Append("@id,@allotid,@barcode,@FromWarehouse,@create_id,@create_time,@allotType,@ToWarehouse)");
+            strSql.Append("@id,@allotid,@barcode,@FromWarehouse,@create_id,@create_time,@allotType,@ToWarehouse,@todep_id)");
 
 
             strSql.AppendLine(" update Product set authIn=101 where barcode=@barcode and Status<>4");//
@@ -74,6 +74,7 @@ namespace XHD.DAL
                     new SqlParameter("@NowWarehouse", SqlDbType.Int,4),
                     new SqlParameter("@allotType", SqlDbType.Int,4),
                    new SqlParameter("@ToWarehouse", SqlDbType.Int,4),
+                   new SqlParameter("@todep_id",SqlDbType.VarChar,50)
             };
             parameters[0].Value = model.id;
             parameters[1].Value = model.allotid;
@@ -84,6 +85,7 @@ namespace XHD.DAL
             parameters[6].Value = model.NowWarehouse;
             parameters[7].Value = model.allotType;
             parameters[8].Value = model.ToWarehouse;
+            parameters[9].Value = model.todep_id;
             System.Data.SqlClient.SqlCommand cm = new System.Data.SqlClient.SqlCommand();
 
             cm.CommandText = strSql.ToString();
@@ -306,7 +308,7 @@ namespace XHD.DAL
         public DataSet GetList(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select id,allotid,barcode,FromWarehouse,create_id,create_time,allotType ");
+            strSql.Append("select id,allotid,barcode,FromWarehouse,create_id,create_time,allotType,todep_id ");
             strSql.Append(" FROM Product_allotDetail ");
             if (strWhere.Trim() != "")
             {

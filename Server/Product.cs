@@ -250,19 +250,19 @@ namespace XHD.Server
             //门店入库则状态不能是总部入库或者是已销售的
             if (optype == "mdrk")
             {
-                serchtxt += $" and status not in(1,4) and indep_id in('7C881F36-3597-483B-BC71-EB5D7CFDA2C7','{dep_id}') and outStatus<>1 ";
+                serchtxt += $" and status not in(1,4) and outStatus<>1   and indep_id='{ dep_id }' ";
             }
 
             //门店出库则状态不能为总部操作状态，取不能是已销售的
             if (optype == "mdck")
             {
-                serchtxt += $" and status not in(1,2,3,4) and outStatus<>3 ";
+                serchtxt += $" and status not in(1,2,3,4) and outStatus<>3  and indep_id='{ dep_id }' ";
             }
 
             //门店调拨 状态不能为总部操作状态，取不能是已销售的
             if (optype == "mddb")
             {
-                serchtxt += $" and status not in(1,2,3,4) and outStatus<>2  ";
+                serchtxt += $" and status not in(1,2,3,4) and outStatus<>2   and indep_id='{ dep_id }' ";
             }
 
             //是否要取门店的
@@ -270,7 +270,7 @@ namespace XHD.Server
             {
                 serchtxt += " and indep_id='" + dep_id + "'";
             }
-            else if (optype != "mdrk")
+            else if (string.IsNullOrWhiteSpace(optype))
             {
                 //权限
                 serchtxt = GetSQLCreateIDWhere(serchtxt, true);

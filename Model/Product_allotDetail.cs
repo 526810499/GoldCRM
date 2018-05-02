@@ -22,6 +22,10 @@ namespace XHD.Model
         private string _create_id;
         private DateTime _create_time;
 
+        /// <summary>
+        /// 到那个门店
+        /// </summary>
+        public string todep_id { get; set; }
 
         /// <summary>
         /// 到哪个仓库

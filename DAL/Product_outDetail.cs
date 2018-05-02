@@ -41,9 +41,9 @@ namespace XHD.DAL
             bool rs = false;
             StringBuilder strSql = new StringBuilder();
             strSql.AppendLine("insert into Product_outDetail(");
-            strSql.Append("id,outid,barcode,create_id,create_time,FromWarehouse,outType,ToWarehouse)");
+            strSql.Append("id,outid,barcode,create_id,create_time,FromWarehouse,outType,ToWarehouse,todep_id)");
             strSql.Append(" values (");
-            strSql.Append("@id,@outid,@barcode,@create_id,@create_time,@FromWarehouse,@outType,@ToWarehouse) ");
+            strSql.Append("@id,@outid,@barcode,@create_id,@create_time,@FromWarehouse,@outType,@ToWarehouse,@todep_id) ");
 
             strSql.AppendLine(" update Product set authIn=102 where barcode=@barcode and Status<>4");//
 
@@ -56,7 +56,7 @@ namespace XHD.DAL
                     new SqlParameter("@FromWarehouse", SqlDbType.Int,4),
                     new SqlParameter("@outType", SqlDbType.Int,4),
                     new SqlParameter("@ToWarehouse", SqlDbType.Int,4),
-
+                    new SqlParameter("@todep_id",SqlDbType.VarChar,50)
             };
             parameters[0].Value = model.id;
             parameters[1].Value = model.outid;
@@ -66,6 +66,8 @@ namespace XHD.DAL
             parameters[5].Value = model.FromWarehouse.CInt(0, false);
             parameters[6].Value = model.outType;
             parameters[7].Value = model.ToWarehouse.CInt(0, false);
+            
+            parameters[8].Value=model.todep_id;
 
             System.Data.SqlClient.SqlCommand cm = new System.Data.SqlClient.SqlCommand();
 
@@ -277,7 +279,7 @@ namespace XHD.DAL
         public DataSet GetList(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select id,outid,barcode,create_id,create_time,FromWarehouse,outType ");
+            strSql.Append("select id,outid,barcode,create_id,create_time,FromWarehouse,outType,todep_id ");
             strSql.Append(" FROM Product_outDetail ");
             if (strWhere.Trim() != "")
             {

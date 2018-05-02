@@ -143,7 +143,9 @@
     <Content Include="CSS\font-awesome.css" />
     <Content Include="CSS\font-awesome.min.css" />
     <Content Include="CSS\headimg.css" />
+    <Content Include="CSS\login\dl_bg_pic.jpg" />
     <Content Include="CSS\login\loginstyle.css" />
+    <Content Include="CSS\login\logo.png" />
     <Content Include="CSS\login\Particleground.js" />
     <Content Include="CSS\notes.css" />
     <Content Include="finance\getReceivable.aspx" />
