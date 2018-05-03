@@ -74,13 +74,13 @@
         { display: '所属行业', name: 'cus_industry_id', width: 80, render: function (item, i) { return item.cus_industry } },
         { display: '员工', name: 'emp_id', width: 80, render: function (item, i) { return item.employee } },
 
-        {
-            display: '客源状态', name: 'isPrivate', width: 60, render: function (item, i) {
-                if (item.isPrivate == 1) return "公客";
-                else
-                    return "私客";
-            }
-        },
+        //{
+        //    display: '客源状态', name: 'isPrivate', width: 60, render: function (item, i) {
+        //        if (item.isPrivate == 1) return "公客";
+        //        else
+        //            return "私客";
+        //    }
+        //},
         {
             display: '最后跟进', name: 'lastfollow', width: 90, render: function (item) {
                 var lastfollow = formatTimebytype(item.lastfollow, 'yyyy-MM-dd');

@@ -147,6 +147,13 @@ namespace XHD.Server
             return auth.authtype + ":" + auth.authtext;
         }
 
+        private DataAuth DataAuthDepID()
+        {
+            GetDataAuth dataauth = new GetDataAuth();
+            return dataauth.getAuthDep(emp_id, 0);
+ 
+        }
+
 
         /// <summary>
         /// 获取跨部门的部门ID

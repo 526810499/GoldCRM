@@ -65,7 +65,7 @@
                             $("#odetail").append(datas);
 
                             datas2 += "<tr>";
-                            datas2 += "<td  colospan='4'>销售人：" + $("#yyy").text() + "&nbsp;&nbsp;收银员：" + $("#syy").text() + "</td></tr>";
+                            datas2 += "<td  colspan='4'><div style='padding-top:10px'>销售人：" + $("#yyy").text() + "&nbsp;&nbsp;收银员：" + $("#syy").text() + "</div></td></tr>";
 
                             datas2 += "</table>";
                             $("#cw").append(datas2);

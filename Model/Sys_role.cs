@@ -20,6 +20,12 @@ namespace XHD.Model
         
         private string _create_id;
         private DateTime? _create_time;
+
+        /// <summary>
+        /// 是否特殊角色
+        /// </summary>
+        public int SpecialRole { get; set; }
+
         /// <summary>
         /// 
         /// </summary>

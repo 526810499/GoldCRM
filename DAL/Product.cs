@@ -22,9 +22,9 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Product(");
-            strSql.Append("id,product_name,category_id,status,Weight,indep_id,cost,price,authIn,remarks,specifications,create_id,create_time,AttCosts,StockPrice,MainStoneWeight,AttStoneWeight,AttStoneNumber,StonePrice,GoldTotal,CostsTotal,Totals,Sbarcode,depopbefwid,BarCode,OutStatus,SalesTotalPrice,SalesCostsTotal,IsGold,SupplierID,createdep_id,warehouse_id,OutStatus)");
+            strSql.Append("id,product_name,category_id,status,Weight,indep_id,cost,price,authIn,remarks,specifications,create_id,create_time,AttCosts,StockPrice,MainStoneWeight,AttStoneWeight,AttStoneNumber,StonePrice,GoldTotal,CostsTotal,Totals,Sbarcode,depopbefwid,BarCode,OutStatus,SalesTotalPrice,SalesCostsTotal,IsGold,SupplierID,createdep_id,warehouse_id)");
             strSql.Append(" values (");
-            strSql.Append("@id,@product_name,@category_id,@status,@Weight,@indep_id,@cost,@price,@authIn,@remarks,@specifications,@create_id,@create_time,@AttCosts,@StockPrice,@MainStoneWeight,@AttStoneWeight,@AttStoneNumber,@StonePrice,@GoldTotal,@CostsTotal,@Totals,@Sbarcode,@depopbefwid,@BarCode,@OutStatus,@SalesTotalPrice,@SalesCostsTotal,@IsGold,@SupplierID,@createdep_id,0,0)");
+            strSql.Append("@id,@product_name,@category_id,@status,@Weight,@indep_id,@cost,@price,@authIn,@remarks,@specifications,@create_id,@create_time,@AttCosts,@StockPrice,@MainStoneWeight,@AttStoneWeight,@AttStoneNumber,@StonePrice,@GoldTotal,@CostsTotal,@Totals,@Sbarcode,@depopbefwid,@BarCode,@OutStatus,@SalesTotalPrice,@SalesCostsTotal,@IsGold,@SupplierID,@createdep_id,0)");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@product_name", SqlDbType.VarChar,250),
@@ -83,7 +83,7 @@ namespace XHD.DAL
             parameters[22].Value = model.Sbarcode;
             parameters[23].Value = model.depopbefwid;
             parameters[24].Value = model.BarCode;
-            parameters[25].Value = model.OutStatus;
+            parameters[25].Value = model.OutStatus.CInt(0,false);
             parameters[26].Value = model.SalesTotalPrice;
             parameters[27].Value = model.SalesCostsTotal;
             parameters[28].Value = model.IsGold;

@@ -23,9 +23,9 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Sys_role(");
-            strSql.Append("id,RoleName,RoleDscript,RoleSort,DataAuth,PublicAuth,create_id,create_time)");
+            strSql.Append("id,RoleName,RoleDscript,RoleSort,DataAuth,PublicAuth,create_id,create_time,SpecialRole)");
             strSql.Append(" values (");
-            strSql.Append("@id,@RoleName,@RoleDscript,@RoleSort,@DataAuth,@PublicAuth,@create_id,@create_time)");
+            strSql.Append("@id,@RoleName,@RoleDscript,@RoleSort,@DataAuth,@PublicAuth,@create_id,@create_time,@SpecialRole)");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@RoleName", SqlDbType.NVarChar,255),
@@ -34,7 +34,9 @@ namespace XHD.DAL
                     new SqlParameter("@DataAuth", SqlDbType.Int,4),
                     new SqlParameter("@PublicAuth", SqlDbType.Int,4),
                     new SqlParameter("@create_id", SqlDbType.VarChar,50),
-                    new SqlParameter("@create_time", SqlDbType.DateTime)};
+                    new SqlParameter("@create_time", SqlDbType.DateTime),
+                   new SqlParameter("@SpecialRole", SqlDbType.Int,4),
+            };
             parameters[0].Value = model.id;
             parameters[1].Value = model.RoleName;
             parameters[2].Value = model.RoleDscript;
@@ -43,7 +45,7 @@ namespace XHD.DAL
             parameters[5].Value = model.PublicAuth;
             parameters[6].Value = model.create_id;
             parameters[7].Value = model.create_time;
-
+            parameters[8].Value = model.SpecialRole;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {
@@ -66,7 +68,7 @@ namespace XHD.DAL
             strSql.Append("RoleDscript=@RoleDscript,");
             strSql.Append("RoleSort=@RoleSort,");
             strSql.Append("DataAuth=@DataAuth,");
-            strSql.Append("PublicAuth=@PublicAuth");
+            strSql.Append("PublicAuth=@PublicAuth,SpecialRole=@SpecialRole");
             strSql.Append(" where id=@id ");
             SqlParameter[] parameters = {
                     new SqlParameter("@RoleName", SqlDbType.NVarChar,255),
@@ -74,14 +76,16 @@ namespace XHD.DAL
                     new SqlParameter("@RoleSort", SqlDbType.Int,4),
                     new SqlParameter("@DataAuth", SqlDbType.Int,4),
                     new SqlParameter("@PublicAuth", SqlDbType.Int,4),
-                    new SqlParameter("@id", SqlDbType.VarChar,50)};
+                    new SqlParameter("@id", SqlDbType.VarChar,50),
+                   new SqlParameter("@SpecialRole", SqlDbType.Int,4),
+            };
             parameters[0].Value = model.RoleName;
             parameters[1].Value = model.RoleDscript;
             parameters[2].Value = model.RoleSort;
             parameters[3].Value = model.DataAuth;
             parameters[4].Value = model.PublicAuth;
             parameters[5].Value = model.id;
-
+            parameters[6].Value = model.SpecialRole;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {
@@ -143,7 +147,7 @@ namespace XHD.DAL
         public DataSet GetList(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select id,RoleName,RoleDscript,RoleSort,DataAuth,PublicAuth,create_id,create_time ");
+            strSql.Append("select id,RoleName,RoleDscript,RoleSort,DataAuth,PublicAuth,create_id,create_time,SpecialRole ");
             strSql.Append(" FROM Sys_role ");
             if (strWhere.Trim() != "")
             {
@@ -163,7 +167,7 @@ namespace XHD.DAL
             {
                 strSql.Append(" top " + Top.ToString());
             }
-            strSql.Append(" id,RoleName,RoleDscript,RoleSort,DataAuth,PublicAuth,create_id,create_time ");
+            strSql.Append(" id,RoleName,RoleDscript,RoleSort,DataAuth,PublicAuth,create_id,create_time,SpecialRole  ");
             strSql.Append(" FROM Sys_role ");
             if (strWhere.Trim() != "")
             {
@@ -182,8 +186,8 @@ namespace XHD.DAL
             StringBuilder strSql_total = new StringBuilder();
             strSql_total.Append(" SELECT COUNT(id) FROM Sys_role ");
             strSql_grid.Append("SELECT ");
-            strSql_grid.Append("      n,id,RoleName,RoleDscript,RoleSort,DataAuth,PublicAuth,create_id,create_time ");
-            strSql_grid.Append(" FROM ( SELECT id,RoleName,RoleDscript,RoleSort,DataAuth,PublicAuth,create_id,create_time, ROW_NUMBER() OVER( Order by " + filedOrder + " ) AS n from Sys_role");
+            strSql_grid.Append("      n,id,RoleName,RoleDscript,RoleSort,DataAuth,PublicAuth,create_id,create_time,SpecialRole  ");
+            strSql_grid.Append(" FROM ( SELECT id,RoleName,RoleDscript,RoleSort,DataAuth,PublicAuth,create_id,create_time,SpecialRole, ROW_NUMBER() OVER( Order by " + filedOrder + " ) AS n from Sys_role");
             if (strWhere.Trim() != "")
             {
                 strSql_grid.Append(" WHERE " + strWhere);

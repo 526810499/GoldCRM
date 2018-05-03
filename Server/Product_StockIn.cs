@@ -318,7 +318,7 @@ namespace XHD.Server
         /// <returns></returns>
         public string Auth(string id)
         {
-            if (!CheckBtnAuthority(authRightID))
+            if (!CheckIsAdmin() && !CheckBtnAuthority(authRightID))
             {
                 return XhdResult.Error("您没有该操作权限,请确认后在操作！").ToString();
             }

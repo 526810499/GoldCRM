@@ -29,29 +29,14 @@ namespace XHD.Controller
         public string TransDepartmentID(string empid, string emdepid, int type)
         {
             string RoleIDs = GetRoleidByUID(empid);
-
-            DataSet ds = dataauth.GetList($" Role_id in {RoleIDs}");
-            List<string> list = new List<string>();
-            list.Add(empid);
-            string result = $"'{empid}',";
-            if (ds.Tables[0].Rows.Count > 0)
-            {
-
-                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                {
-                    string depid = ds.Tables[0].Rows[i]["dep_id"].CString("");
-                    if (list.Contains(depid))
-                    {
-                        continue;
-                    }
-                    list.Add(depid);
-                    result += $"'{depid}',";
-                }
-            }
+ 
+            string result = get_dep_ids_byroleids(RoleIDs, emdepid);
 
             return result.Trim(',');
 
         }
+
+
 
         /// <summary>
         /// 根据用户ID获取公客修改权限
@@ -91,6 +76,137 @@ namespace XHD.Controller
         }
 
         /// <summary>
+        /// 获取用户授权数据允许操作的部门
+        /// </summary>
+        /// <param name="empid"></param>
+        /// <returns></returns>
+        public DataAuth getAuthDep(string empid)
+        {
+            return getAuthDep(empid, 0);
+        }
+
+        /// <summary>
+        ///获取用户授权数据允许操作的部门
+        /// </summary>
+        /// <param name="empid"></param>
+        /// <param name="authtype"></param>
+        /// <returns></returns>
+        public DataAuth getAuthDep(string empid, int authtype)
+        {
+            DataAuth da = new DataAuth();
+
+            da.emp_id = empid;
+
+            if (authtype == 999)//特殊权限标记
+            {
+                da.authtype = 5;
+                return da;
+            }
+
+            DataSet ds1 = emp.GetList(string.Format("id = '{0}'", empid));
+            if (ds1.Tables[0].Rows[0]["uid"].ToString() == "admin") //管理员不受权限控制
+            {
+                da.authtype = 5;
+                return da;
+            }
+
+            int temp = 0;
+            string RoleIDs = GetRoleidByUID(empid);
+
+            if (!string.IsNullOrEmpty(RoleIDs))
+            {
+                //var sda = new Sys_data_authority();
+                //DataSet ds = sda.GetList($" option_id= {optionid} and Role_id in {RoleIDs}");
+                DataSet ds = role.GetList($" id in {RoleIDs} and SpecialRole<>1 ");
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        if (int.Parse(ds.Tables[0].Rows[i]["DataAuth"].ToString()) > temp)
+                            temp = int.Parse(ds.Tables[0].Rows[i]["DataAuth"].ToString());
+                    }
+                    //return temp.ToString();
+                }
+            }
+
+            //1,   '本人'    2,  '本部'  3,  '本部及下级' },   4  '指定部门'  5,  '全部'
+            da.authtype = temp;
+
+            switch (temp)
+            {
+                case 0: break;
+                case 1:
+                    da.selfData = true;
+                    da.authtext = $"'{empid}'";
+                    da.emp_id = empid;
+                    break;
+                case 2:
+                    da.authtext = $"'{ds1.Tables[0].Rows[0]["dep_id"].ToString()}'";
+                    break;
+                case 3:
+                    da.authtext = get_depall_dep_ids(ds1.Tables[0].Rows[0]["dep_id"].ToString());
+                    break;
+                case 4:
+                    da.authtext = get_dep_ids_byroleids(RoleIDs, "");
+                    break;
+            }
+            return da;
+        }
+
+
+        /// <summary>
+        /// 根据部门ID获取用户ID集合
+        /// </summary>
+        /// <param name="dep_id"></param>
+        /// <returns></returns>
+        private string get_depall_dep_ids(string dep_id)
+        {
+            if (!PageValidate.checkID(dep_id)) return "";
+
+            DataSet ds = dep.GetAllList();
+
+            string deplist = GetTasks.GetDepTask(dep_id, ds.Tables[0]);
+            deplist += $"'{dep_id}'";
+
+            return deplist;
+        }
+
+
+        /// <summary>
+        /// 根据角色ID获取所有关联部门
+        /// </summary>
+        /// <param name="RoleIDs"></param>
+        /// <returns></returns>
+        private string get_dep_ids_byroleids(string RoleIDs, string dep_id)
+        {
+            DataSet ds = dataauth.GetList($" Role_id in {RoleIDs}");
+            List<string> list = new List<string>();
+
+            string result = "";
+            if (!string.IsNullOrEmpty(dep_id))
+            {
+                result = $"'{dep_id}',";
+                list.Add(dep_id);
+            }
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    string depid = ds.Tables[0].Rows[i]["dep_id"].CString("");
+                    if (list.Contains(depid))
+                    {
+                        continue;
+                    }
+                    list.Add(depid);
+                    result += $"'{depid}',";
+                }
+            }
+
+            return result.Trim(',');
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="empid"></param>
@@ -122,7 +238,7 @@ namespace XHD.Controller
             {
                 //var sda = new Sys_data_authority();
                 //DataSet ds = sda.GetList($" option_id= {optionid} and Role_id in {RoleIDs}");
-                DataSet ds = role.GetList($" id in {RoleIDs}");
+                DataSet ds = role.GetList($" id in {RoleIDs} and SpecialRole<>1 ");
 
                 if (ds.Tables[0].Rows.Count > 0)
                 {
@@ -256,7 +372,16 @@ namespace XHD.Controller
     public class DataAuth
     {
         public string emp_id { get; set; }
+
+        /// <summary>
+        /// 数据类型  1,   '本人'    2,  '本部'  3,  '本部及下级' },   4  '指定部门'  5,  '全部'
+        /// </summary>
         public int authtype { get; set; }
         public string authtext { get; set; }
+
+        /// <summary>
+        /// 个人数据
+        /// </summary>
+        public bool selfData { get; set; }
     }
 }

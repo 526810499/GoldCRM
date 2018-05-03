@@ -64,10 +64,6 @@
     <Reference Include="XHD.Common">
       <HintPath>..\Common\bin\Debug\XHD.Common.dll</HintPath>
     </Reference>
-    <Reference Include="XHD.Controller, Version=1.0.0.614, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\XHD.Controller.dll</HintPath>
-    </Reference>
     <Reference Include="XHD.DBUtility, Version=3.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DBUtility\bin\Debug\XHD.DBUtility.dll</HintPath>
@@ -158,6 +154,12 @@
     <Compile Include="Tool_batch.cs" />
     <Compile Include="upload.cs" />
     <Compile Include="xhd_Service.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Controller\Controller.csproj">
+      <Project>{0dba2f27-f052-4ec8-9881-98825fa926be}</Project>
+      <Name>Controller</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

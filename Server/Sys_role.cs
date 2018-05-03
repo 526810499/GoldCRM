@@ -27,7 +27,7 @@ namespace XHD.Server
             model.RoleName = PageValidate.InputText(request["T_role"], 250);
             model.RoleSort = int.Parse(request["T_RoleOrder"]);
             model.RoleDscript = PageValidate.InputText(request["T_Descript"], 255);
-
+            model.SpecialRole = (request["T_SpecialRole_val"]).CInt(0, false);
             model.DataAuth =  (request["T_auth_val"]).CInt(2,false);
             model.PublicAuth =  (request["T_public_val"]).CInt(1,false);
 
