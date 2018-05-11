@@ -149,10 +149,11 @@
                         }
                     },
                     {
-                        display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.CostsTotal);
+                        display: '销售工费', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.SalesCostsTotal);
                         }
-                    }, { display: '现存仓库', name: 'warehouse_name', width: 100, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
+                    },
+                    //{ display: '现存仓库', name: 'warehouse_name', width: 100, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
                       { display: '关联门店', name: 'indep_name', width: 120, render: function (item) { if (item.indep_name == null) { return "总部" } else { return item.indep_name; } } },
                 ],
                 allowHideColumn: false,

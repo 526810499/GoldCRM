@@ -53,9 +53,9 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into CRM_Customer(");
-            strSql.Append("id,Serialnumber,cus_name,cus_add,cus_tel,cus_fax,cus_website,cus_industry_id,Provinces_id,City_id,cus_type_id,cus_level_id,cus_source_id,DesCripe,Remarks,emp_id,isPrivate,lastfollow,xy,isDelete,Delete_time,create_id,create_time,cus_extend,birthday,integral,birthdays,birthmonths)");
+            strSql.Append("id,Serialnumber,cus_name,cus_add,cus_tel,cus_fax,cus_website,cus_industry_id,Provinces_id,City_id,cus_type_id,cus_level_id,cus_source_id,DesCripe,Remarks,emp_id,isPrivate,lastfollow,xy,isDelete,Delete_time,create_id,create_time,cus_extend,birthday,integral,birthdays,birthmonths,createdep_id)");
             strSql.Append(" values (");
-            strSql.Append("@id,@Serialnumber,@cus_name,@cus_add,@cus_tel,@cus_fax,@cus_website,@cus_industry_id,@Provinces_id,@City_id,@cus_type_id,@cus_level_id,@cus_source_id,@DesCripe,@Remarks,@emp_id,@isPrivate,@lastfollow,@xy,@isDelete,@Delete_time,@create_id,@create_time,@cus_extend,@birthday,@integral,@birthdays,@birthmonths)");
+            strSql.Append("@id,@Serialnumber,@cus_name,@cus_add,@cus_tel,@cus_fax,@cus_website,@cus_industry_id,@Provinces_id,@City_id,@cus_type_id,@cus_level_id,@cus_source_id,@DesCripe,@Remarks,@emp_id,@isPrivate,@lastfollow,@xy,@isDelete,@Delete_time,@create_id,@create_time,@cus_extend,@birthday,@integral,@birthdays,@birthmonths,@createdep_id)");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@Serialnumber", SqlDbType.VarChar,250),
@@ -85,7 +85,8 @@ namespace XHD.DAL
                     new SqlParameter("@integral",SqlDbType.Int,4),
                    new SqlParameter("@birthdays",SqlDbType.Int,4),
                   new SqlParameter("@birthmonths",SqlDbType.Int,4),
-                  new SqlParameter("@birthyear",SqlDbType.Int,4)
+                  new SqlParameter("@birthyear",SqlDbType.Int,4),
+                  new SqlParameter("@createdep_id",SqlDbType.VarChar,50),
             };
             parameters[0].Value = model.id;
             parameters[1].Value = model.Serialnumber;
@@ -116,6 +117,7 @@ namespace XHD.DAL
             parameters[26].Value = (model.birthday.HasValue && model.birthday != DateTime.MaxValue ? (model.birthday.CDateTime(DateTime.Now, false).Day).CInt(0, false) : 0);
             parameters[27].Value = (model.birthday.HasValue && model.birthday != DateTime.MaxValue ? (model.birthday.CDateTime(DateTime.Now, false).Month).CInt(0, false) : 0);
             parameters[28].Value = (model.birthday.HasValue && model.birthday != DateTime.MaxValue ? (model.birthday.CDateTime(DateTime.Now, false).Year).CInt(0, false) : 0);
+            parameters[29].Value = model.createdep_id;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {
@@ -179,7 +181,7 @@ namespace XHD.DAL
                    new SqlParameter("@birthdays",SqlDbType.Int,4),
                   new SqlParameter("@birthmonths",SqlDbType.Int,4),
                   new SqlParameter("@birthyear",SqlDbType.Int,4),
-                
+
             };
             parameters[0].Value = model.Serialnumber;
             parameters[1].Value = model.cus_name;
@@ -326,15 +328,15 @@ namespace XHD.DAL
             strSql_inner.Append("   (");
             strSql_inner.Append("        SELECT  ");
             strSql_inner.Append("            * ");
-            strSql_inner.Append("            , (select params_name from Sys_Param where id = w1.cus_industry_id) as cus_industry ");
-            strSql_inner.Append("            , (select params_name from Sys_Param where id = w1.cus_level_id) as cus_level ");
-            strSql_inner.Append("            , (select params_name from Sys_Param where id = w1.cus_type_id) as cus_type ");
-            strSql_inner.Append("            , (select params_name from Sys_Param where id = w1.cus_source_id) as cus_source ");
-            strSql_inner.Append("            , (select City from Sys_Param_City where id = w1.City_id) as City ");
-            strSql_inner.Append("            , (select Provinces from Sys_Param_Provinces where id = w1.Provinces_id) as Provinces ");
-            strSql_inner.Append("            , (select dep_name from hr_department where id = (select dep_id from hr_employee where id = w1.emp_id)) as department ");
+            strSql_inner.Append("            , (select params_name from Sys_Param(nolock) where id = w1.cus_industry_id) as cus_industry ");
+            strSql_inner.Append("            , (select params_name from Sys_Param(nolock) where id = w1.cus_level_id) as cus_level ");
+            strSql_inner.Append("            , (select params_name from Sys_Param(nolock) where id = w1.cus_type_id) as cus_type ");
+            strSql_inner.Append("            , (select params_name from Sys_Param(nolock) where id = w1.cus_source_id) as cus_source ");
+            strSql_inner.Append("            , (select City from Sys_Param_City(nolock) where id = w1.City_id) as City ");
+            strSql_inner.Append("            , (select Provinces from Sys_Param_Provinces(nolock) where id = w1.Provinces_id) as Provinces ");
+            strSql_inner.Append("            , (select dep_name from hr_department(nolock) where id = (select dep_id from hr_employee(nolock) where id = w1.emp_id)) as department ");
             strSql_inner.Append("            , (select name from hr_employee where id = w1.emp_id) as employee ");
-            strSql_inner.Append("        FROM(SELECT * from CRM_Customer UNION SELECT * FROM CRM_Customer where isPrivate = 1) as w1 ");
+            strSql_inner.Append("        FROM(SELECT * from CRM_Customer(nolock) UNION SELECT * FROM CRM_Customer(nolock) where isPrivate = 1) as w1 ");
             strSql_inner.Append("   ) w2 ");
             if (strWhere.Trim() != "")
             {

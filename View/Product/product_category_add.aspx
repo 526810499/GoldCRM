@@ -73,7 +73,7 @@
                         value: obj.parentid,
                         treeLeafOnly: false,
                         tree: {
-                            url: 'Product_category.tree.xhd?qxz=1&rnd=' + Math.random(),
+                            url: 'Product_category.tree.xhd?qxzg=1&rnd=' + Math.random(),
                             idFieldName: 'id',
                             checkbox: false
                         }

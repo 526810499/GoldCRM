@@ -44,6 +44,16 @@ namespace XHD.BLL
         }
 
         /// <summary>
+        /// 根据条形码获取商品ID
+        /// </summary>
+        /// <param name="BarCode"></param>
+        /// <returns></returns>
+        public string GetProductIdByCode(string BarCode)
+        {
+            return dal.GetProductIdByCode(BarCode);
+        }
+
+        /// <summary>
         /// 删除一条数据
         /// </summary>
         public bool Delete(string id)

@@ -49,18 +49,20 @@
                             return toMoney(item.AttStoneWeight);
                         }
                     },
-                    {
-                        display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.CostsTotal);
-                        }
-                    },
+                    //{
+                    //    display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
+                    //        return toMoney(item.CostsTotal);
+                    //    }
+                    //},
                       { display: '关联门店', name: 'indep_name', width: 120, render: function (item) { if (item.indep_name == null) { return "总部" } else { return item.indep_name; } } },
-                    { display: '现存仓库', name: 'warehouse_name', width: 100, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
+                    //{ display: '现存仓库', name: 'warehouse_name', width: 100, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
                     {
                         display: '状态', name: 'status', width: 80, align: 'right', render: function (item) {
                             return GetproductStatus(item.status);
                         }
                     },
+                     { display: "证书编号", name: "CertificateNo", type: "text", options: "{width:180}", validate: "{required:false}" },
+                      { display: "圈号手寸", name: "Circle", type: "text", options: "{width:180}", validate: "{required:false}"},
                     {
                         display: '审核状态', name: 'authIn', width: 80, align: 'right', render: function (item) {
                             switch (item.authIn) {

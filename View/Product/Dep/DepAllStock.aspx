@@ -57,10 +57,15 @@
                        }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='AttStoneNumber'>" + item.sum + "</span>"; } }
                    },
                    {
-                       display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
-                           return toMoney(item.CostsTotal);
-                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='CostsTotal'>" + item.sum + "</span>"; } }
+                       display: '销售工费', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
+                           return toMoney(item.SalesCostsTotal);
+                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='SalesCostsTotal'>" + item.sum + "</span>"; } }
                    },
+                    {
+                        display: '销售价格', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.SalesTotalPrice);
+                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='SalesTotalPrice'>" + item.sum + "</span>"; } }
+                    },
                     //{ display: '现存仓库', name: 'warehouse_name', width: 120, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
                     {
                         display: '总状态', name: 'status', width: 80, align: 'right', render: function (item) {

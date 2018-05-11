@@ -43,6 +43,17 @@ namespace XHD.Model
         private decimal? _salescoststotal;
 
         /// <summary>
+        /// 圈号手寸
+        /// </summary>
+        public string Circle { get; set; }
+
+
+        /// <summary>
+        /// 证书号
+        /// </summary>
+        public string CertificateNo { get; set; }
+
+        /// <summary>
         /// 部门id
         /// </summary>
         public string createdep_id { get; set; }

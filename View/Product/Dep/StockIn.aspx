@@ -27,7 +27,7 @@
                 columns: [
                     {
                         display: '入库单号', name: 'id', align: 'left', width: 300, render: function (item) {
-                            var html = "<a href='javascript:void(0)' onclick=view('ptake','" + item.id + "')>" + item.id + "</a>";
+                            var html = "<a href='javascript:void(0)' onclick=PView('" + item.id + "')>" + item.id + "</a>";
                             return html;
                         }
                     },
@@ -78,11 +78,14 @@
                                     }
                                 },
                                 {
-                                    display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
-                                        return toMoney(item.CostsTotal);
+                                    display: '销售工费', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
+                                        return toMoney(item.SalesCostsTotal);
                                     }
-                                }
-                                ,
+                                }, {
+                                    display: '销售价格', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
+                                        return toMoney(item.SalesTotalPrice);
+                                    }
+                                },
                                { display: '备注', name: 'remark', align: 'left', width: 180 }
                             ],
                             usePager: false,
@@ -226,6 +229,12 @@
         //        $.ligerDialog.warn('请选择盘点单！');
         //    }
         //}
+
+        function PView(id) {
+
+            f_openWindow2('product/Dep/StockIn_Add.aspx?id=' + id, "查看入库单", 1050, 680);
+
+        }
 
 
         function edit() {

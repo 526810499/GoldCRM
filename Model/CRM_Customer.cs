@@ -42,6 +42,12 @@ namespace XHD.Model
         /// </summary>
         public DateTime? birthday { get; set; }
 
+
+        /// <summary>
+        /// 创建部门
+        /// </summary>
+        public string createdep_id { get; set; }
+
         /// <summary>
         /// 用户积分
         /// </summary>

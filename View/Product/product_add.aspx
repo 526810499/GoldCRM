@@ -41,10 +41,10 @@
                 var T_StockPrice = parseFloat($("#T_StockPrice").val());
                 var T_Weight = parseFloat($("#T_Weight").val());
 
-                if (T_StockPrice <= 0 && T_product_categoryName != "赠送品") {
-                    $.ligerDialog.warn('进货金价不能为小于0！');
-                    return false;
-                }
+                //if (T_StockPrice <= 0 && T_product_categoryName != "赠送品") {
+                //    $.ligerDialog.warn('进货金价不能为小于0！');
+                //    return false;
+                //}
                 if (T_Weight <= 0) {
                     $.ligerDialog.warn('重量不能为小于0！');
                     return false;
@@ -88,6 +88,8 @@
 
                     if (obj.IsGold == null || obj.IsGold == undefined) { obj.IsGold = 0; }
 
+
+
                     $("#form1").ligerAutoForm({
                         labelWidth: 80, inputWidth: 180, space: 20,
                         fields: [
@@ -122,13 +124,17 @@
                                     { display: "供应商", name: "T_SupplierID", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_supplier.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + obj.SupplierID + "'}", validate: "{required:false}" },
                                     { display: "出厂码", name: "T_Sbarcode", type: "text", options: "{width:180}", validate: "{required:false}", initValue: (obj.Sbarcode) },
                                 ],
-                                   [{ display: "条形码", name: "T_BarCode", type: "text", options: "{width:180,disabled:true}", validate: "{required:false}", initValue: (obj.BarCode) },
+                                   [{ display: "条形码", name: "T_BarCode", type: "text", options: "{width:180;}", validate: "{required:false}", initValue: (obj.BarCode) },
                                     { display: "是否黄金类", name: "T_GType", type: "select", options: "{width:180,onSelected:function(value){SetT_SalesTotalPrice(value);},data:[{id:0,text:'否'},{id:1,text:'是'}],selectBoxHeight:50, value:" + obj.IsGold + "}", validate: "{required:true}" }
                                    ],
-                             [
-                                    { display: "销售价格", name: "T_SalesTotalPrice", type: "text", options: "{width:180,disabled:true,onChangeValue:function(value){   $('#T_SalesTotalPrice').val(toMoney(value));  ; }}", validate: "{required:true}", initValue: toMoney(obj.SalesTotalPrice) },
-                                    { display: "销售工费", name: "T_SalesCostsTotal", type: "text", options: "{width:180,disabled:true,onChangeValue:function(value){ $('#T_SalesCostsTotal').val(toMoney(value)); }}", validate: "{required:true}", initValue: toMoney(obj.SalesCostsTotal) }
-                             ],
+                                 [
+                                        { display: "销售价格", name: "T_SalesTotalPrice", type: "text", options: "{width:180,disabled:true,onChangeValue:function(value){   $('#T_SalesTotalPrice').val(toMoney(value));  ; }}", validate: "{required:true}", initValue: toMoney(obj.SalesTotalPrice) },
+                                        { display: "销售工费", name: "T_SalesCostsTotal", type: "text", options: "{width:180,disabled:true,onChangeValue:function(value){ $('#T_SalesCostsTotal').val(toMoney(value)); }}", validate: "{required:true}", initValue: toMoney(obj.SalesCostsTotal) }
+                                 ],
+                                 [
+                                    { display: "证书编号", name: "T_CertificateNo", type: "text", options: "{width:180}", validate: "{required:false}", initValue: (obj.CertificateNo) },
+                                    { display: "圈号手寸", name: "T_Circle", type: "text", options: "{width:180}", validate: "{required:false}", initValue: (obj.Circle) }
+                                 ],
                                    [
                                     { display: "备注", name: "T_Remark", type: "textarea", cols: 73, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.Remark }
                                    ]
@@ -136,7 +142,14 @@
                             }
                         ]
                     });
-
+                    $("#T_BarCode").attr("maxlength", "15");
+                    if (oaid.length > 0) {
+                        if (obj.StockPrice == null || obj.StockPrice == undefined || obj.StockPrice == 0) { $("#T_StockPrice").val(toMoney(0.00)); }
+                        if (obj.AttCosts == null || obj.AttCosts == undefined || obj.AttCosts == 0) { $("#T_AttCosts").val(toMoney(0.00)); }
+                        if (obj.status != 1) {
+                            $("#T_BarCode").attr("disabled", "disabled");
+                        }
+                    }
                 }
             });
 
@@ -194,6 +207,8 @@
             $("#T_CostsTotal").val(toMoney(total));
             SetT_Totals();
         }
+
+
 
     </script>
 </head>

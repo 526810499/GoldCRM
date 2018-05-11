@@ -674,6 +674,7 @@ function view(type, id, id1) {
         case "pcategory":
             width = 730, height = 600, title = "查看商品分类", url = 'product/product_category_add.aspx?cid=' + id;
             break;
+ 
 
     }
     f_openWindow(url, title, width, height, false, null, showMax);

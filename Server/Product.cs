@@ -53,6 +53,8 @@ namespace XHD.Server
             model.remarks = PageValidate.InputText(request["T_Remark"], 255);
             model.IsGold = (request["T_GType"].CString("") == "是" ? 1 : 0);
             model.BarCode = PageValidate.InputText(request["T_BarCode"], 50);
+            model.CertificateNo = PageValidate.InputText(request["T_CertificateNo"], 50);
+            model.Circle = PageValidate.InputText(request["T_Circle"], 50);
 
             string pid = PageValidate.InputText(request["pid"], 50);
             if (PageValidate.checkID(pid))
@@ -73,11 +75,25 @@ namespace XHD.Server
 
                 DataRow dr = ds.Tables[0].Rows[0];
                 int status = dr["status"].CInt(0, false);
-
+                int authIn = dr["authIn"].CInt(0, false);
                 string oldCode = dr["BarCode"].CString("");
-                if (status != 1 && oldCode != model.BarCode.Trim().ToUpper())
+                if (oldCode != model.BarCode.Trim().ToUpper())
                 {
-                    return XhdResult.Error("该商品状态已发生改变,条形码不能修改").ToString();
+                    if (status != 1)
+                    {
+                        return XhdResult.Error("该商品状态已发生改变,条形码不能修改").ToString();
+                    }
+                    else if (authIn != 0)
+                    {
+                        return XhdResult.Error("该商品处于审核状态,条形码不能修改").ToString();
+                    }
+                    else {
+                        string id = product.GetProductIdByCode(model.BarCode);
+                        if (!string.IsNullOrWhiteSpace(id))
+                        {
+                            return XhdResult.Error("该条形码已存在,请更换").ToString();
+                        }
+                    }
                 }
                 model.BarCode = model.BarCode.Trim().ToUpper();
                 product.Update(model);
@@ -145,10 +161,36 @@ namespace XHD.Server
                 model.createdep_id = dep_id;
                 model.status = 1;
 
-
-
-                model.BarCode = GetBarCode(model.category_id);
-                product.Add(model);
+                try
+                {
+                    model.BarCode = GetBarCode(model.category_id);
+                    product.Add(model);
+                }
+                catch (Exception error)
+                {
+                    if (error.Message.IndexOf("不能在具有唯一索引") > -1)
+                    {
+                        int t = 3;
+                        while (t > 0)
+                        {
+                            try
+                            {
+                                model.BarCode = GetBarCode(model.category_id);
+                                bool r = product.Add(model);
+                                if (r) { t = -1; break; }
+                                t++;
+                            }
+                            catch (Exception err1)
+                            {
+                                SoftLog.LogStr(err1, "Product");
+                                return XhdResult.Error("添加失败,请重新添加！").ToString();
+                            }
+                        }
+                    }
+                    else {
+                        return XhdResult.Error("添加失败,请重新添加！").ToString();
+                    }
+                }
             }
 
             return XhdResult.Success().ToString();
@@ -163,14 +205,14 @@ namespace XHD.Server
         {
             string code = DateTime.Now.GetHashCode().ToString().Replace("-", "");
             BLL.Product_category cbll = new BLL.Product_category();
-            string str = "Y";
+            string CodingBegin = "Y";
             DataSet cds = cbll.GetList("id='" + model.category_id + "'");
             if (cds != null && cds.Tables.Count > 0)
             {
-                str = cds.Tables[0].Rows[0]["CodingBegins"].CString("Y");
+                CodingBegin = cds.Tables[0].Rows[0]["CodingBegins"].CString("Y");
             }
-            int counts = cbll.GetCategoryCounts(categoryid);
-            code = string.Format("{0}{1}{2}", str, DateTime.Now.Year, counts);//.PadRight(14, '0')
+            int counts = cbll.GetCategoryCounts(CodingBegin);
+            code = string.Format("{0}{1}{2}", CodingBegin, DateTime.Now.Year, counts.CString("1").PadLeft(5, '0'));//.PadRight(14, '0')
 
             return code.ToUpper();
         }
@@ -262,9 +304,9 @@ namespace XHD.Server
             if (optype == "mddb")
             {
                 //门店调拨需要判断跨门店权限
-                string depids = TransDepartmentID();
+                //string depids = TransDepartmentID();
 
-                serchtxt += $" and status not in(1,2,3,4) and outStatus<>2   and indep_id in({ depids }) ";
+                serchtxt += $" and status not in(1,2,3,4) and outStatus<>2   ";// and indep_id in({ depids })
             }
 
             //是否要取门店的
@@ -327,7 +369,7 @@ namespace XHD.Server
 
             if (status != 1)
             {
-                return XhdResult.Error("此商品下含有调拨单，不允许删除！").ToString();
+                return XhdResult.Error("此商品当前非入库状态，不允许删除！").ToString();
             }
 
             bool candel = true;

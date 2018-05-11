@@ -119,7 +119,7 @@ namespace XHD.DAL
             strSql.Append("vipcard=@vipcard,");
             strSql.Append("receive_money=@receive_money,");
             strSql.Append("arrears_money=@arrears_money,");
-            strSql.Append(" createdep_id=@createdep_id,PayTheBill=@PayTheBill,saledep_id=@saledep_id  ");
+            strSql.Append("PayTheBill=@PayTheBill,saledep_id=@saledep_id  ");// createdep_id=@createdep_id,
             strSql.Append(" where id=@id ");
             SqlParameter[] parameters = {
                     new SqlParameter("@Order_date", SqlDbType.DateTime),
@@ -235,12 +235,12 @@ namespace XHD.DAL
             strSql.Append("      , Sale_order.[createdep_id] ");
             strSql.Append("      , Sale_order.[vipcard] ");
             strSql.Append("      , Sale_order.[create_id] ");
-            strSql.Append("      , Sale_order.[create_time],cashier_id,vipcard,createdep_id,PayTheBill ");
+            strSql.Append("      , Sale_order.[create_time],cashier_id,vipcard,Sale_order.Createdep_id,PayTheBill ");
             strSql.Append("      , CRM_Customer.cus_name ");
             strSql.Append("      , hr_employee.name as emp_name ");
             strSql.Append("      , chr.name as cashiername ");
             strSql.Append("      , hr_department.dep_name,saledep_id ");
-            strSql.Append("  FROM [dbo].[Sale_order] ");
+            strSql.Append("  FROM [dbo].[Sale_order](nolock) ");
             strSql.Append("        INNER JOIN CRM_Customer(nolock) ON CRM_Customer.id = Sale_order.Customer_id ");
             strSql.Append("        INNER JOIN hr_employee(nolock) ON hr_employee.id = Sale_order.emp_id ");
             strSql.Append("        INNER JOIN hr_employee(nolock) as chr ON chr.id = Sale_order.cashier_id ");
@@ -284,11 +284,11 @@ namespace XHD.DAL
             strSql.Append("      , Sale_order.[create_time] ");
             strSql.Append("      , Sale_order.[createdep_id] ");
             strSql.Append("      , Sale_order.[vipcard] ");
-            strSql.Append("      , CRM_Customer.cus_name,cashier_id,vipcard,createdep_id,PayTheBill  ");
+            strSql.Append("      , CRM_Customer.cus_name,cashier_id,vipcard,Sale_order.createdep_id,PayTheBill  ");
             strSql.Append("      , hr_employee.name as emp_name ");
             strSql.Append("      , hr_department.dep_name ,saledep_id");
             strSql.Append("      , chr.name as cashiername ");
-            strSql.Append("  FROM[dbo].[Sale_order] ");
+            strSql.Append("  FROM[dbo].[Sale_order](nolock) ");
             strSql.Append("        INNER JOIN CRM_Customer(nolock) ON CRM_Customer.id = Sale_order.Customer_id ");
             strSql.Append("        INNER JOIN hr_employee(nolock) ON hr_employee.id = Sale_order.emp_id ");
             strSql.Append("        INNER JOIN hr_employee(nolock) as chr ON chr.id = Sale_order.cashier_id ");
@@ -340,9 +340,9 @@ namespace XHD.DAL
             strSql_inner.Append("      , hr_employee.name as emp_name ");
             strSql_inner.Append("      , hr_department.dep_name  ,cashier_id,saledep_id ");
             strSql_inner.Append("  FROM[dbo].[Sale_order] ");
-            strSql_inner.Append("        INNER JOIN CRM_Customer ON CRM_Customer.id = Sale_order.Customer_id ");
-            strSql_inner.Append("        INNER JOIN hr_employee ON hr_employee.id = Sale_order.emp_id ");
-            strSql_inner.Append("        INNER JOIN hr_department ON hr_department.id = hr_employee.dep_id ");
+            strSql_inner.Append("        INNER JOIN CRM_Customer(nolock) ON CRM_Customer.id = Sale_order.Customer_id ");
+            strSql_inner.Append("        INNER JOIN hr_employee(nolock) ON hr_employee.id = Sale_order.emp_id ");
+            strSql_inner.Append("        INNER JOIN hr_department(nolock) ON hr_department.id = hr_employee.dep_id ");
             strSql_inner.Append("        INNER JOIN hr_department(nolock) as xsdep ON xsdep.id = Sale_order.saledep_id ");
             if (strWhere.Trim() != "")
             {

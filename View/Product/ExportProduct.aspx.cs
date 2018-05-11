@@ -98,7 +98,7 @@ namespace XHD.View.Product
                 nameList.Add("SalesCostsTotal", "销售工费(￥)");
                 nameList.Add("SalesTotalPrice", "销售价格(￥)");
                 nameList.Add("remark", "备注");
-
+         
                 ExportHelper.ExportDataTableToExcel(ds.Tables[0], nameList, nameList.Keys.ToArray(), DateTime.Now.ToString("MMddHHmmss"), fname);
             }
             else {

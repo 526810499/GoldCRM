@@ -91,6 +91,23 @@ namespace XHD.DAL
         }
 
         /// <summary>
+        /// 添加编码
+        /// </summary>
+        /// <param name="CodingBegins"></param>
+        public void AddNO(string CodingBegins)
+        {
+            string sql = @"
+                IF NOT EXISTS(SELECT 1 FROM Product_CategoryNoTB WHERE CodingBegin=@CodingBegin)BEGIN
+                   INSERT INTO Product_CategoryNoTB(CodingBegin,Counts) VALUES(@CodingBegin,1)
+                END";
+            SqlParameter[] parameters = {
+                new SqlParameter("@CodingBegin",SqlDbType.VarChar,50) { Value=CodingBegins}
+            };
+
+            DbHelperSQL.ExecuteSql(sql, parameters);
+        }
+
+        /// <summary>
         /// 删除一条数据
         /// </summary>
         public bool Delete(string id)
@@ -152,17 +169,18 @@ namespace XHD.DAL
         /// </summary>
         /// <param name="ID"></param>
         /// <returns></returns>
-        public int GetCategoryCounts(string ID) {
+        public int GetCategoryCounts(string CodingBegin)
+        {
             string sql = @" 
                         DECLARE @MaxCount INT
-                        update Product_category set Counts=isnull(Counts,10000)+1,@MaxCount=(isnull(Counts,10000)+1) where id=@id 
+                        update Product_CategoryNoTB set Counts=isnull(Counts,0)+1,@MaxCount=(isnull(Counts,0)+1) where CodingBegin=@CodingBegin 
                         select @MaxCount
                       ";
             SqlParameter[] parameters = {
-                    new SqlParameter("@id", SqlDbType.VarChar,50)           };
-            parameters[0].Value = ID;
+                    new SqlParameter("@CodingBegin", SqlDbType.VarChar,50)           };
+            parameters[0].Value = CodingBegin;
 
-            return DbHelperSQL.ExecuteScalar(sql,parameters).CInt(0,false);
+            return DbHelperSQL.ExecuteScalar(sql, parameters).CInt(0, false);
         }
 
         /// <summary>

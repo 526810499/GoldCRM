@@ -30,8 +30,12 @@
 
             $("#maingrid4").ligerGrid({
                 columns: [
-                    { display: '订单号', name: 'id', align: 'left', width: 300 },
-
+                    {
+                        display: '订单号', name: 'id', align: 'left', width: 300, render: function (item) {
+                            var html = "<a href='javascript:void(0)' onclick=PView('" + item.id + "')>" + item.id + "</a>";
+                            return html;
+                        }
+                    },
                     { display: '出库至门店', name: 'todep_name', align: 'left', width: 300 },
                     //{ display: '出库至仓库', name: 'NowWarehouseName', align: 'left', width: 300 },
                     { display: '创建人', name: 'CreateName', align: 'left', width: 160 },
@@ -83,8 +87,12 @@
                                     }
                                 },
                                 {
-                                    display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
-                                        return toMoney(item.CostsTotal);
+                                    display: '销售工费', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
+                                        return toMoney(item.SalesCostsTotal);
+                                    }
+                                }, {
+                                    display: '销售价格', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
+                                        return toMoney(item.SalesTotalPrice);
                                     }
                                 }
                             ],
@@ -181,6 +189,9 @@
             }
         }
 
+        function PView(id) {
+            f_openWindow2('product/Dep/StockOut_Add.aspx?id=' +id, "查看出库单", 1050, 680);
+        }
 
         function edit() {
             var manager = $("#maingrid4").ligerGetGridManager();

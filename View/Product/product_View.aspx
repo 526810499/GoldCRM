@@ -81,6 +81,10 @@
                                    [{ display: "条形码", name: "T_BarCode", type: "text", options: "{width:180,disabled:true}", validate: "{required:false}", initValue: (obj.BarCode) },
                                     { display: "是否黄金类", name: "T_GType", type: "select", options: "{width:180,,data:[{id:0,text:'否'},{id:1,text:'是'}],selectBoxHeight:50, value:" + obj.IsGold + "}", validate: "{required:true}" }
                                    ],
+                                  [
+                                    { display: "证书编号", name: "T_CertificateNo", type: "text", options: "{width:180}", validate: "{required:false}", initValue: (obj.CertificateNo) },
+                                    { display: "圈号手寸", name: "T_Circle", type: "text", options: "{width:180}", validate: "{required:false}", initValue: (obj.Circle) }
+                                  ],
                                    [
                                     { display: "备注", name: "T_Remark", type: "textarea", cols: 73, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.Remark }
                                    ]

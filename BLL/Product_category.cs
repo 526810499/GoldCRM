@@ -33,6 +33,16 @@ namespace XHD.BLL
         }
 
         /// <summary>
+        /// 添加编码
+        /// </summary>
+        /// <param name="CodingBegins"></param>
+        public void AddNO(string CodingBegins)
+        {
+            dal.AddNO(CodingBegins);
+        }
+
+
+        /// <summary>
         /// 删除一条数据
         /// </summary>
         public bool Delete(string id)

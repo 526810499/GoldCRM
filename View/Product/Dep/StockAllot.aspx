@@ -109,8 +109,8 @@
                                     }
                                 },
                                 {
-                                    display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
-                                        return toMoney(item.CostsTotal);
+                                    display: '销售工费', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
+                                        return toMoney(item.SalesCostsTotal);
                                     }
                                 }
 

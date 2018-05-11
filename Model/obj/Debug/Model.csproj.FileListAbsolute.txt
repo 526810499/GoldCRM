@@ -93,3 +93,4 @@ F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Model\bin\Debug\OpenSmtp.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Model\bin\Debug\Newtonsoft.Json.Net35.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Model\obj\Debug\XHD.Model.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Model\obj\Debug\XHD.Model.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Model\obj\Debug\Model.csprojResolveAssemblyReference.cache

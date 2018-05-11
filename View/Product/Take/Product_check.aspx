@@ -27,7 +27,7 @@
                 columns: [
                     {
                         display: '盘点单号', name: 'id', align: 'left', width: 300, render: function (item) {
-                            var html = "<a href='javascript:void(0)' onclick=view('ptake','" + item.id + "')>" + item.id + "</a>";
+                            var html = "<a href='javascript:void(0)' onclick=PView('" + item.id + "')>" + item.id + "</a>";
                             return html;
                         }
                     },
@@ -250,7 +250,9 @@
                 $.ligerDialog.warn('请选择盘点单！');
             }
         }
-
+        function PView(id) {
+            f_openWindow2('product/Take/Product_CheckAdd.aspx?id=' + id, "查看点单", 1050, 680);
+        }
 
         function edit() {
             var manager = $("#maingrid4").ligerGetGridManager();

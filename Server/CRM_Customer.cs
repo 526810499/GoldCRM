@@ -12,9 +12,10 @@ namespace XHD.Server
         private static BLL.CRM_Customer customer = new BLL.CRM_Customer();
         private static Model.CRM_Customer model = new Model.CRM_Customer();
 
-
         public CRM_Customer()
         {
+            allDataBtnid = "ED2E90BC-2618-49B9-B93A-6C4468E27738";
+            depDataBtnid = "62735B9F-00B7-439C-93E3-5104D65DF5BE";
         }
 
         public CRM_Customer(HttpContext context) : base(context) { }
@@ -141,8 +142,13 @@ namespace XHD.Server
             {
                 serchtxt += $" and birthmonths={request["smonth"].CInt(0, false)}";
             }
-            //权限
-            serchtxt += Auth();
+
+            if (string.IsNullOrWhiteSpace(request["selfc"].CString("")) || request["selfc"].CString("-1") != "0")
+            {
+                //权限
+                serchtxt = GetSQLCreateIDWhere(serchtxt, true);
+            }
+
 
             if (!string.IsNullOrEmpty(request["stext"]) && request["search"].CInt(0, false) == 1)
             {
@@ -180,6 +186,7 @@ namespace XHD.Server
             model.cus_extend = PageValidate.InputText(request["extendjson"], int.MaxValue);
             model.birthday = request["T_birthday"].CDateTime();
             model.integral = request["T_integral"].CInt(0, false);
+            model.createdep_id = dep_id;
             string id = PageValidate.InputText(request["id"], 50);
             if (PageValidate.checkID(id))
             {
@@ -191,15 +198,15 @@ namespace XHD.Server
                     return XhdResult.Error("参数不正确，更新失败！").ToString();
 
                 DataRow dr = ds.Tables[0].Rows[0];
-
+                string creatuid = dr["create_id"].CString("");
                 //判断公客权限
-                if (dr["isPrivate"].ToString() == "1" && uid != "admin")
+                if (emp_id != creatuid && uid != "admin" && !CheckBtnAuthority(allDataBtnid) && !CheckBtnAuthority(depDataBtnid))
                 {
                     var dataauth = new GetDataAuth();
                     bool canEdit = dataauth.getPrivateCusEdit(emp_id);
 
                     if (!canEdit)
-                        return XhdResult.Error("您不具备公客的修改权限！").ToString();
+                        return XhdResult.Error("您不具修改该客户的权限！").ToString();
 
                 }
 

@@ -29,6 +29,10 @@ namespace XHD.Server
             model.CodingBegins = PageValidate.InputText(request["T_CodingBegins"], 50).ToUpper();
             string id = PageValidate.InputText(request["id"], 50);
             string pid = PageValidate.InputText(request["T_category_parent_val"], 50);
+            if (string.IsNullOrWhiteSpace(model.parentid))
+            {
+                model.parentid = "root";
+            }
             if (PageValidate.checkID(id))
             {
                 model.id = id;
@@ -65,17 +69,19 @@ namespace XHD.Server
 
                 if (!string.IsNullOrEmpty(Log_Content))
                     Syslog.Add_log(UserID, UserName, IPStreet, EventTitle, EventType, EventID, Log_Content);
-
-
-
             }
-
             else
             {
-                if (string.IsNullOrWhiteSpace(model.parentid))
+                if (string.IsNullOrWhiteSpace(model.CodingBegins) && model.parentid != "root")
                 {
-                    model.parentid = "root";
+                    DataSet ds = category.GetList($" id= '{model.parentid }' ");
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        DataRow dr = ds.Tables[0].Rows[0];
+                        model.CodingBegins = dr["CodingBegins"].CString("");
+                    }
                 }
+
                 model.id = Guid.NewGuid().ToString();
                 model.create_id = emp_id;
                 model.create_time = DateTime.Now;
@@ -83,6 +89,12 @@ namespace XHD.Server
                 category.Add(model);
 
             }
+
+            if (!string.IsNullOrWhiteSpace(model.CodingBegins))
+            {
+                category.AddNO(model.CodingBegins);
+            }
+
             return XhdResult.Success().ToString();
         }
 
@@ -114,6 +126,11 @@ namespace XHD.Server
             if (qxz)
             {
                 str.Append("{\"id\":\"\",\"text\":\"==所有==\",\"d_icon\":\"\"},");
+            }
+            qxz = request["qxzg"].CInt(0, false) == 1;
+            if (qxz)
+            {
+                str.Append("{\"id\":\"root\",\"text\":\"==根==\",\"d_icon\":\"\"},");
             }
             str.Append(GetTreeString("root", ds.Tables[0]));
             str.Replace(",", "", str.Length - 1, 1);

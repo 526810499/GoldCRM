@@ -70,7 +70,9 @@
                     display: '×´Ì¬', name: 'status', width: 80, align: 'right', render: function (item) {
                         return GetproductStatus(item.status);
                     }
-                }, {
+                }, { display: "Ö¤Êé±àºÅ", name: "CertificateNo", type: "text", options: "{width:180}", validate: "{required:false}" },
+                      { display: "È¦ºÅÊÖ´ç", name: "Circle", type: "text", options: "{width:180}", validate: "{required:false}" },
+                {
                     display: 'ÉóºË×´Ì¬', name: 'authIn', width: 80, align: 'right', render: function (item) {
                         switch (item.authIn) {
                             case 101:
