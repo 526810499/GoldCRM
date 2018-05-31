@@ -39,62 +39,62 @@
                    {
                        display: '重量(克)', name: 'Weight', width: 80, align: 'left', render: function (item) {
                            return toMoney(item.Weight);
-                       }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='Weight'>" + item.sum + "</span>"; } }
+                       }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='Weight'>" + toMoney(item.sum) + "</span>"; } }
                    },
                    {
                        display: '进货金价(￥)', name: 'StockPrice', width: 80, align: 'left', render: function (item) {
                            return toMoney(item.StockPrice);
-                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='StockPrice'>" + item.sum + "</span>"; } }
+                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='StockPrice'>" + toMoney(item.sum) + "</span>"; } }
                    },
                    {
                        display: '附工费(￥)', name: 'AttCosts', width: 80, align: 'right', render: function (item) {
                            return toMoney(item.AttCosts);
-                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='AttCosts'>" + item.sum + "</span>"; } }
+                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='AttCosts'>" + toMoney(item.sum) + "</span>"; } }
                    },
                    {
                        display: '主石重', name: 'MainStoneWeight', width: 60, align: 'right', render: function (item) {
                            return toMoney(item.MainStoneWeight);
-                       }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='MainStoneWeight'>" + item.sum + "</span>"; } }
+                       }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='MainStoneWeight'>" + toMoney(item.sum) + "</span>"; } }
                    },
                    {
                        display: '附石重', name: 'AttStoneWeight', width: 60, align: 'right', render: function (item) {
                            return toMoney(item.AttStoneWeight);
-                       }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='AttStoneWeight'>" + item.sum + "</span>"; } }
+                       }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='AttStoneWeight'>" + toMoney(item.sum) + "</span>"; } }
                    },
                    {
                        display: '附石数', name: 'AttStoneNumber', width: 50, align: 'right', render: function (item) {
                            return toMoney(item.AttStoneNumber);
-                       }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='AttStoneNumber'>" + item.sum + "</span>"; } }
+                       }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='AttStoneNumber'>" + toMoney(item.sum) + "</span>"; } }
                    },
                    {
                        display: '石价(￥)', name: 'StonePrice', width: 80, align: 'right', render: function (item) {
                            return toMoney(item.StonePrice);
-                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='StonePrice'>" + item.sum + "</span>"; } }
+                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='StonePrice'>" + toMoney(item.sum) + "</span>"; } }
                    },
                    {
                        display: '金价小计(￥)', name: 'GoldTotal', width: 80, align: 'right', render: function (item) {
                            return toMoney(item.GoldTotal);
-                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='GoldTotal'>" + item.sum + "</span>"; } }
+                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='GoldTotal'>" + toMoney(item.sum) + "</span>"; } }
                    },
                    {
                        display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
                            return toMoney(item.CostsTotal);
-                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='CostsTotal'>" + item.sum + "</span>"; } }
+                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='CostsTotal'>" + toMoney(item.sum) + "</span>"; } }
                    },
                    {
                        display: '成本总价(￥)', name: 'Totals', width: 80, align: 'right', render: function (item) {
                            return toMoney(item.Totals);
-                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='Totals'>" + item.sum + "</span>"; } }
+                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='Totals'>" + toMoney(item.sum) + "</span>"; } }
                    },
                    {
                        display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
                            return toMoney(item.SalesCostsTotal);
-                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='SalesCostsTotal'>" + item.sum + "</span>"; } }
+                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='SalesCostsTotal'>" + toMoney(item.sum) + "</span>"; } }
                    },
                    {
                        display: '销售价格(￥)', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
                            return toMoney(item.SalesTotalPrice);
-                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='SalesTotalPrice'>" + item.sum + "</span>"; } }
+                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='SalesTotalPrice'>" + toMoney(item.sum) + "</span>"; } }
                    },
                    { display: '关联门店', name: 'indep_name', width: 120, render: function (item) { if (item.indep_name == null) { return "总部" } else { return item.indep_name; } } },
                     //{ display: '现存仓库', name: 'warehouse_name', width: 120, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
