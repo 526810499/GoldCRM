@@ -113,7 +113,7 @@
 
             $("#stext").ligerTextBox({ width: 200 });
             $("#scode").ligerTextBox({ width: 250 });
-            $("#scode").attr("maxlength", 14);
+            $("#scode").attr("maxlength", 7);
             $("#scode").on('input', function (e) {
                 doChangeSearch();
             });
@@ -121,7 +121,7 @@
 
         function doChangeSearch() {
             var v = $("#scode").val();
-            if (v != undefined && v.length == 14) {
+            if (v != undefined && v.length == 7) {
                 doserch();
             }
         }

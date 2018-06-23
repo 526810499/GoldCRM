@@ -94,7 +94,8 @@
                                     display: '销售价格', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
                                         return toMoney(item.SalesTotalPrice);
                                     }
-                                }
+                                },
+                                { display: '一口价', name: 'FixedPrice', width: 120, render: function (item) { if (item.FixedPrice == null) { return '0'; } else { return toMoney(item.FixedPrice); } } },
                             ],
                             usePager: false,
                             checkbox: false,
@@ -185,7 +186,20 @@
                 f_openWindow2('product/Dep/StockOut_Add.aspx?authbtn=1&id=' + rows.id + "&astatus=" + rows.status, "审核出库单", 1050, 680, buttons);
             }
             else {
-                $.ligerDialog.warn('请选择调度单！');
+                $.ligerDialog.warn('请选择出库单！');
+            }
+        }
+
+        function ExcelDC() {
+
+            var manager = $("#maingrid4").ligerGetGridManager();
+            var row = manager.getSelectedRow();
+            if (row) {
+                var titles = "门店出库：至" + row.todep_name + " (" + formatTimebytype(row.create_time, "yyyy-MM-dd") + ")";
+                location.href = "product/ExportProduct.aspx?etype=4&outid=" + row.id + "&rnd=" + Math.random() + "&titles=" + encodeURI(titles);
+            }
+            else {
+                $.ligerDialog.warn("请选择出库单");
             }
         }
 
@@ -205,7 +219,7 @@
                 f_openWindow2('product/Dep/StockOut_Add.aspx?id=' + rows.id + "&astatus=" + rows.status, "修改出库单", 1050, 680, buttons);
             }
             else {
-                $.ligerDialog.warn('请选择调度单！');
+                $.ligerDialog.warn('请选择出库单！');
             }
         }
         function add() {
@@ -246,7 +260,7 @@
                 })
             }
             else {
-                $.ligerDialog.warn("请选择调度单");
+                $.ligerDialog.warn("请选择出库单");
             }
 
         }

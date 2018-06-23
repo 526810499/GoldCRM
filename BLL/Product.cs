@@ -123,6 +123,14 @@ namespace XHD.BLL
         /// <summary>
         /// 分页获取数据列表
         /// </summary>
+        public DataSet ExportList(string strWhere)
+        {
+            return dal.ExportList(strWhere);
+        }
+
+        /// <summary>
+        /// 分页获取数据列表
+        /// </summary>
         public DataSet GetList(int PageSize, int PageIndex, string strWhere, string filedOrder, out DataTable totalTable)
         {
             return dal.GetList(PageSize, PageIndex, strWhere, filedOrder, out totalTable);

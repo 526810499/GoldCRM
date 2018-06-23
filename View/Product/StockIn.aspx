@@ -10,7 +10,7 @@
     <link href="../../CSS/input.css" rel="stylesheet" type="text/css" />
     <script src="../../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="../../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
-    <script src="../../JS/XHD.js?v=6" type="text/javascript"></script>
+    <script src="../../JS/XHD.js?v=9" type="text/javascript"></script>
     <script src="../../lib/jquery.form.js" type="text/javascript"></script>
 
     <script type="text/javascript">
@@ -27,12 +27,12 @@
                 columns: [
                     {
                         display: '入库单号', name: 'id', align: 'left', width: 300, render: function (item) {
-                            var html = "<a href='javascript:void(0)' onclick=PView('" + item.id + "')>" + item.id + "</a>";
+                            var html = "<a href='javascript:void(0)' onclick=PView('" + item.id + "'," + item.status + ")>" + item.id + "</a>";
                             return html;
                         }
                     },
                     //{ display: '入库仓库', name: 'product_warehouse', align: 'left', width: 200 },
-                    { display: '入库门店', name: 'dep_name', align: 'left', width: 120 },
+                    //{ display: '入库门店', name: 'dep_name', align: 'left', width: 120 },
                     { display: '创建人', name: 'CreateName', align: 'left', width: 120 },
                     {
                         display: '创建时间', name: 'create_time', width: 150, align: 'left', render: function (item) {
@@ -53,7 +53,7 @@
 
                 ],
                 dataAction: 'server',
-                url: "Product_StockIn.grid.xhd?intype=1&rnd=" + Math.random(),
+                url: "Product_StockIn.grid.xhd?intype=0&rnd=" + Math.random(),
                 pageSize: 30,
                 pageSizeOptions: [10, 20, 30, 40, 50, 60, 80, 100, 120],
                 width: '100%',
@@ -69,31 +69,118 @@
                         $(p).append(grid);
                         $(grid).css('margin', 3).ligerGrid({
                             columns: [
-                                { display: '商品名称', name: 'product_name', align: 'left', width: 120 },
-                                { display: '商品类别', name: 'category_name', align: 'left', width: 120 },
-                                { display: '条形码', name: 'BarCode', align: 'left', width: 160 },
-                                {
-                                    display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {
-                                        return toMoney(item.Weight);
-                                    }
-                                },
-                                {
-                                    display: '销售工费', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
-                                        return toMoney(item.SalesCostsTotal);
-                                    }
-                                }, {
-                                    display: '销售价格', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
-                                        return toMoney(item.SalesTotalPrice);
-                                    }
-                                }, { display: '一口价', name: 'FixedPrice', width: 120, render: function (item) { if (item.FixedPrice == null) { return '0'; } else { return toMoney(item.FixedPrice); } } },
-                               { display: '备注', name: 'remark', align: 'left', width: 180 }
-                            ],
-                            usePager: false,
-                            checkbox: false,
+                           {
+                               display: '条形码', name: 'BarCode', align: 'left', width: 160, render: function (item) {
 
-                            url: "Product_StockIn.gridDetail.xhd?stockid=" + r.id,
+                                   var html = "<a href='javascript:void(0)' onclick=ViewModel('product','" + item.id + "')>" + item.BarCode + "</a>";
+                                   if ($("div"))
+                                       return html;
+                               }
+                           },
+                           {
+                               display: '商品名称', name: 'product_name', align: 'left', width: 120
+                           },
+                           {
+                               display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {
+                                   return toMoney(item.Weight);
+                               }
+                           },
+                          { display: '商品类别', name: 'category_name', align: 'left', width: 120 },
+                           {
+                               display: '进货金价(￥)', name: 'StockPrice', width: 80, align: 'left', render: function (item) {
+                                   return toMoney(item.StockPrice);
+                               }
+                           },
+                           {
+                               display: '附工费(￥)', name: 'AttCosts', width: 80, align: 'right', render: function (item) {
+                                   return toMoney(item.AttCosts);
+                               }
+                           },
+                           {
+                               display: '主石重', name: 'MainStoneWeight', width: 60, align: 'right', render: function (item) {
+                                   return toMoney(item.MainStoneWeight);
+                               }
+                           },
+                           {
+                               display: '附石重', name: 'AttStoneWeight', width: 60, align: 'right', render: function (item) {
+                                   return toMoney(item.AttStoneWeight);
+                               }
+                           },
+                           {
+                               display: '附石数', name: 'AttStoneNumber', width: 50, align: 'right', render: function (item) {
+                                   return toMoney(item.AttStoneNumber);
+                               }
+                           },
+                           {
+                               display: '石价(￥)', name: 'StonePrice', width: 80, align: 'right', render: function (item) {
+                                   return toMoney(item.StonePrice);
+                               }
+                           },
+                           {
+                               display: '金价小计(￥)', name: 'GoldTotal', width: 80, align: 'right', render: function (item) {
+                                   return toMoney(item.GoldTotal);
+                               }
+                           },
+                           {
+                               display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
+                                   return toMoney(item.CostsTotal);
+                               }
+                           },
+                           {
+                               display: '成本总价(￥)', name: 'Totals', width: 80, align: 'right', render: function (item) {
+                                   return toMoney(item.Totals);
+                               }
+                           },
+                           {
+                               display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
+                                   return toMoney(item.SalesCostsTotal);
+                               }
+                           },
+                           {
+                               display: '销售价格(￥)', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
+                                   return toMoney(item.SalesTotalPrice);
+                               }
+                           },
+                             {
+                                 display: '一口价', name: 'FixedPrice', width: 120, render: function (item) { if (item.FixedPrice == null) { return '0'; } else { return toMoney(item.FixedPrice); } }
+                             },
+
+                          {
+                              display: '当前状态', name: 'status', width: 80, align: 'right', render: function (item) {
+                                  return GetproductStatus(item.status);
+                              }
+                          },
+                           {
+                               display: '审核状态', name: 'authIn', width: 80, align: 'right', render: function (item) {
+                                   switch (item.authIn) {
+                                       case 101:
+                                           return "<span style='color:#0066FF'> 调拨审核中 </span>";
+                                       case 102:
+                                           return "<span style='color:#00CC66'> 出库审核中 </span>";
+                                       default:
+                                           return "正常";
+                                   }
+                               }
+                           }
+                            ],
+                            dataAction: 'server',
+                            url: "Product.StockGridDetail.xhd?stockid=" + r.id + "&rnd=" + Math.random(),
+                            pageSize: 30,
+                            pageSizeOptions: [10, 20, 30, 40, 50, 60, 80, 100, 120],
                             width: '99%', height: '180',
-                            heightDiff: 0
+                            heightDiff: 0,
+                            checkbox: false,
+                            //isChecked: f_isChecked,
+                            //onCheckRow: f_onCheckRow,
+                            //onCheckAllRow: f_onCheckAllRow,
+                            onReload: function () {
+                                checkedCustomer = [];
+                            },
+                            onContextmenu: function (parm, e) {
+                                //actionCustomerID = parm.data.id;
+                                //menu.show({ top: e.pageY, left: e.pageX });
+                                //return false;
+                            }
                         })
 
                     }
@@ -110,8 +197,13 @@
             toolbar();
 
         });
+
+        function ViewModel(tag, id) {
+            f_openWindow('product/product_add.aspx?pid=' + id, "修改商品", 700, 580, product_save);
+        }
+
         function toolbar() {
-            $.get("toolbar.GetSys.xhd?mid=depstockin&rnd=" + Math.random(), function (data, textStatus) {
+            $.get("toolbar.GetSys.xhd?mid=product_list&rnd=" + Math.random(), function (data, textStatus) {
                 var data = eval('(' + data + ')');
                 //alert(data);
                 var items = [];
@@ -150,7 +242,7 @@
                     data: [
                     { text: '所有', id: '' },
                     { text: '未提交', id: '0' },
-                    { text: '保存并入库', id: '1' }
+                    { text: '提交保存', id: '1' }
                     ], valueFieldID: 'status',
                 });
                 $("#swarehouse_id").ligerComboBox({
@@ -177,6 +269,34 @@
         }
 
 
+        function ExcelDC() {
+
+            var manager = $("#maingrid4").ligerGetGridManager();
+            var row = manager.getSelectedRow();
+            if (row) {
+                location.href = "ExportProduct.aspx?etype=2&stockid=" + row.id + "&rnd=" + Math.random();
+            }
+            else {
+                $.ligerDialog.warn("请选择入库单");
+            }
+        }
+
+
+
+        function prints() {
+
+            if (checkedCustomer == null || checkedCustomer.length <= 0) {
+                $.ligerDialog.warn("没有需要打印的商品");
+                return;
+            }
+            var ids = "";
+            $(checkedCustomer).each(function (i, v) {
+                ids += v + ",";
+            });
+
+            window.open("PrintProduct.aspx?ids=" + ids + "&rnd=" + Math.random());
+        }
+
         function serchpanel() {
 
             if ($(".az").css("display") == "none") {
@@ -195,7 +315,7 @@
         //查询
         function doserch() {
             var sendtxt = "&rnd=" + Math.random();
-            var serchtxt = "intype=1&status=" + $("#status").val();
+            var serchtxt = "intype=0&status=" + $("#status").val();
             serchtxt += "&sorderid=" + $("#sorderid").val();
             serchtxt += "&scode=" + $("#scode").val();
             //serchtxt += "&swarehouse_id=" + $("#swarehouse_id_val").val();
@@ -214,26 +334,49 @@
             });
         }
 
-        //function auth() {
-        //    var manager = $("#maingrid4").ligerGetGridManager();
-        //    var rows = manager.getSelectedRow();
-        //    if (rows && rows != undefined) {
-        //        var buttons = [];
-        //        if (rows.status == 1) {
-        //            buttons.push({ text: '审核通过', onclick: f_saveYesAuth });
-        //            buttons.push({ text: '审核不通过', onclick: f_saveNoAuth });
-        //        }
-        //        f_openWindow2('product/Dep/StockIn_Add.aspx?authbtn=1&id=' + rows.id + "&astatus=" + rows.status, "审核入库单", 1050, 680, buttons);
-        //    }
-        //    else {
-        //        $.ligerDialog.warn('请选择盘点单！');
-        //    }
-        //}
 
-        function PView(id) {
+        function PView(id, status) {
+            var buttons = [];
+            if (status != 1) {
+                buttons.push({ text: '保存并入库', onclick: f_saveAuth });
+            }
+            f_openWindow2('product/StockIn_Add.aspx?id=' + id + "&status=" + status, "查看入库单", 1050, 680, buttons);
 
-            f_openWindow2('product/Dep/StockIn_Add.aspx?id=' + id, "查看入库单", 1050, 680);
+        }
 
+        function product_save(item, dialog) {
+            var issave = dialog.frame.f_save();
+            if (issave) {
+                dialog.close();
+                $.ligerDialog.waitting('数据保存中,请稍候...');
+                $.ajax({
+                    url: "Product.save.xhd", type: "POST",
+                    data: issave,
+                    dataType: 'json',
+                    success: function (result) {
+                        $.ligerDialog.closeWaitting();
+
+                        var obj = eval(result);
+
+                        if (obj.isSuccess) {
+                            f_load();
+                        }
+                        else {
+                            $.ligerDialog.error(obj.Message);
+                        }
+                        //f_load();     
+                    },
+                    error: function () {
+                        $.ligerDialog.closeWaitting();
+                        $.ligerDialog.error('操作失败！');
+                    }
+                });
+
+            }
+        }
+        function product_load() {
+            var manager = $("#maingrid4").ligerGetGridManager();
+            manager.loadData(true);
         }
 
 
@@ -242,43 +385,75 @@
             var rows = manager.getSelectedRow();
             if (rows && rows != undefined) {
                 var buttons = [];
-                if (rows.status == 0) {
-                    buttons.push({ text: '保存', onclick: f_save });
+                if (rows.status != 1) {
                     buttons.push({ text: '保存并入库', onclick: f_saveAuth });
                 }
-                f_openWindow2('product/Dep/StockIn_Add.aspx?id=' + rows.id + "&astatus=" + rows.status, "修改入库单", 1050, 680, buttons);
+                f_openWindow2('product/StockIn_Add.aspx?id=' + rows.id + "&status=" + rows.status, "修改入库单", 1050, 680, buttons);
             }
             else {
                 $.ligerDialog.warn('请选择入库单！');
             }
         }
         function add() {
-            var buttons = [];
-            buttons.push({ text: '保存', onclick: f_save });
-            //buttons.push({ text: '生成盘点单', onclick: create_take });
-            buttons.push({ text: '保存并入库', onclick: f_saveAuth });
-            f_openWindow2('product/Dep/StockIn_Add.aspx?astatus=0', "新增入库单", 1050, 680, buttons);
+            var oid = "addtemp";
+            $.ajax({
+                url: "Product_StockIn.CheckHQAddOrder.xhd?intype=0", type: "Get",
+                data: { rnd: Math.random() },
+                async: false,
+                success: function (result) {
+                    if (result != null && result.length > 0) {
+                        $.ligerDialog.confirm("上笔入库单未完成是否继续上笔订单操作,否则上笔入库单将回收删除", function (yes) {
+                            if (yes) {
+                                oid = result;
+                                AddOrder(oid);
+                            } else {
+                                $.ajax({
+                                    url: "Product_StockIn.del.xhd?intype=0", type: "POST",
+                                    data: { id: result, rnd: Math.random() },
+                                    dataType: 'json',
+                                    success: function (result) {
+                                        var obj = eval(result);
+                                        if (obj.isSuccess) {
+                                            f_load();
+                                        }
+                                    },
+                                    error: function () {
+
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        AddOrder(oid);
+                    }
+                },
+                error: function () {
+
+                }
+            });
+
         }
+        function AddOrder(oid) {
 
-        function create_take() {
-
-
+            var buttons = [];
+            buttons.push({ text: '保存并入库', onclick: f_saveAuth });
+            f_openWindow2('product/StockIn_Add.aspx?id=' + oid, "新增入库单", 1050, 680, buttons, 9002, false, f_load);
         }
 
         function del() {
             var manager = $("#maingrid4").ligerGetGridManager();
             var row = manager.getSelectedRow();
             if (row) {
-                var msg = "入库单删除不能恢复，确定删除？";
+                var msg = "入库单删除不能恢复已入库商品也会删除，确定删除？";
                 if (row.status == 1) {
-                    $.ligerDialog.warn("已提交保存不能删除");
+                    $.ligerDialog.warn("已提交入库不能删除");
                     return false;
                 }
 
                 $.ligerDialog.confirm(msg, function (yes) {
                     if (yes) {
                         $.ajax({
-                            url: "Product_StockIn.del.xhd?intype=1", type: "POST",
+                            url: "Product_StockIn.del.xhd?intype=0", type: "POST",
                             data: { id: row.id, rnd: Math.random() },
                             dataType: 'json',
                             success: function (result) {
@@ -299,7 +474,7 @@
                             }
                         });
                     }
-                })
+                });
             }
             else {
                 $.ligerDialog.warn("请选择入库单");
@@ -321,7 +496,7 @@
                 dialog.close();
                 $.ligerDialog.waitting('数据保存中,请稍候...');
                 $.ajax({
-                    url: "Product_StockIn.save.xhd?intype=1&auth=" + auth, type: "POST",
+                    url: "Product_StockIn.HQSave.xhd?intype=0&auth=" + auth, type: "POST",
                     data: issave,
                     dataType: 'json',
                     success: function (result) {
@@ -346,17 +521,6 @@
                     }
                 });
 
-            }
-        }
-        function ExcelDC() {
-
-            var manager = $("#maingrid4").ligerGetGridManager();
-            var row = manager.getSelectedRow();
-            if (row) {
-                location.href = "/product/ExportProduct.aspx?etype=3&stockid=" + row.id + "&rnd=" + Math.random();
-            }
-            else {
-                $.ligerDialog.warn("请选择入库单");
             }
         }
 

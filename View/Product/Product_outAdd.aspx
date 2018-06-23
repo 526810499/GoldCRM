@@ -130,11 +130,16 @@
                             return toMoney(item.AttStoneWeight);
                         }
                     },
-                    {
-                        display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.CostsTotal);
-                        }
+                {
+                    display: '销售工费', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
+                        return toMoney(item.SalesCostsTotal);
                     }
+                }, {
+                    display: '销售价格', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
+                        return toMoney(item.SalesTotalPrice);
+                    }
+                },
+                { display: '一口价', name: 'FixedPrice', width: 120, render: function (item) { if (item.FixedPrice == null) { return '0'; } else { return toMoney(item.FixedPrice); } } },
                 ],
                 allowHideColumn: false,
                 title: '出库明细',

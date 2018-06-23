@@ -318,6 +318,21 @@ namespace XHD.DAL
         }
 
         /// <summary>
+        /// 通过试图查找
+        /// </summary>
+        /// <param name="strWhere"></param>
+        /// <returns></returns>
+        public DataSet GetListView(string strWhere)
+        {
+            string sql = "select * from view_AllotProduct";
+            if (strWhere.Trim() != "")
+            {
+                sql += (" where " + strWhere);
+            }
+            return DbHelperSQL.Query(sql);
+        }
+
+        /// <summary>
         /// 分页获取数据列表
         /// </summary>
         public DataSet GetList(int PageSize, int PageIndex, string strWhere, string filedOrder, out string Total)

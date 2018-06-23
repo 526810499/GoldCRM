@@ -37,7 +37,7 @@
                    { display: '商品类别', name: 'category_name', align: 'left', width: 120, totalSummary: { type: 'total', render: function (item) { return "<span id='tspan'>合计:</span>"; } } },
 
                    {
-                       display: '重量(克)', name: 'Weight', width: 80, align: 'left', render: function (item) {
+                       display: '重量(克)', name: 'Weight', width: 60, align: 'left', render: function (item) {
                            return toMoney(item.Weight);
                        }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='Weight'>" + toMoney(item.sum) + "</span>"; } }
                    },
@@ -72,37 +72,38 @@
                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='StonePrice'>" + toMoney(item.sum) + "</span>"; } }
                    },
                    {
-                       display: '金价小计(￥)', name: 'GoldTotal', width: 80, align: 'right', render: function (item) {
+                       display: '金价小计(￥)', name: 'GoldTotal', width: 120, align: 'right', render: function (item) {
                            return toMoney(item.GoldTotal);
                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='GoldTotal'>" + toMoney(item.sum) + "</span>"; } }
                    },
                    {
-                       display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
+                       display: '工费小计(￥)', name: 'CostsTotal', width: 120, align: 'right', render: function (item) {
                            return toMoney(item.CostsTotal);
                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='CostsTotal'>" + toMoney(item.sum) + "</span>"; } }
                    },
                    {
-                       display: '成本总价(￥)', name: 'Totals', width: 80, align: 'right', render: function (item) {
+                       display: '成本总价(￥)', name: 'Totals', width: 120, align: 'right', render: function (item) {
                            return toMoney(item.Totals);
                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='Totals'>" + toMoney(item.sum) + "</span>"; } }
                    },
                    {
-                       display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
+                       display: '销售工费(￥)', name: 'SalesCostsTotal', width: 120, align: 'right', render: function (item) {
                            return toMoney(item.SalesCostsTotal);
                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='SalesCostsTotal'>" + toMoney(item.sum) + "</span>"; } }
                    },
                    {
-                       display: '销售价格(￥)', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
+                       display: '销售价格(￥)', name: 'SalesTotalPrice', width: 120, align: 'right', render: function (item) {
                            return toMoney(item.SalesTotalPrice);
                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='SalesTotalPrice'>" + toMoney(item.sum) + "</span>"; } }
                    },
+                   { display: '一口价', name: 'FixedPrice', width: 120, render: function (item) { if (item.FixedPrice == null) { return '0'; } else { return toMoney(item.FixedPrice); } } },
                    { display: '关联门店', name: 'indep_name', width: 120, render: function (item) { if (item.indep_name == null) { return "总部" } else { return item.indep_name; } } },
-                    //{ display: '现存仓库', name: 'warehouse_name', width: 120, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
-                   {
-                       display: '状态', name: 'status', width: 80, align: 'right', render: function (item) {
-                           return GetproductStatus(item.status);
-                       }
-                   }
+
+                 {
+                     display: '状态', name: 'status', width: 60, align: 'right', render: function (item) {
+                         return GetproductStatus(item.status);
+                     }
+                 }
             ];
 
 
@@ -237,8 +238,7 @@
                 $("#maingrid4").ligerGetGridManager()._onResize();
             }
         }
-        //查询
-        function doserch() {
+        function GetSearchWhere() {
             var sendtxt = "&allstock=1&sum=1&rnd=" + Math.random();
             var serchtxt = "scode=" + $("#scode").val();
             serchtxt += "&stext=" + $("#stext").val();
@@ -247,9 +247,24 @@
             //serchtxt += "&warehouse_id=" + $("#sck_val").val();
             serchtxt += "&sindep_id=" + $("#sdep_val").val();
             serchtxt += sendtxt;
+            return serchtxt;
+        }
+
+        //查询
+        function doserch() {
+
+            var serchtxt = GetSearchWhere();
             var manager = $("#maingrid4").ligerGetGridManager();
             manager._setUrl("Product.grid.xhd?" + serchtxt);
         }
+
+        function ExcelDC() {
+            var serchtxt = GetSearchWhere();
+
+            location.href = "Product.ExoportHQStock.xhd?etype=7" + serchtxt;
+
+        }
+
 
 
         function edit() {

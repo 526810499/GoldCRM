@@ -8,9 +8,20 @@ namespace XHD.Model
     public partial class Product
     {
         public Product()
-        { }
+        {
+        }
+
+        public Product(int _isAddTemp)
+        {
+            this.isAddTemp = _isAddTemp;
+        }
+
         #region Model
 
+        /// <summary>
+        /// 是否添加临时记录
+        /// </summary>
+        public int isAddTemp { get; set; }
 
 
         private string _id;
@@ -41,6 +52,21 @@ namespace XHD.Model
         private int? _outstatus;
         private decimal? _salestotalprice;
         private decimal? _salescoststotal;
+
+        /// <summary>
+        /// 一口价
+        /// </summary>
+        public decimal FixedPrice { get; set; }
+
+        /// <summary>
+        /// 标签价格
+        /// </summary>
+        public decimal PriceTag { get; set; }
+
+        /// <summary>
+        /// 入库单号
+        /// </summary>
+        public string StockID { get; set; }
 
         /// <summary>
         /// 圈号手寸
@@ -97,7 +123,7 @@ namespace XHD.Model
             get { return _category_id; }
         }
         /// <summary>
-        /// 1 入库 101 门店入库 2调拨 201 门店调拨 3出库 301 门店出库 4已销售
+        /// -1 临时入库  1 入库 101 门店入库 2调拨 201 门店调拨 3出库 301 门店出库 4已销售
         /// </summary>
         public int status
         {
@@ -303,7 +329,7 @@ namespace XHD.Model
 
 
     [Serializable]
-    public  class ProductAllot
+    public class ProductAllot
     {
         /// <summary>
         /// 

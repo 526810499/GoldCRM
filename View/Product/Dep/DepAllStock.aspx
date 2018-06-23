@@ -64,9 +64,9 @@
                     {
                         display: '销售价格', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
                             return toMoney(item.SalesTotalPrice);
-                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='SalesTotalPrice'>" + toMoney(item.sum)m + "</span>"; } }
+                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='SalesTotalPrice'>" + toMoney(item.sum) + "</span>"; } }
                     },
-                    //{ display: '现存仓库', name: 'warehouse_name', width: 120, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
+                    { display: '一口价', name: 'FixedPrice', width: 120, render: function (item) { if (item.FixedPrice == null) { return '0'; } else { return toMoney(item.FixedPrice); } } },
                     {
                         display: '总状态', name: 'status', width: 80, align: 'right', render: function (item) {
                             return GetproductStatus(item.status);
@@ -206,8 +206,9 @@
                 $("#maingrid4").ligerGetGridManager()._onResize();
             }
         }
+
         //查询
-        function doserch() {
+        function GetSearchWhere() {
             var sendtxt = "&depdata=1&sum=1&rnd=" + Math.random();
             var serchtxt = "scode=" + $("#scode").val();
             serchtxt += "&stext=" + $("#stext").val();
@@ -215,6 +216,14 @@
             serchtxt += "&categoryid=" + $("#sfl_val").val();
             //serchtxt += "&warehouse_id=" + $("#sck_val").val();
             serchtxt += sendtxt;
+            
+            return serchtxt;
+        }
+        //查询
+        function doserch() {
+          
+            var serchtxt = GetSearchWhere();
+           
             var manager = $("#maingrid4").ligerGetGridManager();
             manager._setUrl("Product.grid.xhd?" + serchtxt);
         }
@@ -230,11 +239,13 @@
                 $.ligerDialog.warn('请选择商品！');
             }
         }
-        function add() {
+ 
+        function ExcelDC() {
+            var serchtxt = GetSearchWhere();
 
-            // f_openWindow('product/product_add.aspx?categoryid=', "新增商品", 700, 580, f_save);
+            location.href = "Product.ExoportHQStock.xhd?etype=8" + serchtxt;
+
         }
-
 
         function f_load() {
             var manager = $("#maingrid4").ligerGetGridManager();

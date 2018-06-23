@@ -125,7 +125,7 @@
 
         function doChangeSearch() {
             var v = $("#scode").val();
-            if (v != undefined && v.length == 14 || isCode == 1) {
+            if (v != undefined && v.length == 7 || isCode == 1) {
                 doserch();
             }
         }
@@ -135,7 +135,7 @@
         function doserch() {
             var scode = $("#scode").val();
             //必须要输入条形码
-            if ((scode.length < 14 || itemsCode.indexOf(scode) > -1) && isCode == 0) {
+            if ((scode.length < 7 || itemsCode.indexOf(scode) > -1) && isCode == 0) {
                 return false;
             }
             var notfindadd = getparastr("notfindadd", 1);
@@ -158,7 +158,7 @@
             $.get(url, function (rdata, textStatus) {
 
                 var data = eval('(' + rdata + ')');
-                if (data.Total <= 0 && notfindadd == 1 && scode.length == 14) {
+                if (data.Total <= 0 && notfindadd == 1 && scode.length == 7) {
                     if (itemsCode.indexOf(scode) <= -1) {
                         var nobj = { id: scode, product_name: "", category_name: "", BarCode: scode, Weight: 0, SalesCostsTotal: 0, SalesTotalPrice: 0, status: 9999, remark: "库存中未找到商品" };
                         itemsCode.push(scode);

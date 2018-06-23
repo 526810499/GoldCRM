@@ -158,14 +158,19 @@ namespace XHD.DAL
         /// </summary>
         public DataSet GetList(string strWhere)
         {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("select id,stockid,barcode,createdep_id,remark,warehouse_id,oldwarehouse_id ");
-            strSql.Append(" FROM Product_StockInDetial ");
+            string sql = @"select   p.BarCode,p.product_name,c.product_category AS category_name, p.Weight, p.SalesCostsTotal, p.SalesTotalPrice, p.CostsTotal, p.Totals,  p.FixedPrice,p.remarks
+                         from dbo.Product_StockInDetial(NOLOCK) AS ptd 
+                        INNER JOIN dbo.Product(NOLOCK) AS p ON ptd.BarCode = p.BarCode 
+                        INNER JOIN dbo.Product_category(NOLOCK) AS c ON p.category_id = c.id  ";
+
             if (strWhere.Trim() != "")
             {
-                strSql.Append(" where " + strWhere);
+                sql += (" WHERE " + strWhere);
             }
-            return DbHelperSQL.Query(strSql.ToString());
+
+
+
+            return DbHelperSQL.Query(sql.ToString());
         }
 
         /// <summary>
@@ -244,10 +249,10 @@ namespace XHD.DAL
         {
             StringBuilder strSql_grid = new StringBuilder();
             StringBuilder strSql_total = new StringBuilder();
-            strSql_total.Append(" SELECT COUNT(id) FROM Product_StockInDetial(nolock) ");
+            strSql_total.Append(" SELECT COUNT(id) FROM Product_StockInDetial(nolock) as ptd ");
             strSql_grid.Append("SELECT ");
             strSql_grid.Append("      * ");
-            strSql_grid.Append(@" FROM ( select   c.product_category AS category_name, p.BarCode, p.Weight, p.SalesCostsTotal, 
+            strSql_grid.Append(@" FROM ( select   p.FixedPrice,c.product_category AS category_name, p.BarCode, p.Weight, p.SalesCostsTotal, 
       p.SalesTotalPrice, p.CostsTotal, p.Totals, p.product_name, ROW_NUMBER() OVER( Order by " + filedOrder + " ) AS n from dbo.Product_StockInDetial(NOLOCK) AS ptd INNER JOIN dbo.Product(NOLOCK) AS p ON ptd.BarCode = p.BarCode INNER JOIN dbo.Product_category(NOLOCK) AS c ON p.category_id = c.id ");
             if (strWhere.Trim() != "")
             {

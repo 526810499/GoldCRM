@@ -47,7 +47,7 @@ namespace XHD.Model
             get { return _create_time; }
         }
         /// <summary>
-        /// 状态 1正常
+        /// 状态 0 未保存 1 已提交入库  -1 临时单
         /// </summary>
         public int status
         {

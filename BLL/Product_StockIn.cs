@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 
@@ -32,6 +33,26 @@ namespace XHD.BLL
         }
 
         /// <summary>
+        /// 总部入库
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public bool HQUpdateStock(Model.Product_StockIn model)
+        {
+            return dal.HQUpdateStock(model);
+        }
+
+        /// <summary>
+        /// 总部入库修改入库商品状态
+        /// </summary>
+        /// <param name="Stauts"></param>
+        /// <param name="StockID"></param>
+        /// <returns></returns>
+        public bool HQUpdateProductStockStatus(string StockID)
+        {
+            return dal.HQUpdateProductStockStatus(StockID);
+        }
+        /// <summary>
         /// 删除一条数据
         /// </summary>
         public bool Delete(string id)
@@ -54,6 +75,18 @@ namespace XHD.BLL
         {
             return dal.GetList(strWhere);
         }
+
+        /// <summary>
+        /// 检查总部入库订单
+        /// </summary>
+        /// <param name="createid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public string CheckHQAddOrder(string createid, int status,int inType)
+        {
+            return dal.CheckHQAddOrder(createid, status, inType);
+        }
+
         /// <summary>
         /// 获得前几行数据
         /// </summary>
@@ -61,7 +94,7 @@ namespace XHD.BLL
         {
             return dal.GetList(Top, strWhere, filedOrder);
         }
- 
+
         /// <summary>
         /// 获得数据列表
         /// </summary>

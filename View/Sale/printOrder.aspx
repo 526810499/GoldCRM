@@ -85,7 +85,7 @@
 
     <div id="divprint">
         <div>
-            <div style="padding-top: 12px; padding-left: 120px" id="cuser"></div>
+            <div style="padding-top: 5px; padding-left: 120px" id="cuser"></div>
             <div style="padding-top: 5px; padding-left: 120px" id="oid"></div>
             <div style="padding-top: 5px; padding-left: 120px" id="oday"></div>
             <div style="padding-top: 5px; padding-left: 120px" id="otime"></div>

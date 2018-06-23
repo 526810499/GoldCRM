@@ -70,6 +70,46 @@ namespace XHD.DAL
                 return false;
             }
         }
+
+        /// <summary>
+        /// 总部入库
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public bool HQUpdateStock(Model.Product_StockIn model)
+        {
+
+            string sql = @"update Product_StockIn set Status=@Status,remark=@remark where ID=@ID";
+            SqlParameter[] par = {
+                new SqlParameter("@ID",model.id),
+                 new SqlParameter("@Status",model.status),
+                  new SqlParameter("@remark",model.remark),
+            };
+
+            return DbHelperSQL.ExecuteSql(sql, par) > 0;
+        }
+
+
+
+        /// <summary>
+        /// 总部入库修改入库商品状态
+        /// </summary>
+        /// <param name="Stauts"></param>
+        /// <param name="StockID"></param>
+        /// <returns></returns>
+        public bool HQUpdateProductStockStatus(string StockID)
+        {
+
+            string sql = @"update Product set Status=1  where StockID=@StockID and status=-1";
+            SqlParameter[] par = {
+                new SqlParameter("@StockID",StockID),
+            };
+
+            return DbHelperSQL.ExecuteSql(sql, par) > 0;
+        }
+
+
+
         /// <summary>
         /// 更新一条数据
         /// </summary>
@@ -189,6 +229,24 @@ namespace XHD.DAL
                 strSql.Append(" where " + strWhere);
             }
             return DbHelperSQL.Query(strSql.ToString());
+        }
+
+        /// <summary>
+        /// 检查总部入库订单
+        /// </summary>
+        /// <param name="createid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public string CheckHQAddOrder(string create_id, int status,int inType)
+        {
+            string sql = "select id from Product_StockIn(nolock) where create_id=@create_id and  status=@status and inType=@inType ";
+            SqlParameter[] parameters = {
+                    new SqlParameter("@status", SqlDbType.Int) { Value=status},
+                    new SqlParameter("@inType", SqlDbType.Int) { Value=inType},
+                    new SqlParameter("@create_id", SqlDbType.NVarChar,50) { Value=create_id},
+            };
+
+            return DbHelperSQL.ExecuteScalar(sql, parameters).CString("");
         }
 
         /// <summary>

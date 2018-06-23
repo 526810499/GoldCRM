@@ -70,6 +70,29 @@ namespace XHD.BLL
             return dal.GetCategoryCounts(ID);
         }
 
+        /// <summary>
+        /// 获取序列号条形码
+        /// </summary>
+        /// <param name="Type"></param>
+        /// <returns></returns>
+        public Sys_SerialNumber GetSerialNumber(SerialNumberType Type)
+        {
+            return dal.GetSerialNumber(Type);
+        }
+
+
+        /// <summary>
+        /// 重置序列号
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <param name="BegLetter"></param>
+        /// <param name="Counts"></param>
+        /// <returns></returns>
+        public bool ResetSerialNumber(long ID, string BegLetter, int Counts)
+        {
+            return dal.ResetSerialNumber(ID, BegLetter, Counts);
+        }
+
 
         /// <summary>
         /// 获得数据列表

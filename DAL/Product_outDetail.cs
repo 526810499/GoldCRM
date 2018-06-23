@@ -294,8 +294,8 @@ namespace XHD.DAL
         public DataSet GetList2(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select Product.BarCode,Product.product_name,Product.Weight,Product.CostsTotal,Product.CostsTotal,Product_outDetail.create_time ");
-            strSql.Append(" FROM Product_outDetail(nolock) inner join Product(nolock) on Product_outDetail.barCode=Product.BarCode ");
+            strSql.Append("select * ");
+            strSql.Append(" FROM view_outProduct");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);

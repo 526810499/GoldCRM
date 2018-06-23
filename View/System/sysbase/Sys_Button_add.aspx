@@ -47,8 +47,9 @@
         });
 
         function f_save() {
+            var btnid = getparastr("btnid","");
             if ($(form1).valid()) {
-                var sendtxt = "&btnid=" + getparastr("btnid") + "&menuid=" + getparastr("menuid") + "&isHide=" + $("#T_isHide_val").val();
+                var sendtxt = "&btnid=" + btnid + "&menuid=" + getparastr("menuid") + "&isHide=" + $("#T_isHide_val").val() + "&adbtnid=" + $("#T_btn_ID").val();
                 return $("form :input").fieldSerialize() + sendtxt;
             }
         }
@@ -73,6 +74,9 @@
                     thmanager.setValue(obj.isHide);
                 }
             });
+            if (oaid != null && oaid.length > 0) {
+                $("#idtr").hide();
+            }
         }
         function f_selectContact() {
             if (winicons) {
@@ -158,6 +162,17 @@
                 <td height="23">
 
                     <input type="text" id="T_btn_name" name="T_btn_name" ltype="text" ligerui="{width:180}" validate="{required:true}" />
+
+                </td>
+            </tr>
+            <tr id="idtr">
+                <td height="23" style="width: 88px" colspan="2">
+
+                    <div align="left" style="width: 62px">°´Å¥ID£º</div>
+                </td>
+                <td height="23">
+
+                    <input type="text" id="T_btn_ID" name="T_btn_ID" ltype="text" ligerui="{width:180}" validate="{required:false}" />
 
                 </td>
             </tr>

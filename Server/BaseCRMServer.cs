@@ -35,6 +35,16 @@ namespace XHD.Server
             uid = PageValidate.InputText(employee.uid, 50);
         }
 
+        protected void ExportError(string msg)
+        {
+            System.Web.HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment; filename=导出结果失败_错误提示信息.txt");
+            System.Web.HttpContext.Current.Response.ContentType = "text/plain";
+            System.Web.HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.UTF8;
+            System.Web.HttpContext.Current.Response.Write(msg);
+            System.Web.HttpContext.Current.Response.End();
+
+        }
+
         /// <summary>
         /// 盘点是否管理员
         /// </summary>
@@ -151,7 +161,7 @@ namespace XHD.Server
         {
             GetDataAuth dataauth = new GetDataAuth();
             return dataauth.getAuthDep(emp_id, 0);
- 
+
         }
 
 

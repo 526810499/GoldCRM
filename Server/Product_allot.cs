@@ -75,7 +75,7 @@ namespace XHD.Server
                     //需要判断是否有审核权限
                     if (status > 1)
                     {
-                        if (!CheckIsAdmin()&&!CheckBtnAuthority(authRightID))
+                        if (!CheckIsAdmin() && !CheckBtnAuthority(authRightID))
                         {
                             return XhdResult.Error("您没有该操作权限,请确认后在操作！").ToString();
                         }
@@ -154,7 +154,7 @@ namespace XHD.Server
                                 create_time = DateTime.Now,
                                 allotType = model.allotType,
                                 ToWarehouse = model.NowWarehouse,
-                                todep_id=model.todep_id,
+                                todep_id = model.todep_id,
 
                             });
                             if (!r)
@@ -210,6 +210,9 @@ namespace XHD.Server
             int allotType = request["allottype"].CInt(0, false);
             string serchtxt = $" allotType=" + allotType;
 
+            //调拨审核
+            int dbauth = request["dbauth"].CInt(0, false);
+
 
             if (!string.IsNullOrEmpty(request["whid"]))
                 serchtxt += $" and NowWarehouse={request["whid"].CInt(0, false)}";
@@ -235,7 +238,27 @@ namespace XHD.Server
                 }
                 serchtxt += $" and id in({ids.Trim(',')})";
             }
-            serchtxt = GetSQLCreateIDWhere(serchtxt, true);
+
+            //调拨审核的则等于当前部门的
+            if (dbauth == 1)
+            {
+                serchtxt += $" and status<>0  ";
+                //是管理员并且拥有所有数据权限
+                if (uid == "admin" || CheckBtnAuthority(allDataBtnid))
+                {
+
+                }
+                else/* if (CheckBtnAuthority(depDataBtnid))*/
+                {
+                    serchtxt += $" and fromdep_id='{dep_id}'";
+                }
+                //else {//什么权限都没有
+                //    serchtxt += $" and fromdep_id='none'";
+                //}
+            }
+            else {
+                serchtxt = GetSQLCreateIDWhere(serchtxt, true);
+            }
 
             DataSet ds = allotBll.GetList(PageSize, PageIndex, serchtxt, sorttext, out Total);
             string dt = GetGridJSON.DataTableToJSON1(ds.Tables[0], Total);
@@ -321,7 +344,7 @@ namespace XHD.Server
                 {
                     status = 3;
                 }
- 
+
                 bool r = allotBll.AuthApproved(rows["allotType"].CInt(0, false), id, emp_id, status, remark, rows["todep_id"].CString(""));
                 if (r)
                 {

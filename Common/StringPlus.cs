@@ -200,33 +200,27 @@ namespace XHD.Common
 
         #endregion
 
-        /// <summary>
-        /// 获取当前随机字母
-        /// </summary>
-        public static string GetRandomLetters()
-        {
 
-            int r = GetRandom(1, 9);
 
-            return NunberToChar(r);
-        }
+
 
         /// <summary>
-        /// 数字转字母
+        /// 要转换成字母的数字（数字范围在闭区间[65,90]）
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        public static string NunberToChar(int number)
+        public static string NunToChar(int number)
         {
-            if (1 <= number && 36 >= number)
+            if (65 <= number && 90 >= number)
             {
-                int num = number + 64;
                 System.Text.ASCIIEncoding asciiEncoding = new System.Text.ASCIIEncoding();
-                byte[] btNumber = new byte[] { (byte)num };
+                byte[] btNumber = new byte[] { (byte)number };
                 return asciiEncoding.GetString(btNumber);
             }
-            return number.CString("");
+
+            throw new Exception("数字不在转换范围间[65,90]");
         }
+
 
         /// <summary>
         /// 获取指定范围的随机数

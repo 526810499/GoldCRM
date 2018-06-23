@@ -734,13 +734,13 @@ function setColumn(type, menuID, columnID, value) {
 }
 
 var activeDialog = null;
-function f_openWindow(url, title, width, height, onOK, zindex, showmax) {
+function f_openWindow(url, title, width, height, onOK, zindex, showmax, closeEvnet) {
     var z_index = zindex || 9001;
     var showMax = showmax || true;
     var buttons = [];
     if (onOK)
         buttons.push({ text: '保存', onclick: onOK });
-    buttons.push({ text: '关闭', onclick: function (item, dialog) { dialog.close(); } })
+    buttons.push({ text: '关闭', onclick: function (item, dialog) { dialog.close(); if (closeEvnet != undefined && closeEvnet != null) { closeEvnet;} } })
 
     var dialogOptions = {
         zindex: z_index,
@@ -759,14 +759,14 @@ function f_openWindow(url, title, width, height, onOK, zindex, showmax) {
 }
 
 var activeDialog2 = null;
-function f_openWindow2(url, title, width, height, buttons, zindex, showmax) {
+function f_openWindow2(url, title, width, height, buttons, zindex, showmax,closeEvnet) {
     var z_index = zindex || 9001;
     var showMax = showmax || true;
     if (buttons == null) {
         buttons = [];
     }
 
-    buttons.push({ text: '关闭', onclick: function (item, dialog) { dialog.close(); } });
+    buttons.push({ text: '关闭', onclick: function (item, dialog) { dialog.close();   if (closeEvnet != undefined && closeEvnet != null) {   closeEvnet; } } });
 
     var dialogOptions = {
         zindex: z_index,

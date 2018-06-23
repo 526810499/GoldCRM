@@ -28,18 +28,33 @@ namespace XHD.View.Product
             if (!IsPostBack)
             {
 
-                //导出数据类型 0 条形码导出  1销售利润表导出 
+                //导出数据类型 0 条形码导出  1销售利润表导出  2 总部入库导出 3门店入库导出订单  4总部出库导出订单 5门店出库导出订单 6 门店调拨导出订单 
                 exportType = Request["etype"].CInt(0, false);
 
                 switch (exportType)
                 {
                     case 0:
-                        Export();
+                        ExportProductBarcode();
                         break;
                     case 1:
                         ExportOrderLiR();
                         break;
-       
+                    case 2:
+                        ExportHQSotckid();
+                        break;
+                    case 3:
+                        ExportDeepSotckid();
+                        break;
+                    case 4:
+                        ExportHQOut();
+                        break;
+                    case 5:
+                        ExportDeepOut();
+                        break;
+
+                    case 6:
+                        ExportDeepAllot();
+                        break;
                 }
 
 
@@ -57,13 +72,13 @@ namespace XHD.View.Product
             return candel;
         }
 
-        #region 导出商品条形码
+        #region 导出商品条形码  0
         /// <summary>
         /// 导出商品条形码
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-        public string Export()
+        public string ExportProductBarcode()
         {
 
             bool candel = CheckBtnAuthority("0DBE7337-D4D3-4895-8C8F-5E0A4ECEEE0A");
@@ -85,7 +100,7 @@ namespace XHD.View.Product
             DataSet ds = product.GetList(where);
             if (ds != null && ds.Tables[0].Rows != null && ds.Tables[0].Rows.Count > 0)
             {
-                string fname = DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls";
+                string fname = DateTime.Now.ToString("yyyyMMddHHmmss");
 
                 Dictionary<string, string> nameList = new Dictionary<string, string>();
                 nameList.Add("BarCode", "条形码");
@@ -94,11 +109,11 @@ namespace XHD.View.Product
                 nameList.Add("Weight", "重量(克)");
                 nameList.Add("GoldTotal", "金价小计(￥)");
                 nameList.Add("CostsTotal", "工费小计(￥)");
-                nameList.Add("Totals", "成本总价(￥)");
+                //nameList.Add("Totals", "成本总价(￥)");
                 nameList.Add("SalesCostsTotal", "销售工费(￥)");
                 nameList.Add("SalesTotalPrice", "销售价格(￥)");
                 nameList.Add("remark", "备注");
-         
+
                 ExportHelper.ExportDataTableToExcel(ds.Tables[0], nameList, nameList.Keys.ToArray(), DateTime.Now.ToString("MMddHHmmss"), fname);
             }
             else {
@@ -118,7 +133,7 @@ namespace XHD.View.Product
             Response.End();
 
         }
-        #region 导出销售利润报表
+        #region 导出销售利润报表 1
 
 
 
@@ -152,7 +167,7 @@ namespace XHD.View.Product
                 {
                     right = new BLL.Sys_role_emp().CheckUserRoleRight(employee.id, "9A513452-7CD6-4A80-AC47-53493DF86DB9");
                 }
-                string fname = DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls";
+                string fname = DateTime.Now.ToString("yyyyMMddHHmmss");
                 Dictionary<string, int> hcWidth = new Dictionary<string, int>();
                 Dictionary<string, string> nameList = new Dictionary<string, string>();
                 nameList.Add("rows", "序号");
@@ -185,6 +200,233 @@ namespace XHD.View.Product
             }
 
             return "";
+        }
+
+        #endregion
+
+        #region 总部入库单导出  2
+
+        private void ExportHQSotckid()
+        {
+            string stockid = Request["stockid"].CString("");
+            if (string.IsNullOrWhiteSpace(stockid)) { ExportError("请选择订单"); return; }
+
+            bool candel = CheckBtnAuthority("0DBE7337-D4D3-4895-8C8F-5E0A4ECEEE0A");
+
+            if (!candel)
+            {
+                ExportError("无此权限");
+                return;
+            }
+
+            string where = $" stockid='{PageValidate.InputText(stockid, 36)}'";
+            DataSet ds = product.GetList(where);
+            if (ds != null && ds.Tables[0].Rows != null && ds.Tables[0].Rows.Count > 0)
+            {
+                string fname = "总部入库" + stockid;
+
+                Dictionary<string, string> nameList = new Dictionary<string, string>();
+                nameList.Add("BarCode", "条形码");
+                nameList.Add("product_name", "商品名称");
+                nameList.Add("category_name", "商品分类");
+                nameList.Add("Weight", "重量(克)");
+                nameList.Add("GoldTotal", "金价小计(￥)");
+                nameList.Add("CostsTotal", "工费小计(￥)");
+                nameList.Add("SalesCostsTotal", "销售工费(￥)");
+                nameList.Add("SalesTotalPrice", "销售价格(￥)");
+                nameList.Add("FixedPrice", "一口价(￥)");
+                nameList.Add("remarks", "备注");
+
+                ExportHelper.ExportDataTableToExcel(ds.Tables[0], nameList, nameList.Keys.ToArray(), DateTime.Now.ToString("MMddHHmmss"), fname, null, null, true, true, "总部入库单：" + stockid);
+            }
+            else {
+                ExportError("无数据导出");
+            }
+        }
+
+        #endregion
+
+        #region 门店入库单导出 3
+
+        private void ExportDeepSotckid()
+        {
+            string stockid = Request["stockid"].CString("");
+            if (string.IsNullOrWhiteSpace(stockid)) { ExportError("请选择订单"); return; }
+
+            bool candel = CheckBtnAuthority("E49C0800-B4C2-402A-88DB-4F373289F577");
+
+            if (!candel)
+            {
+                ExportError("无此权限");
+                return;
+            }
+
+            string where = $" ptd.stockid='{PageValidate.InputText(stockid, 36)}'";
+            DataSet ds = new BLL.Product_StockInDetial().GetList(where);
+            if (ds != null && ds.Tables[0].Rows != null && ds.Tables[0].Rows.Count > 0)
+            {
+                string fname = "门店入库" + stockid;
+
+                Dictionary<string, string> nameList = new Dictionary<string, string>();
+                nameList.Add("BarCode", "条形码");
+                nameList.Add("product_name", "商品名称");
+                nameList.Add("category_name", "商品分类");
+                nameList.Add("Weight", "重量(克)");
+                nameList.Add("GoldTotal", "金价小计(￥)");
+                nameList.Add("CostsTotal", "工费小计(￥)");
+                nameList.Add("SalesCostsTotal", "销售工费(￥)");
+                nameList.Add("SalesTotalPrice", "销售价格(￥)");
+                nameList.Add("FixedPrice", "一口价(￥)");
+                nameList.Add("remarks", "备注");
+
+                ExportHelper.ExportDataTableToExcel(ds.Tables[0], nameList, nameList.Keys.ToArray(), DateTime.Now.ToString("MMddHHmmss"), fname, null, null, true, true, "门店入库单：" + stockid);
+            }
+            else {
+                ExportError("无数据导出");
+            }
+
+        }
+
+        #endregion
+
+
+        #region 总部出单导出  4
+
+        private void ExportHQOut()
+        {
+            string outid = Request["outid"].CString("");
+            if (string.IsNullOrWhiteSpace(outid)) { ExportError("请选择订单"); return; }
+
+            bool candel = CheckBtnAuthority("208BCAE3-F1CC-4335-98A8-9B6358A0CAA7");
+
+            if (!candel)
+            {
+                ExportError("无此权限");
+                return;
+            }
+            string titles = Request["titles"].CString("");
+            string fname = "总部出库" + outid;
+            if (string.IsNullOrWhiteSpace(titles))
+            {
+                 titles=fname;
+            }
+            string where = $" outid='{PageValidate.InputText(outid, 36)}' and outType=0 ";
+            DataSet ds = new BLL.Product_outDetail().GetList2(where);
+            if (ds != null && ds.Tables[0].Rows != null && ds.Tables[0].Rows.Count > 0)
+            {
+                Dictionary<string, string> nameList = new Dictionary<string, string>();
+                nameList.Add("BarCode", "条形码");
+                nameList.Add("product_name", "商品名称");
+                nameList.Add("category_name", "商品分类");
+                nameList.Add("Weight", "重量(克)");
+                nameList.Add("GoldTotal", "金价小计(￥)");
+                nameList.Add("CostsTotal", "工费小计(￥)");
+                nameList.Add("SalesCostsTotal", "销售工费(￥)");
+                nameList.Add("SalesTotalPrice", "销售价格(￥)");
+                nameList.Add("FixedPrice", "一口价(￥)");
+                nameList.Add("remarks", "备注");
+
+                ExportHelper.ExportDataTableToExcel(ds.Tables[0], nameList, nameList.Keys.ToArray(), outid, fname, null, null, true, true, titles);
+            }
+            else {
+                ExportError("无数据导出");
+            }
+        }
+
+        #endregion
+
+        #region 门店出单导出 5
+
+        private void ExportDeepOut()
+        {
+            string outid = Request["outid"].CString("");
+            if (string.IsNullOrWhiteSpace(outid)) { ExportError("请选择订单"); return; }
+
+            bool candel = CheckBtnAuthority("F5A14EA6-C0BA-4CFD-B4FA-5C5B26100245");
+
+            if (!candel)
+            {
+                ExportError("无此权限");
+                return;
+            }
+            string titles = Request["titles"].CString("");
+            string fname = "门店出库" + outid;
+            if (string.IsNullOrWhiteSpace(titles))
+            {
+                titles = fname;
+            }
+            string where = $" outid='{PageValidate.InputText(outid, 36)}' and outType=1";
+            DataSet ds = new BLL.Product_outDetail().GetList2(where);
+            if (ds != null && ds.Tables[0].Rows != null && ds.Tables[0].Rows.Count > 0)
+            {
+                
+
+                Dictionary<string, string> nameList = new Dictionary<string, string>();
+                nameList.Add("BarCode", "条形码");
+                nameList.Add("product_name", "商品名称");
+                nameList.Add("category_name", "商品分类");
+                nameList.Add("Weight", "重量(克)");
+                nameList.Add("GoldTotal", "金价小计(￥)");
+                nameList.Add("CostsTotal", "工费小计(￥)");
+                nameList.Add("SalesCostsTotal", "销售工费(￥)");
+                nameList.Add("SalesTotalPrice", "销售价格(￥)");
+                nameList.Add("FixedPrice", "一口价(￥)");
+                nameList.Add("remarks", "备注");
+
+                ExportHelper.ExportDataTableToExcel(ds.Tables[0], nameList, nameList.Keys.ToArray(), DateTime.Now.ToString("MMddHHmmss"), fname, null, null, true, true, titles);
+            }
+            else {
+                ExportError("无数据导出");
+            }
+
+        }
+
+        #endregion
+
+        #region 门店调拨单 6
+
+        private void ExportDeepAllot()
+        {
+            string allotid = Request["allotid"].CString("");
+            if (string.IsNullOrWhiteSpace(allotid)) { ExportError("请选择订单"); return; }
+
+            bool candel = CheckBtnAuthority("73F601AB-DA9A-4E40-8A0A-F44C48965D11");
+
+            if (!candel)
+            {
+                ExportError("无此权限");
+                return;
+            }
+            string titles = Request["titles"].CString("");
+            string fname = "门店调拨" + allotid;
+            if (string.IsNullOrWhiteSpace(titles))
+            {
+                titles = fname;
+            }
+            string where = $" allotid='{PageValidate.InputText(allotid, 36)}' AND allotType=1  ";
+            DataSet ds = new BLL.Product_allotDetail().GetListView(where);
+            if (ds != null && ds.Tables[0].Rows != null && ds.Tables[0].Rows.Count > 0)
+            {
+               
+
+                Dictionary<string, string> nameList = new Dictionary<string, string>();
+                nameList.Add("BarCode", "条形码");
+                nameList.Add("product_name", "商品名称");
+                nameList.Add("category_name", "商品分类");
+                nameList.Add("Weight", "重量(克)");
+                nameList.Add("GoldTotal", "金价小计(￥)");
+                nameList.Add("CostsTotal", "工费小计(￥)");
+                nameList.Add("SalesCostsTotal", "销售工费(￥)");
+                nameList.Add("SalesTotalPrice", "销售价格(￥)");
+                nameList.Add("FixedPrice", "一口价(￥)");
+                nameList.Add("remarks", "备注");
+
+                ExportHelper.ExportDataTableToExcel(ds.Tables[0], nameList, nameList.Keys.ToArray(), DateTime.Now.ToString("MMddHHmmss"), fname, null, null, true, true, titles);
+            }
+            else {
+                ExportError("无数据导出");
+            }
+
         }
 
         #endregion

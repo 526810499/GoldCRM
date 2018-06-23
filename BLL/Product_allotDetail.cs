@@ -61,7 +61,7 @@ namespace XHD.BLL
         /// <param name="allotid"></param>
         /// <param name="barcode"></param>
         /// <returns></returns>
-        public bool Delete(int allotType,string allotid, string barcode)
+        public bool Delete(int allotType, string allotid, string barcode)
         {
             return dal.Delete(allotType, allotid, barcode);
         }
@@ -106,6 +106,15 @@ namespace XHD.BLL
             return dal.GetList(Top, strWhere, filedOrder);
         }
 
+        /// <summary>
+        /// 通过试图查找
+        /// </summary>
+        /// <param name="strWhere"></param>
+        /// <returns></returns>
+        public DataSet GetListView(string strWhere)
+        {
+            return dal.GetListView(strWhere);
+        }
 
         /// <summary>
         /// 分页获取数据列表

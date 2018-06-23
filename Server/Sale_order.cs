@@ -155,7 +155,7 @@ namespace XHD.Server
                 model.create_time = DateTime.Now;
                 model.arrears_invoice = model.Order_amount;
                 model.invoice_money = 0;
-                model.Serialnumber = "DD" + DateTime.Now.ToString("yyMMdd") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
+                model.Serialnumber = GetOrderID();
                 if (model.Order_status_id == "5587BCED-0A36-4EDF-9562-F962A9B1913C")
                 {
                     canAddIntegal = 1;
@@ -221,6 +221,29 @@ namespace XHD.Server
             }
 
         }
+        private static object objlock = new object();
+        /// <summary>
+        /// 获取订单号
+        /// </summary>
+        /// <returns></returns>
+        private string GetOrderID()
+        {
+            lock (objlock)
+            {
+                BLL.Product_category sbll = new BLL.Product_category();
+                Model.Sys_SerialNumber serial = sbll.GetSerialNumber(Model.SerialNumberType.OrderNO);
+                string orderid = "DD" + DateTime.Now.ToString("yyMMddHH");
+                if (serial.Times.Date != DateTime.Now.Date)
+                {
+                    sbll.ResetSerialNumber(serial.ID, "1", 1);
+                    serial.Counts = 1;
+                }
+
+                orderid = "DD" + DateTime.Now.ToString("yyMMddHH") + serial.Counts.CString("1").PadLeft(5, '0');
+
+                return orderid;
+            }
+        }
 
         private string GetStWhere()
         {
@@ -257,7 +280,8 @@ namespace XHD.Server
                 serchtxt += $" and Sale_order.emp_id = '{emp_id }'";
             }
 
-            serchtxt = GetSQLCreateIDWhere(serchtxt, true);
+            string temp = GetSQLCreateIDWhere(serchtxt, true);
+            serchtxt = temp.Replace("create_id", " Sale_order.create_id");
 
             return serchtxt;
         }

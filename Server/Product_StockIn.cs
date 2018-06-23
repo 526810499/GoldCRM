@@ -46,6 +46,63 @@ namespace XHD.Server
 
         }
 
+        /// <summary>
+        /// 总部入库保存
+        /// </summary>
+        /// <returns></returns>
+        public string HQSave()
+        {
+
+            model.remark = PageValidate.InputText(request["T_Remark"], 255);
+            model.inType = request["inType"].CInt(0, false);
+            string id = PageValidate.InputText(request["id"], 50);
+
+            string msg = "";
+            try
+            {
+                if (PageValidate.checkID(id, false))
+                {
+                    DataSet ds = bll.GetList($" id= '{id}' ");
+                    if (ds.Tables[0].Rows.Count < 1)
+                    {
+                        return XhdResult.Error("系统错误，无数据！").ToString();
+                    }
+                    model.status = 1;
+                    model.id = id;
+                    //  int status = ds.Tables[0].Rows[0]["status"].CInt(0, false);
+                    //修改备注信息
+                    bll.HQUpdateStock(model);
+                    //修改临时入库的
+                    bll.HQUpdateProductStockStatus(model.id);
+                }
+
+            }
+            catch (Exception error)
+            {
+                msg = error.ToString();
+                SoftLog.LogStr(error.ToString(), "Product_StockIn");
+                return XhdResult.Error("添加失败,请确认是否重复添加后在操作！").ToString();
+            }
+            finally
+            {
+                if (model.status == 1)
+                {
+                    bool r = detailBll.UpdateProductWareHouse(model.id, model.warehouse_id, dep_id);
+                    if (!r)
+                    {
+                        msg += "提交保存失败";
+                    }
+                }
+            }
+
+            if (msg.Length > 0)
+            {
+                return XhdResult.Success(msg + "<br/>入库保存失败,请确认后在操作！").ToString();
+            }
+
+            return XhdResult.Success().ToString();
+        }
+
         public string save()
         {
             model.warehouse_id = request["T_Warehouse_val"].CInt(0, false);
@@ -221,9 +278,9 @@ namespace XHD.Server
                 sortorder = "asc";
 
             string sorttext = " " + sortname + " " + sortorder;
-
+            int inType = request["inType"].CInt(0, false);
             string Total;
-            string serchtxt = $" inType=" + request["inType"].CInt(0, false);
+            string serchtxt = $" inType=" + inType;
 
 
             if (!string.IsNullOrEmpty(request["whid"]))
@@ -234,12 +291,27 @@ namespace XHD.Server
 
             if (!string.IsNullOrEmpty(request["sorderid"]))
                 serchtxt += $" and id='{PageValidate.InputText(request["sorderid"], 50)}'";
- 
+
+            if (!string.IsNullOrWhiteSpace(request["sbegtime"]))
+            {
+                serchtxt += $" and create_time>='{request["sbegtime"].CDateTime(DateTime.Now, false)}'";
+            }
+            if (!string.IsNullOrWhiteSpace(request["sendtime"]))
+            {
+                serchtxt += $" and create_time<='{request["sendtime"].CDateTime(DateTime.Now, false)}'";
+            }
 
             if (!string.IsNullOrEmpty(request["scode"]))
             {
                 string scode = PageValidate.InputText(request["scode"], 50);
-                DataSet dsc = detailBll.GetList($" barcode='{scode}'");
+                DataSet dsc = new DataSet();
+                if (inType == 1)
+                {
+                    dsc = detailBll.GetList($" ptd.barcode='{scode}'");
+                }
+                else {
+                    dsc = new BLL.Product().GetList($" barcode='{scode}'");
+                }
                 if (dsc == null || dsc.Tables[0].Rows.Count <= 0)
                 {
                     return GetGridJSON.DataTableToJSON1(null, "0");
@@ -281,7 +353,7 @@ namespace XHD.Server
             string serchtxt = $" 1=1 ";
             if (!string.IsNullOrEmpty(request["stockid"]) && request["stockid"] != "null")
             {
-                serchtxt += $" and stockid='{PageValidate.InputText(request["stockid"], 50)}'";
+                serchtxt += $" and ptd.stockid='{PageValidate.InputText(request["stockid"], 50)}'";
             }
             else {
                 return GetGridJSON.DataTableToJSON1(new DataTable(), "0");
@@ -307,8 +379,40 @@ namespace XHD.Server
         {
             if (!PageValidate.checkID(id, false) || id == "null") return "{}";
             id = PageValidate.InputText(id, 50);
-            DataSet ds = bll.GetList($" id= '{id}' ");
+            DataSet ds = new DataSet();
+            //添加临时单
+            if (id == "addtemp")
+            {
+                Model.Product_StockIn model = new Model.Product_StockIn();
+
+                model.createdep_id = dep_id;
+                model.create_id = emp_id;
+                model.create_time = DateTime.Now;
+                model.inType = request["inType"].CInt(0, false);
+                id = "RK" + DateTime.Now.ToString("yyMMdd") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
+                model.id = id;
+                model.status = -1;
+                model.remark = "";
+
+                bll.Add(model);
+
+                return JsonDyamicHelper.NetJsonConvertObject(model);
+            }
+            else {
+                ds = bll.GetList($" id= '{id}' ");
+            }
             return DataToJson.DataToJSON(ds);
+        }
+
+        /// <summary>
+        /// 检查门店入库是否有未完成的
+        /// </summary>
+        /// <returns></returns>
+        public string CheckHQAddOrder(int inType)
+        {
+            string orderid = bll.CheckHQAddOrder(emp_id, -1,inType);
+
+            return orderid;
         }
 
         /// <summary>

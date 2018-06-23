@@ -4,6 +4,8 @@ using System.Data;
 using System.Text;
 using System.Data.SqlClient;
 using XHD.DBUtility;//Please add references
+using XHD.Model;
+
 namespace XHD.DAL
 {
     /// <summary>
@@ -181,6 +183,51 @@ namespace XHD.DAL
             parameters[0].Value = CodingBegin;
 
             return DbHelperSQL.ExecuteScalar(sql, parameters).CInt(0, false);
+        }
+
+        /// <summary>
+        /// 获取序列号条形码
+        /// </summary>
+        /// <param name="Type"></param>
+        /// <returns></returns>
+        public Sys_SerialNumber GetSerialNumber(SerialNumberType Type)
+        {
+            string sql = @"
+                        DECLARE @Counts     INT
+                        DECLARE @BegLetter    nvarchar(50)
+                        DECLARE @Times        smalldatetime
+                        DECLARE  @ID        bigint
+                        update Sys_SerialNumber set Counts=isnull(Counts,0)+1,@ID=ID,@Counts=(isnull(Counts,0)+1),@BegLetter=BegLetter,@Times=Times where Type=@Type 
+                        select @Counts as Counts,@BegLetter as BegLetter,@Times as Times,@ID as ID
+                         ";
+            SqlParameter[] parameters = {
+                    new SqlParameter("@Type", SqlDbType.Int)
+            };
+            parameters[0].Value = (int)Type;
+
+            DataTable table = DbHelperSQL.Query(sql, parameters).Tables[0];
+
+            return ModelConvertHelper<Sys_SerialNumber>.ToModel(table);
+        }
+
+        /// <summary>
+        /// 重置序列号
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <param name="BegLetter"></param>
+        /// <param name="Counts"></param>
+        /// <returns></returns>
+        public bool ResetSerialNumber(long ID, string BegLetter, int Counts)
+        {
+            string sql = " update Sys_SerialNumber set Counts=@Counts,BegLetter=@BegLetter,Times=@Times where ID=@ID  ";
+            SqlParameter[] parameters = {
+                    new SqlParameter("@Counts", SqlDbType.Int) { Value=Counts},
+                    new SqlParameter("@BegLetter",SqlDbType.NVarChar,50) { Value=BegLetter},
+                    new SqlParameter("@Times",SqlDbType.SmallDateTime) { Value=DateTime.Now.Date},
+                    new SqlParameter("@ID",SqlDbType.BigInt) { Value=ID}
+            };
+
+            return DbHelperSQL.ExecuteSql(sql, parameters) > 0;
         }
 
         /// <summary>

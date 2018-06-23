@@ -12,7 +12,7 @@ namespace XHD.Server
     {
         public static BLL.Sys_Button btn = new BLL.Sys_Button();
         public static Model.Sys_Button model = new Model.Sys_Button();
- 
+
 
         public Sys_Button()
         {
@@ -52,6 +52,7 @@ namespace XHD.Server
 
         public void save()
         {
+            string adbtnid = PageValidate.InputText(request["adbtnid"], 50);
             model.Menu_id = PageValidate.InputText(request["menuid"], 50);
             model.Btn_name = PageValidate.InputText(request["T_btn_name"], 255);
             model.Btn_icon = PageValidate.InputText(request["T_btn_icon"], 255);
@@ -69,7 +70,13 @@ namespace XHD.Server
             }
             else
             {
-                model.Btn_id = Guid.NewGuid().ToString().ToUpper();
+                if (string.IsNullOrWhiteSpace(adbtnid))
+                {
+                    model.Btn_id = Guid.NewGuid().ToString().ToUpper();
+                }
+                else {
+                    model.Btn_id = adbtnid;
+                }
                 btn.Add(model);
             }
         }

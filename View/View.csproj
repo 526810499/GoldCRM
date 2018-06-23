@@ -95,8 +95,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\BLL\bin\Debug\XHD.BLL.dll</HintPath>
     </Reference>
-    <Reference Include="XHD.Common, Version=3.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="XHD.Common">
       <HintPath>..\Lib\XHD.Common.dll</HintPath>
     </Reference>
     <Reference Include="XHD.DBUtility, Version=3.5.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -840,6 +839,7 @@
     <Content Include="main1.aspx" />
     <Content Include="Product\Dep\DepAllStock.aspx" />
     <Content Include="Product\Dep\Product_check.aspx" />
+    <Content Include="Product\Dep\StockAllotAuth.aspx" />
     <Content Include="Product\Dep\StockAllot.aspx" />
     <Content Include="Product\Dep\StockAllot_Add.aspx" />
     <Content Include="Product\Dep\StockOut.aspx" />
@@ -854,6 +854,8 @@
     <Content Include="Product\PrintOutProduct.aspx" />
     <Content Include="Product\PrintProduct.aspx" />
     <Content Include="Product\product_View.aspx" />
+    <Content Include="Product\StockIn.aspx" />
+    <Content Include="Product\StockIn_Add.aspx" />
     <Content Include="Product\Take\AddProduct.aspx" />
     <Content Include="Product\Take\Product_check.aspx" />
     <Content Include="Product\Product_out.aspx" />

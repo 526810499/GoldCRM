@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Web;
 using XHD.Common;
 using XHD.Controller;
+using XHD.Model;
 
 namespace XHD.Server
 {
@@ -32,7 +34,12 @@ namespace XHD.Server
         }
 
         public string save()
-        {
+        {            ///是否添加临时记录 1 是 0否
+            int isAddTemp = request["isAddTemp"].CInt(0, false);
+            model = new Model.Product(isAddTemp);
+            //批量次数
+            int BatchNumber = request["T_BNumber"].CInt(1, false);
+
             model.category_id = PageValidate.InputText(request["T_product_category_val"], 50);
             model.product_name = PageValidate.InputText(request["T_product_name"], 255);
             model.StockPrice = request["T_StockPrice"].CDecimal(0, false);
@@ -55,6 +62,10 @@ namespace XHD.Server
             model.BarCode = PageValidate.InputText(request["T_BarCode"], 50);
             model.CertificateNo = PageValidate.InputText(request["T_CertificateNo"], 50);
             model.Circle = PageValidate.InputText(request["T_Circle"], 50);
+            model.FixedPrice = request["T_FixedPrice"].CDecimal(0, false);
+            model.PriceTag = request["T_PriceTag"].CDecimal(0, false);
+            model.StockID = PageValidate.InputText(request["StockID"], 50);
+
 
             string pid = PageValidate.InputText(request["pid"], 50);
             if (PageValidate.checkID(pid))
@@ -156,44 +167,55 @@ namespace XHD.Server
 
 
                 model.create_id = emp_id;
-                model.create_time = DateTime.Now;
-                model.id = Guid.NewGuid().ToString();
                 model.createdep_id = dep_id;
-                model.status = 1;
-
-                try
+                model.status = (isAddTemp == 1 ? -1 : 1);
+                //批量循环加入
+                while (BatchNumber > 0)
                 {
-                    model.BarCode = GetBarCode(model.category_id);
-                    product.Add(model);
-                }
-                catch (Exception error)
-                {
-                    if (error.Message.IndexOf("不能在具有唯一索引") > -1)
+                    try
                     {
-                        int t = 3;
-                        while (t > 0)
+                        model.create_time = DateTime.Now;
+                        model.id = Guid.NewGuid().ToString();
+                        model.BarCode = GetBarCode(model.category_id);
+                        product.Add(model);
+                    }
+                    catch (Exception error)
+                    {
+                        SoftLog.LogStr(error, "Product");
+                        if (error.Message.IndexOf("不能在具有唯一索引") > -1)
                         {
-                            try
+                            int t = 3;
+                            while (t > 0)
                             {
-                                model.BarCode = GetBarCode(model.category_id);
-                                bool r = product.Add(model);
-                                if (r) { t = -1; break; }
-                                t++;
-                            }
-                            catch (Exception err1)
-                            {
-                                SoftLog.LogStr(err1, "Product");
-                                return XhdResult.Error("添加失败,请重新添加！").ToString();
+                                try
+                                {
+                                    model.BarCode = GetBarCode(model.category_id);
+                                    bool r = product.Add(model);
+                                    if (r) { t = -1; break; }
+                                    t++;
+                                }
+                                catch (Exception err1)
+                                {
+                                    SoftLog.LogStr(err1, "Product");
+                                    return XhdResult.Error("添加失败,请重新添加！").ToString();
+                                }
                             }
                         }
+                        else {
+                            return XhdResult.Error("添加失败,请重新添加！").ToString();
+                        }
                     }
-                    else {
-                        return XhdResult.Error("添加失败,请重新添加！").ToString();
-                    }
+                    BatchNumber--;
                 }
             }
-
-            return XhdResult.Success().ToString();
+            //添加临时单的返回添加后修改的记录
+            if (isAddTemp == 1)
+            {
+                return XhdResult.Success(model).ToString();
+            }
+            else {
+                return XhdResult.Success().ToString();
+            }
         }
 
         /// <summary>
@@ -203,52 +225,26 @@ namespace XHD.Server
         /// <returns></returns>
         private string GetBarCode(string categoryid)
         {
-            string code = DateTime.Now.GetHashCode().ToString().Replace("-", "");
             BLL.Product_category cbll = new BLL.Product_category();
-            string CodingBegin = "Y";
-            DataSet cds = cbll.GetList("id='" + model.category_id + "'");
-            if (cds != null && cds.Tables.Count > 0)
-            {
-                CodingBegin = cds.Tables[0].Rows[0]["CodingBegins"].CString("Y");
-            }
-            int counts = cbll.GetCategoryCounts(CodingBegin);
-            code = string.Format("{0}{1}{2}", CodingBegin, DateTime.Now.Year, counts.CString("1").PadLeft(5, '0'));//.PadRight(14, '0')
 
-            return code.ToUpper();
+            Sys_SerialNumber serial = cbll.GetSerialNumber(SerialNumberType.ProductBarcode);
+            int counts = serial.Counts;
+            string nBegLetter = serial.BegLetter;
+
+            if (counts == 999999)
+            {
+                char BegLetter = nBegLetter.ToCharArray()[0];
+                int C = Convert.ToInt32(BegLetter) + 1;
+                nBegLetter = StringPlus.NunToChar(C);
+                cbll.ResetSerialNumber(serial.ID, nBegLetter, 1);
+                counts = 1;
+            }
+            return string.Format("{0}{1}", nBegLetter, counts.CString("1").PadLeft(6, '0'));
         }
 
-        public string grid()
+        private string GetStWhere()
         {
-            int PageIndex = int.Parse(request["page"] == null ? "1" : request["page"]);
-            int PageSize = int.Parse(request["pagesize"] == null ? "30" : request["pagesize"]);
-            string sortname = request["sortname"];
-            string sortorder = request["sortorder"];
-
-            if (sortname == "category_name")
-            {
-                sortname = "category_id";
-            }
-            if (sortname == "supplier_name")
-            {
-                sortname = "SupplierID";
-            }
-            if (sortname == "warehouse_name")
-            {
-                sortname = "warehouse_id";
-            }
-            if (sortname == "indep_name")
-            {
-                sortname = "indep_id";
-            }
-            if (string.IsNullOrEmpty(sortname))
-                sortname = " create_time";
-            if (string.IsNullOrEmpty(sortorder))
-                sortorder = "asc";
-
-            string sorttext = " " + sortname + " " + sortorder;
-
-            string Total = "0";
-            string serchtxt = $" 1=1 ";
+            string serchtxt = $" status<>-1 ";
             if (!string.IsNullOrEmpty(request["categoryid"]))
                 serchtxt += $" and category_id='{PageValidate.InputText(request["categoryid"], 50)}'";
 
@@ -322,6 +318,41 @@ namespace XHD.Server
                 }
             }
 
+            return serchtxt;
+        }
+
+        public string grid()
+        {
+            int PageIndex = int.Parse(request["page"] == null ? "1" : request["page"]);
+            int PageSize = int.Parse(request["pagesize"] == null ? "30" : request["pagesize"]);
+            string sortname = request["sortname"];
+            string sortorder = request["sortorder"];
+
+            if (sortname == "category_name")
+            {
+                sortname = "category_id";
+            }
+            if (sortname == "supplier_name")
+            {
+                sortname = "SupplierID";
+            }
+            if (sortname == "warehouse_name")
+            {
+                sortname = "warehouse_id";
+            }
+            if (sortname == "indep_name")
+            {
+                sortname = "indep_id";
+            }
+            if (string.IsNullOrEmpty(sortname))
+                sortname = " create_time";
+            if (string.IsNullOrEmpty(sortorder))
+                sortorder = " desc ";
+
+            string sorttext = " " + sortname + " " + sortorder;
+
+            string Total = "0";
+            string serchtxt = GetStWhere();
 
             if (request["sum"].CInt(0, false) == 1)
             {
@@ -341,6 +372,26 @@ namespace XHD.Server
             }
         }
 
+        public string StockGridDetail()
+        {
+            int PageIndex = int.Parse(request["page"] == null ? "1" : request["page"]);
+            int PageSize = int.Parse(request["pagesize"] == null ? "30" : request["pagesize"]);
+            string sortname = request["sortname"];
+            string sortorder = request["sortorder"];
+
+            if (string.IsNullOrEmpty(sortname))
+                sortname = " create_time";
+            if (string.IsNullOrEmpty(sortorder))
+                sortorder = " desc ";
+
+            string sorttext = " " + sortname + " " + sortorder;
+
+            string Total = "0";
+            string serchtxt = $" StockID='{PageValidate.InputText(request["stockid"].CString(""), 50)}'";
+
+            DataSet ds = product.GetList(PageSize, PageIndex, serchtxt, sorttext, out Total);
+            return GetGridJSON.DataTableToJSON1(ds.Tables[0], Total);//, totalTable
+        }
 
 
         public string form(string id)
@@ -442,7 +493,45 @@ namespace XHD.Server
 
         #endregion
 
+        #region 根据条件导出数据
+        public void ExoportHQStock()
+        {
+            string where = GetStWhere();
 
+            DataSet ds = product.ExportList(where);
+
+
+            if (ds != null && ds.Tables[0].Rows != null && ds.Tables[0].Rows.Count > 0)
+            {
+                string fname = "库存" + DateTime.Now.ToString("yyyyMMddHHmmss");
+
+                Dictionary<string, string> nameList = new Dictionary<string, string>();
+                nameList.Add("BarCode", "条形码");
+                nameList.Add("product_name", "商品名称");
+                nameList.Add("category_name", "商品分类");
+                nameList.Add("Weight", "重量(克)");
+                nameList.Add("GoldTotal", "金价小计(￥)");
+                nameList.Add("CostsTotal", "工费小计(￥)");
+                nameList.Add("SalesCostsTotal", "销售工费(￥)");
+                nameList.Add("SalesTotalPrice", "销售价格(￥)");
+                nameList.Add("indep_name", "关联门店");
+                nameList.Add("FixedPrice", "一口价(￥)");
+                nameList.Add("remarks", "备注");
+                List<string> list = new List<string>();
+                foreach (string s in nameList.Keys)
+                {
+                    list.Add(s);
+                }
+
+
+                ExportHelper.ExportDataTableToExcel(ds.Tables[0], nameList, list.ToArray(), DateTime.Now.ToString("MMddHHmmss"), fname, null, null, true, true);
+            }
+            else {
+                ExportError("无数据导出");
+            }
+        }
+
+        #endregion
 
     }
 }

@@ -57,16 +57,16 @@
                         }
                     },
                     {
-                        display: '状态', name: 'status', width: 150, align: 'left', render: function (item) {
+                        display: '状态', name: 'status', width: 80, align: 'left', render: function (item) {
                             switch (item.status) {
                                 case 0:
                                     return "<span style='color:#0066FF'> 等待提交 </span>";
                                 case 1:
-                                    return "<span style='color:#00CC66'> 等待调出门店审核 </span>";
+                                    return "<span style='color:#00CC66'> 等待审核 </span>";
                                 case 2:
-                                    return "<span style='color:#009900'> 调出门店审核通过 </span>";
+                                    return "<span style='color:#009900'> 审核通过 </span>";
                                 case 3:
-                                    return "<span style='color:#FF3300'> 调出门店审核不通过 </span>";
+                                    return "<span style='color:#FF3300'> 审核不通过 </span>";
                             }
                         }
                     },
@@ -74,7 +74,7 @@
 
                 ],
                 dataAction: 'server',
-                url: "Product_allot.grid.xhd?allottype=1&rnd=" + Math.random(),
+                url: "Product_allot.grid.xhd?dbauth=1&allottype=1&rnd=" + Math.random(),
                 pageSize: 30,
                 pageSizeOptions: [10, 20, 30, 40, 50, 60, 80, 100, 120],
                 width: '100%',
@@ -113,8 +113,6 @@
                                         return toMoney(item.SalesCostsTotal);
                                     }
                                 }
-                                ,
-                                { display: '一口价', name: 'FixedPrice', width: 120, render: function (item) { if (item.FixedPrice == null) { return '0'; } else { return toMoney(item.FixedPrice); } } },
 
 
                             ],
@@ -145,10 +143,12 @@
                 var items = [];
                 var arr = data.Items;
                 for (var i = 0; i < arr.length; i++) {
-                    if (arr[i].text == "审核") { arr[i].text = "审核列表";}
-                    arr[i].icon = "../../" + arr[i].icon;
-                    items.push(arr[i]);
+                    if (arr[i].text == "审核") {
+                        arr[i].icon = "../../" + arr[i].icon;
+                        items.push(arr[i]);
+                    }
                 }
+                items.push({ type: 'button', text: '导出', icon: '../../../../images/icon/91.png', disable: true, click: function () { ExcelDC() } });
                 items.push({ type: 'textbox', id: 'sstatus', text: '状态：' });
                 items.push({ type: 'textbox', id: 'sorderid', text: '调拨单号：' });
                 items.push({ type: 'textbox', id: 'scode', text: '条形码：' });
@@ -156,7 +156,6 @@
 
                 $("#toolbar").ligerToolBar({
                     items: items
-
                 });
                 //menu = $.ligerMenu({
                 //    width: 120, items: getMenuItems(data)
@@ -166,23 +165,32 @@
                 $("#sstatus").ligerComboBox({
                     data: [
                     { text: '所有', id: '' },
-                    { text: '等待提交', id: '0' },
-                    { text: '等待调出门店审核', id: '1' },
-                    { text: '调出门店审核通过', id: '2' },
-                    { text: '调出门店审核不通过', id: '3' }
+                    { text: '等待审核', id: '1' },
+                    { text: '审核通过', id: '2' },
+                    { text: '审核不通过', id: '3' }
                     ], valueFieldID: 'status',
                 });
                 $("#maingrid4").ligerGetGridManager()._onResize();
             });
         }
+        function ExcelDC() {
 
+            var manager = $("#maingrid4").ligerGetGridManager();
+            var row = manager.getSelectedRow();
+            if (row) {
+                location.href = "/product/ExportProduct.aspx?etype=6&allotid=" + row.id + "&rnd=" + Math.random();
+            }
+            else {
+                $.ligerDialog.warn("请选择调拨单");
+            }
+        }
 
         function onSelect(note) {
             doserch();
         }
         //查询
         function doserch() {
-            var sendtxt = "&allottype=1&rnd=" + Math.random();
+            var sendtxt = "&dbauth=1&allottype=1&rnd=" + Math.random();
             var serchtxt = $("#form1 :input").fieldSerialize() + sendtxt;
 
             var manager = $("#maingrid4").ligerGetGridManager();
@@ -198,8 +206,20 @@
         }
 
         function auth() {
-            var buttons = [];
-            f_openWindow2('product/Dep/StockAllotAuth.aspx?allottype=1', "审核列表", 1200, 700, buttons);
+            var manager = $("#maingrid4").ligerGetGridManager();
+            var rows = manager.getSelectedRow();
+            console.log("rows", rows);
+            if (rows && rows != undefined) {
+                var buttons = [];
+                if (rows.status == 1) {
+                    buttons.push({ text: '审核通过', onclick: f_saveYesAuth });
+                    buttons.push({ text: '审核不通过', onclick: f_saveNoAuth });
+                }
+                f_openWindow2('product/Dep/StockAllot_Add.aspx?authbtn=1&id=' + rows.id + "&astatus=" + rows.status, "审核调拨单", 1200, 600, buttons);
+            }
+            else {
+                $.ligerDialog.warn('请选择调拨审核单！');
+            }
         }
 
 
@@ -348,20 +368,6 @@
         function f_load() {
             var manager = $("#maingrid4").ligerGetGridManager();
             manager.loadData(true);
-        }
-
-
-        function ExcelDC() {
-
-            var manager = $("#maingrid4").ligerGetGridManager();
-            var row = manager.getSelectedRow();
-            if (row) {
-                var titles = "门店调拨：" + row.fromdep_name + "至" + row.todep_name + " (" + formatTimebytype(row.create_time, "yyyy-MM-dd") + ")";
-                location.href = "/product/ExportProduct.aspx?etype=6&allotid=" + row.id + "&rnd=" + Math.random() + "&titles=" + encodeURI(titles);
-            }
-            else {
-                $.ligerDialog.warn("请选择调拨单");
-            }
         }
 
     </script>

@@ -19,6 +19,7 @@ namespace XHD.Controller
 
         public string Message { get; set; }
         public string Type { get; set; }
+        public object data { get; set; }
 
         #region Success
 
@@ -36,6 +37,28 @@ namespace XHD.Controller
             {
                 success = true,
                 Message = message
+            };
+        }
+
+
+        public static XhdResult Success(object data)
+        {
+            return new XhdResult
+            {
+                success = true,
+                data = data
+            };
+        }
+
+
+
+        public static XhdResult Success(string message, object data)
+        {
+            return new XhdResult
+            {
+                success = true,
+                Message = message,
+                data = data
             };
         }
 

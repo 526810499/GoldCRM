@@ -291,16 +291,12 @@ F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\XHD.SMS.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\XHD.DAL.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\OpenSmtp.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\Newtonsoft.Json.Net35.dll
-F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\NPOI.OOXML.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\IBatisNet.DataMapper.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\IBatisNet.Common.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\System.Data.SQLite.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\MySql.Data.dll
-F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\NPOI.OpenXmlFormats.dll
-F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\NPOI.OpenXml4Net.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\XHD.Controller.pdb
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\XHD.BLL.pdb
-F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\XHD.Common.pdb
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\XHD.DBUtility.pdb
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\XHD.Excel.pdb
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\XHD.Model.pdb

@@ -24,15 +24,15 @@
         $(function () {
             $.metadata.setType("attr", "validate");
             XHD.validate($(form1));
-
-            loadForm(getparastr("pid"));
+            var pid = getparastr("pid", "");
+            loadForm(pid);
         });
 
         function f_save() {
 
             if ($(form1).valid()) {
                 var T_product_category = $("#T_product_category_val").val();
-                if (T_product_category.length <= 0) {
+                if (T_product_category == null || T_product_category.length <= 0) {
                     $.ligerDialog.warn('商品分类需选择');
                     return false;
                 }
@@ -91,11 +91,14 @@
 
 
                     $("#form1").ligerAutoForm({
-                        labelWidth: 80, inputWidth: 180, space: 20,
+                        labelWidth: 120, inputWidth: 180, space: 20,
                         fields: [
                             {
                                 display: '商品', type: 'group', icon: '',
                                 rows: [
+                                    [
+                                     { display: "批量添加(数量)", name: "T_BNumber", type: "text", options: "{width:180}", validate: "{required:true}", initValue: 1 }
+                                    ],
                                    [
                                     { display: "商品名称", name: "T_product_name", type: "text", options: "{width:180}", validate: "{required:true}", initValue: obj.product_name },
                                     { display: "商品类别", name: "T_product_category", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_category.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + obj.category_id + "'}", validate: "{required:true}" }
@@ -125,18 +128,22 @@
                                     { display: "出厂码", name: "T_Sbarcode", type: "text", options: "{width:180}", validate: "{required:false}", initValue: (obj.Sbarcode) },
                                 ],
                                    [{ display: "条形码", name: "T_BarCode", type: "text", options: "{width:180;}", validate: "{required:false}", initValue: (obj.BarCode) },
-                                    { display: "是否黄金类", name: "T_GType", type: "select", options: "{width:180,onSelected:function(value){SetT_SalesTotalPrice(value);},data:[{id:0,text:'否'},{id:1,text:'是'}],selectBoxHeight:50, value:" + obj.IsGold + "}", validate: "{required:true}" }
+                                    { display: "品类", name: "T_GType", type: "select", options: "{width:180,onSelected:function(value){SetT_SalesTotalPrice(value);},data:[{id:0,text:'其他'},{id:1,text:'足金类'},{id:2,text:'硬金类'},{id:3,text:'K金类'},{id:4,text:'钻石类'},{id:5,text:'彩色宝石类'},{id:6,text:'翡翠类'},{id:7,text:'摆件类'},{id:8,text:'金钞类'},{id:9,text:'金条类'}],selectBoxHeight:150, value:" + obj.IsGold + "}", validate: "{required:true}" }
                                    ],
                                  [
                                         { display: "销售价格", name: "T_SalesTotalPrice", type: "text", options: "{width:180,disabled:true,onChangeValue:function(value){   $('#T_SalesTotalPrice').val(toMoney(value));  ; }}", validate: "{required:true}", initValue: toMoney(obj.SalesTotalPrice) },
                                         { display: "销售工费", name: "T_SalesCostsTotal", type: "text", options: "{width:180,disabled:true,onChangeValue:function(value){ $('#T_SalesCostsTotal').val(toMoney(value)); }}", validate: "{required:true}", initValue: toMoney(obj.SalesCostsTotal) }
                                  ],
+                                [
+                                      { display: "标签价格", name: "T_PriceTag", type: "text", options: "{width:180,disabled:true,onChangeValue:function(value){   $('#T_PriceTag').val(toMoney(value));  ; }}", validate: "{required:true}", initValue: toMoney(obj.PriceTag) },
+                                      { display: "一口价", name: "T_FixedPrice", type: "text", options: "{width:180,disabled:true,onChangeValue:function(value){ $('#T_FixedPrice').val(toMoney(value)); }}", validate: "{required:true}", initValue: toMoney(obj.FixedPrice) }
+                                ],
                                  [
                                     { display: "证书编号", name: "T_CertificateNo", type: "text", options: "{width:180}", validate: "{required:false}", initValue: (obj.CertificateNo) },
                                     { display: "圈号手寸", name: "T_Circle", type: "text", options: "{width:180}", validate: "{required:false}", initValue: (obj.Circle) }
                                  ],
                                    [
-                                    { display: "备注", name: "T_Remark", type: "textarea", cols: 73, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.Remark }
+                                    { display: "备注", name: "T_Remark", type: "textarea", cols: 73, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.remarks }
                                    ]
                                 ]
                             }
@@ -149,6 +156,8 @@
                         if (obj.status != 1) {
                             $("#T_BarCode").attr("disabled", "disabled");
                         }
+                        //移除掉第一个
+                        $(".l-group").children("dl")[0].remove();
                     }
                 }
             });
@@ -167,6 +176,7 @@
             var gtype = 0;
             if ($("#T_GType").val() == "是") { gtype = 1; }
             SetT_SalesTotalPrice(gtype);
+
         }
 
         //销售价格=（成本总价*2.5）
@@ -185,6 +195,9 @@
                 $("#T_SalesCostsTotal").val(0.00);
                 $("#T_SalesTotalPrice").val(toMoney(total));
             }
+
+            //设置标签价格等
+            SetT_PriceTag();
         }
 
 
@@ -206,6 +219,52 @@
             total = parseFloat(T_AttCosts.replace(/\$|\,/g, '')) * parseFloat(T_Weight.replace(/\$|\,/g, ''));
             $("#T_CostsTotal").val(toMoney(total));
             SetT_Totals();
+        }
+
+        //设置标签价格
+        function SetT_PriceTag() {
+            var ptype = parseInt($("#T_GType_val").val());
+
+            //工费小计
+            var T_CostsTotal = parseFloat($("#T_CostsTotal").val().replace(/\$|\,/g, ''));
+            //克重
+            var T_Weight = parseFloat($("#T_Weight").val().replace(/\$|\,/g, ''));
+            //成本价
+            var T_Totals = parseFloat($("#T_Totals").val().replace(/\$|\,/g, ''));
+            $("#T_PriceTag").val(0);
+            $("#T_FixedPrice").val(0);
+            switch (ptype) {
+                case 1: //足金类
+                    if (T_CostsTotal <= 2) { $("#T_PriceTag").val(toMoney(parseFloat(T_Weight * 20))); }
+                    else if (T_CostsTotal <= 22) { $("#T_PriceTag").val(toMoney(parseFloat(T_CostsTotal * 6))); }
+                    else if (T_CostsTotal <= 40) { $("#T_PriceTag").val(toMoney(parseFloat(T_CostsTotal * 4))); }
+                    break;
+                case 2:  //硬金类
+                    if (T_Weight <= 5) { $("#T_FixedPrice").val(toMoney(parseFloat(T_Totals * 0.5))); }
+                    else if (T_Weight > 5 && T_CostsTotal <= 15) { $("#T_PriceTag").val(toMoney(parseFloat(T_CostsTotal * 6))); }
+                    else if (T_Weight > 5 && T_CostsTotal <= 40) { $("#T_PriceTag").val(toMoney(parseFloat(T_CostsTotal * 4))); }
+                    break;
+                case 3://K金
+                case 4://钻石
+                    $("#T_FixedPrice").val(toMoney(parseFloat(T_Totals * 2.5)));
+                    break;
+                case 5://彩色宝石
+                case 6://翡翠
+                    $("#T_FixedPrice").val(toMoney(parseFloat(T_Totals * 3)));
+                    break;
+                case 7://摆件
+                    $("#T_FixedPrice").val(toMoney(parseFloat(T_Totals * 6)));
+                    break;
+                case 8://金钞类
+                    $("#T_PriceTag").val(toMoney(parseFloat(T_CostsTotal * 4)));
+                    break;
+                case 9: //金条类
+                    $("#T_PriceTag").val(toMoney(parseFloat(T_CostsTotal * 2.3)));
+                    break;
+                default:
+                    break;
+            }
+
         }
 
 

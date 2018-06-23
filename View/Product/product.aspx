@@ -98,13 +98,12 @@
                             return toMoney(item.SalesTotalPrice);
                         }
                     },
-                    { display: '供应商', name: 'supplier_name', width: 100 },
-                     //{ display: '现存仓库', name: 'warehouse_name', width: 100, render: function (item) { if (item.warehouse_name == null) { return '总仓库'; } else { return item.warehouse_name; } } },
-                    {
-                        display: '当前状态', name: 'status', width: 80, align: 'right', render: function (item) {
-                            return GetproductStatus(item.status);
-                        }
-                    },
+                  { display: '一口价', name: 'FixedPrice', width: 120, render: function (item) { if (item.FixedPrice == null) { return '0'; } else { return toMoney(item.FixedPrice); } } },
+                  {
+                      display: '当前状态', name: 'status', width: 80, align: 'right', render: function (item) {
+                          return GetproductStatus(item.status);
+                      }
+                  },
                     {
                         display: '审核状态', name: 'authIn', width: 80, align: 'right', render: function (item) {
                             switch (item.authIn) {

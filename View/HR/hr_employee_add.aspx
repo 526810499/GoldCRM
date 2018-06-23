@@ -22,7 +22,7 @@
     <script type="text/javascript">
         var manager;
         $(function () {
-           
+
             $.metadata.setType("attr", "validate");
             XHD.validate($(form1));
 
@@ -66,10 +66,10 @@
             $("#T_uid").attr("validate", "{ required: true, username: true, remote: remote, messages: { required: '请输入账号名', remote: '此账户存在!' } }");
         });
 
-        function check(evt) {            
+        function check(evt) {
             var evt = evt || window.event;
             var e = evt.srcElement || evt.target;
-           
+
             var data = manager.getData();
 
             for (var i = 0; i < data.length; i++) {
@@ -175,8 +175,8 @@
                         else {
                             $.ligerDialog.error(obj.Message);
                         }
-                        
-                        
+
+
                     },
                     error: function () {
                         $.ligerDialog.closeWaitting();
@@ -189,7 +189,7 @@
         function add() {
             f_openWindow("hr/hr_getpost.aspx", "选择岗位", 650, 400, f_getpost, 9003);
         }
-        function removepost() {          
+        function removepost() {
             manager.deleteSelectedRow();
         }
         function f_getpost(item, dialog) {
@@ -229,7 +229,7 @@
                 return;
             }
 
-            if ($(form1).valid()) {               
+            if ($(form1).valid()) {
                 var data = manager.getData();
 
                 var sendtxt = "&id=" + getparastr("empid");
@@ -290,7 +290,7 @@
                         <div align="right" style="width: 62px">姓名：</div>
                     </td>
                     <td colspan="3">
-                        <input type="text" id="T_name" name="T_name" ltype="text" ligerui="{width:160}" <%-- validate="{required:true,minlength:1,maxlength:50,messages:{required:'请输入姓名',maxlength:'你的名字有这么长嘛？'}}"--%> />
+                        <input type="text" id="T_name" name="T_name" ltype="text" ligerui="{width:160}" validate="{required:true,minlength:1,maxlength:50,messages:{required:'请输入姓名',maxlength:'你的名字有这么长嘛？'}}" />
                     </td>
                     <td>
                         <div align="right" style="width: 62px">生日：</div>
@@ -303,13 +303,13 @@
                         <div align="right" style="width: 62px">性别：</div>
                     </td>
                     <td width="45px">
-                        <input type="text" id="T_sex" name="T_sex" ltype="select" ligerui="{width:40,data:[{id:'男',text:'男'},{id:'女',text:'女'}]}" <%--validate="{required:true}" --%> />
+                        <input type="text" id="T_sex" name="T_sex" ltype="select" ligerui="{width:40,data:[{id:'男',text:'男'},{id:'女',text:'女'}]}"  validate="{required:true}"  />
                     </td>
                     <td width="42">
                         <div align="right">状态：</div>
                     </td>
                     <td width="80px">
-                        <input type="text" id="T_status" name="T_status" style="width: 60px" ltype="select" ligerui="{width:65,data:[{id:'在职',text:'在职'},{id:'离职',text:'离职'}]}" <%-- validate="{required:true}"--%> /></td>
+                        <input type="text" id="T_status" name="T_status" style="width: 60px" ltype="select" ligerui="{width:65,data:[{id:'在职',text:'在职'},{id:'离职',text:'离职'}]}"  validate="{required:true}"  /></td>
                     <td>
                         <div align="right" style="width: 61px">
                             身份证：
@@ -325,13 +325,13 @@
                         </div>
                     </td>
                     <td colspan="3">
-                        <input type="text" id="T_tel" name="T_tel" ltype="text" ligerui="{width:160}" <%--validate="{required:true,cellphone:true,messages:{required:'请输入手机号'}}"--%> />
+                        <input type="text" id="T_tel" name="T_tel" ltype="text" ligerui="{width:160}"  validate="{required:true,cellphone:true,messages:{required:'请输入手机号'}}" />
                     </td>
                     <td>
                         <div align="right" style="width: 62px">入职日期：</div>
                     </td>
                     <td>
-                        <input type="text" id="T_entryDate" name="T_entryDate" ltype="date" ligerui="{width:160}" /></td>
+                        <input type="text" id="T_entryDate" name="T_entryDate" ltype="date" ligerui="{width:160}"  validate="{required:true}"  /></td>
                 </tr>
                 <tr>
                     <td>
@@ -374,7 +374,7 @@
 
                     </td>
                 </tr>
-                
+
                 <tr>
                     <td>
                         <div align="right" style="width: 62px">备注：</div>
