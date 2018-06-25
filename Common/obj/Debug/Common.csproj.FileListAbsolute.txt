@@ -60,6 +60,6 @@ F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\bin\Debug\NPOI.OOXML.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\bin\Debug\NPOI.OpenXml4Net.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\bin\Debug\NPOI.OpenXmlFormats.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\bin\Debug\OpenSmtp.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\obj\Debug\XHD.Common.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\obj\Debug\XHD.Common.pdb
-F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache

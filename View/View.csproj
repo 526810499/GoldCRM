@@ -836,7 +836,8 @@
     <Content Include="lib\ligerUI\skins\Tab\images\win\dialogicon.gif" />
     <Content Include="License.html" />
     <Content Include="login.aspx" />
-    <Content Include="main1.aspx" />
+    <Content Include="login1.aspx" />
+    <Content Include="main.aspx" />
     <Content Include="Product\Dep\DepAllStock.aspx" />
     <Content Include="Product\Dep\Product_check.aspx" />
     <Content Include="Product\Dep\StockAllotAuth.aspx" />
@@ -938,7 +939,7 @@
     <Content Include="Images\XPButtonUploadText_61x22.png" />
     <Content Include="JS\ajaxUpload.js" />
     <Content Include="lib\jquery\jquery-1.11.3.min.js" />
-    <Content Include="main.aspx" />
+    <Content Include="main1.aspx" />
     <Content Include="home\home.aspx" />
     <Content Include="Personal\Task\Assignment.aspx" />
     <Content Include="Personal\Task\todo_add.aspx" />
@@ -2998,7 +2999,6 @@
     <Content Include="lib\ligerUI\skins\icons\true.gif" />
     <Content Include="lib\ligerUI\skins\icons\up.gif" />
     <Content Include="lib\ligerUI\skins\ligerui-icons.css" />
-    <Content Include="login1.aspx" />
     <Content Include="home\GetPortal.aspx" />
     <Content Include="Personal\Message\news.aspx" />
     <Content Include="Personal\Message\news_add.aspx" />

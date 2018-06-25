@@ -6,12 +6,12 @@
     <meta name="renderer" content="webkit" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
     <meta name="renderer" content="webkit" />
-<%--    <title>永坤金行-CRM-登录</title>--%>
+    <title>永坤金行-CRM-登录</title>
     <link rel="shortcut icon" type="image/x-icon" href="images/logo/favicon.ico" />
     <link href="lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" />
     <link href="lib/ligerUI/skins/Gray2014/css/all.css" rel="stylesheet" />
     <link href="CSS/input.css" rel="stylesheet" type="text/css" />
-    <link href="CSS/login/loginstyle.css" rel="stylesheet" />
+    <link href="CSS/login/loginstyle.css?v=9" rel="stylesheet" />
     <script src="lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
 
@@ -131,9 +131,12 @@
 
     </script>
     <style>
-        body {
+            body {
             height: 100%;
-            background: #16a085;
+			background-image:url(css/login/dl_bg_pic.jpg);
+			background-repeat:no-repeat;
+			background-position:center top;
+			background-size:cover;
             overflow: hidden;
         }
     </style>
@@ -141,7 +144,9 @@
 <body>
     <form id="form1" name="form1">
         <dl class="admin_login">
- 
+            <dt>
+                <strong><img width="120" src="css/login/logo.png"></img></strong>
+            </dt>
             <dd class="user_icon">
 
                 <input id="T_uid" name="T_uid" type="text" placeholder="账号" class="login_txtbx" />

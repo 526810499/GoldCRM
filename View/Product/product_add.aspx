@@ -86,7 +86,7 @@
                         obj.SupplierID = "";
                     }
 
-                    if (obj.IsGold == null || obj.IsGold == undefined) { obj.IsGold = 0; }
+                    //if (obj.IsGold == null || obj.IsGold == undefined) { obj.IsGold = 0; }
 
 
 
@@ -128,7 +128,7 @@
                                     { display: "出厂码", name: "T_Sbarcode", type: "text", options: "{width:180}", validate: "{required:false}", initValue: (obj.Sbarcode) },
                                 ],
                                    [{ display: "条形码", name: "T_BarCode", type: "text", options: "{width:180;}", validate: "{required:false}", initValue: (obj.BarCode) },
-                                    { display: "品类", name: "T_GType", type: "select", options: "{width:180,onSelected:function(value){SetT_SalesTotalPrice(value);},data:[{id:0,text:'其他'},{id:1,text:'足金类'},{id:2,text:'硬金类'},{id:3,text:'K金类'},{id:4,text:'钻石类'},{id:5,text:'彩色宝石类'},{id:6,text:'翡翠类'},{id:7,text:'摆件类'},{id:8,text:'金钞类'},{id:9,text:'金条类'}],selectBoxHeight:150, value:" + obj.IsGold + "}", validate: "{required:true}" }
+                                    { display: "品类", name: "T_GType", type: "select", options: "{width:180,onSelected:function(value){SetT_SalesTotalPrice(value);},data:[{ id:null,text:'=请选择='},{id:1,text:'足金类'},{id:2,text:'硬金类'},{id:3,text:'K金类'},{id:4,text:'钻石类'},{id:5,text:'彩色宝石类'},{id:6,text:'翡翠类'},{id:7,text:'摆件类'},{id:8,text:'金钞类'},{id:9,text:'金条类'},{id:0,text:'其他'}],selectBoxHeight:150, value:" + obj.IsGold + "}", validate: "{required:true}" }
                                    ],
                                  [
                                         { display: "销售价格", name: "T_SalesTotalPrice", type: "text", options: "{width:180,disabled:true,onChangeValue:function(value){   $('#T_SalesTotalPrice').val(toMoney(value));  ; }}", validate: "{required:true}", initValue: toMoney(obj.SalesTotalPrice) },

@@ -95,7 +95,7 @@
             });
         }
         function ViewModel(id) {
-            f_openWindow('product/product_add.aspx?pid=' + id, "修改商品", 700, 580, f_addsave);
+            f_openWindow('product/product_add.aspx?pid=' + id, "修改商品", 700, 580, f_addsave,9004);
         }
 
 
@@ -213,7 +213,7 @@
             var rows = manager.getSelectedRow();
             var rows = manager.getSelectedRow();
             if (rows && rows != undefined) {
-                f_openWindow('product/product_add.aspx?pid=' + rows.id, "修改商品", 1000, 700, f_addsave);
+                f_openWindow('product/product_add.aspx?pid=' + rows.id, "修改商品", 1000, 700, f_addsave,9004);
             }
             else {
                 $.ligerDialog.warn('请选择商品！');

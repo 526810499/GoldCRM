@@ -4,13 +4,13 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<%--    <title>永坤金行-CRM</title>--%>
+    <title>永坤金行-CRM</title>
     <meta name="renderer" content="webkit" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
     <link rel="shortcut icon" type="image/x-icon" href="images/logo/favicon.ico" />
     <link href="lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" />
     <link href="lib/ligerUI/skins/Silvery/css/all.css" rel="stylesheet" />
-    <link href="CSS/index/main.css?v=2" rel="stylesheet" />
+    <link href="CSS/index/main.css?v=3" rel="stylesheet" />
 
     <script src="lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
@@ -45,7 +45,7 @@
 <body>
 
 
-    <div id="header"  style="display: none">
+    <div id="header">
 
 
         <div class="logoContent">
@@ -59,7 +59,7 @@
             <div id="userinfo" class="item">
 
                 <div style="position: relative; float: left;">
-                    <div id="Username" style="font-size: 14px; padding-right: 5px; width: 60px; text-align: right; float: left; height: 50px; line-height: 50px;"></div>
+                    <div id="Username" style="font-size: 14px; padding-right: 5px; width: 120px; text-align: right; float: left; height: 50px; line-height: 50px;"></div>
                 </div>
                 <div id="portrait">
                     <img id="userheader" width="40" style="border-radius: 100%;" />
@@ -72,9 +72,6 @@
     <div id="layout" style="width: 100%; margin-top: 4px;">
 
         <div position="left" title="功能菜单" id="accordion1">
-            <%--<ul class="nav" id="mainmenu">
-              
-            </ul>--%>
         </div>
         <div position="center" id="framecenter">
             <div tabid="home" title="桌面" style="height: 300px">
@@ -328,7 +325,7 @@
         function getuserinfo() {
             $.getJSON("Sys_base.GetUserInfo.xhd?rnd=" + Math.random(), function (data, textStatus) {
                 //alert(data);
-                $("#Username").html("<div style='cursor:pointer'>" + data.name + "</div>");
+                $("#Username").html("<div style='cursor:pointer'>" + data.dep_name + "_" + data.name + "</div>");
                 if (data.title) {
                     $("#userheader").attr("src", "file/header/" + data.title);
                 }

@@ -58,7 +58,7 @@ namespace XHD.Server
             model.SupplierID = request["T_SupplierID_val"].CInt(0, false);
             model.Sbarcode = PageValidate.InputText(request["T_Sbarcode"], 255);
             model.remarks = PageValidate.InputText(request["T_Remark"], 255);
-            model.IsGold = (request["T_GType"].CString("") == "是" ? 1 : 0);
+            model.IsGold = (request["T_GType_val"].CInt(0,false));
             model.BarCode = PageValidate.InputText(request["T_BarCode"], 50);
             model.CertificateNo = PageValidate.InputText(request["T_CertificateNo"], 50);
             model.Circle = PageValidate.InputText(request["T_Circle"], 50);

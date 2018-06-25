@@ -4,7 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>永坤金行-CRM</title>
+<%--    <title>永坤金行-CRM</title>--%>
     <meta name="renderer" content="webkit" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
     <link rel="shortcut icon" type="image/x-icon" href="images/logo/favicon.ico" />
@@ -45,7 +45,7 @@
 <body>
 
 
-    <div id="header">
+    <div id="header"  style="display: none">
 
 
         <div class="logoContent">
