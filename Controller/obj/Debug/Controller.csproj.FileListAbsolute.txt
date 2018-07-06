@@ -182,6 +182,7 @@ F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Debug\NPOI.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Debug\OpenSmtp.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Debug\Newtonsoft.Json.Net35.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Debug\NPOI.OOXML.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Debug\ICSharpCode.SharpZipLib.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Debug\NPOI.OpenXmlFormats.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Debug\NPOI.OpenXml4Net.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Controller\bin\Debug\XHD.Common.pdb

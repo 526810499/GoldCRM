@@ -16,6 +16,17 @@ namespace XHD.BLL
         { }
         #region  BasicMethod
 
+
+        /// <summary>
+        /// 获取分类ID
+        /// </summary>
+        /// <param name="categoryName"></param>
+        /// <returns></returns>
+        public string GetcategoryID(string categoryName)
+        {
+            return dal.GetcategoryID(categoryName);
+        }
+
         /// <summary>
         /// 增加一条数据
         /// </summary>

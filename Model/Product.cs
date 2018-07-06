@@ -23,6 +23,10 @@ namespace XHD.Model
         /// </summary>
         public int isAddTemp { get; set; }
 
+        /// <summary>
+        /// 导入标签ID
+        /// </summary>
+        public string importTagID { get; set; }
 
         private string _id;
         private string _product_name;

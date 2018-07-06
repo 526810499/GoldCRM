@@ -15,7 +15,7 @@
     <script src="../lib/jquery-validation/messages_cn.js" type="text/javascript"></script>
     <script src="../lib/ligerUI/js/common.js" type="text/javascript"></script>
     <script src="../lib/jquery.form.js" type="text/javascript"></script>
-    <script src="../JS/XHD.js?v=2" type="text/javascript"></script>
+    <script src="../JS/XHD.js?v=112" type="text/javascript"></script>
 
     <script type="text/javascript">
         var sid = "";
@@ -95,7 +95,7 @@
             });
         }
         function ViewModel(id) {
-            f_openWindow('product/product_add.aspx?pid=' + id, "修改商品", 700, 580, f_addsave,9004);
+            f_openWindow('product/product_add.aspx?pid=' + id, "修改商品", 700, 580, f_addsave, 9004);
         }
 
 
@@ -172,12 +172,12 @@
                     icon: '../../../../images/icon/11.png',
                     click: add
                 });
-                //$("#btn_addcode").ligerButton({
-                //    width: 80,
-                //    text: "批量导入",
-                //    icon: '../../images/icon/75.png',
-                //    click: addBatchCode
-                //});
+                $("#btn_addcode").ligerButton({
+                    width: 80,
+                    text: "批量导入",
+                    icon: '../../images/icon/75.png',
+                    click: addBatchCode
+                });
                 $("#btn_del").ligerButton({
                     width: 60,
                     text: "删除",
@@ -204,7 +204,7 @@
 
         }
         function f_addbatchsave(item, dialog) {
-            f_addsave();
+            
         }
 
         function updateCode() {
@@ -213,7 +213,7 @@
             var rows = manager.getSelectedRow();
             var rows = manager.getSelectedRow();
             if (rows && rows != undefined) {
-                f_openWindow('product/product_add.aspx?pid=' + rows.id, "修改商品", 1000, 700, f_addsave,9004);
+                f_openWindow('product/product_add.aspx?pid=' + rows.id, "修改商品", 1000, 700, f_addsave, 9004);
             }
             else {
                 $.ligerDialog.warn('请选择商品！');
@@ -253,13 +253,23 @@
         }
 
         function f_load() {
+ 
             var manager = $("#maingridc4").ligerGetGridManager();
             manager.loadData(true);
+        }
+        function f_Batchload(item, dialog) {
+           
+            var manager = $("#maingridc4").ligerGetGridManager();
+            manager.loadData(true);
+            dialog.close();
         }
 
         //批量导入
         function addBatchCode() {
-            f_openWindow("product/AddBatchProduct.aspx?sid=" + sid, "批量导入商品", 1000, 400, f_addbatchsave, 9003);
+ 
+            var buttons = [];
+            buttons.push({ text: '返回', onclick: f_Batchload });
+            f_openWindowNotClose("product/product_excel_add.aspx?pid=" + sid + "&isAddTemp=" + isAddTemp, "批量导入商品", 1050, 680, buttons, 9002,false);
         }
 
         function pro_remove() {

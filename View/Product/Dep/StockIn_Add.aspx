@@ -43,6 +43,15 @@
                 return sendtxt;
             }
         }
+        function f_saveAuth() {
+
+            var sendtxt = "T_Remark=" + $("#T_Remark").val() + "&id=" + getparastr("id", "");
+           
+            return sendtxt;
+
+        }
+
+
         function GetPostData() {
             var manager = $("#maingridc4").ligerGetGridManager();
             var data = manager.getChanges();
@@ -81,7 +90,7 @@
 
                     if (obj != null && obj.status >= 0) {
                         rows.push([
-                               { display: "状态", name: "T_Status", type: "select", options: "{width:180,onSelected:function(value){},data:[{id:0,text:'未提交'},{id:1,text:'提交保存'}],selectBoxHeight:50, value:" + obj.status + "}", validate: "{required:true}" }
+                               { display: "状态", name: "T_Status", type: "select", options: "{width:180,onSelected:function(value){},data:[{id:1,text:'等待审核'},{id:2,text:'审核通过'},{id:3,text:'审核不通过'}],selectBoxHeight:100, value:" + obj.status + "}", validate: "{required:true}" }
                         ]);
                     }
                     if (!obj.discount_amount)
@@ -133,7 +142,7 @@
                 enabledEdit: false,
                 url: "Product_StockIn.gridDetail.xhd?stockid=" + getparastr("id", ""),
                 width: '100%',
-                height: 500,
+                height: 450,
                 heightDiff: -1,
                 onLoaded: f_loaded,
 

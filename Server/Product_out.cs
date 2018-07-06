@@ -43,6 +43,25 @@ namespace XHD.Server
 
         }
 
+
+        /// <summary>
+        /// 总部出库发到门店审核
+        /// </summary>
+        private string HQOutSendDepAuth()
+        {
+            string RKID = "RK" + DateTime.Now.ToString("yyMMdd") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
+            //不是提交审核的直接跳过
+            if (model.status != 1 || model.outType != 0)
+            {
+                return "";
+            }
+            model.create_id = emp_id;
+            //通知到门店
+            allotBll.SendDepStockIn(model, RKID,"总部出库",0);
+
+            return RKID;
+        }
+
         public string save()
         {
             model.NowWarehouse = request["T_NowWarehouse_val"].CInt(0, false);
@@ -55,10 +74,11 @@ namespace XHD.Server
             model.update_time = DateTime.Now;
             string id = PageValidate.InputText(request["id"], 50);
             string postData = request["postData"].CString("");
-            bool isAdd = true;
+            bool isAdd = false;
             string msg = "";
             bool CanAdd = true;
             bool CanDel = true;
+            string DeepRKID = "";
             try
             {
                 List<Model.ProductAllot> list = JsonDyamicHelper.NetJsonConvertJson<List<Model.ProductAllot>>(postData);
@@ -118,6 +138,10 @@ namespace XHD.Server
 
                     if (!string.IsNullOrEmpty(Log_Content))
                         Syslog.Add_log(UserID, UserName, IPStreet, EventTitle, EventType, EventID, Log_Content);
+
+
+                    DeepRKID = HQOutSendDepAuth();
+
                 }
                 else
                 {
@@ -127,7 +151,7 @@ namespace XHD.Server
                     id = "CK" + DateTime.Now.ToString("yyMMdd") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
                     model.id = id;
                     model.status = request["auth"].CInt(0, false) == 1 ? 1 : 0;
-
+                    isAdd = true;
                     allotBll.Add(model);
                 }
 
@@ -170,23 +194,33 @@ namespace XHD.Server
                         allotDetailBll.Delete(model.outType, id, m.BarCode);
                     }
                 }
+                //添加的并且直接提交审核的
+                if (isAdd && model.status == 1)
+                {
+                    DeepRKID = HQOutSendDepAuth();
+                }
 
             }
             catch (Exception error)
             {
                 msg = error.ToString();
                 SoftLog.LogStr(error.ToString(), "SaveOut");
-                return XhdResult.Error("添加失败,请确认是否重复添加后在操作！").ToString();
+             
             }
 
             if (msg.Length > 0)
             {
                 //添加提交审核的但是商品状态改变的修改状态
-                if (model.status == 1 && isAdd)
+                if (model.status == 1)
                 {
                     model.status = 0;
                     allotBll.Update(model);
+                    if (!string.IsNullOrWhiteSpace(DeepRKID))
+                    {
+                        allotBll.DeleteSotockIN(DeepRKID);
+                    }
                 }
+
                 msg += "<br/>状态发生改变,请确认后在操作！";
                 return XhdResult.Success(msg).ToString();
             }
@@ -404,7 +438,7 @@ namespace XHD.Server
             if (!isdel) return XhdResult.Error("系统错误，删除失败！").ToString();
 
             //日志
-            string EventType = "调拨单删除";
+            string EventType = "出库单删除";
 
             string UserID = emp_id;
             string UserName = emp_name;

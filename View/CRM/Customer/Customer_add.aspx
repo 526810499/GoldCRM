@@ -68,7 +68,7 @@
                                 rows: [
                                     [
                                         { display: "客户名称", name: "T_customer", type: "text", options: "{width:180}", validate: "{required:true}", initValue: obj.cus_name },
-                                        { display: "客户生日", name: "T_birthday", type: "date", options: "{width:180}", validate: "{required:true}", initValue: formatTimebytype(obj.birthday, "yyyy-MM-dd") },
+                                        { display: "客户生日", name: "T_birthday", type: "date", options: "{width:180}", initValue: formatTimebytype(obj.birthday, "yyyy-MM-dd") },
                                     ],
                                     [
                                         { display: "电话", name: "T_tel", type: "text", options: "{width:180}", validate: "{required:true}", initValue: obj.cus_tel },

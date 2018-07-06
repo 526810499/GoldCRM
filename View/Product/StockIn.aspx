@@ -408,7 +408,7 @@
                                 AddOrder(oid);
                             } else {
                                 $.ajax({
-                                    url: "Product_StockIn.del.xhd?intype=0", type: "POST",
+                                    url: "Product_StockIn.TempDel.xhd?intype=0", type: "POST",
                                     data: { id: result, rnd: Math.random() },
                                     dataType: 'json',
                                     success: function (result) {

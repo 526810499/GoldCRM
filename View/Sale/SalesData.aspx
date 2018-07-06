@@ -25,7 +25,11 @@
             });
             $("#maingrid4").ligerGrid({
                 columns: [
-                    { display: '序号', width: 50, render: function (item, i) { return item.n; } },
+                    {
+                        display: '成交时间', name: 'Order_date', width: 150, render: function (item) {
+                            return formatTime(item.create_time);
+                        }
+                    },
                     {
                         display: '销售订单', name: 'Serialnumber', width: 250, render: function (item) {
                             var html = "<a href='javascript:void(0)' onclick=view('order','" + item.id + "')>" + item.Serialnumber + "</a>";
@@ -61,12 +65,7 @@
                         }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='amount'>" + item.sum + "</span>"; } }
                     },
                     { display: '成交部门', name: 'F_dep_id', width: 80, render: function (item, i) { return item.dep_name; } },
-                    { display: '成交人员', name: 'emp_id', width: 80, render: function (item, i) { return item.emp_name; } },
-                    {
-                        display: '成交时间', name: 'Order_date', width: 150, render: function (item) {
-                            return formatTime(item.create_time);
-                        }
-                    }
+                    { display: '成交人员', name: 'emp_id', width: 80, render: function (item, i) { return item.emp_name; } }
                 ],
                 dataAction: 'server', pageSize: 30, pageSizeOptions: [10, 20, 30, 40, 50, 60, 80, 100, 120],
                 url: "Sale_order.gridData.xhd?user=" + user + "&datacount=1&rnd=" + Math.random() + "&startdate=<%=DateTime.Now.AddDays(-1).Date%>",

@@ -15,6 +15,24 @@ namespace XHD.DAL
         { }
         #region  BasicMethod
 
+
+        /// <summary>
+        /// 删除导入的数据
+        /// </summary>
+        /// <param name="StockID"></param>
+        /// <param name="importid"></param>
+        /// <returns></returns>
+        public int DeleteImport(string StockID, string importTagID) {
+            string sql = "delete Product where StockID=@StockID and importTagID=@importTagID";
+
+            SqlParameter[] par = {
+                new SqlParameter("@importTagID",importTagID),
+                new SqlParameter("@StockID",StockID)
+            };
+
+            return DbHelperSQL.ExecuteSql(sql,par);
+        }
+
         /// <summary>
         /// 增加一条数据
         /// </summary>
@@ -22,9 +40,9 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Product(");
-            strSql.Append("id,product_name,category_id,status,Weight,indep_id,cost,price,authIn,remarks,specifications,create_id,create_time,AttCosts,StockPrice,MainStoneWeight,AttStoneWeight,AttStoneNumber,StonePrice,GoldTotal,CostsTotal,Totals,Sbarcode,depopbefwid,BarCode,OutStatus,SalesTotalPrice,SalesCostsTotal,IsGold,SupplierID,createdep_id,warehouse_id,CertificateNo,Circle,StockID,PriceTag,FixedPrice)");
+            strSql.Append("id,product_name,category_id,status,Weight,indep_id,cost,price,authIn,remarks,specifications,create_id,create_time,AttCosts,StockPrice,MainStoneWeight,AttStoneWeight,AttStoneNumber,StonePrice,GoldTotal,CostsTotal,Totals,Sbarcode,depopbefwid,BarCode,OutStatus,SalesTotalPrice,SalesCostsTotal,IsGold,SupplierID,createdep_id,warehouse_id,CertificateNo,Circle,StockID,PriceTag,FixedPrice,importTagID)");
             strSql.Append(" values (");
-            strSql.Append("@id,@product_name,@category_id,@status,@Weight,@indep_id,@cost,@price,@authIn,@remarks,@specifications,@create_id,@create_time,@AttCosts,@StockPrice,@MainStoneWeight,@AttStoneWeight,@AttStoneNumber,@StonePrice,@GoldTotal,@CostsTotal,@Totals,@Sbarcode,@depopbefwid,@BarCode,@OutStatus,@SalesTotalPrice,@SalesCostsTotal,@IsGold,@SupplierID,@createdep_id,0,@CertificateNo,@Circle,@StockID,@PriceTag,@FixedPrice)");
+            strSql.Append("@id,@product_name,@category_id,@status,@Weight,@indep_id,@cost,@price,@authIn,@remarks,@specifications,@create_id,@create_time,@AttCosts,@StockPrice,@MainStoneWeight,@AttStoneWeight,@AttStoneNumber,@StonePrice,@GoldTotal,@CostsTotal,@Totals,@Sbarcode,@depopbefwid,@BarCode,@OutStatus,@SalesTotalPrice,@SalesCostsTotal,@IsGold,@SupplierID,@createdep_id,0,@CertificateNo,@Circle,@StockID,@PriceTag,@FixedPrice,@importTagID)");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@product_name", SqlDbType.VarChar,250),
@@ -62,6 +80,7 @@ namespace XHD.DAL
                     new SqlParameter("@StockID", SqlDbType.VarChar,50),
                     new SqlParameter("@PriceTag", SqlDbType.Decimal,18),
                     new SqlParameter("@FixedPrice", SqlDbType.Decimal,18),
+                    new SqlParameter("@importTagID", SqlDbType.VarChar,50),
             };
             parameters[0].Value = model.id;
             parameters[1].Value = model.product_name;
@@ -99,6 +118,7 @@ namespace XHD.DAL
             parameters[33].Value = model.StockID;
             parameters[34].Value = model.PriceTag;
             parameters[35].Value = model.FixedPrice;
+            parameters[36].Value = model.importTagID;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {

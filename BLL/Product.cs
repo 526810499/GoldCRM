@@ -28,6 +28,17 @@ namespace XHD.BLL
         }
 
         /// <summary>
+        /// 删除导入的数据
+        /// </summary>
+        /// <param name="StockID"></param>
+        /// <param name="importid"></param>
+        /// <returns></returns>
+        public int DeleteImport(string StockID, string importTagID)
+        {
+            return dal.DeleteImport(StockID,importTagID);
+        }
+
+        /// <summary>
         /// 增加一条数据
         /// </summary>
         public bool Add(XHD.Model.Product model)

@@ -56,6 +56,9 @@
     <Reference Include="IBatisNet.DataMapper">
       <HintPath>..\Lib\IBatisNet.DataMapper.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\Lib\npoi\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>ueditor\net\Bin\Newtonsoft.Json.dll</HintPath>
@@ -854,6 +857,7 @@
     <Content Include="Product\AllStock.aspx" />
     <Content Include="Product\PrintOutProduct.aspx" />
     <Content Include="Product\PrintProduct.aspx" />
+    <Content Include="Product\product_excel_add.aspx" />
     <Content Include="Product\product_View.aspx" />
     <Content Include="Product\StockIn.aspx" />
     <Content Include="Product\StockIn_Add.aspx" />
@@ -879,6 +883,7 @@
     <Content Include="Sale\contract_add.aspx" />
     <Content Include="Sale\contract_atta.aspx" />
     <Content Include="Sale\GetOrder.aspx" />
+    <Content Include="Sale\printOrder2.aspx" />
     <Content Include="Sale\printOrder.aspx" />
     <Content Include="Sale\SalesData.aspx" />
     <Content Include="Sale\order.aspx" />
@@ -981,6 +986,9 @@
     <Content Include="font\fontawesome-webfont.woff2" />
     <Content Include="Test.aspx" />
     <Content Include="welcome.htm" />
+    <Content Include="file\template\K金类_入库模板.xlsx" />
+    <Content Include="file\template\珠宝类_入库模板.xlsx" />
+    <Content Include="file\template\黄金类_入库模板.xlsx" />
     <None Include="JS\DragFlow\jquery-1.4.1-vsdoc.js" />
     <Content Include="JS\DragFlow\jquery-1.4.1.js" />
     <Content Include="JS\DragFlow\jquery-1.4.1.min.js" />

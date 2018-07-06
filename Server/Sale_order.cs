@@ -450,17 +450,22 @@ namespace XHD.Server
             id = PageValidate.InputText(id, 50);
             DataSet ds = order.GetList($"Sale_order.id = '{id}'");
 
-            var receivable = new BLL.Finance_Receivable();
-            if (ds.Tables[0].Rows[0]["receive_money"].CDecimal(0, false) > 0)
+            if (ds.Tables[0].Rows.Count == 0)
             {
-                return XhdResult.Error("此订单下含有收款，不允许删除！").ToString();
+                return XhdResult.Error("参数不正确，更新失败！").ToString();
+            }
+            DataRow dr = ds.Tables[0].Rows[0];
+
+            if (dr["Order_status_id"].CString("") == "5587BCED-0A36-4EDF-9562-F962A9B1913C")
+            {
+                return XhdResult.Error("已支付订单不允许删除！").ToString();
             }
 
             int rows = new BLL.Sale_order_details().GetDetailCount(id);
 
             if (rows > 0)
             {
-                return XhdResult.Error("此订单下含有商品，不允许删除！").ToString();
+                return XhdResult.Error("此订单下含有商品,如果要删除请先移除商品后在操作！").ToString();
             }
 
             bool candel = true;
@@ -470,22 +475,6 @@ namespace XHD.Server
                 candel = getauth.GetBtnAuthority(emp_id.ToString(), "3D175449-0461-44B4-A400-3BA2625AA237");
                 if (!candel)
                     return XhdResult.Error("无此权限！").ToString();
-
-                //dataauth
-                var dataauth = new GetDataAuth();
-                DataAuth auth = dataauth.getAuth(emp_id);
-                string authid = ds.Tables[0].Rows[0]["employee_id"].ToString();
-                switch (auth.authtype)
-                {
-                    case 0: candel = false; break;
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4:
-                        if (authid.IndexOf(auth.authtext) == -1) candel = false; break;
-                }
-                if (!candel)
-                    return XhdResult.Error("权限不够！").ToString();
             }
 
             bool isdel = order.Delete(id);

@@ -219,15 +219,15 @@
             }
         }
         function f_save() {
-            if ($("input[name=default_post_check]").length == 0) {
-                $.ligerDialog.warn("请添加岗位！");
-                return;
-            }
+            //if ($("input[name=default_post_check]").length == 0) {
+            //    $.ligerDialog.warn("请添加岗位！");
+            //    return;
+            //}
 
-            if (!f_checkdefault()) {
-                $.ligerDialog.warn("请选择默认岗位！");
-                return;
-            }
+            //if (!f_checkdefault()) {
+            //    $.ligerDialog.warn("请选择默认岗位！");
+            //    return;
+            //}
 
             if ($(form1).valid()) {
                 var data = manager.getData();

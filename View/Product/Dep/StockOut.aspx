@@ -10,7 +10,7 @@
     <link href="../../CSS/input.css" rel="stylesheet" type="text/css" />
     <script src="../../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="../../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
-    <script src="../../JS/XHD.js?v=1" type="text/javascript"></script>
+    <script src="../../JS/XHD.js?v=2" type="text/javascript"></script>
     <script src="../../lib/jquery.form.js" type="text/javascript"></script>
 
     <script type="text/javascript">
@@ -183,7 +183,7 @@
                     buttons.push({ text: '审核通过', onclick: f_saveYesAuth });
                     buttons.push({ text: '审核不通过', onclick: f_saveNoAuth });
                 }
-                f_openWindow2('product/Dep/StockOut_Add.aspx?authbtn=1&id=' + rows.id + "&astatus=" + rows.status, "审核出库单", 1050, 680, buttons);
+                f_openWindow2('product/Dep/StockOut_Add.aspx?authbtn=1&id=' + rows.id + "&astatus=" + rows.status, "审核出库单", 1050, 780, buttons);
             }
             else {
                 $.ligerDialog.warn('请选择出库单！');
@@ -204,7 +204,7 @@
         }
 
         function PView(id) {
-            f_openWindow2('product/Dep/StockOut_Add.aspx?id=' +id, "查看出库单", 1050, 680);
+            f_openWindow2('product/Dep/StockOut_Add.aspx?id=' + id, "查看出库单", 1050, 780);
         }
 
         function edit() {
@@ -216,7 +216,7 @@
                     buttons.push({ text: '保存', onclick: f_save });
                     buttons.push({ text: '保存并提交审核', onclick: f_saveAuth });
                 }
-                f_openWindow2('product/Dep/StockOut_Add.aspx?id=' + rows.id + "&astatus=" + rows.status, "修改出库单", 1050, 680, buttons);
+                f_openWindow2('product/Dep/StockOut_Add.aspx?id=' + rows.id + "&astatus=" + rows.status, "修改出库单", 1050, 780, buttons);
             }
             else {
                 $.ligerDialog.warn('请选择出库单！');
@@ -226,7 +226,7 @@
             var buttons = [];
             buttons.push({ text: '保存', onclick: f_save });
             buttons.push({ text: '保存并提交审核', onclick: f_saveAuth });
-            f_openWindow2('product/Dep/StockOut_Add.aspx?astatus=0', "新增出库单", 1050, 680, buttons);
+            f_openWindow2('product/Dep/StockOut_Add.aspx?astatus=0', "新增出库单", 1050, 780, buttons);
         }
 
         function del() {

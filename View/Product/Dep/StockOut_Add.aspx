@@ -163,7 +163,7 @@
                 enabledEdit: false,
                 url: "Product_out.gridDetail.xhd?outid=" + getparastr("id"),
                 width: '100%',
-                height: 500,
+                height: 450,
                 heightDiff: -1,
                 onLoaded: f_loaded
             });

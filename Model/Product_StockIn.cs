@@ -47,7 +47,7 @@ namespace XHD.Model
             get { return _create_time; }
         }
         /// <summary>
-        /// 状态 0 未保存 1 已提交入库  -1 临时单
+        /// 状态 -1 临时记录单 0未提交保存 1总部保存并提交  门店则是 1 提交等待审核 2审核通过 3审核不通过
         /// </summary>
         public int status
         {

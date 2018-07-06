@@ -25,9 +25,9 @@
                             return html;
                         }
                     },
-                    {
-                        display: '条形码头', name: 'CodingBegins', width: 50
-                    }
+                    //{
+                    //    display: '条形码头', name: 'CodingBegins', width: 50
+                    //}
                 ],
                 dataAction: 'local',
                 pageSize: 30,

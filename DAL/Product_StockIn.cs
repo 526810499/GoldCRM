@@ -197,6 +197,36 @@ namespace XHD.DAL
             }
         }
 
+
+        /// <summary>
+        /// 删除一条数据
+        /// </summary>
+        public bool DeleteTemp(string id)
+        {
+
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(" delete from Product_StockIn  ");
+            strSql.Append(" where id=@id  and status=-1 ");
+            strSql.Append(" delete from Product_StockInDetial ");
+            strSql.Append(" where stockid=@id  ");
+            strSql.Append(" delete from Product ");
+            strSql.Append(" where stockid=@id ");
+           
+            SqlParameter[] parameters = {
+                    new SqlParameter("@id", SqlDbType.VarChar,50)         };
+            parameters[0].Value = id;
+
+            int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
+            if (rows > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         /// <summary>
         /// 批量删除数据
         /// </summary>
@@ -222,7 +252,7 @@ namespace XHD.DAL
         public DataSet GetList(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select id,create_id,create_time,status,remark,createdep_id,inType,warehouse_id ");
+            strSql.Append("select id,create_id,create_time,status,remark,createdep_id,inType,warehouse_id,FromOutID,FromType ");
             strSql.Append(" FROM Product_StockIn ");
             if (strWhere.Trim() != "")
             {
@@ -237,7 +267,7 @@ namespace XHD.DAL
         /// <param name="createid"></param>
         /// <param name="status"></param>
         /// <returns></returns>
-        public string CheckHQAddOrder(string create_id, int status,int inType)
+        public string CheckHQAddOrder(string create_id, int status, int inType)
         {
             string sql = "select id from Product_StockIn(nolock) where create_id=@create_id and  status=@status and inType=@inType ";
             SqlParameter[] parameters = {
@@ -247,6 +277,27 @@ namespace XHD.DAL
             };
 
             return DbHelperSQL.ExecuteScalar(sql, parameters).CString("");
+        }
+
+        /// <summary>
+        /// 门店入库审核
+        /// </summary>
+        /// <param name="OrderID"></param>
+        /// <param name="AuthID"></param>
+        /// <param name="Remark"></param>
+        /// <param name="Status"></param>
+        /// <returns></returns>
+        public int DeepAuthSotockIN(string OrderID, string AuthID, string Remark, int Status)
+        {
+            string sql = "update Product_StockIn set  authuser_id=@authuser_id,authuser_time=getdate(),remark=@remark,status=@Status where id=@id";
+            SqlParameter[] parameters = {
+                    new SqlParameter("@Status", SqlDbType.Int) { Value=Status},
+                    new SqlParameter("@authuser_id", SqlDbType.NVarChar,50) { Value=AuthID},
+                    new SqlParameter("@remark", SqlDbType.NVarChar,50) { Value=Remark},
+                       new SqlParameter("@id", SqlDbType.NVarChar,50) { Value=OrderID},
+            };
+
+            return DbHelperSQL.ExecuteSql(sql, parameters).CInt(0, false);
         }
 
         /// <summary>

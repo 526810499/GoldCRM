@@ -145,14 +145,14 @@
                     <input type="text" id="T_category_parent" name="T_category_parent" validate="{required:true}" />
                 </td>
             </tr>
-            <tr>
+            <%--            <tr>
                 <td height="23" colspan="2">
                     <div align="left" style="width: 62px">Ãı–Œ¬ÎÕ∑£∫</div>
                 </td>
                 <td height="23">
                     <input type="text" id="T_CodingBegins" name="T_CodingBegins" ltype="text" validate="{required:true}" />
                 </td>
-            </tr>
+            </tr>--%>
             <tr>
                 <td height="23" style="width: 62px">
 
@@ -168,7 +168,7 @@
                     <input type="hidden" id="T_category_icon" name="T_category_icon" />
                 </td>
             </tr>
-     
+
 
         </table>
     </form>

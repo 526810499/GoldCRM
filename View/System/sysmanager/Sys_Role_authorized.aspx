@@ -20,7 +20,7 @@
         var manager = "";
         var treemanager;
         $(function () {
-            $("#layout1").ligerLayout({ leftWidth: 150, allowLeftResize: false, allowLeftCollapse: true, space: 2, heightDiff:1 });
+            $("#layout1").ligerLayout({ leftWidth: 150, allowLeftResize: false, allowLeftCollapse: true, space: 2, heightDiff: 1 });
             $("#tree1").ligerTree({
                 //url: '../data/Sys_Menu.GetSysApp&rnd=' + Math.random(),
                 url: 'Sys_App.GetAppList.xhd?rnd=' + Math.random(),
@@ -76,7 +76,7 @@
 
                 ],
                 rownumbers: true,
-                allowHideColumn:false,
+                allowHideColumn: false,
                 rowid: "Menu_id",
                 onAfterShowData: f_setbtn,
                 onCheckRow: f_onCheckRow,
@@ -116,7 +116,7 @@
             if (!note) return;
 
             //获取权限
-            var roleid = getparastr("Role_id");           
+            var roleid = getparastr("Role_id");
 
             $.ajax({
                 type: 'get',
@@ -129,17 +129,17 @@
                     var arrmenu = new Array();
                     var arrbtn = new Array();
 
-                    arrmenu = data.menus; 
+                    arrmenu = data.menus;
                     for (var i = 0; i < arrmenu.length; i++) {
                         if (arrmenu[i].length > 0) {
                             manager.setCheck(arrmenu[i]);
                             //console.log(arrmenu[i]);
                         }
                     }
-                    
+
                     arrbtn = data.btns;
                     for (var j = 0; j < arrbtn.length; j++) {
-                            $("#" + arrbtn[j]).prop("checked", true);  
+                        $("#" + arrbtn[j]).prop("checked", true);
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -179,7 +179,8 @@
                 f_saving();
                 $.ajax({
                     type: 'post',
-                    url: "Sys_role.saveauth.xhd?postdata=" + savetext + '&rdm=' + Math.random(),
+                    url: "Sys_role.saveauth.xhd?rdm=" + Math.random(),
+                    data: { postdata: savetext },
                     success: function (data) {
                         //alert(data);
                         setTimeout(function () {
@@ -243,7 +244,7 @@
                         var arrname = new Array();
                         arrstr = returntxt.split(",");
 
-                       
+
                         for (var j = 0; j < arrstr.length; j++) {
                             arrstr1 = arrstr[j].split("|");
                             arrid = arrstr1[0];

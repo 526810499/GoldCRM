@@ -15,7 +15,7 @@ namespace XHD.Server
         public static BLL.Product product = new BLL.Product();
         public static BLL.Product_allot allotBll = new BLL.Product_allot();
         public static BLL.Product_allotDetail allotDetailBll = new BLL.Product_allotDetail();
-
+        public static BLL.Product_out outBll = new BLL.Product_out();
         public static Model.Product_allot model = new Model.Product_allot();
 
         private string authRightID = "";
@@ -43,6 +43,32 @@ namespace XHD.Server
 
         }
 
+        /// <summary>
+        /// 调拨发到门店审核
+        /// </summary>
+        private string OutSendDepAuth()
+        {
+            Model.Product_out omodel = new Model.Product_out()
+            {
+                id = model.id,
+                createdep_id = model.createdep_id,
+                todep_id = model.todep_id,
+                allot_id = model.id,
+                create_id = emp_id,
+            };
+            string RKID = "RK" + DateTime.Now.ToString("yyMMdd") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
+            //不是提交审核的直接跳过
+            if (model.status != 1 || model.allotType != 1)
+            {
+                return "";
+            }
+
+            //通知到门店
+            outBll.SendDepStockIn(omodel, RKID, "门店调拨", 1);
+
+            return RKID;
+        }
+
         public string save()
         {
             model.NowWarehouse = request["T_NowWarehouse_val"].CInt(0, false);
@@ -54,10 +80,11 @@ namespace XHD.Server
             model.allotType = request["allotType"].CInt(0, false);
             string id = PageValidate.InputText(request["id"], 50);
             string postData = request["postData"].CString("");
-            bool isAdd = true;
+            bool isAdd = false;
             string msg = "";
             bool CanAdd = true;
             bool CanDel = true;
+            string RKID = "";
             try
             {
                 List<Model.ProductAllot> list = JsonDyamicHelper.NetJsonConvertJson<List<Model.ProductAllot>>(postData);
@@ -117,6 +144,12 @@ namespace XHD.Server
 
                     if (!string.IsNullOrEmpty(Log_Content))
                         Syslog.Add_log(UserID, UserName, IPStreet, EventTitle, EventType, EventID, Log_Content);
+
+                    //提交审核的
+                    if (model.status == 1)
+                    {
+                        RKID = OutSendDepAuth();
+                    }
                 }
                 else
                 {
@@ -126,7 +159,7 @@ namespace XHD.Server
                     id = "DB" + DateTime.Now.ToString("yyMMdd") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
                     model.id = id;
                     model.status = request["auth"].CInt(0, false) == 1 ? 1 : 0;
-
+                    isAdd = true;
                     allotBll.Add(model);
                 }
 
@@ -169,23 +202,32 @@ namespace XHD.Server
                         allotDetailBll.Delete(model.allotType, id, m.BarCode);
                     }
                 }
+                if (isAdd && model.status == 1)
+                {
+                    RKID = OutSendDepAuth();
+                }
 
             }
             catch (Exception error)
             {
                 msg = error.ToString();
                 SoftLog.LogStr(error.ToString(), "SaveAllotid");
-                return XhdResult.Error("添加失败,请确认是否重复添加后在操作！").ToString();
+
             }
 
             if (msg.Length > 0)
             {
                 //添加提交审核的但是商品状态改变的修改状态
-                if (model.status == 1 && isAdd)
+                if (model.status == 1)
                 {
                     model.status = 0;
                     allotBll.Update(model);
+                    if (!string.IsNullOrWhiteSpace(RKID))
+                    {
+                        outBll.DeleteSotockIN(RKID);
+                    }
                 }
+
                 return XhdResult.Success(msg + "<br/>商品状态发生改变,请确认后在操作！").ToString();
             }
 
@@ -209,10 +251,6 @@ namespace XHD.Server
             string Total = "";
             int allotType = request["allottype"].CInt(0, false);
             string serchtxt = $" allotType=" + allotType;
-
-            //调拨审核
-            int dbauth = request["dbauth"].CInt(0, false);
-
 
             if (!string.IsNullOrEmpty(request["whid"]))
                 serchtxt += $" and NowWarehouse={request["whid"].CInt(0, false)}";
@@ -239,26 +277,7 @@ namespace XHD.Server
                 serchtxt += $" and id in({ids.Trim(',')})";
             }
 
-            //调拨审核的则等于当前部门的
-            if (dbauth == 1)
-            {
-                serchtxt += $" and status<>0  ";
-                //是管理员并且拥有所有数据权限
-                if (uid == "admin" || CheckBtnAuthority(allDataBtnid))
-                {
-
-                }
-                else/* if (CheckBtnAuthority(depDataBtnid))*/
-                {
-                    serchtxt += $" and fromdep_id='{dep_id}'";
-                }
-                //else {//什么权限都没有
-                //    serchtxt += $" and fromdep_id='none'";
-                //}
-            }
-            else {
-                serchtxt = GetSQLCreateIDWhere(serchtxt, true);
-            }
+            serchtxt = GetSQLCreateIDWhere(serchtxt, true);
 
             DataSet ds = allotBll.GetList(PageSize, PageIndex, serchtxt, sorttext, out Total);
             string dt = GetGridJSON.DataTableToJSON1(ds.Tables[0], Total);

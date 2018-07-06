@@ -10,7 +10,7 @@
     <link href="../../CSS/input.css" rel="stylesheet" type="text/css" />
     <script src="../../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="../../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
-    <script src="../../JS/XHD.js?v=6" type="text/javascript"></script>
+    <script src="../../JS/XHD.js?v=1" type="text/javascript"></script>
     <script src="../../lib/jquery.form.js" type="text/javascript"></script>
 
     <script type="text/javascript">
@@ -31,7 +31,16 @@
                             return html;
                         }
                     },
-                    //{ display: '入库仓库', name: 'product_warehouse', align: 'left', width: 200 },
+                {
+                    display: '入库审核类型', name: 'FromType', width: 100, align: 'left', render: function (item) {
+                        switch (item.status) {
+                            case 1:
+                                return "<span style='color:#0066FF'> 门店调拨 </span>";
+                            default:
+                                return "<span style='color:#00CC66'> 总部出库 </span>";
+                        }
+                    }
+                },
                     { display: '入库门店', name: 'dep_name', align: 'left', width: 120 },
                     { display: '创建人', name: 'CreateName', align: 'left', width: 120 },
                     {
@@ -42,10 +51,12 @@
                     {
                         display: '状态', name: 'status', width: 100, align: 'left', render: function (item) {
                             switch (item.status) {
-                                case 0:
-                                    return "<span style='color:#0066FF'> 未保存提交 </span>";
                                 case 1:
-                                    return "<span style='color:#00CC66'> 已保存并入库 </span>";
+                                    return "<span style='color:#0066FF'> 等待审核 </span>";
+                                case 2:
+                                    return "<span style='color:#00CC66'> 审核通过 </span>";
+                                case 3:
+                                    return "<span style='color:red'> 审核不通过 </span>";
                             }
                         }
                     },
@@ -149,9 +160,18 @@
                 $("#sstatus").ligerComboBox({
                     data: [
                     { text: '所有', id: '' },
-                    { text: '未提交', id: '0' },
-                    { text: '保存并入库', id: '1' }
+                    { text: '等待审核', id: '1' },
+                    { text: '审核通过', id: '2' },
+                     { text: '审核不通过', id: '3' },
                     ], valueFieldID: 'status',
+                });
+                $("#scode").ligerTextBox({ width: 250 });
+                $("#ftype").ligerComboBox({
+                    data: [
+                    { text: '所有', id: '' },
+                    { text: '门店调拨', id: '1' },
+                    { text: '总部出库', id: '0' },
+                    ], valueFieldID: 'FromType',
                 });
                 $("#swarehouse_id").ligerComboBox({
                     width: 150,
@@ -195,7 +215,7 @@
         //查询
         function doserch() {
             var sendtxt = "&rnd=" + Math.random();
-            var serchtxt = "intype=1&status=" + $("#status").val();
+            var serchtxt = "intype=1&status=" + $("#status").val() + "&FromType=" + $("#FromType").val();
             serchtxt += "&sorderid=" + $("#sorderid").val();
             serchtxt += "&scode=" + $("#scode").val();
             //serchtxt += "&swarehouse_id=" + $("#swarehouse_id_val").val();
@@ -214,25 +234,25 @@
             });
         }
 
-        //function auth() {
-        //    var manager = $("#maingrid4").ligerGetGridManager();
-        //    var rows = manager.getSelectedRow();
-        //    if (rows && rows != undefined) {
-        //        var buttons = [];
-        //        if (rows.status == 1) {
-        //            buttons.push({ text: '审核通过', onclick: f_saveYesAuth });
-        //            buttons.push({ text: '审核不通过', onclick: f_saveNoAuth });
-        //        }
-        //        f_openWindow2('product/Dep/StockIn_Add.aspx?authbtn=1&id=' + rows.id + "&astatus=" + rows.status, "审核入库单", 1050, 680, buttons);
-        //    }
-        //    else {
-        //        $.ligerDialog.warn('请选择盘点单！');
-        //    }
-        //}
+        function auth() {
+            var manager = $("#maingrid4").ligerGetGridManager();
+            var rows = manager.getSelectedRow();
+            if (rows && rows != undefined) {
+                var buttons = [];
+                if (rows.status == 1) {
+                    buttons.push({ text: '审核通过', onclick: f_saveAuth });
+                    buttons.push({ text: '审核不通过', onclick: f_saveAuthN });
+                }
+                f_openWindow2('product/Dep/StockIn_Add.aspx?authbtn=1&id=' + rows.id + "&astatus=" + rows.status, "审核入库单", 1050, 680, buttons);
+            }
+            else {
+                $.ligerDialog.warn('请选择入库单！');
+            }
+        }
 
         function PView(id) {
 
-            f_openWindow2('product/Dep/StockIn_Add.aspx?id=' + id, "查看入库单", 1050, 680);
+            f_openWindow2('product/Dep/StockIn_Add.aspx?id=' + id, "查看入库单", 1050, 780);
 
         }
 
@@ -242,11 +262,11 @@
             var rows = manager.getSelectedRow();
             if (rows && rows != undefined) {
                 var buttons = [];
-                if (rows.status == 0) {
-                    buttons.push({ text: '保存', onclick: f_save });
-                    buttons.push({ text: '保存并入库', onclick: f_saveAuth });
+                if (rows.status == 1) {
+                    buttons.push({ text: '审核通过', onclick: f_saveAuth });
+                    buttons.push({ text: '审核不通过', onclick: f_saveAuthN });
                 }
-                f_openWindow2('product/Dep/StockIn_Add.aspx?id=' + rows.id + "&astatus=" + rows.status, "修改入库单", 1050, 680, buttons);
+                f_openWindow2('product/Dep/StockIn_Add.aspx?id=' + rows.id + "&astatus=" + rows.status, "修改审核入库单", 1050, 780, buttons);
             }
             else {
                 $.ligerDialog.warn('请选择入库单！');
@@ -256,8 +276,8 @@
             var buttons = [];
             buttons.push({ text: '保存', onclick: f_save });
             //buttons.push({ text: '生成盘点单', onclick: create_take });
-            buttons.push({ text: '保存并入库', onclick: f_saveAuth });
-            f_openWindow2('product/Dep/StockIn_Add.aspx?astatus=0', "新增入库单", 1050, 680, buttons);
+            buttons.push({ text: '保存提交审核', onclick: f_saveAuth });
+            f_openWindow2('product/Dep/StockIn_Add.aspx?astatus=0', "新增入库单", 1050, 780, buttons);
         }
 
         function create_take() {
@@ -270,8 +290,8 @@
             var row = manager.getSelectedRow();
             if (row) {
                 var msg = "入库单删除不能恢复，确定删除？";
-                if (row.status == 1) {
-                    $.ligerDialog.warn("已提交保存不能删除");
+                if (row.status == 1 || row.status == 3) {
+                    $.ligerDialog.warn("等待审核或已审核通过的入库单不能删除");
                     return false;
                 }
 
@@ -308,11 +328,49 @@
         }
 
         function f_saveAuth(item, dialog) {
-            Save(item, dialog, 1);
+            Auth(item, dialog, 2);
+        }
+
+        function f_saveAuthN(item, dialog) {
+            Auth(item, dialog, 3);
         }
 
         function f_save(item, dialog) {
             Save(item, dialog, 0);
+        }
+
+        function Auth(item, dialog, auth) {
+            var issave = dialog.frame.f_saveAuth();
+            if (issave) {
+                dialog.close();
+                $.ligerDialog.waitting('数据保存中,请稍候...');
+                $.ajax({
+                    url: "Product_StockIn.Auth.xhd?intype=1&auth=" + auth, type: "POST",
+                    data: issave,
+                    dataType: 'json',
+                    success: function (result) {
+                        $.ligerDialog.closeWaitting();
+
+                        var obj = eval(result);
+
+                        if (obj.isSuccess) {
+                            if (obj.Message != null && obj.Message != undefined) {
+                                $.ligerDialog.warn(obj.Message);
+                            }
+                            f_load();
+                        }
+                        else {
+                            $.ligerDialog.error(obj.Message);
+                        }
+                        //f_load();     
+                    },
+                    error: function () {
+                        $.ligerDialog.closeWaitting();
+                        $.ligerDialog.error('操作失败！');
+                    }
+                });
+
+            }
         }
 
         function Save(item, dialog, auth) {
@@ -400,13 +458,13 @@
                     </td>
                     <td>
                         <input id='scode' name="scode" type='text' /></td>
-                    <%--                    <td>
-                        <div style='width: 60px; text-align: right; float: right'>盘点仓库：</div>
+                    <td>
+                        <div style='width: 100px; text-align: right; float: right'>入库审核类型：</div>
                     </td>
                     <td>
-                        <input type='select' id='swarehouse_id' name='swarehouse_id' ltype='text' ligerui='{width:120}' />
+                        <input type='select' id='ftype' name='ftype' ltype='text' ligerui='{width:120}' />
 
-                    </td>--%>
+                    </td>
 
 
                     <td>

@@ -89,7 +89,7 @@
                             ],
                             [
                                 { display: "支付方式", name: "T_paytype", type: "select", options: "{width:180,url:'Sys_Param.combo.xhd?type=pay_type',value:'" + obj.pay_type_id + "'}", validate: "{required:true}", initValue: formatTimebytype(obj.import_time, "yyyy-MM-dd") },
-                                { display: "Pos单号", name: "T_PayTheBill", type: "text", options: "{width:180}", validate: "{required:true}", initValue: (obj.PayTheBill) }
+                                { display: "Pos单号", name: "T_PayTheBill", type: "text", options: "{width:180}",  initValue: (obj.PayTheBill) }
                             ],
                             [
                                 { display: "应收金额", name: "T_total", type: "text", options: "{width:180,disabled:false}", validate: "{required:true}", initValue: toMoney(obj.total_amount, "") },

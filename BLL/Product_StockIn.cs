@@ -63,6 +63,13 @@ namespace XHD.BLL
         /// <summary>
         /// 删除一条数据
         /// </summary>
+        public bool DeleteTemp(string id)
+        {
+            return dal.DeleteTemp(id);
+        }
+        /// <summary>
+        /// 删除一条数据
+        /// </summary>
         public bool DeleteList(string idlist)
         {
             return dal.DeleteList(idlist);
@@ -82,9 +89,22 @@ namespace XHD.BLL
         /// <param name="createid"></param>
         /// <param name="status"></param>
         /// <returns></returns>
-        public string CheckHQAddOrder(string createid, int status,int inType)
+        public string CheckHQAddOrder(string createid, int status, int inType)
         {
             return dal.CheckHQAddOrder(createid, status, inType);
+        }
+
+        /// <summary>
+        /// 门店入库审核
+        /// </summary>
+        /// <param name="OrderID"></param>
+        /// <param name="AuthID"></param>
+        /// <param name="Remark"></param>
+        /// <param name="Status"></param>
+        /// <returns></returns>
+        public int DeepAuthSotockIN(string OrderID, string AuthID, string Remark, int Status)
+        {
+            return dal.DeepAuthSotockIN(OrderID, AuthID, Remark, Status);
         }
 
         /// <summary>

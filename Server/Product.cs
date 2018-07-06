@@ -58,7 +58,7 @@ namespace XHD.Server
             model.SupplierID = request["T_SupplierID_val"].CInt(0, false);
             model.Sbarcode = PageValidate.InputText(request["T_Sbarcode"], 255);
             model.remarks = PageValidate.InputText(request["T_Remark"], 255);
-            model.IsGold = (request["T_GType_val"].CInt(0,false));
+            model.IsGold = (request["T_GType_val"].CInt(0, false));
             model.BarCode = PageValidate.InputText(request["T_BarCode"], 50);
             model.CertificateNo = PageValidate.InputText(request["T_CertificateNo"], 50);
             model.Circle = PageValidate.InputText(request["T_Circle"], 50);
@@ -287,13 +287,13 @@ namespace XHD.Server
             //门店入库则状态不能是总部入库或者是已销售的
             if (optype == "mdrk")
             {
-                serchtxt += $" and status not in(1,4) and outStatus<>1   and indep_id='{ dep_id }' ";
+                serchtxt += $" and status not in(1,4) and outStatus<>1 and authIn=0   and indep_id='{ dep_id }' ";
             }
 
             //门店出库则状态不能为总部操作状态，取不能是已销售的
             if (optype == "mdck")
             {
-                serchtxt += $" and status not in(1,2,3,4) and outStatus<>3  and indep_id='{ dep_id }' ";
+                serchtxt += $" and status not in(1,2,3,4) and outStatus<>3 and authIn=0 and indep_id='{ dep_id }' ";
             }
 
             //门店调拨 状态不能为总部操作状态，取不能是已销售的
@@ -302,7 +302,12 @@ namespace XHD.Server
                 //门店调拨需要判断跨门店权限
                 //string depids = TransDepartmentID();
 
-                serchtxt += $" and status not in(1,2,3,4) and outStatus<>2   ";// and indep_id in({ depids })
+                serchtxt += $" and status not in(1,2,3,4) and authIn=0 and outStatus<>2   ";// and indep_id in({ depids })
+            }
+            //总部出库
+            if (optype == "zbck")
+            {
+                serchtxt += $" and status=1 and authIn=0     ";// and indep_id in({ depids })
             }
 
             //是否要取门店的
@@ -529,6 +534,339 @@ namespace XHD.Server
             else {
                 ExportError("无数据导出");
             }
+        }
+
+        #endregion
+
+
+        #region  导入商品
+
+        Dictionary<string, string> dictTs = new Dictionary<string, string>();
+        BLL.Product_category cateBll = new BLL.Product_category();
+        /// <summary>
+        /// 获取分类ID
+        /// </summary>
+        /// <param name="TypeName"></param>
+        /// <returns></returns>
+        private string GetTypeID(string TypeName)
+        {
+            TypeName = TypeName.Trim();
+            string id = "";
+            if (dictTs.ContainsKey(TypeName))
+            {
+                id = dictTs[TypeName];
+            }
+            else {
+                id = cateBll.GetcategoryID(TypeName);
+                if (!dictTs.ContainsKey(TypeName))
+                {
+                    dictTs.Add(TypeName, id);
+                }
+            }
+
+            return id;
+        }
+
+
+        /// <summary>
+        /// K金类导入
+        /// </summary>
+        /// <param name="rows"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private string KJImport(DataRow rows, string id, int index, int isAddTemp, string importTagID, ref bool IsEnd)
+        {
+            //品名	克重	单价	成本	标签价	条码
+
+            try
+            {
+                string name = rows["品名"].CString("").Trim();
+                string kz = rows["克重"].CString("").Trim();
+                string jhjz = rows["单价"].CString("").Trim();
+                string cb = rows["成本"].CString("").Trim();
+                string bqgf = rows["标签价"].CString("").Trim();
+                string tm = rows["条码"].CString("").Trim();
+
+                if (string.IsNullOrWhiteSpace(name) && string.IsNullOrWhiteSpace(tm))
+                {
+                    IsEnd = true;
+                }
+                else {
+                    Model.Product pmodel = new Model.Product(isAddTemp)
+                    {
+                        product_name = name,
+                        Weight = kz.CDecimal(0, false),
+                        StockPrice = jhjz.CDecimal(0, false),
+                        Totals = cb.CDecimal(0, false),
+                        SalesCostsTotal = bqgf.CDecimal(0, false),
+                        SalesTotalPrice = bqgf.CDecimal(0, false),
+                        BarCode = tm,
+                        IsGold = 1,
+                        StockID = id,
+                        status = (isAddTemp == 1 ? -1 : 1),
+                        importTagID = importTagID,
+                        createdep_id = dep_id,
+                        create_id = emp_id,
+                        create_time = DateTime.Now,
+                        AuthIn = 0,
+                        id = Guid.NewGuid().ToString(),
+                    };
+                    bool r = string.IsNullOrWhiteSpace(product.GetProductIdByCode(tm));
+                    if (!r)
+                    {
+                        return "条形码【" + tm + "】已存在";
+                    }
+                    pmodel.category_id = GetTypeID(name);
+                    r = product.Add(pmodel);
+                    if (!r)
+                    {
+                        return "条形码【" + tm + "】添加失败";
+                    }
+                }
+            }
+            catch (Exception error)
+            {
+                SoftLog.LogStr(error, "HJImportProduct");
+
+                return "第【" + index + "】行添加异常";
+            }
+
+
+            return "";
+        }
+
+
+
+        /// <summary>
+        /// 黄金类导入
+        /// </summary>
+        /// <param name="rows"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private string HJImport(DataRow rows, string id, int index, int isAddTemp, string importTagID, ref bool IsEnd)
+        {
+            //序号	品名	克重	进货金价	金价小计	附工费	工费小计	成本	标签工费	一口价	条码
+
+            try
+            {
+                string name = rows["品名"].CString("").Trim();
+                string kz = rows["克重"].CString("").Trim();
+                string jhjz = rows["进货金价"].CString("").Trim();
+                string jjxj = rows["金价小计"].CString("").Trim();
+                string fgf = rows["附工费"].CString("").Trim();
+                string gwxj = rows["工费小计"].CString("").Trim();
+                string cb = rows["成本"].CString("").Trim();
+                string bqgf = rows["标签工费"].CString("").Trim();
+                string ykj = rows["一口价"].CString("").Trim();
+                string tm = rows["条码"].CString("").Trim();
+
+                if (string.IsNullOrWhiteSpace(name) && string.IsNullOrWhiteSpace(tm))
+                {
+                    IsEnd = true;
+                }
+                else {
+                    Model.Product pmodel = new Model.Product(isAddTemp)
+                    {
+                        product_name = name,
+                        Weight = kz.CDecimal(0, false),
+                        StockPrice = jhjz.CDecimal(0, false),
+                        GoldTotal = jjxj.CDecimal(0, false),
+                        AttCosts = fgf.CDecimal(0, false),
+                        CostsTotal = gwxj.CDecimal(0, false),
+                        Totals = cb.CDecimal(0, false),
+                        SalesCostsTotal = bqgf.CDecimal(0, false),
+                        FixedPrice = ykj.CDecimal(0, false),
+                        BarCode = tm,
+                        IsGold = 1,
+                        StockID = id,
+                        status = (isAddTemp == 1 ? -1 : 1),
+                        importTagID = importTagID,
+                        createdep_id = dep_id,
+                        create_id = emp_id,
+                        create_time = DateTime.Now,
+                        AuthIn = 0,
+                        id = Guid.NewGuid().ToString(),
+                    };
+                    bool r = string.IsNullOrWhiteSpace(product.GetProductIdByCode(tm));
+                    if (!r)
+                    {
+                        return "条形码【" + tm + "】已存在";
+                    }
+                    pmodel.category_id = GetTypeID(name);
+                    r = product.Add(pmodel);
+                    if (!r)
+                    {
+                        return "条形码【" + tm + "】添加失败";
+                    }
+                }
+            }
+            catch (Exception error)
+            {
+                SoftLog.LogStr(error, "HJImportProduct");
+
+                return "第【" + index + "】行添加异常";
+            }
+
+
+            return "";
+        }
+
+        /// <summary>
+        /// 珠宝类导入
+        /// </summary>
+        /// <param name="rows"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private string ZBImport(DataRow rows, string id, int index, int isAddTemp, string importTagID, ref bool IsEnd)
+        {
+
+
+            //首饰名称 含配金重    总件重 手寸  主石(ct / g / p)  颜色 净度  成本 标签价 条码
+            try
+            {
+                string name = rows["首饰名称"].CString("").Trim();
+                string pjz = rows["含配金重"].CString("").Trim();
+                string zjz = rows["总件重"].CString("").Trim();
+                string sc = rows["手寸"].CString("").Trim();
+                string zs = rows["主石(ct/g/p)"].CString("").Trim();
+                string ys = rows["颜色"].CString("").Trim();
+                string jd = rows["净度"].CString("").Trim();
+                string cb = rows["成本"].CString("").Trim();
+                string bqj = rows["标签价"].CString("").Trim();
+                string tm = rows["条码"].CString("").Trim();
+
+                if (string.IsNullOrWhiteSpace(name) && string.IsNullOrWhiteSpace(tm))
+                {
+                    IsEnd = true;
+                }
+                else {
+                    string[] zsarys = zs.Split('/');
+                    int fss = 0;
+                    if (zsarys.Length > 2)
+                    {
+                        fss = zsarys[2].CInt(0, false);
+                    }
+                    Model.Product pmodel = new Model.Product(isAddTemp)
+                    {
+                        product_name = name,
+                        Weight = pjz.CDecimal(0, false),
+                        Circle = sc,
+                        MainStoneWeight = zsarys[0].CDecimal(0, false),
+                        AttStoneNumber = fss,
+                        remarks = "净度：" + jd + ",颜色:" + ys,
+                        Totals = cb.CDecimal(0, false),
+                        PriceTag = bqj.CDecimal(0, false),
+                        SalesTotalPrice = bqj.CDecimal(0, false),
+                        BarCode = tm,
+                        IsGold = 0,
+                        StockID = id,
+                        status = (isAddTemp == 1 ? -1 : 1),
+                        importTagID = importTagID,
+                        createdep_id = dep_id,
+                        create_id = emp_id,
+                        create_time = DateTime.Now,
+                        AuthIn = 0,
+                        id = Guid.NewGuid().ToString(),
+                    };
+                    bool r = string.IsNullOrWhiteSpace(product.GetProductIdByCode(tm));
+                    if (!r)
+                    {
+                        return "条形码【" + tm + "】已存在";
+                    }
+                    pmodel.category_id = GetTypeID(name);
+                    r = product.Add(pmodel);
+                    if (!r)
+                    {
+                        return "条形码【" + tm + "】添加失败";
+                    }
+                }
+            }
+            catch (Exception error)
+            {
+                SoftLog.LogStr(error, "ZBImportProduct");
+
+                return "第【" + index + "】行添加异常";
+            }
+
+
+            return "";
+        }
+
+        public string ImportProduct()
+        {
+            string id = request["pid"];
+            System.Text.StringBuilder logs = new System.Text.StringBuilder();
+            string importTagID = Guid.NewGuid().ToString();
+            try
+            {
+
+                int isAddTemp = request["isAddTemp"].CInt(0, false);
+                //0 珠宝 1 黄金 2K金
+                int AddType = request["addtype"].CInt(0, false);
+
+                HttpPostedFile uploadFile = request.Files[0];
+                if (uploadFile == null || string.IsNullOrWhiteSpace(id))
+                {
+                    return XhdResult.Error("确认参数是否正常").ToString();
+                }
+                string filename = uploadFile.FileName;
+                ExcelExtension ension = ExcelExtension.XLS;
+                if (filename.LastIndexOf(".xlsx") > -1)
+                {
+                    ension = ExcelExtension.XLSX;
+                }
+                Stream stream = uploadFile.InputStream;
+
+                DataTable table = ExportHelper.ReadExcelToDataTable(stream, ension);
+                if (table == null || table.Rows.Count <= 0)
+                {
+                    return XhdResult.Error("表格数据未读到").ToString();
+                }
+                if (!table.Columns.Contains("条码"))
+                {
+                    return XhdResult.Error("请确认导入的Excel 模板格式是否正确").ToString();
+                }
+                int index = 1;
+                int rs = 0;
+                foreach (DataRow rows in table.Rows)
+                {
+                    bool IsEnd = false;
+                    string msg = "";
+                    switch (AddType)
+                    {
+                        case 0:
+                            msg = ZBImport(rows, id, index, isAddTemp, importTagID, ref IsEnd);
+                            break;
+                        case 1:
+                            msg = HJImport(rows, id, index, isAddTemp, importTagID, ref IsEnd);
+                            break;
+                        case 2:
+                            msg = KJImport(rows, id, index, isAddTemp, importTagID, ref IsEnd);
+                            break;
+                    }
+                    if (!string.IsNullOrWhiteSpace(msg)) { logs.AppendLine(msg + Environment.NewLine); }
+                    else {
+                        rs++;
+                    }
+
+                    if (IsEnd)
+                    {
+                        break;
+                    }
+
+                    index++;
+                }
+
+                logs.AppendLine("成功上传:" + rs);
+
+            }
+            catch (Exception error)
+            {
+                SoftLog.LogStr(error, "ImportProduct");
+                product.DeleteImport(id, importTagID);
+                return XhdResult.Error("批量导入失败,请确认导入数据库格式是否正确！").ToString();
+            }
+            return XhdResult.Success(logs.ToString()).ToString();
         }
 
         #endregion

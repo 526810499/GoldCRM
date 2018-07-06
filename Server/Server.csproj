@@ -44,8 +44,20 @@
     <Reference Include="FluentScheduler">
       <HintPath>G:\下载\360\FluentSchedulerDemo2010\FluentSchedulerDemo2010\bin\Debug\FluentScheduler.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\Lib\npoi\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="NPOI">
-      <HintPath>..\..\..\Cmj.DataExchange\Cmj.DataExchange\bin\Debug\NPOI.dll</HintPath>
+      <HintPath>..\Lib\npoi\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>..\Lib\npoi\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\Lib\npoi\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats">
+      <HintPath>..\Lib\npoi\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
     <Reference Include="OpenPop, Version=2.0.6.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

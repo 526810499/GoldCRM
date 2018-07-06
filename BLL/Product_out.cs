@@ -23,6 +23,26 @@ namespace XHD.BLL
             return dal.Exists(id);
         }
 
+
+        /// <summary>
+        /// 通知门店入库
+        /// </summary>
+        /// <returns></returns>
+        public int SendDepStockIn(Model.Product_out model, string RKID, string Remark, int FromType)
+        {
+            return dal.SendDepStockIn(model, RKID,Remark,FromType);
+        }
+
+        /// <summary>
+        /// 删除门店入库单
+        /// </summary>
+        /// <param name="RKID"></param>
+        /// <returns></returns>
+        public bool DeleteSotockIN(string RKID)
+        {
+            return dal.DeleteSotockIN(RKID);
+        }
+
         /// <summary>
         /// 增加一条数据
         /// </summary>

@@ -32,6 +32,66 @@ namespace XHD.DAL
 
 
         /// <summary>
+        /// 通知门店入库
+        /// </summary>
+        /// <returns></returns>
+        public int SendDepStockIn(Model.Product_out model, string RKID, string Remark, int FromType)
+        {
+            string sql = "";
+
+            //插入入库单，出入入库明细
+            sql =
+                            @"
+            INSERT INTO Product_StockIn(id, create_id, create_time, status, remark, createdep_id, inType, warehouse_id,  FromOutID,FromType)
+            VALUES(@id, @create_id, GETDATE(), 1, @Remark, @createdep_id, 1, 0,  @FromOutID,@FromType)
+
+           
+            ";
+            //总部出库
+            if (FromType == 0)
+            {
+                sql += @" INSERT Product_StockInDetial(id, stockid, BarCode, createdep_id, remark, warehouse_id, oldwarehouse_id)
+            SELECT NEWID(), @id, barcode,  @createdep_id,'', 0, 0 FROM dbo.Product_outDetail WHERE outid=@FromOutID";
+            }
+            else {
+                //门店调拨
+                sql += @" INSERT Product_StockInDetial(id, stockid, BarCode, createdep_id, remark, warehouse_id, oldwarehouse_id)
+            SELECT NEWID(), @id, barcode,  @createdep_id,'',0,0 FROM dbo.Product_allotDetail WHERE allotid=@FromOutID";
+            }
+
+            SqlParameter[] par = {
+                new SqlParameter("@id",RKID),
+                new SqlParameter("@create_id",model.create_id),
+                new SqlParameter("@createdep_id",model.todep_id),
+                new SqlParameter("@FromOutID",model.id),
+                new SqlParameter("@Remark",Remark),
+                new SqlParameter("@FromType",FromType),
+            };
+
+            return DbHelperSQL.ExecuteSql(sql, par);
+        }
+
+        /// <summary>
+        /// 删除门店入库单
+        /// </summary>
+        /// <param name="RKID"></param>
+        /// <returns></returns>
+        public bool DeleteSotockIN(string RKID)
+        {
+            string sql = @"
+                DELETE payuser FROM  Product_StockInDetial  AS payuser 
+                LEFT JOIN Product_StockIn AS bu ON bu.id=payuser.stockid 
+                WHERE bu.FromOutID=@RKID and bu.inType=1 
+                DELETE Product_StockIn where FromOutID=@RKID and inType=1 
+          ";
+            SqlParameter[] parameters = {
+                    new SqlParameter("@RKID", SqlDbType.VarChar,50) { Value=RKID}      };
+
+            return DbHelperSQL.ExecuteSql(sql, parameters) > 0;
+        }
+
+
+        /// <summary>
         /// 增加一条数据
         /// </summary>
         public bool Add(Model.Product_out model)
@@ -148,17 +208,16 @@ namespace XHD.DAL
             strSql.Append("authuser_time=@authuser_time,");
             strSql.Append("remark=@remark");
             strSql.Append(" where id=@id ");
-            int rows = 1;
-            rows += CountPorduct(id);
+
             int pstatus = 3;
             //审核 通过需要同步信息
             if (status == 2)
             {
                 if (outType == 1)
                 {
-                    pstatus = 103;
+                    pstatus = 101;
                 }
-                string sql = @"UPDATE payuser SET payuser.indep_id=bu.todep_id,payuser.authIn=0,payuser.status=@pstatus,warehouse_id=bu.ToWarehouse,payuser.outStatus=3 FROM dbo.Product(nolock) AS payuser inner JOIN Product_outDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.outid=@id and payuser.status<>4 ";
+                string sql = @"UPDATE payuser SET payuser.indep_id=bu.todep_id,payuser.authIn=0,payuser.status=@pstatus,warehouse_id=bu.ToWarehouse,payuser.outStatus=1 FROM dbo.Product(nolock) AS payuser inner JOIN Product_outDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.outid=@id and payuser.status<>4 ";
                 strSql.AppendLine(sql);
 
             }
@@ -182,7 +241,7 @@ namespace XHD.DAL
             {
                 cm.Parameters.Add(p);
             }
-            return ExecTran(cm, rows);
+            return ExecTran(cm, -1);
         }
 
         /// <summary>

@@ -384,6 +384,7 @@ function AnsiToUnicode(chrCode) {
 * Url编码 
 **/
 urlencode = function (unzipStr) {
+    if (unzipStr == null || unzipStr == undefined) { return ""; }
     var zipstr = "";
     var strSpecial = "!\"#$%&'()*+,/:;<=>?[]^`{|}~%";
     var tt = "";
@@ -408,6 +409,7 @@ urlencode = function (unzipStr) {
 * Url解码 
 **/
 urldecode = function (zipStr) {
+    if (zipStr == null || zipStr == undefined) { return "";}
     var uzipStr = "";
     for (var i = 0; i < zipStr.length; i++) {
         var chr = zipStr.charAt(i);
@@ -651,16 +653,16 @@ function view(type, id, id1) {
             width = 730, height = 450, title = "应收单", url = 'finance/receivable_add.aspx?id=' + id;
             break;
         case "product":
-            width = 730, height = 600, title = "查看商品", url = 'product/product_add.aspx?pid=' + id;
+            width = 730, height = 780, title = "查看商品", url = 'product/product_add.aspx?pid=' + id;
             break;
         case "depproduct":
-            width = 730, height = 600, title = "查看商品", url = 'product/product_View.aspx?depdata=1&pid=' + id;
+            width = 730, height = 780, title = "查看商品", url = 'product/product_View.aspx?depdata=1&pid=' + id;
             break;
         case "pallot":
-            width = 730, height = 600, title = "查看调拨", url = 'product/Product_allotAdd.aspx?id=' + id;
+            width = 730, height = 780, title = "查看调拨", url = 'product/Product_allotAdd.aspx?id=' + id;
             break;
         case "pout":
-            width = 730, height = 600, title = "查看出库", url = 'product/Product_outAdd.aspx?id=' + id;
+            width = 730, height = 780, title = "查看出库", url = 'product/Product_outAdd.aspx?id=' + id;
             break;
         case "pretrieval":
             width = 730, height = 600, title = "查看订购补货", url = 'product/Product_Retrieval_Add.aspx?id=' + id;
@@ -674,7 +676,7 @@ function view(type, id, id1) {
         case "pcategory":
             width = 730, height = 600, title = "查看商品分类", url = 'product/product_category_add.aspx?cid=' + id;
             break;
- 
+
 
     }
     f_openWindow(url, title, width, height, false, null, showMax);
@@ -740,7 +742,7 @@ function f_openWindow(url, title, width, height, onOK, zindex, showmax, closeEvn
     var buttons = [];
     if (onOK)
         buttons.push({ text: '保存', onclick: onOK });
-    buttons.push({ text: '关闭', onclick: function (item, dialog) { dialog.close(); if (closeEvnet != undefined && closeEvnet != null) { closeEvnet;} } })
+    buttons.push({ text: '关闭', onclick: function (item, dialog) { dialog.close(); if (closeEvnet != undefined && closeEvnet != null) { closeEvnet; } } })
 
     var dialogOptions = {
         zindex: z_index,
@@ -759,14 +761,14 @@ function f_openWindow(url, title, width, height, onOK, zindex, showmax, closeEvn
 }
 
 var activeDialog2 = null;
-function f_openWindow2(url, title, width, height, buttons, zindex, showmax,closeEvnet) {
+function f_openWindow2(url, title, width, height, buttons, zindex, showmax, closeEvnet) {
     var z_index = zindex || 9001;
     var showMax = showmax || true;
     if (buttons == null) {
         buttons = [];
     }
 
-    buttons.push({ text: '关闭', onclick: function (item, dialog) { dialog.close();   if (closeEvnet != undefined && closeEvnet != null) {   closeEvnet; } } });
+    buttons.push({ text: '关闭', onclick: function (item, dialog) { dialog.close(); if (closeEvnet != undefined && closeEvnet != null) { closeEvnet; } } });
 
     var dialogOptions = {
         zindex: z_index,
@@ -783,6 +785,32 @@ function f_openWindow2(url, title, width, height, buttons, zindex, showmax,close
 
     activeDialog2 = top.jQuery.ligerDialog.open(dialogOptions);
 }
+
+
+var activeDialog3 = null;
+function f_openWindowNotClose(url, title, width, height, buttons, zindex, showmax) {
+    var z_index = zindex || 9001;
+    var showMax = showmax || true;
+    if (buttons == null) {
+        buttons = [];
+    }
+
+    var dialogOptions = {
+        zindex: z_index,
+        width: width,
+        height: height,
+        title: title,
+        url: url,
+        buttons: buttons,
+        isResize: false,
+        showToggle: false,
+        showMax: showMax,
+        timeParmName: 'a'
+    };
+
+    activeDialog3 = top.jQuery.ligerDialog.open(dialogOptions);
+}
+
 
 function DateDiff(sDate) {    //sDate1和sDate2是2006-12-18格式  
     var oDate1, oDate2, iDays;

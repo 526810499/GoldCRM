@@ -21,6 +21,11 @@ namespace XHD.Server
 
         public static Model.Product_StockIn model = new Model.Product_StockIn();
 
+        public static BLL.Product_out outBll = new BLL.Product_out();
+
+
+        public static BLL.Product_allot allotBll = new BLL.Product_allot();
+
         private string authRightID = "";
         private string delRightID = "";
 
@@ -245,17 +250,7 @@ namespace XHD.Server
                 SoftLog.LogStr(error.ToString(), "Product_StockIn");
                 return XhdResult.Error("添加失败,请确认是否重复添加后在操作！").ToString();
             }
-            finally
-            {
-                if (model.status == 1)
-                {
-                    bool r = detailBll.UpdateProductWareHouse(model.id, model.warehouse_id, dep_id);
-                    if (!r)
-                    {
-                        msg += "提交保存失败";
-                    }
-                }
-            }
+
 
             if (msg.Length > 0)
             {
@@ -285,6 +280,9 @@ namespace XHD.Server
 
             if (!string.IsNullOrEmpty(request["whid"]))
                 serchtxt += $" and warehouse_id={request["whid"].CInt(0, false)}";
+
+            if (!string.IsNullOrEmpty(request["FromType"]))
+                serchtxt += $" and FromType={request["FromType"].CInt(0, false)}";
 
             if (!string.IsNullOrEmpty(request["status"]))
                 serchtxt += $" and status={request["status"].CInt(0, false)}";
@@ -410,9 +408,38 @@ namespace XHD.Server
         /// <returns></returns>
         public string CheckHQAddOrder(int inType)
         {
-            string orderid = bll.CheckHQAddOrder(emp_id, -1,inType);
+            string orderid = bll.CheckHQAddOrder(emp_id, -1, inType);
 
             return orderid;
+        }
+
+        private bool OutOrderUpStatus(string OrderID, DataTable table, int Status, string Remark)
+        {
+            string FromOutID = table.Rows[0]["FromOutID"].CString("");
+            int inType = table.Rows[0]["inType"].CInt(0, false);
+            //入库来源
+            int FromType = table.Rows[0]["FromType"].CInt(0, false);
+            if (string.IsNullOrWhiteSpace(FromOutID)) { return true; }
+            bool r = false;
+            try
+            {
+                //总部入库
+                if (FromType == 0)
+                {
+                    r = outBll.AuthApproved(1, FromOutID, emp_id, Status, Remark);
+                }
+                else {
+                    //门店调拨
+                    r = allotBll.AuthApproved(1, FromOutID, emp_id, Status, Remark, table.Rows[0]["createdep_id"].CString(dep_id));
+                }
+            }
+            catch (Exception error)
+            {
+                SoftLog.LogStr(error.ToString(), "OutOrderUpStatus");
+            }
+
+
+            return r;
         }
 
         /// <summary>
@@ -428,26 +455,82 @@ namespace XHD.Server
             }
             id = PageValidate.InputText(request["id"], 50);
             string remark = PageValidate.InputText(request["remark"], 250);
-            if (PageValidate.checkID(id, false))
+            if (!PageValidate.checkID(id, false))
             {
-                int status = request["auth"].CInt(0, false);
-
-                //审核不通过需要释放到锁库
-                if (status != 2)
-                {
-                    status = 3;
-                }
-                //bool r = bll.AuthApproved(id, emp_id, status, remark);
-                //if (r)
-                //{
-                //    return XhdResult.Success().ToString();
-                //}
-                //else {
-                //    return XhdResult.Error("审核处理失败,请确认该单下相应的商品是否发生状态改变").ToString();
-                //}
+                return XhdResult.Error("参数有误,请确认后在操作！").ToString();
             }
 
-            return "";
+            DataSet ds = bll.GetList($" id= '{id}' ");
+            DataTable table = ds.Tables[0];
+            string FromOutID = table.Rows[0]["FromOutID"].CString("");
+            int status = request["auth"].CInt(0, false);
+
+            //审核不通过需要释放到锁库
+            if (status != 2)
+            {
+                status = 3;
+            }
+            try
+            {
+                //审核操作
+                bool r = bll.DeepAuthSotockIN(id, emp_id, remark, status) > 0;
+
+                if (string.IsNullOrWhiteSpace(FromOutID))
+                {
+                    r = detailBll.UpdateProductWareHouse(model.id, model.warehouse_id, dep_id);
+                    if (!r)
+                    {
+                        bll.DeepAuthSotockIN(id, emp_id, remark + "[审核出错]", 1);
+                        return XhdResult.Error("审核处理失败,请确认该单下相应的商品是否发生状态改变!!").ToString();
+                    }
+                }
+                else {
+
+                    r = OutOrderUpStatus(id, table, status, remark);
+                    if (!r)
+                    {
+                        bll.DeepAuthSotockIN(id, emp_id, remark + "[审核出错]", 1);
+                        return XhdResult.Error("审核出错,请重试").ToString();
+                    }
+                }
+            }
+            catch (Exception error)
+            {
+                bll.DeepAuthSotockIN(id, emp_id, remark, 1);
+                SoftLog.LogStr(error.ToString(), "HQOutOrderUpStatusAuth");
+                return XhdResult.Error("参数有误,请确认后在操作！").ToString();
+            }
+            return XhdResult.Success().ToString();
+        }
+
+        /// <summary>
+        /// 删除临时单
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public string TempDel(string id)
+        {
+            if (!PageValidate.checkID(id, false)) return XhdResult.Error("参数错误！").ToString();
+            id = PageValidate.InputText(id, 50);
+            DataSet ds = bll.GetList($" id= '{id}' and create_id='{emp_id}' ");
+            if (ds.Tables[0].Rows.Count < 1)
+                return XhdResult.Error("系统错误，无数据！").ToString();
+
+            int status = ds.Tables[0].Rows[0]["status"].CInt(0, false);
+
+            //审核不通过不需要盘点
+            if (status != -1)
+            {
+                return XhdResult.Error("此入库单状态已改变，不允许删除！").ToString();
+            }
+
+            bool isdel = bll.DeleteTemp(id);
+            if (!isdel) return XhdResult.Error("系统错误，删除失败！").ToString();
+
+
+
+            return XhdResult.Success().ToString();
+
         }
 
         /// <summary>
@@ -464,7 +547,7 @@ namespace XHD.Server
                 return XhdResult.Error("系统错误，无数据！").ToString();
 
             int status = ds.Tables[0].Rows[0]["status"].CInt(0, false);
-
+            string FromOutID = ds.Tables[0].Rows[0]["FromOutID"].CString("");
             //审核不通过不需要盘点
             if (status == 2)
             {
@@ -482,6 +565,12 @@ namespace XHD.Server
 
             bool isdel = bll.Delete(id);
             if (!isdel) return XhdResult.Error("系统错误，删除失败！").ToString();
+
+            //有来源的
+            if (string.IsNullOrWhiteSpace(FromOutID))
+            {
+                outBll.Delete(FromOutID, 0);
+            }
 
             //日志
             string EventType = "门店入库单删除";

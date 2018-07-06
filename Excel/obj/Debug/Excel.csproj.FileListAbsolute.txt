@@ -146,6 +146,7 @@ F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Debug\IBatisNet.DataM
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Debug\IBatisNet.Common.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Debug\System.Data.SQLite.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Debug\MySql.Data.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Debug\ICSharpCode.SharpZipLib.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Debug\NPOI.OpenXmlFormats.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Debug\NPOI.OpenXml4Net.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Excel\bin\Debug\XHD.Common.pdb

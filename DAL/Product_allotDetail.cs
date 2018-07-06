@@ -61,7 +61,7 @@ namespace XHD.DAL
             strSql.Append("@id,@allotid,@barcode,@FromWarehouse,@create_id,@create_time,@allotType,@ToWarehouse,@todep_id)");
 
 
-            strSql.AppendLine(" update Product set authIn=101 where barcode=@barcode and Status<>4");//
+            strSql.AppendLine(" update Product set authIn=101,OutStatus=102 where barcode=@barcode and Status<>4");//
 
 
             SqlParameter[] parameters = {

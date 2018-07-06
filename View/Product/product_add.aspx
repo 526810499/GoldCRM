@@ -21,6 +21,9 @@
     <script src="../lib/ligerUI2/js/plugins/ligerComboBox.js"></script>
     <script src="../lib/ligerUI2/js/plugins/ligerTree.js"></script>
     <script type="text/javascript">
+
+        var isUpdate = false;
+
         $(function () {
             $.metadata.setType("attr", "validate");
             XHD.validate($(form1));
@@ -50,12 +53,12 @@
                     return false;
                 }
 
-                var sct = parseFloat($("#T_SalesCostsTotal").val().replace(/\$|\,/g, ''));
-                var stp = parseFloat($("#T_SalesTotalPrice").val().replace(/\$|\,/g, ''));
-                if (sct <= 0 && stp <= 0) {
-                    $.ligerDialog.warn('价格总价不能为空！');
-                    return false;
-                }
+                //var sct = parseFloat($("#T_SalesCostsTotal").val().replace(/\$|\,/g, ''));
+                //var stp = parseFloat($("#T_SalesTotalPrice").val().replace(/\$|\,/g, ''));
+                //if (sct <= 0 && stp <= 0) {
+                //    $.ligerDialog.warn('价格总价不能为空！');
+                //    return false;
+                //}
 
                 var sendtxt = "&pid=" + getparastr("pid");
                 return $("form :input").fieldSerialize() + sendtxt;
@@ -151,6 +154,7 @@
                     });
                     $("#T_BarCode").attr("maxlength", "15");
                     if (oaid.length > 0) {
+                        isUpdate = true;
                         if (obj.StockPrice == null || obj.StockPrice == undefined || obj.StockPrice == 0) { $("#T_StockPrice").val(toMoney(0.00)); }
                         if (obj.AttCosts == null || obj.AttCosts == undefined || obj.AttCosts == 0) { $("#T_AttCosts").val(toMoney(0.00)); }
                         if (obj.status != 1) {
@@ -167,6 +171,9 @@
 
         //成本总价=（金价小计+工费小计+石价）
         function SetT_Totals() {
+            //修改的不做计算
+            if (isUpdate) { return false; }
+
             var total = 0;
             var T_GoldTotal = $("#T_GoldTotal").val();
             var T_CostsTotal = $("#T_CostsTotal").val();
@@ -181,6 +188,8 @@
 
         //销售价格=（成本总价*2.5）
         function SetT_SalesTotalPrice(value) {
+            //修改的不做计算
+            if (isUpdate) { return false; }
 
             var T_Totals = $("#T_Totals").val();
             //（2）黄金类商品，生成销售工费（工费小计*3）
@@ -188,12 +197,12 @@
                 var T_CostsTotal = $("#T_CostsTotal").val();
                 var total = parseFloat(T_CostsTotal.replace(/\$|\,/g, '')) * 3;
                 $("#T_SalesCostsTotal").val(toMoney(total));
-                $("#T_SalesTotalPrice").val(0.00);
+             // $("#T_SalesTotalPrice").val(0.00);
             } else {
                 //非黄金类商品（K金，金镶玉，钻石）生成销售单价（成本总价*2.5）
                 var total = parseFloat(T_Totals.replace(/\$|\,/g, '')) * 2.5;
                 $("#T_SalesCostsTotal").val(0.00);
-                $("#T_SalesTotalPrice").val(toMoney(total));
+                //$("#T_SalesTotalPrice").val(toMoney(total));
             }
 
             //设置标签价格等
@@ -203,6 +212,9 @@
 
         //进货金价*克重
         function SetT_GoldTotal() {
+            //修改的不做计算
+            if (isUpdate) { return false; }
+
             var total = 0;
             var T_StockPrice = $("#T_StockPrice").val();
             var T_Weight = $("#T_Weight").val();
@@ -213,6 +225,9 @@
 
         //附工费*克重
         function SetT_CostsTotal() {
+            //修改的不做计算
+            if (isUpdate) { return false; }
+
             var total = 0;
             var T_AttCosts = $("#T_AttCosts").val();
             var T_Weight = $("#T_Weight").val();
@@ -223,6 +238,10 @@
 
         //设置标签价格
         function SetT_PriceTag() {
+
+            //修改的不做计算
+            if (isUpdate) { return false; }
+
             var ptype = parseInt($("#T_GType_val").val());
 
             //工费小计
@@ -264,7 +283,8 @@
                 default:
                     break;
             }
-
+            //销售价就是标签价
+            $("#T_SalesTotalPrice").val($("#T_PriceTag").val());
         }
 
 

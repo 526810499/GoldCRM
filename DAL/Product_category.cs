@@ -17,6 +17,24 @@ namespace XHD.DAL
         { }
         #region  BasicMethod
 
+
+        /// <summary>
+        /// 获取分类ID
+        /// </summary>
+        /// <param name="categoryName"></param>
+        /// <returns></returns>
+        public string GetcategoryID(string categoryName)
+        {
+            string sql = "select id from Product_category(nolock) where product_category=@product_category";
+            SqlParameter[] parameters = {
+
+                    new SqlParameter("@product_category", SqlDbType.VarChar,250) { Value=categoryName},
+
+            };
+
+            return DbHelperSQL.ExecuteScalar(sql, parameters).CString("");
+        }
+
         /// <summary>
         /// 增加一条数据
         /// </summary>

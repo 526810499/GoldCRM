@@ -281,6 +281,11 @@ F:\Visual Studio 2013\XHDCRM\XHDCRM2\Server\obj\Debug\XHD.Server.pdb
 F:\Visual Studio 2013\XHDCRM\XHDCRM2\Server\bin\Debug\XHD.Service.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\XHD.Server.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\XHD.Server.pdb
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\ICSharpCode.SharpZipLib.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\NPOI.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\NPOI.OOXML.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\NPOI.OpenXml4Net.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\NPOI.OpenXmlFormats.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\XHD.BLL.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\XHD.Common.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\Server\bin\Debug\XHD.Controller.dll

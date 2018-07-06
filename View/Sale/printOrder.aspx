@@ -5,7 +5,32 @@
     <script src="../JS/pringAreas/jquery.PrintArea.js"></script>
     <script src="../JS/XHD.js"></script>
     <meta charset="utf-8" />
+    <style media="print">
+        @page {
+            size: auto; /* auto is the initial value */
+            margin: 0mm; /* this affects the margin in the printer settings */
+        }
+    </style>
     <script type="text/javascript">
+
+
+
+        // 设置页眉页脚为空
+        function PageSetup_Null() {
+            try {
+                var hkey_root, hkey_path, hkey_key
+                hkey_root = "HKEY_CURRENT_USER"
+                hkey_path = "\\Software\\Microsoft\\Internet Explorer\\PageSetup\\";
+
+                var RegWsh = new ActiveXObject("WScript.Shell");
+                hkey_key = "header";
+                RegWsh.RegWrite(hkey_root + hkey_path + hkey_key, "");
+                hkey_key = "footer";
+                RegWsh.RegWrite(hkey_root + hkey_path + hkey_key, "");
+            }
+            catch (e) { }
+        }
+
         $(function () {
 
             var id = getparastr("id", "")
@@ -65,11 +90,11 @@
                             $("#odetail").append(datas);
 
                             datas2 += "<tr>";
-                            datas2 += "<td  colspan='4'><div style='padding-top:10px'>销售人：" + $("#yyy").text() + "&nbsp;&nbsp;收银员：" + $("#syy").text() + "</div></td></tr>";
+                            datas2 += "<td  colspan='4'><div style='padding-top:10px'>销售人：" + $("#yyy").text() + "<span style='padding-left:30px'> </span>总金额：" + $("#atotla").text() + "<span style='padding-left:30px'> </span>收银员：" + $("#syy").text() + "</div></td></tr>";
 
                             datas2 += "</table>";
-                            $("#cw").append(datas2);
-                            $("#other").append(datas2);
+                            $("#other1").append(datas2);
+                            $("#other2").append(datas2);
                         }
                     }
                 });
@@ -84,35 +109,133 @@
 <body>
 
     <div id="divprint">
-        <div>
-            <div style="padding-top: 5px; padding-left: 120px" id="cuser"></div>
-            <div style="padding-top: 5px; padding-left: 120px" id="oid"></div>
-            <div style="padding-top: 5px; padding-left: 120px" id="oday"></div>
-            <div style="padding-top: 5px; padding-left: 120px" id="otime"></div>
-            <div style="padding-top: 5px; padding-left: 120px" id="onumber"></div>
 
-            <div style="padding-top: 80px; padding-left: 40px; height: 210px" id="odetail">
-            </div>
+        <table>
+            <tr style="height: 82px; padding-left: 90px">
+                <td style="padding-left: 100px">
+                    <table>
+                        <tr style="height: 0px">
+                            <td>
+                                <div id="cuser"></div>
+                            </td>
+                        </tr>
+                        <tr style="height: 15px">
+                            <td>
+                                <div id="oid"></div>
+                            </td>
+                        </tr>
+                        <tr style="height: 15px">
+                            <td>
+                                <div id="oday"></div>
+                            </td>
+                        </tr>
+                        <tr style="height: 15px">
+                            <td>
+                                <div id="otime"></div>
+                            </td>
+                        </tr>
+                        <tr style="height: 15px">
+                            <td>
+                                <div id="onumber"></div>
+                            </td>
+                        </tr>
 
-            <div style="padding-left: 120px; float: left;" id="yyy"></div>
-            <div style="float: right; padding-right: 150px;" id="atotla">0</div>
 
-            <div style="padding-left: 120px; padding-top: 20px;" id="syy"></div>
-            <div style="padding-top: 5px; padding-left: 120px;" id="jl">&nbsp; </div>
-            <div style="padding-top: 5px; padding-left: 120px;" id="dwjg">&nbsp; </div>
-            <div style="padding-top: 5px; padding-bottom: 10px; padding-left: 120px;" id="fkfs">现金</div>
-        </div>
-        <div style="height: 280px" id="cw">
-        </div>
-        <div id="other">
-        </div>
+
+
+                    </table>
+
+                </td>
+
+            </tr>
+
+            <tr style="height: 56px">
+                <td></td>
+            </tr>
+            <tr style="height: 220px; padding-left: 56px">
+                <td style="padding-left: 25px">
+                    <table>
+                        <tr style="height: 8px">
+                            <td></td>
+                        </tr>
+                        <tr style="height: 160px">
+                            <td>
+                                <div id="odetail">
+                                </div>
+                            </td>
+                        </tr>
+
+                    </table>
+                </td>
+            </tr>
+            <tr style="height: 85px; padding-left: 90px">
+                <td style="width: 550px; padding-left: 65px">
+                    <table style="height: 85px; padding-left: 80px">
+
+                        <tr style="height: 10px">
+                            <td style="width: 160px">
+                                <div id="yyy"></div>
+                            </td>
+                            <td style="width: 350px; text-align: right;">
+                                <div id="atotla">0</div>
+                            </td>
+                        </tr>
+                        <tr style="height: 15px">
+                            <td colspan="2">
+                                <div id="syy"></div>
+                            </td>
+                        </tr>
+                        <tr style="height: 15px">
+                            <td colspan="2">
+                                <div id="jl"></div>
+                            </td>
+                        </tr>
+                        <tr style="height: 15px">
+                            <td colspan="2">
+                                <div id="dwjg"></div>
+                            </td>
+                        </tr>
+                        <tr style="height: 15px">
+                            <td colspan="2">
+                                <div id="fkfs">现金</div>
+                            </td>
+                        </tr>
+
+                    </table>
+
+                </td>
+            </tr>
+
+
+
+
+
+            <tr style="height: 216px; padding-left: 60px">
+                <td style="height: 196px; padding-left: 60px">
+                    <div id="other2">
+                    </div>
+                </td>
+            </tr>
+            <tr style="height: 25px">
+                <td></td>
+            </tr>
+
+            <tr style="height: 196px; padding-left: 60px">
+                <td style="height: 196px; padding-left: 60px">
+                    <div id="other1">
+                    </div>
+                </td>
+            </tr>
+        </table>
 
     </div>
 
 
     <script>
         $(document).ready(function () {
+            PageSetup_Null();
             $("#divprint").printArea();
+            PageSetup_Null();
             window.setTimeout(function () {
                 window.close();
             }, 1000);

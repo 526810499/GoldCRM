@@ -10,7 +10,7 @@
     <link href="../../CSS/input.css" rel="stylesheet" type="text/css" />
     <script src="../../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="../../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
-    <script src="../../JS/XHD.js?v=3" type="text/javascript"></script>
+    <script src="../../JS/XHD.js?v=1" type="text/javascript"></script>
     <script src="../../lib/jquery.form.js" type="text/javascript"></script>
 
     <script type="text/javascript">
@@ -62,11 +62,11 @@
                                 case 0:
                                     return "<span style='color:#0066FF'> 等待提交 </span>";
                                 case 1:
-                                    return "<span style='color:#00CC66'> 等待调出门店审核 </span>";
+                                    return "<span style='color:#00CC66'> 等待调入门店审核 </span>";
                                 case 2:
-                                    return "<span style='color:#009900'> 调出门店审核通过 </span>";
+                                    return "<span style='color:#009900'> 调入门店审核通过 </span>";
                                 case 3:
-                                    return "<span style='color:#FF3300'> 调出门店审核不通过 </span>";
+                                    return "<span style='color:#FF3300'> 调入门店审核不通过 </span>";
                             }
                         }
                     },
@@ -145,7 +145,7 @@
                 var items = [];
                 var arr = data.Items;
                 for (var i = 0; i < arr.length; i++) {
-                    if (arr[i].text == "审核") { arr[i].text = "审核列表";}
+
                     arr[i].icon = "../../" + arr[i].icon;
                     items.push(arr[i]);
                 }
@@ -167,9 +167,9 @@
                     data: [
                     { text: '所有', id: '' },
                     { text: '等待提交', id: '0' },
-                    { text: '等待调出门店审核', id: '1' },
-                    { text: '调出门店审核通过', id: '2' },
-                    { text: '调出门店审核不通过', id: '3' }
+                    { text: '等待调入门店审核', id: '1' },
+                    { text: '调入门店审核通过', id: '2' },
+                    { text: '调入门店审核不通过', id: '3' }
                     ], valueFieldID: 'status',
                 });
                 $("#maingrid4").ligerGetGridManager()._onResize();
@@ -199,7 +199,7 @@
 
         function auth() {
             var buttons = [];
-            f_openWindow2('product/Dep/StockAllotAuth.aspx?allottype=1', "审核列表", 1200, 700, buttons);
+            //  f_openWindow2('product/Dep/StockAllotAuth.aspx?allottype=1', "审核列表", 1200, 780, buttons);
         }
 
 
@@ -212,7 +212,7 @@
                     buttons.push({ text: '保存', onclick: f_save });
                     buttons.push({ text: '保存并提交审核', onclick: f_saveAuth });
                 }
-                f_openWindow2('product/Dep/StockAllot_Add.aspx?id=' + rows.id + "&astatus=" + rows.status, "修改调拨单", 1200, 600, buttons);
+                f_openWindow2('product/Dep/StockAllot_Add.aspx?id=' + rows.id + "&astatus=" + rows.status, "修改调拨单", 1200, 780, buttons);
             }
             else {
                 $.ligerDialog.warn('请选择调度单！');
@@ -223,13 +223,17 @@
             var buttons = [];
             buttons.push({ text: '保存', onclick: f_save });
             buttons.push({ text: '保存并提交审核', onclick: f_saveAuth });
-            f_openWindow2('product/Dep/StockAllot_Add.aspx?astatus=0', "新增调拨单", 1200, 600, buttons);
+            f_openWindow2('product/Dep/StockAllot_Add.aspx?astatus=0', "新增调拨单", 1200, 780, buttons);
         }
 
         function del() {
             var manager = $("#maingrid4").ligerGetGridManager();
             var row = manager.getSelectedRow();
             if (row) {
+                if (row.status == 1 || row.status == 3) {
+                    $.ligerDialog.warn("等待审核或已审核通过的调拨单不能删除");
+                    return false;
+                }
                 $.ligerDialog.confirm("调拨单删除不能恢复，确定删除？", function (yes) {
                     if (yes) {
                         $.ajax({

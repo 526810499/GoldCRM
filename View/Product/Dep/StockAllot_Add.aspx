@@ -107,7 +107,7 @@
                         );
                     if (obj != null && obj.status >= 0) {
                         rows.push([
-                               { display: "状态", name: "T_Status", type: "select", options: "{width:180,onSelected:function(value){},data:[{id:0,text:'等待提交'},{id:1,text:'等待审核'},{id:2,text:'审核通过'},{id:3,text:'审核不通过'}],selectBoxHeight:50, value:" + obj.status + "}", validate: "{required:true}" }
+                               { display: "状态", name: "T_Status", type: "select", options: "{width:180,onSelected:function(value){},data:[{id:0,text:'等待提交'},{id:1,text:'等待调入门店审核'},{id:2,text:'调入门店审核通过'},{id:3,text:'调入门店审核不通过'}],selectBoxHeight:50, value:" + obj.status + "}", validate: "{required:true}" }
                         ]);
                     }
                     $("#form1").ligerAutoForm({
@@ -162,7 +162,7 @@
                 enabledEdit: false,
                 url: "Product_allot.gridDetail.xhd?allotid=" + getparastr("id"),
                 width: '100%',
-                height: 500,
+                height: 450,
                 heightDiff: -1,
                 onLoaded: f_loaded
             });

@@ -158,7 +158,7 @@ namespace XHD.DAL
         /// </summary>
         public DataSet GetList(string strWhere)
         {
-            string sql = @"select   p.BarCode,p.product_name,c.product_category AS category_name, p.Weight, p.SalesCostsTotal, p.SalesTotalPrice, p.CostsTotal, p.Totals,  p.FixedPrice,p.remarks
+            string sql = @"select   ptd.stockid,p.BarCode,p.product_name,c.product_category AS category_name, p.Weight, p.SalesCostsTotal, p.SalesTotalPrice, p.CostsTotal, p.Totals,  p.FixedPrice,p.remarks
                          from dbo.Product_StockInDetial(NOLOCK) AS ptd 
                         INNER JOIN dbo.Product(NOLOCK) AS p ON ptd.BarCode = p.BarCode 
                         INNER JOIN dbo.Product_category(NOLOCK) AS c ON p.category_id = c.id  ";

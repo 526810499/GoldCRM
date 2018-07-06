@@ -10,7 +10,7 @@
     <link href="../CSS/input.css" rel="stylesheet" type="text/css" />
     <script src="../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
-    <script src="../JS/XHD.js?v=3" type="text/javascript"></script>
+    <script src="../JS/XHD.js?v=1" type="text/javascript"></script>
     <script src="../lib/jquery.form.js" type="text/javascript"></script>
 
     <script type="text/javascript">
@@ -184,10 +184,10 @@
                     buttons.push({ text: '审核通过', onclick: f_saveYesAuth });
                     buttons.push({ text: '审核不通过', onclick: f_saveNoAuth });
                 }
-                f_openWindow2('product/Product_outAdd.aspx?authbtn=1&id=' + rows.id + "&astatus=" + rows.status, "审核出库单", 1050, 680, buttons);
+                // f_openWindow2('product/Product_outAdd.aspx?authbtn=1&id=' + rows.id + "&astatus=" + rows.status, "审核出库单", 1050, 780, buttons);
             }
             else {
-                $.ligerDialog.warn('请选择出库单！');
+                // $.ligerDialog.warn('请选择出库单！');
             }
         }
 
@@ -201,7 +201,7 @@
                     buttons.push({ text: '保存', onclick: f_save });
                     buttons.push({ text: '保存并提交审核', onclick: f_saveAuth });
                 }
-                f_openWindow2('product/Product_outAdd.aspx?id=' + rows.id + "&astatus=" + rows.status, "修改出库单", 1050, 680, buttons);
+                f_openWindow2('product/Product_outAdd.aspx?id=' + rows.id + "&astatus=" + rows.status, "修改出库单", 1050, 780, buttons);
             }
             else {
                 $.ligerDialog.warn('请选择出库单！');
@@ -211,13 +211,19 @@
             var buttons = [];
             buttons.push({ text: '保存', onclick: f_save });
             buttons.push({ text: '保存并提交审核', onclick: f_saveAuth });
-            f_openWindow2('product/Product_outAdd.aspx?astatus=0', "新增出库单", 1050, 680, buttons);
+            f_openWindow2('product/Product_outAdd.aspx?astatus=0', "新增出库单", 1050, 780, buttons);
         }
 
         function del() {
             var manager = $("#maingrid4").ligerGetGridManager();
             var row = manager.getSelectedRow();
             if (row) {
+                
+                if (row.status == 1 || row.status == 3) {
+                    $.ligerDialog.warn("等待审核或已审核通过的出库单不能删除");
+                    return false;
+                }
+
                 $.ligerDialog.confirm("出库单删除不能恢复，确定删除？", function (yes) {
                     if (yes) {
                         $.ajax({
@@ -337,8 +343,8 @@
             var manager = $("#maingrid4").ligerGetGridManager();
             var row = manager.getSelectedRow();
             if (row) {
-                var titles = "总部出库：至" + row.todep_name + " (" + formatTimebytype(row.create_time,"yyyy-MM-dd") + ")";
-                location.href = "ExportProduct.aspx?etype=4&outid=" + row.id + "&rnd=" + Math.random() + "&titles="+encodeURI(titles) ;
+                var titles = "总部出库：至" + row.todep_name + " (" + formatTimebytype(row.create_time, "yyyy-MM-dd") + ")";
+                location.href = "ExportProduct.aspx?etype=4&outid=" + row.id + "&rnd=" + Math.random() + "&titles=" + encodeURI(titles);
             }
             else {
                 $.ligerDialog.warn("请选择出库单");

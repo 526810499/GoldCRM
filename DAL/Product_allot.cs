@@ -126,6 +126,8 @@ namespace XHD.DAL
             return DbHelperSQL.ExecuteScalar(sql, par).CInt(0, false);
         }
 
+ 
+
         /// <summary>
         /// 审核
         /// </summary>
@@ -145,17 +147,16 @@ namespace XHD.DAL
             strSql.Append("authuser_time=@authuser_time,");
             strSql.Append("remark=@remark");
             strSql.Append(" where id=@id ");
-            int rows = 1;
-            rows += CountPorduct(id);
+       
             //门店调拨 
             if (status == 2)
             {
                 if (allotType == 0)
                 {
-                    strSql.Append(@"UPDATE payuser SET   payuser.indep_id=bu.todep_id,payuser.status=2,payuser.authIn=0,payuser.warehouse_id =bu.ToWarehouse,OutStatus = 2 FROM dbo.Product(nolock) AS payuser inner JOIN Product_allotDetail(nolock) AS bu ON payuser.barcode = bu.barcode WHERE bu.allotid = @id  ");
+                    strSql.Append(@"UPDATE payuser SET   payuser.indep_id=bu.todep_id,payuser.status=101,payuser.authIn=0,payuser.warehouse_id =bu.ToWarehouse,OutStatus =1 FROM dbo.Product(nolock) AS payuser inner JOIN Product_allotDetail(nolock) AS bu ON payuser.barcode = bu.barcode WHERE bu.allotid = @id  ");
                 }
                 else {
-                    strSql.Append(@"UPDATE payuser SET   payuser.status=102,authIn=0,payuser.indep_id=@indep_id, payuser.warehouse_id =bu.ToWarehouse,OutStatus = 2 FROM dbo.Product(nolock) AS payuser inner JOIN Product_allotDetail(nolock) AS bu ON payuser.barcode = bu.barcode WHERE bu.allotid = @id  ");
+                    strSql.Append(@"UPDATE payuser SET   payuser.status=101,authIn=0,payuser.indep_id=@indep_id, payuser.warehouse_id =bu.ToWarehouse,OutStatus =1 FROM dbo.Product(nolock) AS payuser inner JOIN Product_allotDetail(nolock) AS bu ON payuser.barcode = bu.barcode WHERE bu.allotid = @id  ");
                 }
             }
             else {
@@ -180,7 +181,7 @@ namespace XHD.DAL
             {
                 cm.Parameters.Add(p);
             }
-            return ExecTran(cm, rows);
+            return ExecTran(cm, -1);
         }
 
         /// <summary>
