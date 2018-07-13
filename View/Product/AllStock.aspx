@@ -281,7 +281,41 @@
 
             // f_openWindow('product/product_add.aspx?categoryid=', "新增商品", 700, 580, f_save);
         }
+        function del() {
+            var manager = $("#maingrid4").ligerGetGridManager();
+            var row = manager.getSelectedRow();
+            if (row) {
+                $.ligerDialog.confirm("商品删除不能恢复，确定删除？", function (yes) {
+                    if (yes) {
+                        $.ajax({
+                            url: "Product.del.xhd", type: "POST",
+                            data: { id: row.id, rnd: Math.random() },
+                            dataType: 'json',
+                            success: function (result) {
+                                $.ligerDialog.closeWaitting();
 
+                                var obj = eval(result);
+
+                                if (obj.isSuccess) {
+                                    f_load();
+                                }
+                                else {
+                                    $.ligerDialog.error(obj.Message);
+                                }
+                            },
+                            error: function () {
+                                top.$.ligerDialog.closeWaitting();
+                                top.$.ligerDialog.error('删除失败！');
+                            }
+                        });
+                    }
+                })
+            }
+            else {
+                $.ligerDialog.warn("请选择商品");
+            }
+
+        }
 
         function f_load() {
             var manager = $("#maingrid4").ligerGetGridManager();

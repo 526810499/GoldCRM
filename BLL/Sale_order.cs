@@ -58,6 +58,19 @@ namespace XHD.BLL
             return dal.GetList(strWhere);
         }
         /// <summary>
+        /// 财务核销保存
+        /// </summary>
+        /// <param name="orderid"></param>
+        /// <param name="Order_details"></param>
+        /// <param name="VerifyUID"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public int VerifySave(string orderid, string Order_details, string VerifyUID, int status)
+        {
+            return dal.VerifySave(orderid,   Order_details,   VerifyUID,   status);
+        }
+
+        /// <summary>
         /// 获得前几行数据
         /// </summary>
         public DataSet GetList(int Top, string strWhere, string filedOrder)

@@ -53,9 +53,9 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into CRM_Customer(");
-            strSql.Append("id,Serialnumber,cus_name,cus_add,cus_tel,cus_fax,cus_website,cus_industry_id,Provinces_id,City_id,cus_type_id,cus_level_id,cus_source_id,DesCripe,Remarks,emp_id,isPrivate,lastfollow,xy,isDelete,Delete_time,create_id,create_time,cus_extend,birthday,integral,birthdays,birthmonths,createdep_id)");
+            strSql.Append("id,Serialnumber,cus_name,cus_add,cus_tel,cus_fax,cus_website,cus_industry_id,Provinces_id,City_id,cus_type_id,cus_level_id,cus_source_id,DesCripe,Remarks,emp_id,isPrivate,lastfollow,xy,isDelete,Delete_time,create_id,create_time,cus_extend,birthday,integral,birthdays,birthmonths,createdep_id,emp_depid)");
             strSql.Append(" values (");
-            strSql.Append("@id,@Serialnumber,@cus_name,@cus_add,@cus_tel,@cus_fax,@cus_website,@cus_industry_id,@Provinces_id,@City_id,@cus_type_id,@cus_level_id,@cus_source_id,@DesCripe,@Remarks,@emp_id,@isPrivate,@lastfollow,@xy,@isDelete,@Delete_time,@create_id,@create_time,@cus_extend,@birthday,@integral,@birthdays,@birthmonths,@createdep_id)");
+            strSql.Append("@id,@Serialnumber,@cus_name,@cus_add,@cus_tel,@cus_fax,@cus_website,@cus_industry_id,@Provinces_id,@City_id,@cus_type_id,@cus_level_id,@cus_source_id,@DesCripe,@Remarks,@emp_id,@isPrivate,@lastfollow,@xy,@isDelete,@Delete_time,@create_id,@create_time,@cus_extend,@birthday,@integral,@birthdays,@birthmonths,@createdep_id,@emp_depid)");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@Serialnumber", SqlDbType.VarChar,250),
@@ -87,6 +87,7 @@ namespace XHD.DAL
                   new SqlParameter("@birthmonths",SqlDbType.Int,4),
                   new SqlParameter("@birthyear",SqlDbType.Int,4),
                   new SqlParameter("@createdep_id",SqlDbType.VarChar,50),
+                 new SqlParameter("@emp_depid",SqlDbType.VarChar,50),
             };
             parameters[0].Value = model.id;
             parameters[1].Value = model.Serialnumber;
@@ -118,6 +119,7 @@ namespace XHD.DAL
             parameters[27].Value = (model.birthday.HasValue && model.birthday != DateTime.MaxValue ? (model.birthday.CDateTime(DateTime.Now, false).Month).CInt(0, false) : 0);
             parameters[28].Value = (model.birthday.HasValue && model.birthday != DateTime.MaxValue ? (model.birthday.CDateTime(DateTime.Now, false).Year).CInt(0, false) : 0);
             parameters[29].Value = model.createdep_id;
+            parameters[29].Value = model.emp_depid;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {
@@ -155,6 +157,9 @@ namespace XHD.DAL
             strSql.Append("cus_extend=@cus_extend,");
             strSql.Append("xy=@xy");
             strSql.Append(",integral=@integral,birthdays=@birthdays,birthmonths=@birthmonths,birthyear=@birthyear ");
+            strSql.Append(",emp_depid=@emp_depid");
+
+
             strSql.Append(" where id=@id ");
             SqlParameter[] parameters = {
                     new SqlParameter("@Serialnumber", SqlDbType.VarChar,250),
@@ -181,6 +186,7 @@ namespace XHD.DAL
                    new SqlParameter("@birthdays",SqlDbType.Int,4),
                   new SqlParameter("@birthmonths",SqlDbType.Int,4),
                   new SqlParameter("@birthyear",SqlDbType.Int,4),
+                   new SqlParameter("@emp_depid", SqlDbType.VarChar,50),
 
             };
             parameters[0].Value = model.Serialnumber;
@@ -207,6 +213,8 @@ namespace XHD.DAL
             parameters[21].Value = (model.birthday.HasValue && model.birthday != DateTime.MaxValue ? (model.birthday.CDateTime(DateTime.Now, false).Day).CInt(0, false) : 0);
             parameters[22].Value = (model.birthday.HasValue && model.birthday != DateTime.MaxValue ? (model.birthday.CDateTime(DateTime.Now, false).Month).CInt(0, false) : 0);
             parameters[23].Value = (model.birthday.HasValue && model.birthday != DateTime.MaxValue ? (model.birthday.CDateTime(DateTime.Now, false).Year).CInt(0, false) : 0);
+
+            parameters[24].Value = model.emp_depid;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {
@@ -266,7 +274,7 @@ namespace XHD.DAL
         public DataSet GetList(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select integral,birthday,id,Serialnumber,cus_name,cus_add,cus_tel,cus_fax,cus_website,cus_industry_id,Provinces_id,City_id,cus_type_id,cus_level_id,cus_source_id,DesCripe,Remarks,emp_id,isPrivate,lastfollow,xy,isDelete,Delete_time,create_id,create_time,cus_extend ");
+            strSql.Append("select integral,birthday,id,Serialnumber,cus_name,cus_add,cus_tel,cus_fax,cus_website,cus_industry_id,Provinces_id,City_id,cus_type_id,cus_level_id,cus_source_id,DesCripe,Remarks,emp_id,isPrivate,lastfollow,xy,isDelete,Delete_time,create_id,create_time,cus_extend,createdep_id,emp_depid ");
             strSql.Append(",(select params_name from Sys_Param where id = CRM_Customer.cus_industry_id) as cus_industry");
             strSql.Append(",(select params_name from Sys_Param where id = CRM_Customer.cus_level_id) as cus_level");
             strSql.Append(",(select params_name from Sys_Param where id = CRM_Customer.cus_type_id) as cus_type");

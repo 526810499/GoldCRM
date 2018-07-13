@@ -71,7 +71,7 @@ namespace XHD.DAL
         /// <returns></returns>
         public TodayBroadcast GetTodayBroadcast()
         {
-            string sql = "select top 1 * from TodayBroadcast ";
+            string sql = "select top 1 * from TodayBroadcast  order by update_time desc";
 
             DataSet ds = DbHelperSQL.Query(sql);
             if (ds != null && ds.Tables.Count > 0)

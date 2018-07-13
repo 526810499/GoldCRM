@@ -65,6 +65,16 @@
                                { display: "今日金价(克)", name: "T_TodayGlodPrice", type: "number", validate: "{required:true}", initValue: toMoney(obj.TodayGlodPrice, "") },
                             ],
                             [
+                               { display: "首饰金(克)", name: "T_TodayOtherPrice1", type: "number", validate: "{required:true}", initValue: toMoney(obj.TodayOtherPrice1, "") },
+                            ],
+
+                            [
+                              { display: "回购金价(克)", name: "T_TodayOtherPrice2", type: "number", validate: "{required:true}", initValue: toMoney(obj.TodayOtherPrice2, "") },
+                            ],
+                            [
+                              { display: "铂金(克)", name: "T_TodayOtherPrice3", type: "number", initValue: toMoney(obj.TodayOtherPrice3, "") },
+                            ],
+                            [
                                 { display: "其他播报", name: "T_OtherBrodcast", type: "textarea", cols: 73, rows: 6, width: 600, cssClass: "l-textarea", initValue: obj.OtherBrodcast }
                             ],
                            [

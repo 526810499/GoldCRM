@@ -14,11 +14,14 @@ namespace XHD.Server
 
         public CRM_Customer()
         {
+
+        }
+
+        public CRM_Customer(HttpContext context) : base(context)
+        {
             allDataBtnid = "ED2E90BC-2618-49B9-B93A-6C4468E27738";
             depDataBtnid = "62735B9F-00B7-439C-93E3-5104D65DF5BE";
         }
-
-        public CRM_Customer(HttpContext context) : base(context) { }
 
         public string grid()
         {
@@ -143,20 +146,15 @@ namespace XHD.Server
                 serchtxt += $" and birthmonths={request["smonth"].CInt(0, false)}";
             }
 
-            if (string.IsNullOrWhiteSpace(request["selfc"].CString("")) || request["selfc"].CString("-1") != "0")
-            {
-                //权限
-                serchtxt = GetSQLCreateIDWhere(serchtxt, true);
-            }
-
 
             if (!string.IsNullOrEmpty(request["stext"]) && request["search"].CInt(0, false) == 1)
             {
                 if (request["stext"] != "输入姓名搜索")
                     serchtxt += " and cus_name like N'%" + PageValidate.InputText(request["stext"], 255) + "%'";
             }
-            //return request.ServerVariables["http_host"];
-            //return serchtxt;
+
+            serchtxt += GetCusWhere();
+
             //权限
             DataSet ds = customer.GetList(PageSize, PageIndex, serchtxt, sorttext, out Total);
 
@@ -164,126 +162,174 @@ namespace XHD.Server
             return dt;
         }
 
+        private string GetCusWhere()
+        {
+            string serchtxt = "";
+
+            //是否有所有权限
+            bool isAllPrv = CheckBtnAuthority(allDataBtnid);
+            //
+            if (!isAllPrv && uid != "admin")
+            {
+                bool isDeepPrv = CheckBtnAuthority(depDataBtnid);
+                if (isDeepPrv)
+                {
+                    serchtxt += $" and ( (isPrivate=0 and emp_id='{emp_id}') or (isPrivate=1) or (isPrivate=0 and emp_depid='{dep_id}') )";
+                }
+                else {
+                    serchtxt += $" and ( (isPrivate=0 and emp_id='{emp_id}') or (isPrivate=1) )";
+                }
+            }
+            return serchtxt;
+        }
+
         public string save()
         {
-            model.Serialnumber = "CUS-" + DateTime.Now.ToString("yyyy-MM-dd-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
-            model.cus_name = PageValidate.InputText(request["T_customer"], 250);
-            model.cus_add = PageValidate.InputText(request["T_address"], 250);
-            model.cus_tel = PageValidate.InputText(request["T_tel"], 250);
-            model.cus_fax = PageValidate.InputText(request["T_fax"], 250);
-            model.cus_website = PageValidate.InputText(request["T_Website"], 250);
-            model.cus_industry_id = PageValidate.InputText(request["T_industry_val"], 50);
-            model.Provinces_id = PageValidate.InputText(request["T_Provinces_val"], 50);
-            model.City_id = PageValidate.InputText(request["T_City_val"], 50);
-            model.cus_type_id = PageValidate.InputText(request["T_type_val"], 50);
-            model.cus_level_id = PageValidate.InputText(request["T_level_val"], 50);
-            model.cus_source_id = PageValidate.InputText(request["T_source_val"], 50);
-            model.DesCripe = PageValidate.InputText(request["T_descript"], int.MaxValue);
-            model.Remarks = PageValidate.InputText(request["T_remarks"], int.MaxValue);
-            model.emp_id = PageValidate.InputText(request["T_employee_val"], 50);
-            model.isPrivate = int.Parse(request["T_private_val"]);
-            model.xy = PageValidate.InputText(request["T_xy"], 50);
-            model.cus_extend = PageValidate.InputText(request["extendjson"], int.MaxValue);
-            model.birthday = request["T_birthday"].CDateTime();
-            model.integral = request["T_integral"].CInt(0, false);
-            model.createdep_id = dep_id;
-            string id = PageValidate.InputText(request["id"], 50);
-            if (PageValidate.checkID(id))
+            try
             {
-                model.id = id;
-
-                DataSet ds = customer.GetList($"id = '{id}' ");
-
-                if (ds.Tables[0].Rows.Count == 0)
-                    return XhdResult.Error("参数不正确，更新失败！").ToString();
-
-                DataRow dr = ds.Tables[0].Rows[0];
-                string creatuid = dr["create_id"].CString("");
-                //判断公客权限
-                if (emp_id != creatuid && uid != "admin" && !CheckBtnAuthority(allDataBtnid) && !CheckBtnAuthority(depDataBtnid))
+                model.Serialnumber = "CUS-" + DateTime.Now.ToString("yyyy-MM-dd-") + DateTime.Now.GetHashCode().ToString().Replace("-", "");
+                model.cus_name = PageValidate.InputText(request["T_customer"], 250);
+                model.cus_add = PageValidate.InputText(request["T_address"], 250);
+                model.cus_tel = PageValidate.InputText(request["T_tel"], 250);
+                model.cus_fax = PageValidate.InputText(request["T_fax"], 250);
+                model.cus_website = PageValidate.InputText(request["T_Website"], 250);
+                model.cus_industry_id = PageValidate.InputText(request["T_industry_val"].CString(""), 50);
+                model.Provinces_id = PageValidate.InputText(request["T_Provinces_val"], 50);
+                model.City_id = PageValidate.InputText(request["T_City_val"], 50);
+                model.cus_type_id = PageValidate.InputText(request["T_type_val"], 50);
+                model.cus_level_id = PageValidate.InputText(request["T_level_val"], 50);
+                model.cus_source_id = PageValidate.InputText(request["T_source_val"], 50);
+                model.DesCripe = PageValidate.InputText(request["T_descript"], int.MaxValue);
+                model.Remarks = PageValidate.InputText(request["T_remarks"], int.MaxValue);
+                model.emp_id = PageValidate.InputText(request["T_employee_val"], 50);
+                model.isPrivate = int.Parse(request["T_private_val"]);
+                model.xy = PageValidate.InputText(request["T_xy"], 50);
+                model.cus_extend = PageValidate.InputText(request["extendjson"], int.MaxValue);
+                model.birthday = request["T_birthday"].CDateTime();
+                model.integral = request["T_integral"].CInt(0, false);
+                model.createdep_id = dep_id;
+                string id = PageValidate.InputText(request["id"], 50);
+                if (model.cus_industry_id == "undefined") { model.cus_industry_id = ""; }
+                if (model.cus_type_id == "undefined") { model.cus_type_id = ""; }
+                if (model.cus_level_id == "undefined") { model.cus_level_id = ""; }
+                if (model.cus_source_id == "undefined") { model.cus_source_id = ""; }
+                if (PageValidate.checkID(id))
                 {
-                    var dataauth = new GetDataAuth();
-                    bool canEdit = dataauth.getPrivateCusEdit(emp_id);
+                    model.id = id;
 
-                    if (!canEdit)
-                        return XhdResult.Error("您不具修改该客户的权限！").ToString();
+                    DataSet ds = customer.GetList($"id = '{id}' ");
 
+                    if (ds.Tables[0].Rows.Count == 0)
+                        return XhdResult.Error("参数不正确，更新失败！").ToString();
+
+                    DataRow dr = ds.Tables[0].Rows[0];
+                    string creatuid = dr["emp_id"].CString("");
+                    string createdep_id = dr["emp_depid"].CString("");
+                    int isOldisPrivate = dr["isPrivate"].CInt(1, false);
+
+                    //是私客需要判断是否当前用户有权限修改
+                    if (isOldisPrivate == 0)
+                    {                    //判断公客权限
+                        if (emp_id != creatuid && uid != "admin" && !CheckBtnAuthority(allDataBtnid) && !(createdep_id == dep_id && CheckBtnAuthority(depDataBtnid)))
+                        {
+                            return XhdResult.Error("您不具修改该客户的权限！").ToString();
+                        }
+                    }
+                    else if (model.isPrivate == 0)
+                    {//原来是公客，现在要改成私客，需判断是否有权限
+                        if (emp_id != creatuid && uid != "admin" && !CheckBtnAuthority(allDataBtnid) && !(createdep_id == dep_id && CheckBtnAuthority(depDataBtnid)))
+                        {
+                            return XhdResult.Error("您不具修改该客户的权限！").ToString();
+                        }
+                    }
+                    //原来创建的不是当前要关联的这个用户需要去获取下部门
+                    if (creatuid != model.emp_id)
+                    {
+                        model.emp_depid = new BLL.hr_employee().GetModel(model.emp_id).dep_id;
+                    }
+                    else { model.emp_depid = createdep_id; }
+
+                    bool isupdate = customer.Update(model);
+
+                    if (!isupdate) return XhdResult.Error("更新失败！").ToString();
+
+                    string logcontent = "";
+                    logcontent += Syslog.get_log_content(dr["cus_name"].CString(""), request["T_customer"], "客户名", dr["cus_name"].CString(""), request["T_customer"]);
+                    logcontent += Syslog.get_log_content(dr["cus_add"].CString(""), request["T_address"], "地址", dr["cus_add"].CString(""), request["T_address"]);
+                    logcontent += Syslog.get_log_content(dr["cus_tel"].CString(""), request["T_tel"], "电话", dr["cus_tel"].CString(""), request["T_tel"]);
+                    logcontent += Syslog.get_log_content(dr["cus_fax"].CString(""), request["T_fax"], "传真", dr["cus_fax"].CString(""), request["T_fax"]);
+                    logcontent += Syslog.get_log_content(dr["cus_website"].CString(""), request["T_Website"], "网址", dr["cus_website"].CString(""), request["T_Website"]);
+                    logcontent += Syslog.get_log_content(dr["cus_industry_id"].CString(""), request["T_industry_val"], "行业", dr["cus_industry"].CString(""), request["T_industry"]);
+                    logcontent += Syslog.get_log_content(dr["Provinces_id"].CString(""), request["T_Provinces_val"], "省份", dr["Provinces"].CString(""), request["T_Provinces"]);
+                    logcontent += Syslog.get_log_content(dr["City_id"].CString(""), request["T_City_val"], "城市", dr["City"].CString(""), request["T_City"]);
+                    logcontent += Syslog.get_log_content(dr["cus_type_id"].CString(""), request["T_type_val"], "客户类别", dr["cus_type"].CString(""), request["T_type"]);
+                    logcontent += Syslog.get_log_content(dr["cus_level_id"].CString(""), request["T_level_val"], "客户级别", dr["cus_level"].CString(""), request["T_level"]);
+                    logcontent += Syslog.get_log_content(dr["cus_source_id"].CString(""), request["T_source_val"], "客户来源", dr["cus_source"].CString(""), request["T_source"]);
+                    logcontent += Syslog.get_log_content(dr["DesCripe"].CString(""), request["T_descript"], "客户描述", dr["DesCripe"].CString(""), request["T_descript"]);
+                    logcontent += Syslog.get_log_content(dr["Remarks"].CString(""), request["T_remarks"], "备注", dr["Remarks"].CString(""), request["T_remarks"]);
+                    logcontent += Syslog.get_log_content(dr["emp_id"].CString(""), request["T_employee_val"], "归属", dr["employee"].CString(""), request["T_employee"]);
+                    logcontent += Syslog.get_log_content(dr["emp_depid"].CString(""), createdep_id, "emp_depid", dr["emp_depid"].CString(""), createdep_id);
+                    logcontent += Syslog.get_log_content(dr["isPrivate"].CString(""), request["T_private_val"], "公私", dr["isPrivate"].CString("") == "0" ? "私客" : "公客", request["T_private"]);
+                    logcontent += Syslog.get_log_content(dr["xy"].CString(""), request["T_xy"], "坐标", dr["xy"].CString(""), request["T_xy"]);
+
+                    if (!string.IsNullOrEmpty(logcontent))
+                    {
+                        //日志
+
+                        string UserID = emp_id;
+                        string UserName = emp_name;
+                        string IPStreet = request.UserHostAddress;
+                        string EventTitle = model.cus_name;
+                        string EventType = "客户修改";
+                        string EventID = model.id;
+
+                        Syslog.Add_log(UserID, UserName, IPStreet, EventTitle, EventType, EventID, logcontent);
+                    }
+
+                    return XhdResult.Success().ToString();
                 }
-
-                bool isupdate = customer.Update(model);
-
-                if (!isupdate) return XhdResult.Error("更新失败！").ToString();
-
-                string logcontent = "";
-                logcontent += Syslog.get_log_content(dr["cus_name"].ToString(), request["T_customer"], "客户名", dr["cus_name"].ToString(), request["T_customer"]);
-                logcontent += Syslog.get_log_content(dr["cus_add"].ToString(), request["T_address"], "地址", dr["cus_add"].ToString(), request["T_address"]);
-                logcontent += Syslog.get_log_content(dr["cus_tel"].ToString(), request["T_tel"], "电话", dr["cus_tel"].ToString(), request["T_tel"]);
-                logcontent += Syslog.get_log_content(dr["cus_fax"].ToString(), request["T_fax"], "传真", dr["cus_fax"].ToString(), request["T_fax"]);
-                logcontent += Syslog.get_log_content(dr["cus_website"].ToString(), request["T_Website"], "网址", dr["cus_website"].ToString(), request["T_Website"]);
-                logcontent += Syslog.get_log_content(dr["cus_industry_id"].ToString(), request["T_industry_val"], "行业", dr["cus_industry"].ToString(), request["T_industry"]);
-                logcontent += Syslog.get_log_content(dr["Provinces_id"].ToString(), request["T_Provinces_val"], "省份", dr["Provinces"].ToString(), request["T_Provinces"]);
-                logcontent += Syslog.get_log_content(dr["City_id"].ToString(), request["T_City_val"], "城市", dr["City"].ToString(), request["T_City"]);
-                logcontent += Syslog.get_log_content(dr["cus_type_id"].ToString(), request["T_type_val"], "客户类别", dr["cus_type"].ToString(), request["T_type"]);
-                logcontent += Syslog.get_log_content(dr["cus_level_id"].ToString(), request["T_level_val"], "客户级别", dr["cus_level"].ToString(), request["T_level"]);
-                logcontent += Syslog.get_log_content(dr["cus_source_id"].ToString(), request["T_source_val"], "客户来源", dr["cus_source"].ToString(), request["T_source"]);
-                logcontent += Syslog.get_log_content(dr["DesCripe"].ToString(), request["T_descript"], "客户描述", dr["DesCripe"].ToString(), request["T_descript"]);
-                logcontent += Syslog.get_log_content(dr["Remarks"].ToString(), request["T_remarks"], "备注", dr["Remarks"].ToString(), request["T_remarks"]);
-                logcontent += Syslog.get_log_content(dr["emp_id"].ToString(), request["T_employee_val"], "归属", dr["employee"].ToString(), request["T_employee"]);
-                logcontent += Syslog.get_log_content(dr["isPrivate"].ToString(), request["T_private_val"], "公私", dr["isPrivate"].ToString() == "0" ? "私客" : "公客", request["T_private"]);
-                logcontent += Syslog.get_log_content(dr["xy"].ToString(), request["T_xy"], "坐标", dr["xy"].ToString(), request["T_xy"]);
-
-                if (!string.IsNullOrEmpty(logcontent))
+                else
                 {
-                    //日志
+                    id = Guid.NewGuid().ToString();
+                    model.id = id;
+                    model.create_id = emp_id;
+                    model.create_time = DateTime.Now;
+                    model.emp_depid = new BLL.hr_employee().GetModel(model.emp_id).dep_id;
+                    model.isDelete = 0;
 
-                    string UserID = emp_id;
-                    string UserName = emp_name;
-                    string IPStreet = request.UserHostAddress;
-                    string EventTitle = model.cus_name;
-                    string EventType = "客户修改";
-                    string EventID = model.id;
+                    bool isadd = customer.Add(model);
 
-                    Syslog.Add_log(UserID, UserName, IPStreet, EventTitle, EventType, EventID, logcontent);
+                    if (!isadd) return XhdResult.Error("添加失败！").ToString();
+
+                    //BLL.CRM_Contact contact = new BLL.CRM_Contact();
+                    //Model.CRM_Contact modelcontact = new Model.CRM_Contact();
+
+                    //modelcontact.id = Guid.NewGuid().ToString();
+                    //modelcontact.customer_id = id;
+                    //modelcontact.company_id = company_id;
+
+                    //modelcontact.C_name = PageValidate.InputText(request["T_contact_name"], 250);
+                    //modelcontact.C_sex = PageValidate.InputText(request["T_sex"], 50);
+                    //modelcontact.C_department = PageValidate.InputText(request["T_contact_dep"], 250);
+                    //modelcontact.C_position = PageValidate.InputText(request["T_contact_position"], 250);
+                    //modelcontact.C_email = PageValidate.InputText(request["T_email"], 250);
+                    //modelcontact.C_QQ = PageValidate.InputText(request["T_qq"], 250);
+                    //modelcontact.C_tel = PageValidate.InputText(request["T_contact_tel"], 250);
+                    //modelcontact.C_mob = PageValidate.InputText(request["T_mobil"], 250);
+                    //modelcontact.C_hobby = PageValidate.InputText(request["T_hobby"], 250);
+                    //modelcontact.C_remarks = PageValidate.InputText(request["T_contact_remarks"], int.MaxValue);
+                    //modelcontact.create_id = emp_id;
+                    //modelcontact.create_time = DateTime.Now;
+
+                    //contact.Add(modelcontact);
+
+                    return XhdResult.Success().ToString();
                 }
-
-                return XhdResult.Success().ToString();
             }
-            else
+            catch (Exception error)
             {
-                id = Guid.NewGuid().ToString();
-                model.id = id;
-                model.create_id = emp_id;
-                model.create_time = DateTime.Now;
-
-                model.isDelete = 0;
-
-                bool isadd = customer.Add(model);
-
-                if (!isadd) return XhdResult.Error("添加失败！").ToString();
-
-                //BLL.CRM_Contact contact = new BLL.CRM_Contact();
-                //Model.CRM_Contact modelcontact = new Model.CRM_Contact();
-
-                //modelcontact.id = Guid.NewGuid().ToString();
-                //modelcontact.customer_id = id;
-                //modelcontact.company_id = company_id;
-
-                //modelcontact.C_name = PageValidate.InputText(request["T_contact_name"], 250);
-                //modelcontact.C_sex = PageValidate.InputText(request["T_sex"], 50);
-                //modelcontact.C_department = PageValidate.InputText(request["T_contact_dep"], 250);
-                //modelcontact.C_position = PageValidate.InputText(request["T_contact_position"], 250);
-                //modelcontact.C_email = PageValidate.InputText(request["T_email"], 250);
-                //modelcontact.C_QQ = PageValidate.InputText(request["T_qq"], 250);
-                //modelcontact.C_tel = PageValidate.InputText(request["T_contact_tel"], 250);
-                //modelcontact.C_mob = PageValidate.InputText(request["T_mobil"], 250);
-                //modelcontact.C_hobby = PageValidate.InputText(request["T_hobby"], 250);
-                //modelcontact.C_remarks = PageValidate.InputText(request["T_contact_remarks"], int.MaxValue);
-                //modelcontact.create_id = emp_id;
-                //modelcontact.create_time = DateTime.Now;
-
-                //contact.Add(modelcontact);
-
-                return XhdResult.Success().ToString();
+                SoftLog.LogStr(error.ToString(), "customer");
+                return XhdResult.Error("系统错误，请重试！").ToString();
             }
         }
 
@@ -291,7 +337,7 @@ namespace XHD.Server
         {
             if (!PageValidate.checkID(id)) return "{}";
             id = PageValidate.InputText(id, 50);
-            DataSet ds = customer.GetList($"id = '{id}'  {Auth()} ");
+            DataSet ds = customer.GetList($"id = '{id}'  {GetCusWhere()} ");
             string dt = DataToJson.DataToJSON(ds);
 
             return dt;
@@ -453,20 +499,14 @@ namespace XHD.Server
             {
                 if (uid != "admin")
                 {
-                    //dataauth
-                    var dataauth = new GetDataAuth();
-                    DataAuth auth = dataauth.getAuth(emp_id);
-                    string authid = ds.Tables[0].Rows[i]["emp_id"].ToString();
-                    switch (auth.authtype)
+                    DataRow dr = ds.Tables[0].Rows[0];
+                    string creatuid = dr["create_id"].CString("");
+                    string createdep_id = dr["createdep_id"].CString("");
+                    //判断公客权限
+                    if (emp_id != creatuid && uid != "admin" && !CheckBtnAuthority(allDataBtnid) && !(createdep_id == dep_id && CheckBtnAuthority(depDataBtnid)))
                     {
-                        case 0: candel = false; break;
-                        case 1:
-                        case 2:
-                        case 3:
-                        case 4: if (authid.IndexOf(auth.authtext) == -1) candel = false; break;
+                        return XhdResult.Error("您不具修改该客户的权限！").ToString();
                     }
-                    if (!candel)
-                        failure++;
                 }
 
                 string cid = ds.Tables[0].Rows[i]["id"].ToString();

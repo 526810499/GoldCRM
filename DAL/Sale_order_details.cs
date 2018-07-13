@@ -23,24 +23,23 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Sale_order_details(");
-            strSql.Append("order_id,product_id,agio,quantity,amount,BarCode)");
+            strSql.Append("order_id,product_id,agio,quantity,amount,BarCode,DiscountType,DiscountCount,Discounts,SaleType)");
             strSql.Append(" values (");
-            strSql.Append("@order_id,@product_id,@agio,@quantity,@amount,@BarCode); ");
+            strSql.Append("@order_id,@product_id,@agio,@quantity,@amount,@BarCode,@DiscountType,@DiscountCount,@Discounts,@SaleType); ");
             strSql.AppendLine(" update Product set status=4,OutStatus=4 where id=@product_id; ");
             SqlParameter[] parameters = {
-                    new SqlParameter("@order_id", SqlDbType.VarChar,250),
-                    new SqlParameter("@product_id", SqlDbType.VarChar,250),
-                    new SqlParameter("@agio", SqlDbType.Decimal,9),
-                    new SqlParameter("@quantity", SqlDbType.Int,4),
-                    new SqlParameter("@amount", SqlDbType.Decimal,9),
-                    new SqlParameter("@BarCode", SqlDbType.VarChar,50),
+                    new SqlParameter("@order_id", SqlDbType.VarChar,250) { Value=model.order_id},
+                    new SqlParameter("@product_id", SqlDbType.VarChar,250){ Value=model.product_id},
+                    new SqlParameter("@agio", SqlDbType.Decimal,9){ Value=model.agio},
+                    new SqlParameter("@quantity", SqlDbType.Int,4){ Value=model.quantity},
+                    new SqlParameter("@amount", SqlDbType.Decimal,9){ Value=model.amount},
+                    new SqlParameter("@BarCode", SqlDbType.VarChar,50){ Value=model.BarCode},
+                    new SqlParameter("@DiscountType", SqlDbType.Int,9){ Value=model.DiscountType},
+                    new SqlParameter("@DiscountCount", SqlDbType.Decimal,9){ Value=model.DiscountCount},
+                    new SqlParameter("@Discounts", SqlDbType.Decimal,9){ Value=model.Discounts},
+                    new SqlParameter("@SaleType", SqlDbType.Int,9){ Value=model.SaleType},
             };
-            parameters[0].Value = model.order_id;
-            parameters[1].Value = model.product_id;
-            parameters[2].Value = model.agio;
-            parameters[3].Value = model.quantity;
-            parameters[4].Value = model.amount;
-            parameters[5].Value = model.BarCode;
+
 
             SqlCommand cmd = new SqlCommand();
             cmd.CommandText = strSql.ToString();
@@ -62,19 +61,20 @@ namespace XHD.DAL
             strSql.Append("product_id=@product_id,");
             strSql.Append("agio=@agio,");
             strSql.Append("quantity=@quantity,");
-            strSql.Append("amount=@amount");
+            strSql.Append("amount=@amount,DiscountType=@DiscountType,DiscountCount=@DiscountCount,Discounts=@Discounts,SaleType=@SaleType ");
             strSql.Append(" where order_id=@order_id and product_id=@product_id  ");
             SqlParameter[] parameters = {
-                    new SqlParameter("@order_id", SqlDbType.VarChar,250),
-                    new SqlParameter("@product_id", SqlDbType.VarChar,250),
-                    new SqlParameter("@agio", SqlDbType.Decimal,9),
-                    new SqlParameter("@quantity", SqlDbType.Int,4),
-                    new SqlParameter("@amount", SqlDbType.Decimal,9)};
-            parameters[0].Value = model.order_id;
-            parameters[1].Value = model.product_id;
-            parameters[2].Value = model.agio;
-            parameters[3].Value = model.quantity;
-            parameters[4].Value = model.amount;
+                   new SqlParameter("@order_id", SqlDbType.VarChar,250) { Value=model.order_id},
+                    new SqlParameter("@product_id", SqlDbType.VarChar,250){ Value=model.product_id},
+                    new SqlParameter("@agio", SqlDbType.Decimal,9){ Value=model.agio},
+                    new SqlParameter("@quantity", SqlDbType.Int,4){ Value=model.quantity},
+                    new SqlParameter("@amount", SqlDbType.Decimal,9){ Value=model.amount},
+                    new SqlParameter("@BarCode", SqlDbType.VarChar,50){ Value=model.BarCode},
+                    new SqlParameter("@DiscountType", SqlDbType.Int,9){ Value=model.DiscountType},
+                    new SqlParameter("@DiscountCount", SqlDbType.Decimal,9){ Value=model.DiscountCount},
+                    new SqlParameter("@Discounts", SqlDbType.Decimal,9){ Value=model.Discounts},
+                    new SqlParameter("@SaleType", SqlDbType.Int,9){ Value=model.SaleType},
+            };
 
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
@@ -158,9 +158,9 @@ namespace XHD.DAL
             strSql.Append("      , isnull(Product.SalesCostsTotal,0) as SalesCostsTotal ");
             strSql.Append("      , isnull(Product.SalesTotalPrice,0 ) as SalesTotalPrice");
             strSql.Append("      , Product.Weight,Product.CostsTotal ");
-            strSql.Append("      ,Product_category.product_category as category_name ");
-            strSql.Append("  FROM[dbo].[Sale_order_details] ");
-            strSql.Append("  INNER JOIN Product ON Product.id = Sale_order_details.product_id ");
+            strSql.Append("      ,Product_category.product_category as category_name,Sale_order_details.DiscountType,Sale_order_details.DiscountCount,Sale_order_details.Discounts,Sale_order_details.SaleType,Product_category.cproperty ");
+            strSql.Append("  FROM[dbo].[Sale_order_details](nolock) ");
+            strSql.Append("  INNER JOIN Product(nolock) ON Product.id = Sale_order_details.product_id ");
             strSql.Append("  INNER JOIN Product_category(nolock) ON Product.category_id = Product_category.id ");
             if (strWhere.Trim() != "")
             {
@@ -169,34 +169,7 @@ namespace XHD.DAL
             return DbHelperSQL.Query(strSql.ToString());
         }
 
-        /// <summary>
-        /// 获得前几行数据
-        /// </summary>
-        public DataSet GetList(int Top, string strWhere, string filedOrder)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("select ");
-            if (Top > 0)
-            {
-                strSql.Append(" top " + Top.ToString());
-            }
-            strSql.Append("        Sale_order_details.[order_id] ");
-            strSql.Append("      , Sale_order_details.[product_id] ");
-            strSql.Append("      , Sale_order_details.[agio] ");
-            strSql.Append("      , Sale_order_details.[quantity] ");
-            strSql.Append("      , Sale_order_details.[amount] ");
-            strSql.Append("      , Product.product_name ");
-            strSql.Append("      , Product.specifications ");
-            strSql.Append("      , Product.indep_id ");
-            strSql.Append("FROM[dbo].[Sale_order_details] ");
-            strSql.Append("  INNER JOIN Product ON Product.id = Sale_order_details.product_id ");
-            if (strWhere.Trim() != "")
-            {
-                strSql.Append(" where " + strWhere);
-            }
-            strSql.Append(" order by " + filedOrder);
-            return DbHelperSQL.Query(strSql.ToString());
-        }
+ 
         #endregion  BasicMethod
         #region  ExtensionMethod
 

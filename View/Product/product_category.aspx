@@ -25,9 +25,19 @@
                             return html;
                         }
                     },
-                    //{
-                    //    display: '条形码头', name: 'CodingBegins', width: 50
-                    //}
+                      {
+                          display: '类别属性', width: 100, name: 'cproperty',
+                          render: function (item) {
+                              if (item != null) {
+                                  for (var i = 0; i < productCategoryAttr.length; i++) {
+                                      if (productCategoryAttr[i]['id'] == item.cproperty)
+                                          return productCategoryAttr[i]['text']
+                                  }
+                              } else {
+                                  return "其他";
+                              }
+                          }
+                      },
                 ],
                 dataAction: 'local',
                 pageSize: 30,
@@ -39,7 +49,7 @@
                 heightDiff: -10,
                 onRClickToSelect: true,
                 onDblClickRow: function (data, rowindex, rowobj) {
-                    f_openWindow('product/product_category_add.aspx?cid=' + data.id, "查看", 1200, 600);
+                    f_openWindow('product/product_category_add.aspx?cid=' + data.id, "查看", 1200, 500);
                 },
                 onSelectRow: function (data, rowindex, rowobj) {
                     $("#menuicon").attr("src", "../" + data.product_icon);
@@ -85,14 +95,14 @@
 
 
         function add() {
-            f_openWindow("product/product_category_add.aspx", "新增类别", 480, 320, f_save);
+            f_openWindow("product/product_category_add.aspx", "新增类别", 480, 500, f_save);
         }
 
         function edit() {
             var manager = $("#maingrid4").ligerGetGridManager();
             var row = manager.getSelectedRow();
             if (row) {
-                f_openWindow('product/product_category_add.aspx?cid=' + row.id, "修改类别", 480, 320, f_save);
+                f_openWindow('product/product_category_add.aspx?cid=' + row.id, "修改类别", 480, 500, f_save);
             } else {
                 $.ligerDialog.warn('请选择行！');
             }

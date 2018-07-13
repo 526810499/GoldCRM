@@ -19,6 +19,15 @@ namespace XHD.Model
         private string _create_id;
         private DateTime? _create_time;
 
+        /// <summary>
+        /// 根父级
+        /// </summary>
+        public string fparentid { get; set; }
+
+        /// <summary>
+        /// 属性
+        /// </summary>
+        public int cproperty { get; set; }
 
         /// <summary>
         /// 分类条形码开始标记

@@ -56,6 +56,12 @@ namespace XHD.Server
             model.vipcard = PageValidate.InputText(request["T_vipcard"], 50);
             model.saledep_id = PageValidate.InputText(request["T_saledep_id_val"], 50);
             model.PayTheBill = PageValidate.InputText(request["T_PayTheBill"], 50);
+
+            model.VipCardType = request["T_VipCardType_val"].CInt(0, false);
+            model.DiscountType = request["T_DiscountType_val"].CInt(0, false);
+            model.SaleType = request["T_SaleType_val"].CInt(0, false);
+            model.DiscountCount = request["T_DiscountCount"].CDecimal(0, false);
+
             if (string.IsNullOrWhiteSpace(model.saledep_id))
             {
                 model.saledep_id = dep_id;
@@ -156,6 +162,12 @@ namespace XHD.Server
                 model.arrears_invoice = model.Order_amount;
                 model.invoice_money = 0;
                 model.Serialnumber = GetOrderID();
+                if (model.DiscountType == 1)
+                {
+                    model.DiscountCount = model.discount_amount.CDecimal(0, false);
+                    model.discount_amount = model.Order_amount - model.total_amount;
+                }
+
                 if (model.Order_status_id == "5587BCED-0A36-4EDF-9562-F962A9B1913C")
                 {
                     canAddIntegal = 1;
@@ -198,6 +210,9 @@ namespace XHD.Server
                 modeldel.agio = pdata.agio;
                 modeldel.amount = pdata.Amount;
                 modeldel.BarCode = pdata.BarCode;
+                modeldel.SaleType = pdata.SaleType;
+                modeldel.DiscountCount = pdata.DiscountCount;
+                modeldel.Discounts = pdata.Discounts;
 
                 if (pdata.__status == "add")
                 {
@@ -221,6 +236,37 @@ namespace XHD.Server
             }
 
         }
+
+        /// <summary>
+        /// 财务核销
+        /// </summary>
+        /// <returns></returns>
+        public string VerifySave()
+        {
+            string id = PageValidate.InputText(request["id"], 50);
+            DataSet ds = order.GetList($"Sale_order.id = '{id}' ");
+            if (ds.Tables[0].Rows.Count == 0)
+                return XhdResult.Error("参数不正确，更新失败！").ToString();
+            int status = request["vstatus"].CInt(1, false);
+            string remark = PageValidate.InputText(request["remark"], 5000);
+            try
+            {
+                order.VerifySave(id, remark, emp_id, status);
+                return XhdResult.Success().ToString();
+            }
+            catch (Exception error)
+            {
+                SoftLog.LogStr(id + "," + error.ToString(), "OrderVerifySave");
+                if (status == 1)
+                {
+                    order.VerifySave(id, remark, emp_id, 0);
+                }
+                return XhdResult.Error("核销失败,请确认").ToString();
+            }
+
+
+        }
+
         private static object objlock = new object();
         /// <summary>
         /// 获取订单号
@@ -279,10 +325,21 @@ namespace XHD.Server
             {
                 serchtxt += $" and Sale_order.emp_id = '{emp_id }'";
             }
-
-            string temp = GetSQLCreateIDWhere(serchtxt, true);
-            serchtxt = temp.Replace("create_id", " Sale_order.create_id");
-
+            int verifystatus = request["verifystatus"].CInt(-1, false);
+            if (verifystatus > -1 && request["verifystatus"] != null)
+            {
+                serchtxt += $" and verifystatus = {verifystatus }";
+            }
+            //财务核销 1 是 0 否
+            int cwVerify = request["cwVerify"].CInt(0, false);
+            if (cwVerify == 0)
+            {
+                string temp = GetSQLCreateIDWhere(serchtxt, true);
+                serchtxt = temp.Replace("create_id", " Sale_order.create_id");
+            }
+            else {
+                serchtxt += $" and Sale_order.Order_status_id = '5587BCED-0A36-4EDF-9562-F962A9B1913C' ";
+            }
             return serchtxt;
         }
 
@@ -331,8 +388,20 @@ namespace XHD.Server
             {
                 serchtxt += $" and emp_id = '{emp_id }'";
             }
-            serchtxt = GetSQLCreateIDWhere(serchtxt, true);
-
+            int verifystatus = request["vstatus"].CInt(-1, false);
+            if (verifystatus > -1 && !string.IsNullOrWhiteSpace(request["vstatus"]))
+            {
+                serchtxt += $" and verifystatus = {verifystatus }";
+            }
+            //财务核销 1 是 0 否
+            int cwVerify = request["cwVerify"].CInt(0, false);
+            if (cwVerify == 0)
+            {
+                serchtxt = GetSQLCreateIDWhere(serchtxt, true);
+            }
+            else {
+                serchtxt += $" and  Order_status_id = '5587BCED-0A36-4EDF-9562-F962A9B1913C' ";
+            }
             return serchtxt;
         }
 
@@ -377,6 +446,7 @@ namespace XHD.Server
             {
                 Total = otable.Rows[0]["counts"].CString("0");
             }
+
 
             string dt = GetGridJSON.DataTableToJSON(ds.Tables[0], Total, otable);
             return (dt);
@@ -558,6 +628,17 @@ namespace XHD.Server
             public decimal Amount { get; set; }
             public string __status { get; set; }
 
+            /// <summary>
+            /// 优惠金额
+            /// </summary>
+            public decimal Discounts { get; set; }
+
+            /// <summary>
+            /// 折扣 DiscountType 1 时对应的折扣比
+            /// </summary>
+            public decimal DiscountCount { get; set; }
+
+            public int SaleType { get; set; }
 
             public string BarCode { get; set; }
         }

@@ -22,6 +22,12 @@ namespace XHD.Model
         private string _createdep_id;
         private int _intype;
         private int _warehouse_id;
+
+        /// <summary>
+        /// 来自
+        /// </summary>
+        public string FromOutID { get; set; }
+
         /// <summary>
         /// 
         /// </summary>

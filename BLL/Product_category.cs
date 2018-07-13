@@ -17,12 +17,13 @@ namespace XHD.BLL
         #region  BasicMethod
 
 
+
         /// <summary>
         /// 获取分类ID
         /// </summary>
         /// <param name="categoryName"></param>
         /// <returns></returns>
-        public string GetcategoryID(string categoryName)
+        public Model.Product_category GetcategoryID(string categoryName)
         {
             return dal.GetcategoryID(categoryName);
         }
@@ -41,6 +42,15 @@ namespace XHD.BLL
         public bool Update(XHD.Model.Product_category model)
         {
             return dal.Update(model);
+        }
+        /// <summary>
+        /// 获取对象
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
+        public Model.Product_category GetModel(string ID)
+        {
+            return dal.GetModel(ID);
         }
 
         /// <summary>

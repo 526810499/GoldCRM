@@ -17,13 +17,13 @@
     <script src="../lib/ligerUI/js/common.js" type="text/javascript"></script>
 
     <script src="../lib/jquery.form.js" type="text/javascript"></script>
-    <script src="../JS/XHD.js?v=1.0" type="text/javascript"></script>
+    <script src="../JS/XHD.js?v=3.0" type="text/javascript"></script>
     <script src="../lib/ligerUI2/js/plugins/ligerComboBox.js"></script>
     <script src="../lib/ligerUI2/js/plugins/ligerTree.js"></script>
     <script type="text/javascript">
 
         var orderid = "";
-
+        var sysSalePrice;
         $(function () {
             $.metadata.setType("attr", "validate");
             XHD.validate($(form1));
@@ -31,6 +31,11 @@
             loadForm(orderid);
 
         });
+
+        function GetsysSalePrice() {
+            var prices = getCookie("this_broadcast", "");
+            sysSalePrice = prices.split(',');
+        }
 
         function f_save() {
 
@@ -65,35 +70,40 @@
                     if (!customer_id) {
                         rows.push([{ display: "客户", name: "T_customer", validate: "{required:true}", width: 465 }]);
                     }
-
+                    var dname = (decodeURI(getCookie("udepname", "")));
                     if (obj.emp_name == null || obj.emp_name == undefined) {
                         obj.emp_name = getCookie("xhdcrm_uid", "");
                         obj.emp_id = ("<%=XHD.Common.DEncrypt.DEncrypt.Decrypt(HttpUtility.UrlDecode(XHD.Common.CookieHelper.GetValue("uid")))%>");
                         obj.cashiername = obj.emp_name;
                         obj.cashier_id = obj.emp_id;
                     }
-                    var dname = (decodeURI(getCookie("udepname", "")));
-
+                    if (oaid != null && oaid.length > 0) {
+                        dname = obj.dep_name;
+                    }
                     rows.push(
                               [
+                                 { display: "会员卡类型", name: "T_VipCardType", type: "select", options: "{width:180,onChangeValue:function(){ newTotalAmount(); },data:[{id:0,text:'无'},{id:1,text:'金卡'},{id:2,text:'银卡'},{id:3,text:'员工价'},{id:4,text:'股东价'}],selectBoxHeight:50,value:'" + obj.VipCardType + "'}", validate: "{required:true}" },
                                 { display: "会员卡号", name: "T_vipcard", type: "text", initValue: obj.vipcard },
-                                { display: "销售门店", name: "T_saledep_id", type: "select", options: "{width:180,treeLeafOnly: false,disabled:true,tree:{url:'hr_department.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false,value:'" + obj.saledep_id + "',emptyText:'" + dname + "'}}", initValue: dname, validate: "{required:true}" }
                               ],
-                            [
-                                { display: "成交时间", name: "T_date", type: "date", options: "{width:180}", validate: "{required:true}", initValue: formatTimebytype(obj.Order_date, "yyyy-MM-dd") },
-                                { display: "订单金额", name: "T_amount", type: "text", options: "{width:180,disabled:true,onChangeValue:function(){ getAmount(); }}", validate: "{required:true}", initValue: toMoney(obj.Order_amount) }
-                            ],
-                            [
-                                { display: "订单状态", name: "T_status", type: "select", options: "{width:180,url:'Sys_Param.combo.xhd?type=order_status',value:'" + obj.Order_status_id + "'}", validate: "{required:true}" },
-                                { display: "优惠金额", name: "T_discount", type: "text", options: "{width:180,onChangeValue:function(){ getAmount(); }}", validate: "{required:true}", initValue: toMoney(obj.discount_amount) }
-                            ],
-                            [
-                                { display: "支付方式", name: "T_paytype", type: "select", options: "{width:180,url:'Sys_Param.combo.xhd?type=pay_type',value:'" + obj.pay_type_id + "'}", validate: "{required:true}", initValue: formatTimebytype(obj.import_time, "yyyy-MM-dd") },
-                                { display: "Pos单号", name: "T_PayTheBill", type: "text", options: "{width:180}",  initValue: (obj.PayTheBill) }
-                            ],
+                               [
+                                { display: "订单总金额", name: "T_amount", type: "text", options: "{width:180,disabled:true,onChangeValue:function(){ getAmount(); }}", validate: "{required:true}", initValue: toMoney(obj.Order_amount) },
+                                { display: "优惠总金额", name: "T_discount", type: "text", options: "{width:180,disabled:true,onChangeValue:function(){ getAmount(); }}", validate: "{required:true}", initValue: toMoney(obj.discount_amount) }
+                               ],
+
                             [
                                 { display: "应收金额", name: "T_total", type: "text", options: "{width:180,disabled:false}", validate: "{required:true}", initValue: toMoney(obj.total_amount, "") },
                                 { display: "待收金额", name: "T_arrears", type: "text", options: "{width:180,disabled:false}", validate: "{required:true}", initValue: toMoney(obj.arrears_money) }
+                            ],
+                            [
+                              { display: "订单状态", name: "T_status", type: "select", options: "{width:180,url:'Sys_Param.combo.xhd?type=order_status',value:'" + obj.Order_status_id + "'}", validate: "{required:true}" }
+                            ],
+                            [
+                              { display: "支付方式", name: "T_paytype", type: "select", options: "{width:180,url:'Sys_Param.combo.xhd?type=pay_type',value:'" + obj.pay_type_id + "'}", validate: "{required:true}", initValue: formatTimebytype(obj.import_time, "yyyy-MM-dd") },
+                              { display: "Pos单号", name: "T_PayTheBill", type: "text", options: "{width:180}", initValue: (obj.PayTheBill) }
+                            ],
+                            [
+                                { display: "销售门店", name: "T_saledep_id", type: "select", options: "{width:180,treeLeafOnly: false,disabled:true,tree:{url:'hr_department.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false,value:'" + obj.saledep_id + "',emptyText:'" + dname + "'}}", initValue: dname, validate: "{required:true}" },
+                               { display: "成交时间", name: "T_date", type: "date", options: "{width:180}", validate: "{required:true}", initValue: formatTimebytype(obj.Order_date, "yyyy-MM-dd") },
                             ],
                             [
                                 { display: "成交人员", name: "T_emp", validate: "{required:true}", initValue: obj.emp_name },
@@ -145,7 +155,7 @@
                     $("#T_cashier").val(obj.cashiername);
                     $("#T_cashier_val").val(obj.cashier_id);
 
- 
+
                 }
             });
         }
@@ -237,22 +247,45 @@
                 columns: [
                     { display: '商品名称', name: 'product_name', align: 'left', width: 150 },
                     { display: '商品类别', name: 'category_name', align: 'left', width: 150 },
-                    { display: '条形码', name: 'BarCode', align: 'left', width: 180 },
+                    {
+                        display: '品类', width: 100, name: 'cproperty',
+                        render: function (item) {
+                            if (item != null) {
+                                for (var i = 0; i < productCategoryAttr.length; i++) {
+                                    if (productCategoryAttr[i]['id'] == item.cproperty)
+                                        return productCategoryAttr[i]['text']
+                                }
+                            } else {
+                                return "其他";
+                            }
+                        }
+                    },
+                    { display: '条形码', name: 'BarCode', align: 'left', width: 120 },
                     {
                         display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {
                             return toMoney(item.Weight);
                         }
                     },
                     {
-                        display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.CostsTotal);
+                        display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.SalesCostsTotal);
                         }
                     },
                     {
-                        display: '销售价格(￥)', name: 'amount', width: 80, align: 'right', render: function (item) {
+                        display: '一口价(￥)', name: 'FixedPrice', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.FixedPrice);
+                        }
+                    },
+                    {
+                        display: '销售总价(￥)', name: 'amount', width: 80, align: 'right', render: function (item) {
                             return toMoney(item.amount);
                         }, editor: { type: 'number' }
-                    }
+                    },
+                    {
+                        display: '总优惠(￥)', name: 'Discounts', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.Discounts);
+                        }, editor: { type: 'number' }
+                    },
                 ],
                 allowHideColumn: false,
                 onAfterEdit: f_onAfterEdit,
@@ -292,8 +325,11 @@
 
         function f_onAfterEdit(e) {
             var manager = $("#maingrid4").ligerGetGridManager();
+
             $("#T_amount").val(toMoney(manager.getColumnDateByType('amount', 'sum') * 1.0));
+            $("#T_discount").val(toMoney(manager.getColumnDateByType('Discounts', 'sum') * 1.0));
             getAmount();
+
         }
 
         function add() {
@@ -304,6 +340,7 @@
             manager.deleteSelectedRow();
             setTimeout(function () {
                 $("#T_amount").val(toMoney(manager.getColumnDateByType('amount', 'sum') * 1.0));
+                $("#T_discount").val(toMoney(manager.getColumnDateByType('Discounts', 'sum') * 1.0));
                 getAmount();
             }, 50);
         }
@@ -322,6 +359,12 @@
 
                 for (var i = 0; i < rows.length; i++) {
                     rows[i].product_id = rows[i].id;
+                    rows[i].SaleType = 0;
+                    rows[i].DiscountType = 0;
+                    rows[i].DiscountCount = 0;
+                    rows[i].Discounts = 0;
+                    rows[i].agio = 0;
+                    rows[i].SalesUnitPrice = 0;
                     var add = 1;
                     for (var j = 0; j < data.length; j++) {
                         if (rows[i].product_id == data[j].product_id) {
@@ -329,15 +372,207 @@
                         }
                     }
                     if (add == 1) {
-                        //price
+
                         rows[i].quantity = 1;
-                        rows[i]["amount"] = parseFloat(rows[i].SalesCostsTotal) + parseFloat(rows[i].SalesTotalPrice);
-                        manager.addRow(rows[i]);
+                        var row = rows[i];
+                        row = GetSaleDiscounts(row);
+                        manager.addRow(row);
                     }
                 }
                 dialog.close();
             }
             $("#T_amount").val(toMoney(manager.getColumnDateByType('amount', 'sum') * 1.0));
+            $("#T_discount").val(toMoney(manager.getColumnDateByType('Discounts', 'sum') * 1.0));
+            getAmount();
+        }
+
+        //获取销售优惠金额
+        function GetSaleDiscounts(row) {
+
+            var cardType = parseInt($("#T_VipCardType_val").val());
+
+            var cinfos = GetCategoryInfo(row.category_id);
+            var categoryAttr = parseInt(cinfos.cproperty);
+            var pcategory_id = cinfos.fparentid;
+            var category_name = row.category_name;
+            var FixedPrice = parseFloat(row.FixedPrice);
+            //销售工费
+            var SalesCostsTotal = parseFloat(row.SalesCostsTotal);
+            //销售价格
+            var SalesTotalPrice = parseFloat(row.SalesTotalPrice);
+            row.SaleType = categoryAttr;
+
+            //没有会员卡直接返回
+            if (cardType == null || cardType == NaN || cardType==0){
+                row.amount = SalesCostsTotal + SalesTotalPrice;
+                return row;
+            }
+
+            //1 现货金条  2首饰黄金
+            var ctype = 0;
+            //首饰黄金
+            if (pcategory_id == "750efaa0-f2e4-47f9-81ce-83b67d346a31") {
+                ctype = 1;
+            } else if (pcategory_id == "ff991a92-e1d4-4a73-bdf6-cc412b274446") {
+                ctype = 2;
+            }
+
+            var Discounts = 0;
+            var amount = SalesTotalPrice;
+            //有一口价按一口价销售
+            if (FixedPrice > 0) {
+                switch (cardType) {
+                    case 0://没有会员卡
+                        amount = FixedPrice;
+                        break;
+                    case 1://金卡
+                        row.DiscountType = 1;
+                        row.DiscountCount = 9;
+                        amount = FixedPrice * 0.9;
+
+                        break;
+                    case 2://银卡
+                        row.DiscountType = 1;
+                        amount = FixedPrice;
+                        break;
+                    case 3://员工
+                        row.DiscountType = 1;
+                        row.DiscountCount = 8.5;
+                        amount = FixedPrice * 0.85;
+                        break;
+                    case 4://股东
+                        row.DiscountType = 1;
+                        row.DiscountCount = 8;
+                        amount = FixedPrice * 0.8;
+                        break;
+                }
+                amount =  parseFloat(amount.toFixed(2));
+                Discounts = (FixedPrice - amount);
+                //硬金不再享受工费和黄金满减
+                if (category_name.indexOf("硬金") >= 0 || categoryAttr == 2) {
+                    row.amount = amount + SalesCostsTotal + Discounts;
+                    row.Discounts = Discounts;
+                    return row;
+                }
+            }
+            else {
+                //K金类
+                if (categoryAttr == 3 || category_name.indexOf("18K") >= 0) {
+                    switch (cardType) {
+                        case 0://没有会员卡
+                            amount = SalesTotalPrice;
+                            break;
+                        case 1://金卡
+                            row.DiscountType = 1;
+                            row.DiscountCount = 8;
+                            amount = SalesTotalPrice * 0.8;
+                            break;
+                        case 2://银卡
+                            row.DiscountType = 1;
+                            row.DiscountCount = 8.8;
+                            amount = SalesTotalPrice * 0.88;
+                            break;
+                        case 3://员工
+                            row.DiscountType = 1;
+                            row.DiscountCount = 6;
+                            amount = SalesTotalPrice * 0.6;
+                            break;
+                        case 4://股东
+                            row.DiscountType = 1;
+                            row.DiscountCount = 5;
+                            amount = SalesTotalPrice * 0.5;
+                            break;
+                    }
+                    amount =  parseFloat(amount.toFixed(2));
+                    Discounts = (SalesTotalPrice - amount);
+
+                }
+                else if (categoryAttr == 1 || categoryAttr == 2) {//黄金类
+                    //现货金条
+                    if (ctype == 1) {
+                        SalesTotalPrice = parseFloat(sysSalePrice[0]) * parseFloat(row.Weight);
+                    } else if (ctype == 2) {//首饰金
+                        SalesTotalPrice = parseFloat(sysSalePrice[1]) * parseFloat(row.Weight);
+                    }
+                    // 每克减多少 工费打折
+                    switch (cardType) {
+                        case 0://没有会员卡
+                            amount = SalesTotalPrice;
+                            break;
+                        case 1://金卡
+                            row.DiscountType = 1;
+                            row.DiscountCount = 9;
+                            amount = SalesTotalPrice - (row.Weight * 50);
+                            break;
+                        case 2://银卡
+                            row.DiscountType = 0;
+                            amount = SalesTotalPrice - (row.Weight * 40);
+                            break;
+                        case 3://员工
+                            row.DiscountType = 1;
+                            row.DiscountCount = 8.5;
+                            amount = SalesTotalPrice - (row.Weight * 60);
+                            break;
+                        case 4://股东
+                            row.DiscountType = 1;
+                            row.DiscountCount = 8;
+                            amount = SalesTotalPrice - (row.Weight * 70);
+
+                            break;
+                    }
+                    amount = parseFloat(amount.toFixed(2));
+                    Discounts = parseFloat(SalesTotalPrice - amount);
+                    row.agio = Discounts;
+                }
+            }
+
+            //工费优惠计算
+            // 工费打折
+            var CostsTotal = 0;
+            switch (cardType) {
+                case 0://没有会员卡
+                    CostsTotal = 0;
+                    break;
+                case 1://金卡
+                    CostsTotal = (SalesCostsTotal * 0.9);
+                    break;
+                case 2://银卡
+                    CostsTotal = SalesCostsTotal;
+                    break;
+                case 3://员工
+                    CostsTotal = (SalesCostsTotal * 0.85);
+                    break;
+                case 4://股东
+                    CostsTotal = (SalesCostsTotal * 0.8);
+                    break;
+            }
+            if (CostsTotal > 0) {
+                CostsTotal = parseFloat(CostsTotal.toFixed(2));
+                Discounts = Discounts + (SalesCostsTotal - CostsTotal);
+            }
+            Discounts = parseFloat(Discounts.toFixed(2));
+            row.amount = (amount + CostsTotal + Discounts);
+
+            row.Discounts = Discounts;
+
+            return row;
+        }
+
+        //重新计算价格
+        function newTotalAmount() {
+            //过滤重复
+            var manager = $("#maingrid4").ligerGetGridManager();
+            if (manager == null) { return; }
+            var data = manager.getData();
+            console.log(data);
+            for (var i = 0; i < data.length; i++) {
+                var row = data[i]; console.log(row);
+                row = GetSaleDiscounts(row);
+                console.log(row);
+                manager.updateRow(manager.getRow(i), row);
+            }
+            $("#T_amount").val(toMoney(manager.getColumnDateByType('amount', 'sum') * 1.0));
+            $("#T_discount").val(toMoney(manager.getColumnDateByType('Discounts', 'sum') * 1.0));
             getAmount();
         }
 

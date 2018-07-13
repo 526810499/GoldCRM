@@ -22,7 +22,8 @@ namespace XHD.DAL
         /// <param name="StockID"></param>
         /// <param name="importid"></param>
         /// <returns></returns>
-        public int DeleteImport(string StockID, string importTagID) {
+        public int DeleteImport(string StockID, string importTagID)
+        {
             string sql = "delete Product where StockID=@StockID and importTagID=@importTagID";
 
             SqlParameter[] par = {
@@ -30,7 +31,7 @@ namespace XHD.DAL
                 new SqlParameter("@StockID",StockID)
             };
 
-            return DbHelperSQL.ExecuteSql(sql,par);
+            return DbHelperSQL.ExecuteSql(sql, par);
         }
 
         /// <summary>
@@ -399,23 +400,15 @@ namespace XHD.DAL
             StringBuilder strSql_total = new StringBuilder();
 
             strSql_total.Append(" SELECT COUNT(id) FROM Product(nolock) ");
-            strSql_grid.Append("SELECT ");
-            strSql_grid.Append("      n,StockID,PriceTag,FixedPrice,id,authIn, product_name, category_id, status, Weight, create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, depopbefwid, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks,CertificateNo,Circle ");
-            strSql_grid.Append(",(select product_category from Product_category(nolock) where id = w1.category_id) as category_name");
-            strSql_grid.Append(",(select product_supplier from Product_supplier(nolock) where id = w1.SupplierID) as supplier_name");
-            strSql_grid.Append(",(select product_warehouse from Product_warehouse(nolock) where id = w1.warehouse_id) as warehouse_name");
-            strSql_grid.Append(",(select dep_name from hr_department where id = w1.indep_id) as indep_name");
-            strSql_grid.Append(" FROM ( SELECT StockID,PriceTag,FixedPrice,id, product_name,authIn, category_id, status, Weight, create_id, create_time, AttCosts, StockPrice, MainStoneWeight, AttStoneWeight, AttStoneNumber, StonePrice, GoldTotal, CostsTotal, Totals, Sbarcode, depopbefwid, BarCode, OutStatus, SalesTotalPrice, SalesCostsTotal, SupplierID,IsGold,remarks,warehouse_id,indep_id,CertificateNo,Circle, ROW_NUMBER() OVER( Order by " + filedOrder + " ) AS n from Product(nolock)");
             if (strWhere.Trim() != "")
             {
-                strSql_grid.Append(" WHERE " + strWhere);
-                strSql_total.Append(" WHERE " + strWhere);
+                strWhere = " where " + strWhere;
+                strSql_total.Append(strWhere);
             }
-            strSql_grid.Append("  ) as w1  ");
-            strSql_grid.Append("WHERE n BETWEEN " + (PageSize * (PageIndex - 1) + 1) + " AND " + PageSize * PageIndex);
-            strSql_grid.Append(" ORDER BY " + filedOrder);
+
+            string sql = DbHelperSQL.GetNewPageSQL(PageIndex, PageSize, "view_Product", "*", strWhere, filedOrder);
             Total = DbHelperSQL.Query(strSql_total.ToString()).Tables[0].Rows[0][0].ToString();
-            return DbHelperSQL.Query(strSql_grid.ToString());
+            return DbHelperSQL.Query(sql);
         }
 
 
@@ -423,7 +416,7 @@ namespace XHD.DAL
         /// <summary>
         /// 分页获取数据列表
         /// </summary>
-        public DataSet ExportList(  string strWhere  )
+        public DataSet ExportList(string strWhere)
         {
             StringBuilder strSql_grid = new StringBuilder();
 
@@ -435,12 +428,12 @@ namespace XHD.DAL
             if (strWhere.Trim() != "")
             {
                 strSql_grid.Append(" WHERE " + strWhere);
-             
+
             }
             strSql_grid.Append("  ) as w1  ");
-           
- 
-        
+
+
+
             return DbHelperSQL.Query(strSql_grid.ToString());
         }
 

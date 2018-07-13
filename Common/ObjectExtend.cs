@@ -98,7 +98,7 @@ namespace XHD
         {
             try
             {
-                return Convert.ToInt32(obj);
+                return CInt(obj,defaultValue);
             }
             catch (Exception ex)
             {
@@ -123,7 +123,7 @@ namespace XHD
         {
             try
             {
-                return Convert.ToDouble(obj);
+                return obj == null ? defaultValue : obj == DBNull.Value ? defaultValue : Convert.ToDouble(obj);
             }
             catch (Exception ex)
             {
@@ -148,7 +148,8 @@ namespace XHD
         {
             try
             {
-                return Convert.ToSingle(obj);
+                return obj == null ? defaultValue : obj == DBNull.Value ? defaultValue : Convert.ToSingle(obj);
+ 
             }
             catch (Exception ex)
             {
@@ -208,7 +209,9 @@ namespace XHD
         {
             try
             {
-                return Convert.ToInt64(obj);
+                return obj == null ? defaultValue : obj == DBNull.Value ? defaultValue : Convert.ToInt64(obj);
+
+               
             }
             catch (Exception ex)
             {

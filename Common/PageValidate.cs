@@ -241,7 +241,7 @@ namespace XHD.Common
                 }
                 retVal.Replace("'", " "); // Ìæ»»µ¥ÒýºÅ
             }
-            return retVal.ToString();
+            return retVal.CString("");
         }
 
         /// <summary>

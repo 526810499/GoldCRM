@@ -39,9 +39,9 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Sale_order(");
-            strSql.Append("id,Serialnumber,Customer_id,Order_date,pay_type_id,Order_status_id,Order_amount,discount_amount,total_amount,emp_id,receive_money,arrears_money,invoice_money,arrears_invoice,Order_details,create_id,create_time,cashier_id,vipcard,createdep_id,PayTheBill,saledep_id)");
+            strSql.Append("id,Serialnumber,Customer_id,Order_date,pay_type_id,Order_status_id,Order_amount,discount_amount,total_amount,emp_id,receive_money,arrears_money,invoice_money,arrears_invoice,Order_details,create_id,create_time,cashier_id,vipcard,createdep_id,PayTheBill,saledep_id, VipCardType, DiscountType, SaleType, DiscountCount)");
             strSql.Append(" values (");
-            strSql.Append("@id,@Serialnumber,@Customer_id,@Order_date,@pay_type_id,@Order_status_id,@Order_amount,@discount_amount,@total_amount,@emp_id,@receive_money,@arrears_money,@invoice_money,@arrears_invoice,@Order_details,@create_id,@create_time,@cashier_id,@vipcard,@createdep_id,@PayTheBill,@saledep_id)");
+            strSql.Append("@id,@Serialnumber,@Customer_id,@Order_date,@pay_type_id,@Order_status_id,@Order_amount,@discount_amount,@total_amount,@emp_id,@receive_money,@arrears_money,@invoice_money,@arrears_invoice,@Order_details,@create_id,@create_time,@cashier_id,@vipcard,@createdep_id,@PayTheBill,@saledep_id,@VipCardType, @DiscountType, @SaleType, @DiscountCount)");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@Serialnumber", SqlDbType.VarChar,250),
@@ -65,6 +65,10 @@ namespace XHD.DAL
                   new SqlParameter("@createdep_id", SqlDbType.VarChar,50),
                   new SqlParameter("@PayTheBill",SqlDbType.NVarChar,50),
                  new SqlParameter("@saledep_id",SqlDbType.NVarChar,50),
+                    new SqlParameter("@VipCardType",SqlDbType.Int),
+                    new SqlParameter("@DiscountType",SqlDbType.Int),
+                    new SqlParameter("@SaleType",SqlDbType.Int),
+                    new SqlParameter("@DiscountCount",SqlDbType.Decimal),
             };
             parameters[0].Value = model.id;
             parameters[1].Value = model.Serialnumber;
@@ -88,7 +92,10 @@ namespace XHD.DAL
             parameters[19].Value = model.createdep_id;
             parameters[20].Value = model.PayTheBill;
             parameters[21].Value = model.saledep_id;
-
+            parameters[22].Value = model.VipCardType;
+            parameters[23].Value = model.DiscountType;
+            parameters[24].Value = model.SaleType;
+            parameters[25].Value = model.DiscountCount;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {
@@ -119,7 +126,7 @@ namespace XHD.DAL
             strSql.Append("vipcard=@vipcard,");
             strSql.Append("receive_money=@receive_money,");
             strSql.Append("arrears_money=@arrears_money,");
-            strSql.Append("PayTheBill=@PayTheBill,saledep_id=@saledep_id  ");// createdep_id=@createdep_id,
+            strSql.Append("PayTheBill=@PayTheBill,saledep_id=@saledep_id, VipCardType=@VipCardType, DiscountType=@DiscountType, SaleType=@SaleType, DiscountCount=@DiscountCount  ");// createdep_id=@createdep_id,
             strSql.Append(" where id=@id ");
             SqlParameter[] parameters = {
                     new SqlParameter("@Order_date", SqlDbType.DateTime),
@@ -138,6 +145,10 @@ namespace XHD.DAL
                     new SqlParameter("@createdep_id", SqlDbType.VarChar,50),
                     new SqlParameter("@PayTheBill", SqlDbType.VarChar,50),
                    new SqlParameter("@saledep_id", SqlDbType.VarChar,50),
+                   new SqlParameter("@VipCardType",SqlDbType.Int),
+                    new SqlParameter("@DiscountType",SqlDbType.Int),
+                    new SqlParameter("@SaleType",SqlDbType.Int),
+                    new SqlParameter("@DiscountCount",SqlDbType.Decimal),
                };
             parameters[0].Value = model.Order_date;
             parameters[1].Value = model.pay_type_id;
@@ -155,6 +166,10 @@ namespace XHD.DAL
             parameters[13].Value = model.createdep_id;
             parameters[14].Value = model.PayTheBill;
             parameters[15].Value = model.saledep_id;
+            parameters[16].Value = model.VipCardType;
+            parameters[17].Value = model.DiscountType;
+            parameters[18].Value = model.SaleType;
+            parameters[19].Value = model.DiscountCount;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {
@@ -209,6 +224,40 @@ namespace XHD.DAL
         }
 
         /// <summary>
+        /// 财务核销保存
+        /// </summary>
+        /// <param name="orderid"></param>
+        /// <param name="Order_details"></param>
+        /// <param name="VerifyUID"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public int VerifySave(string orderid, string Order_details, string VerifyUID, int status)
+        {
+            string sql = @"update  Sale_order set VerifyStatus=@VerifyStatus,VerifyUID=@VerifyUID,VerifyTime=getdate(),Order_details=@Order_details where id=@id";
+            SqlParameter[] par = {
+            new SqlParameter("@VerifyStatus",status),
+            new SqlParameter("@VerifyUID",VerifyUID),
+            new SqlParameter("@Order_details",Order_details),
+            new SqlParameter("@id",orderid),
+            };
+            int rows = DbHelperSQL.ExecuteSql(sql, par);
+            if (rows > 0 && status == 1)
+            {
+                sql = @"
+                    UPDATE payuser SET status=5
+                    FROM dbo.Product AS payuser 
+                    inner JOIN Sale_order_details  AS bu ON payuser.BarCode=bu.BarCode 
+                    WHERE bu.order_id=@id AND payuser.status=4";
+
+                SqlParameter[] par1 = { new SqlParameter("@id", orderid) };
+
+                rows += DbHelperSQL.ExecuteSql(sql, par1);
+            }
+
+            return rows;
+        }
+
+        /// <summary>
         /// 获得数据列表
         /// </summary>
         public DataSet GetList(string strWhere)
@@ -235,11 +284,11 @@ namespace XHD.DAL
             strSql.Append("      , Sale_order.[createdep_id] ");
             strSql.Append("      , Sale_order.[vipcard] ");
             strSql.Append("      , Sale_order.[create_id] ");
-            strSql.Append("      , Sale_order.[create_time],cashier_id,vipcard,Sale_order.Createdep_id,PayTheBill ");
+            strSql.Append("      , Sale_order.[create_time],cashier_id,vipcard,Sale_order.Createdep_id,PayTheBill ,VipCardType, DiscountType, SaleType, DiscountCount ");
             strSql.Append("      , CRM_Customer.cus_name ");
             strSql.Append("      , hr_employee.name as emp_name ");
             strSql.Append("      , chr.name as cashiername ");
-            strSql.Append("      , hr_department.dep_name,saledep_id ");
+            strSql.Append("      , hr_department.dep_name,saledep_id,VerifyStatus ");
             strSql.Append("  FROM [dbo].[Sale_order](nolock) ");
             strSql.Append("        INNER JOIN CRM_Customer(nolock) ON CRM_Customer.id = Sale_order.Customer_id ");
             strSql.Append("        INNER JOIN hr_employee(nolock) ON hr_employee.id = Sale_order.emp_id ");
@@ -284,7 +333,7 @@ namespace XHD.DAL
             strSql.Append("      , Sale_order.[create_time] ");
             strSql.Append("      , Sale_order.[createdep_id] ");
             strSql.Append("      , Sale_order.[vipcard] ");
-            strSql.Append("      , CRM_Customer.cus_name,cashier_id,vipcard,Sale_order.createdep_id,PayTheBill  ");
+            strSql.Append("      , CRM_Customer.cus_name,cashier_id,vipcard,Sale_order.createdep_id,PayTheBill , VipCardType, DiscountType, SaleType, DiscountCount ");
             strSql.Append("      , hr_employee.name as emp_name ");
             strSql.Append("      , hr_department.dep_name ,saledep_id");
             strSql.Append("      , chr.name as cashiername ");
@@ -338,7 +387,7 @@ namespace XHD.DAL
             strSql_inner.Append("      , Sale_order.[vipcard],PayTheBill  ");
             strSql_inner.Append("      , CRM_Customer.cus_name ");
             strSql_inner.Append("      , hr_employee.name as emp_name ");
-            strSql_inner.Append("      , hr_department.dep_name  ,cashier_id,saledep_id ");
+            strSql_inner.Append("      , hr_department.dep_name  ,cashier_id,saledep_id,VerifyStatus, VipCardType, DiscountType, SaleType, DiscountCount ");
             strSql_inner.Append("  FROM[dbo].[Sale_order] ");
             strSql_inner.Append("        INNER JOIN CRM_Customer(nolock) ON CRM_Customer.id = Sale_order.Customer_id ");
             strSql_inner.Append("        INNER JOIN hr_employee(nolock) ON hr_employee.id = Sale_order.emp_id ");
@@ -370,7 +419,7 @@ namespace XHD.DAL
         /// <returns></returns>
         public DataTable ExportData(string strWhere)
         {
-            string sql = "select  ROW_NUMBER() over(order by BarCode) as rows,*,(amount-Totals) as profits,Order_details as Remark from view_SaleOrderData ";
+            string sql = "select  ROW_NUMBER() over(order by BarCode) as rows,*,(amount-Totals) as profits,Order_details as Remark,(CASE WHEN VerifyStatus = 1 THEN '已核销' ELSE '已销售' END) as VerifyStatusStr,(case VipCardType when 1 then '金卡价' when 2 then '银卡价' when 3 then '员工价' when 4 then '股东价' else '无' end ) as VipCardTypeStr from view_SaleOrderData ";
             if (strWhere.Trim() != "")
             {
                 sql += " where " + strWhere;

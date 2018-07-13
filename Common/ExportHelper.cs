@@ -239,6 +239,19 @@ namespace XHD.Common
             StyleCell.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Left;//横样式
             StyleCell.VerticalAlignment = VerticalAlignment.Center;//垂直样式
             StyleCell.WrapText = true;
+
+            dateStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
+            dateStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
+            dateStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
+            dateStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
+            //边框颜色  
+            dateStyle.BottomBorderColor = HSSFColor.OliveGreen.Black.Index;
+            dateStyle.TopBorderColor = HSSFColor.OliveGreen.Black.Index;
+
+            dateStyle.SetFont(FontCell);
+            dateStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Left;//横样式
+            dateStyle.VerticalAlignment = VerticalAlignment.Center;//垂直样式
+            dateStyle.WrapText = true;
             #endregion
 
             IRow rowhead = sheet1.CreateRow(rowIndex);
@@ -294,8 +307,7 @@ namespace XHD.Common
                                 break;
                             case "System.DateTime"://日期类型   
                                 celltemp.CellStyle = dateStyle;
-                                DateTime dateV;
-                                DateTime.TryParse(Values, out dateV);
+                                DateTime dateV= Values.CDateTime(DateTime.Now,false);
                                 celltemp.SetCellValue(dateV);
                                 break;
                             case "System.Boolean"://布尔型   
@@ -554,9 +566,34 @@ namespace XHD.Common
                     DataRow dataRow = dt.NewRow();
                     for (int j = row.FirstCellNum; j < cellCount; j++)
                     {
-                        if (!row.GetCell(j).isDbNullOrNull())
+                        ICell cell = row.GetCell(j);
+                        if (!cell.isDbNullOrNull())
                         {
-                            dataRow[j] = row.GetCell(j).CString("");
+                            if (cell.CellType == CellType.Formula)
+                            {
+                                try
+                                {
+                                    HSSFFormulaEvaluator e = new HSSFFormulaEvaluator(cell.Sheet.Workbook);
+                                    e.EvaluateInCell(cell);
+                                    dataRow[j] = cell.ToString();
+                                }
+                                catch
+                                {
+                                    if (DateUtil.IsCellDateFormatted(cell))//日期
+                                    {
+                                        dataRow[j] = cell.DateCellValue;
+                                    }
+                                    else
+                                    {
+                                        dataRow[j] = cell.NumericCellValue;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                dataRow[j] = row.GetCell(j).CString("");
+                            }
+
                         }
                     }
                     dt.Rows.Add(dataRow);

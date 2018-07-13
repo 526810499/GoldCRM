@@ -7,7 +7,6 @@ body, html {
 }
 
 #header {
- 
     height: 52px;
     background-repeat: no-repeat;
     background-color: #4e87b3;
@@ -34,6 +33,7 @@ body, html {
     width: 255px;
     line-height: 50px;
     padding-right: 10px;
+    margin-top: -0px;
 }
 
     .navright .item {

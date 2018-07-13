@@ -31,14 +31,14 @@
                         }
                     },
                     {
-                        display: '销售订单', name: 'Serialnumber', width: 250, render: function (item) {
-                            var html = "<a href='javascript:void(0)' onclick=view('order','" + item.id + "')>" + item.Serialnumber + "</a>";
+                        display: '销售订单', name: 'Serialnumber', width: 150, render: function (item) {
+                            var html = "<a href='javascript:void(0)' onclick=PView('" + item.Serialnumber + "','" + item.id + "')>" + item.Serialnumber + "</a>";
                             return html;
                         }
                     },
                       { display: '条形码', name: 'BarCode', align: 'left', width: 180 },
                     {
-                        display: '客户', name: 'Customer_id', width: 260, render: function (item) {
+                        display: '客户', name: 'Customer_id', width:150, render: function (item) {
                             var html = "<a href='javascript:void(0)' onclick=view('customer','" + item.Customer_id + "')>";
                             if (item.cus_name)
                                 html += item.cus_name;
@@ -55,14 +55,19 @@
                         }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='Weight'>" + item.sum + "</span>"; } }
                     },
                     {
-                        display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.CostsTotal);
-                        }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='CostsTotal'>" + item.sum + "</span>"; } }
+                        display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.SalesCostsTotal);
+                        }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='SalesCostsTotal'>" + item.sum + "</span>"; } }
                     },
                     {
                         display: '销售总价', name: 'amount', width: 80, align: 'right', render: function (item) {
                             return toMoney(item.amount);
                         }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='amount'>" + item.sum + "</span>"; } }
+                    },
+                    {
+                        display: '优惠(￥)', name: 'Discounts', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.Discounts);
+                        }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='Discounts'>" + item.sum + "</span>"; } }
                     },
                     { display: '成交部门', name: 'F_dep_id', width: 80, render: function (item, i) { return item.dep_name; } },
                     { display: '成交人员', name: 'emp_id', width: 80, render: function (item, i) { return item.emp_name; } }
@@ -194,11 +199,19 @@
             var manager = $("#maingrid4").ligerGetGridManager();
             var row = manager.getSelectedRow();
             if (row) {
-                f_openWindow('sale/order_add.aspx?id=' + row.id, "查看订单", 800, 700);
+                f_openWindow('sale/order_view.aspx?id=' + row.id, "查看订单" + row.Serialnumber, 1200, 700);
             }
             else {
-                $.ligerDialog.warn('请选择行！');
+                $.ligerDialog.warn('请选订单！');
             }
+        }
+
+
+
+        function PView(oid, id) {
+
+            f_openWindow('sale/order_view.aspx?id=' + id, "查看订单" + oid, 1200, 700);
+
         }
 
         function exports() {
@@ -259,10 +272,10 @@
                             <input type='text' id='T_OrderID' name='T_OrderID' />
                         </div>
                     </td>
-                   <td style="width: 65px">
+                    <td style="width: 65px">
                         <div style='width: 60px;'>销售时间：</div>
                     </td>
-                  <td style="width: 215px">
+                    <td style="width: 215px">
                         <div style='width: 100px; float: left'>
                             <input type='text' id='startdate' name='startdate' ltype='date' value="<%=(DateTime.Now.AddDays(-1).Date).ToString("yyyy-MM-dd") %>" ligerui='{width:97}' />
                         </div>

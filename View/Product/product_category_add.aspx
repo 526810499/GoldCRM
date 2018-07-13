@@ -17,7 +17,7 @@
     <script src="../lib/jquery.form.js" type="text/javascript"></script>
     <script src="../lib/ligerUI2/js/plugins/ligerComboBox.js"></script>
     <script src="../lib/ligerUI2/js/plugins/ligerTree.js"></script>
-    <script src="../JS/XHD.js" type="text/javascript"></script>
+    <script src="../JS/XHD.js?v=21" type="text/javascript"></script>
     <script src="../JS/webuploader/webuploader.min.js" type="text/javascript"></script>
 
     <script type="text/javascript">
@@ -37,6 +37,12 @@
 
 
         function f_save() {
+            var category_attr = $("#category_attr").val();
+            if (category_attr == null || category_attr.length <= 0) {
+                $.ligerDialog.warn("分类属性必须关联");
+                return false;
+            }
+
             if ($(form1).valid()) {
                 var sendtxt = "&id=" + getparastr("cid");
                 return $("form :input").fieldSerialize() + sendtxt;
@@ -61,8 +67,10 @@
                     $("#T_category_name").val(obj.product_category);
                     $("#T_category_icon").val(obj.product_icon);
                     $("#T_CodingBegins").val(obj.CodingBegins);
-                    if (!obj.product_icon)
+                    $("#T_category_attr").val(obj.cproperty);
+                    if (!obj.product_icon) {
                         obj.product_icon = 'images/icon/21.png ';
+                    }
                     $("#menuicon").attr("src", "../" + obj.product_icon);
                     $("#T_category_parent").ligerComboBox({
                         width: 180,
@@ -77,9 +85,18 @@
                             idFieldName: 'id',
                             checkbox: false
                         }
-                    })
+                    });
 
-
+                    $("#T_category_attr").ligerComboBox({
+                        data: productCategoryAttr,
+                        valueField: 'id',
+                        textField: 'text',
+                        valueFieldID: 'category_attr',
+                        selectBoxHeight: 200,
+                        initValue: obj.cproperty,
+                        value: obj.cproperty,
+                    });
+ 
                 }
             });
         }
@@ -143,6 +160,15 @@
                 </td>
                 <td height="23">
                     <input type="text" id="T_category_parent" name="T_category_parent" validate="{required:true}" />
+                </td>
+            </tr>
+            <tr>
+                <td height="23" colspan="2">
+
+                    <div align="left" style="width: 62px">类别属性：</div>
+                </td>
+                <td height="23">
+                    <input type="select" id="T_category_attr" name="T_category_attr" validate="{required:true}" />
                 </td>
             </tr>
             <%--            <tr>

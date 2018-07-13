@@ -10,7 +10,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="images/logo/favicon.ico" />
     <link href="lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" />
     <link href="lib/ligerUI/skins/Silvery/css/all.css" rel="stylesheet" />
-    <link href="CSS/index/main.css?v=3" rel="stylesheet" />
+    <link href="CSS/index/main.css?v=6" rel="stylesheet" />
 
     <script src="lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
@@ -30,7 +30,7 @@
         .bli {
             font-family: arial, sans-serif;
             color: #ffc600;
-            font-size: 18px;
+            font-size: 16px;
             text-transform: uppercase;
             letter-spacing: 0.8pt;
             word-spacing: 0pt;
@@ -50,7 +50,7 @@
 
         <div class="logoContent">
             <img src="css/index/logo.png" width="150" style="float: left; margin-top: 4px;" />
-            <marquee direction="left" behavior="scroll" scrollamount="5" scrolldelay="100" scrolldelay="0" width="600" height="50" style="margin-left: 500px;">
+            <marquee direction="left" behavior="scroll" scrollamount="5" scrolldelay="100" scrolldelay="0" width="600" height="50" style="margin-left: 300px;">
              <div id="scroll_begin"  ></div> </marquee>
         </div>
         <div class="navright">
@@ -433,7 +433,7 @@
         function GetTodayBroadcast() {
             $.getJSON("STodayBroadcast.GetTodayBroadcast.xhd?rnd=" + Math.random(), function (data, textStatus) {
                 if (data != null) {
-                    var temp = "<li class='bli'>当前单价:<b style='color:red;padding-left:5px'>" + toMoney(data.TodayGlodPrice) + "</b></li><li class='bli'>&nbsp;&nbsp;" + data.OtherBrodcast + "</li>";
+                    var temp = "<li class='bli'>黄金单价:<b style='color:red;padding-left:2px'>" + toMoney(data.TodayGlodPrice) + "</b></li> <li class='bli'>首饰金价:<b style='color:red;padding-left:2px'>" + toMoney(data.TodayOtherPrice1) + "</b></li> <li class='bli'>回购金价:<b style='color:red;padding-left:2px'>" + toMoney(data.TodayOtherPrice2) + "</b></li> <li class='bli'> 铂金价:<b style='color:red;padding-left:2px'>" + toMoney(data.TodayOtherPrice3) + "</b></li><li class='bli'>&nbsp;&nbsp;" + data.OtherBrodcast + "</li>";
                     var c = temp;
                     c += "<li>&nbsp;&nbsp;</li>";
                     c += "<li>&nbsp;&nbsp;</li>";
@@ -443,29 +443,10 @@
                     c += temp;
 
                     $("#scroll_begin").html("<ul>" + c + "</ul>");
-                    // ScrollImgLeft();
                 }
             });
         }
 
-        function ScrollImgLeft() {
-            var speed = 20
-            var scroll_begin = document.getElementById("scroll_begin");
-            var scroll_end = document.getElementById("scroll_end");
-            var scroll_div = document.getElementById("scroll_div");
-            scroll_end.innerHTML = scroll_begin.innerHTML
-            function Marquee() {
-                if (scroll_end.offsetWidth - scroll_div.scrollLeft <= 0) {
-                    scroll_div.scrollLeft -= scroll_begin.offsetWidth;
-                }
-                else {
-                    scroll_div.scrollLeft++;
-                }
-            }
-            var MyMar = setInterval(Marquee, speed);
-            scroll_div.onmouseover = function () { clearInterval(MyMar); }
-            scroll_div.onmouseout = function () { MyMar = setInterval(Marquee, speed); }
-        }
 
     </script>
 

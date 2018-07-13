@@ -13,7 +13,7 @@
     <script src="../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
     <script src="../lib/jquery.form.js" type="text/javascript"></script>
-    <script src="../JS/XHD.js" type="text/javascript"></script>
+    <script src="../JS/XHD.js?v=1" type="text/javascript"></script>
     <script type="text/javascript">
         $(function () {
             initLayout();
@@ -25,7 +25,7 @@
                     //{ display: '序号', width: 50, render: function (item, i) { return item.n; } },
                     {
                         display: '订单编号', name: 'Serialnumber', width: 250, render: function (item) {
-                            var html = "<a href='javascript:void(0)' onclick=view('order','" + item.id + "')>" + item.Serialnumber + "</a>";
+                            var html = "<a href='javascript:void(0)' onclick=PView('" + item.id + "','" + item.Serialnumber + "')>" + item.Serialnumber + "</a>";
                             return html;
                         }
                     },
@@ -38,6 +38,12 @@
                             return html;
                         }
                     },
+                    {
+                        display: '会员卡价', name: 'VipCardType', width: 260, render: function (item) {
+                            var VipCardType = item.VipCardType;
+                            return GetVIPCardType(VipCardType);
+                        }
+                    },
                     { display: '销售门店', name: 'F_dep_id', width: 80, render: function (item, i) { return item.dep_name; } },
                     { display: '销售人员', name: 'emp_id', width: 80, render: function (item, i) { return item.emp_name; } },
                     {
@@ -47,12 +53,17 @@
                         totalSummary: { type: 'total' }
                     },
                     {
-                        display: '订单金额（￥）', name: 'total_amount', width: 100, align: 'right', render: function (item) {
-                            return "<div style='color:#135294'>" + toMoney(item.total_amount) + "</div>";
+                        display: '订单总金额（￥）', name: 'Order_amount', width: 100, align: 'right', render: function (item) {
+                            return "<div style='color:#135294'>" + toMoney(item.Order_amount) + "</div>";
                         }, totalSummary: { type: 'sum', render: function (item, i) { return "￥" + item.sum; } }
                     },
                     {
-                        display: '已收总额（￥）', name: 'receive_money', width: 100, align: 'right', render: function (item) {
+                        display: '优惠金额（￥）', name: 'discount_amount', width: 100, align: 'right', render: function (item) {
+                            return "<div style='color:#135294'>" + toMoney(item.discount_amount) + "</div>";
+                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥" + item.sum; } }
+                    },
+                    {
+                        display: '已收金额（￥）', name: 'receive_money', width: 100, align: 'right', render: function (item) {
                             return "<div style='color:#135294'>" + toMoney(item.receive_money) + "</div>";
                         }, totalSummary: { type: 'sum', render: function (item, i) { return "￥" + item.sum; } }
                     },
@@ -92,15 +103,26 @@
                                     }
                                 },
                                 {
-                                    display: '工费小计(￥)', name: 'CostsTotal', width: 80, align: 'right', render: function (item) {
-                                        return toMoney(item.CostsTotal);
+                                    display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
+                                        return toMoney(item.SalesCostsTotal);
                                     }
                                 },
                                 {
-                                    display: '销售总价', name: 'amount', width: 80, align: 'right', render: function (item) {
+                                    display: '一口价(￥)', name: 'FixedPrice', width: 80, align: 'right', render: function (item) {
+                                        return toMoney(item.FixedPrice);
+                                    }
+                                },
+                                {
+                                    display: '销售总价(￥)', name: 'amount', width: 80, align: 'right', render: function (item) {
                                         return toMoney(item.amount);
                                     }
-                                }
+                                },
+                                {
+                                    display: '优惠(￥)', name: 'Discounts', width: 80, align: 'right', render: function (item) {
+                                        return toMoney(item.Discounts);
+                                    }
+                                },
+
                             ],
                             usePager: false,
                             checkbox: false,
@@ -113,7 +135,7 @@
                 },
                 onRClickToSelect: true,
                 onDblClickRow: function (data, rowindex, rowobj) {
-                    f_openWindow('sale/order_add.aspx?id=' + data.id, "查看", 1200, 600);
+                    f_openWindow('sale/order_add.aspx?id=' + data.id, "查看" + data.Serialnumber, 1200, 600);
                 },
                 onContextmenu: function (parm, e) {
                     actionCustomerID = parm.data.id;
@@ -218,18 +240,25 @@
 
 
         function add() {
-            f_openWindow("sale/order_add.aspx", "新增订单", 800, 700, f_save);
+            f_openWindow("sale/order_add.aspx", "新增订单", 1200, 700, f_save);
         }
 
         function edit() {
             var manager = $("#maingrid4").ligerGetGridManager();
             var row = manager.getSelectedRow();
             if (row) {
-                f_openWindow('sale/order_add.aspx?id=' + row.id, "修改订单", 800, 700, f_save);
+                f_openWindow('sale/order_add.aspx?id=' + row.id, "修改订单" + row.Serialnumber, 1200, 700, f_save);
             }
             else {
-                $.ligerDialog.warn('请选择行！');
+                $.ligerDialog.warn('请选择订单！');
             }
+        }
+
+
+        function PView(id, Serialnumber) {
+
+            f_openWindow('sale/order_add.aspx?id=' + id, "查看订单" + Serialnumber, 1200, 700, f_save);
+
         }
 
         function del() {

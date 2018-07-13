@@ -16,7 +16,7 @@
     <script src="../lib/jquery-validation/jquery.metadata.js" type="text/javascript"></script>
     <script src="../lib/jquery-validation/messages_cn.js" type="text/javascript"></script>
     <script src="../lib/ligerUI/js/common.js" type="text/javascript"></script>
-    <script src="../JS/XHD.js" type="text/javascript"></script>
+    <script src="../JS/XHD.js?v=1.5" type="text/javascript"></script>
     <script src="../lib/jquery.form.js" type="text/javascript"></script>
     <script src="../lib/ligerUI2/js/plugins/ligerComboBox.js"></script>
     <script src="../lib/ligerUI2/js/plugins/ligerTree.js"></script>
@@ -104,7 +104,7 @@
                                     ],
                                    [
                                     { display: "商品名称", name: "T_product_name", type: "text", options: "{width:180}", validate: "{required:true}", initValue: obj.product_name },
-                                    { display: "商品类别", name: "T_product_category", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_category.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + obj.category_id + "'}", validate: "{required:true}" }
+                                    { display: "商品类别", name: "T_product_category", type: "select", options: "{width:180,selectBoxHeight:350,onChangeValue:function(){categoryChange();},treeLeafOnly: false,tree:{url:'Product_category.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + obj.category_id + "'}", validate: "{required:true}" }
                                    ],
                                    [
                                     { display: "进货金价", name: "T_StockPrice", type: "text", options: "{width:180,onChangeValue:function(value){ $('#T_StockPrice').val(toMoney(value));SetT_GoldTotal(); }}", validate: "{required:true}", initValue: toMoney(obj.StockPrice, "") },
@@ -130,8 +130,20 @@
                                     { display: "供应商", name: "T_SupplierID", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_supplier.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + obj.SupplierID + "'}", validate: "{required:false}" },
                                     { display: "出厂码", name: "T_Sbarcode", type: "text", options: "{width:180}", validate: "{required:false}", initValue: (obj.Sbarcode) },
                                 ],
-                                   [{ display: "条形码", name: "T_BarCode", type: "text", options: "{width:180;}", validate: "{required:false}", initValue: (obj.BarCode) },
-                                    { display: "品类", name: "T_GType", type: "select", options: "{width:180,onSelected:function(value){SetT_SalesTotalPrice(value);},data:[{ id:null,text:'=请选择='},{id:1,text:'足金类'},{id:2,text:'硬金类'},{id:3,text:'K金类'},{id:4,text:'钻石类'},{id:5,text:'彩色宝石类'},{id:6,text:'翡翠类'},{id:7,text:'摆件类'},{id:8,text:'金钞类'},{id:9,text:'金条类'},{id:0,text:'其他'}],selectBoxHeight:150, value:" + obj.IsGold + "}", validate: "{required:true}" }
+                                   [
+                                     { display: "条形码", name: "T_BarCode", type: "text", options: "{width:180;}", validate: "{required:false}", initValue: (obj.BarCode) },
+                                     {
+                                         display: "品类", name: "T_IsGold", type: "select", options: "{width:180;data:" + productCategoryAttr + ",valueField:'id',textField:'text'}", validate: "{required:false}", initValue: (obj.IsGold), render: function (item) {
+                                             if (item != null) {
+                                                 for (var i = 0; i < productCategoryAttr.length; i++) {
+                                                     if (productCategoryAttr[i]['id'] == item.IsGold)
+                                                         return productCategoryAttr[i]['text']
+                                                 }
+                                             } else {
+                                                 return "其他";
+                                             }
+                                         }
+                                     },
                                    ],
                                  [
                                         { display: "销售价格", name: "T_SalesTotalPrice", type: "text", options: "{width:180,disabled:true,onChangeValue:function(value){   $('#T_SalesTotalPrice').val(toMoney(value));  ; }}", validate: "{required:true}", initValue: toMoney(obj.SalesTotalPrice) },
@@ -157,7 +169,7 @@
                         isUpdate = true;
                         if (obj.StockPrice == null || obj.StockPrice == undefined || obj.StockPrice == 0) { $("#T_StockPrice").val(toMoney(0.00)); }
                         if (obj.AttCosts == null || obj.AttCosts == undefined || obj.AttCosts == 0) { $("#T_AttCosts").val(toMoney(0.00)); }
-                        if (obj.status != 1) {
+                        if (obj.status > 2) {
                             $("#T_BarCode").attr("disabled", "disabled");
                         }
                         //移除掉第一个
@@ -180,24 +192,24 @@
             var T_StonePrice = $("#T_StonePrice").val();
             total = parseFloat(T_StonePrice.replace(/\$|\,/g, '')) + parseFloat(T_CostsTotal.replace(/\$|\,/g, '')) + parseFloat(T_GoldTotal.replace(/\$|\,/g, ''));
             $("#T_Totals").val(toMoney(total));
-            var gtype = 0;
-            if ($("#T_GType").val() == "是") { gtype = 1; }
-            SetT_SalesTotalPrice(gtype);
+
+            SetT_SalesTotalPrice();
 
         }
 
         //销售价格=（成本总价*2.5）
-        function SetT_SalesTotalPrice(value) {
+        function SetT_SalesTotalPrice() {
             //修改的不做计算
             if (isUpdate) { return false; }
+            ctype = $("#HT_GType").val();
 
             var T_Totals = $("#T_Totals").val();
             //（2）黄金类商品，生成销售工费（工费小计*3）
-            if (value == 1) {
+            if (ctype == 1 || ctype == 2) {
                 var T_CostsTotal = $("#T_CostsTotal").val();
                 var total = parseFloat(T_CostsTotal.replace(/\$|\,/g, '')) * 3;
                 $("#T_SalesCostsTotal").val(toMoney(total));
-             // $("#T_SalesTotalPrice").val(0.00);
+                // $("#T_SalesTotalPrice").val(0.00);
             } else {
                 //非黄金类商品（K金，金镶玉，钻石）生成销售单价（成本总价*2.5）
                 var total = parseFloat(T_Totals.replace(/\$|\,/g, '')) * 2.5;
@@ -242,7 +254,7 @@
             //修改的不做计算
             if (isUpdate) { return false; }
 
-            var ptype = parseInt($("#T_GType_val").val());
+            var ptype = parseInt($("#HT_GType").val());
 
             //工费小计
             var T_CostsTotal = parseFloat($("#T_CostsTotal").val().replace(/\$|\,/g, ''));
@@ -254,14 +266,15 @@
             $("#T_FixedPrice").val(0);
             switch (ptype) {
                 case 1: //足金类
+                case 10: //铂金类
                     if (T_CostsTotal <= 2) { $("#T_PriceTag").val(toMoney(parseFloat(T_Weight * 20))); }
                     else if (T_CostsTotal <= 22) { $("#T_PriceTag").val(toMoney(parseFloat(T_CostsTotal * 6))); }
-                    else if (T_CostsTotal <= 40) { $("#T_PriceTag").val(toMoney(parseFloat(T_CostsTotal * 4))); }
+                    else if (T_CostsTotal > 22) { $("#T_PriceTag").val(toMoney(parseFloat(T_CostsTotal * 4))); }
                     break;
                 case 2:  //硬金类
                     if (T_Weight <= 5) { $("#T_FixedPrice").val(toMoney(parseFloat(T_Totals * 0.5))); }
                     else if (T_Weight > 5 && T_CostsTotal <= 15) { $("#T_PriceTag").val(toMoney(parseFloat(T_CostsTotal * 6))); }
-                    else if (T_Weight > 5 && T_CostsTotal <= 40) { $("#T_PriceTag").val(toMoney(parseFloat(T_CostsTotal * 4))); }
+                    else if (T_Weight > 5 && T_CostsTotal > 15) { $("#T_PriceTag").val(toMoney(parseFloat(T_CostsTotal * 4))); }
                     break;
                 case 3://K金
                 case 4://钻石
@@ -287,13 +300,29 @@
             $("#T_SalesTotalPrice").val($("#T_PriceTag").val());
         }
 
+        function categoryChange() {
+            var cagv = $("#T_product_category_val").val();
+            if (cagv == null || cagv.length <= 0) { return;}
+            var ct = GetCategoryInfo(cagv);
+            if (ct == null) { return;}
+            var cproperty = ct.cproperty;
+            $("#HT_GType").val(cproperty);
 
+            $("#T_IsGold_val").val(cproperty);
+            for (var i = 0; i < productCategoryAttr.length; i++) {
+                if (productCategoryAttr[i]['id'] == cproperty) {
+                    $("#T_IsGold").val(productCategoryAttr[i]['text']);
+                    return;
+                }
+            }
+        }
 
     </script>
 </head>
 <body>
     <div style="padding: 10px;">
         <form id="form1" onsubmit="return false">
+            <input id="HT_GType" name="HT_GType" value="0" type="hidden" />
         </form>
     </div>
 </body>

@@ -23,17 +23,21 @@ namespace XHD.DAL
         /// </summary>
         /// <param name="categoryName"></param>
         /// <returns></returns>
-        public string GetcategoryID(string categoryName)
+        public Model.Product_category GetcategoryID(string categoryName)
         {
-            string sql = "select id from Product_category(nolock) where product_category=@product_category";
+            string sql = "select id,product_category,parentid,CodingBegins,cproperty,fparentid from Product_category(nolock) where product_category=@product_category";
             SqlParameter[] parameters = {
 
                     new SqlParameter("@product_category", SqlDbType.VarChar,250) { Value=categoryName},
 
             };
 
-            return DbHelperSQL.ExecuteScalar(sql, parameters).CString("");
+            DataTable table = DbHelperSQL.Query(sql, parameters).Tables[0];
+
+            return ModelConvertHelper<Model.Product_category>.ToModel(table);
         }
+
+ 
 
         /// <summary>
         /// 增加一条数据
@@ -42,9 +46,9 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Product_category(");
-            strSql.Append("id,product_category,parentid,product_icon,create_id,create_time,CodingBegins,Counts)");
+            strSql.Append("id,product_category,parentid,product_icon,create_id,create_time,CodingBegins,Counts,cproperty,fparentid)");
             strSql.Append(" values (");
-            strSql.Append("@id,@product_category,@parentid,@product_icon,@create_id,@create_time,@CodingBegins,@Counts)");
+            strSql.Append("@id,@product_category,@parentid,@product_icon,@create_id,@create_time,@CodingBegins,@Counts,@cproperty,@fparentid)");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@product_category", SqlDbType.VarChar,250),
@@ -53,7 +57,9 @@ namespace XHD.DAL
                     new SqlParameter("@create_id", SqlDbType.VarChar,50),
                     new SqlParameter("@create_time", SqlDbType.DateTime),
                     new SqlParameter("@CodingBegins",SqlDbType.VarChar,50),
-                    new SqlParameter("@Counts",SqlDbType.Int,4)
+                    new SqlParameter("@Counts",SqlDbType.Int,4),
+                     new SqlParameter("@cproperty",SqlDbType.Int,4),
+               new SqlParameter("@fparentid",SqlDbType.VarChar,50),
             };
             parameters[0].Value = model.id;
             parameters[1].Value = model.product_category;
@@ -63,8 +69,8 @@ namespace XHD.DAL
             parameters[5].Value = model.create_time;
             parameters[6].Value = model.CodingBegins;
             parameters[7].Value = 10000;
-
-
+            parameters[8].Value = model.cproperty;
+            parameters[9].Value = model.fparentid;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {
@@ -84,21 +90,24 @@ namespace XHD.DAL
             strSql.Append("update Product_category set ");
             strSql.Append("product_category=@product_category,");
             strSql.Append("parentid=@parentid,");
-            strSql.Append("product_icon=@product_icon,CodingBegins=@CodingBegins");
+            strSql.Append("product_icon=@product_icon,CodingBegins=@CodingBegins,cproperty=@cproperty,fparentid=@fparentid");
             strSql.Append(" where id=@id ");
             SqlParameter[] parameters = {
                     new SqlParameter("@product_category", SqlDbType.VarChar,250),
                     new SqlParameter("@parentid", SqlDbType.VarChar,50),
                     new SqlParameter("@product_icon", SqlDbType.VarChar,250),
                     new SqlParameter("@id", SqlDbType.VarChar,50),
-                new SqlParameter("@CodingBegins",SqlDbType.VarChar,50)
+                new SqlParameter("@CodingBegins",SqlDbType.VarChar,50),
+                new SqlParameter("@cproperty",SqlDbType.Int),
+                new SqlParameter("@fparentid",SqlDbType.VarChar,50),
 };
             parameters[0].Value = model.product_category;
             parameters[1].Value = model.parentid;
             parameters[2].Value = model.product_icon;
             parameters[3].Value = model.id;
             parameters[4].Value = model.CodingBegins;
-
+            parameters[5].Value = model.cproperty;
+            parameters[6].Value = model.fparentid;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {
@@ -175,13 +184,29 @@ namespace XHD.DAL
         public DataSet GetList(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select id,product_category,parentid,product_icon,create_id,create_time,CodingBegins ");
+            strSql.Append("select id,product_category,parentid,product_icon,create_id,create_time,CodingBegins,cproperty,fparentid ");
             strSql.Append(" FROM Product_category ");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);
             }
             return DbHelperSQL.Query(strSql.ToString());
+        }
+
+        /// <summary>
+        /// 获取对象
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
+        public Model.Product_category GetModel(string ID)
+        {
+            string sql = "select  id,product_category,parentid,CodingBegins,cproperty,fparentid from Product_category(nolock) where id=@id";
+            SqlParameter[] par = {
+                new SqlParameter("@id",SqlDbType.VarChar,50) { Value=ID}
+            };
+            DataTable table = DbHelperSQL.Query(sql, par).Tables[0];
+
+            return ModelConvertHelper<Model.Product_category>.ToModel(table);
         }
 
         /// <summary>
@@ -259,8 +284,8 @@ namespace XHD.DAL
             {
                 strSql.Append(" top " + Top.ToString());
             }
-            strSql.Append(" id,product_category,parentid,product_icon,create_id,create_time,CodingBegins,0 as isextend ");
-            strSql.Append(" FROM Product_category ");
+            strSql.Append(" id,product_category,parentid,product_icon,create_id,create_time,CodingBegins,0 as isextend,cproperty,fparentid ");
+            strSql.Append(" FROM Product_category(nolock) ");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);

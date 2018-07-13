@@ -61,14 +61,7 @@ namespace XHD.BLL
         {
             return dal.GetList(strWhere);
         }
-        /// <summary>
-        /// 获得前几行数据
-        /// </summary>
-        public DataSet GetList(int Top, string strWhere, string filedOrder)
-        {
-            return dal.GetList(Top, strWhere, filedOrder);
-        }
-
+ 
 
         /// <summary>
         /// 获得数据列表

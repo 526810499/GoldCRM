@@ -391,7 +391,7 @@ namespace XHD.Server
                 model.id = id;
                 model.status = -1;
                 model.remark = "";
-
+                model.FromOutID = model.inType + "_" + emp_id;
                 bll.Add(model);
 
                 return JsonDyamicHelper.NetJsonConvertObject(model);

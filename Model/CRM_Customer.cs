@@ -174,17 +174,22 @@ namespace XHD.Model
 			get{return _remarks;}
 		}
 		/// <summary>
-		/// 
+		/// 业务员
 		/// </summary>
 		public string emp_id
 		{
 			set{ _emp_id=value;}
 			get{return _emp_id;}
 		}
-		/// <summary>
-		/// 
-		/// </summary>
-		public int? isPrivate
+        /// <summary>
+        /// 业务部门
+        /// </summary>
+        public string emp_depid { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int? isPrivate
 		{
 			set{ _isprivate=value;}
 			get{return _isprivate;}

@@ -28,12 +28,11 @@
                 { text: '请选择类型', id: '' },
                 { text: '珠宝类', id: '0' },
                 { text: '黄金类', id: '1' },
-                { text: 'K进类', id: '2' },
+                { text: 'K金类', id: '2' },
                 ], valueFieldID: 'simtypes', initValue: ''
             });
             $("#ctlBtn").click(function () { startup(); });
         });
-
 
         function startup() {
 
@@ -50,8 +49,8 @@
 
             $.ligerDialog.confirm("确认上传类型为【" + $("#imtypes").val() + "】&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br\><br\> 如果有新增商品分类请在分类列表中新增后在上传！！！", function (yes) {
 
-                if (!yes) { return false;}
-              
+                if (!yes) { return false; }
+
                 var formFile = new FormData();
                 formFile.append("excelFile", fileObj);
 
@@ -82,7 +81,7 @@
 <body style="padding: 0px">
     <form id="form1" onsubmit="return false">
         <fieldset style="border-style: solid; margin: 10px; padding: 5px;">
-             
+
             <table border="0" cellpadding="3" cellspacing="1" style="background: #fff; width: 400px;" class="aztable">
 
                 <tr>

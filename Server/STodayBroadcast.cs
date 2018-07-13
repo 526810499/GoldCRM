@@ -127,6 +127,9 @@ namespace XHD.Server
             Model.TodayBroadcast model = new Model.TodayBroadcast();
             model = bll.GetTodayBroadcast();
             if (model == null) { model = new Model.TodayBroadcast(); }
+            //价格设置到cookie里
+            CookieHelper.Add("this_broadcast", $"{model.TodayGlodPrice},{model.TodayOtherPrice1},{model.TodayOtherPrice2},{model.TodayOtherPrice3}");
+
             return (JsonDyamicHelper.NetJsonConvertObject(model));
         }
     }

@@ -149,9 +149,13 @@ namespace XHD.View.Product
             {
                 rid = "5181CD41-1933-440D-ADAE-82D44E859D11";
             }
+            else if (userData == 2)
+            {
+                rid = "FE718E01-5403-4FBE-8BC4-4E3E131A3BE3";
+            }
             bool candel = CheckBtnAuthority(rid);
 
-            if (!candel)
+            if (!candel && employee.uid != "admin")
             {
                 ExportError("无此权限");
                 return "";
@@ -182,8 +186,14 @@ namespace XHD.View.Product
                     nameList.Add("Totals", "成本总价(￥)");
                     nameList.Add("profits", "利润");
                 }
-                nameList.Add("CostsTotal", "工费小计(￥)");
+                if (userData == 2)
+                {
+                    nameList.Add("VerifyStatusStr", "状态");
+                }
+                nameList.Add("VipCardTypeStr", "会员价");
+                nameList.Add("SalesCostsTotal", "销售工费(￥)");
                 nameList.Add("amount", "销售总价(￥)");
+                nameList.Add("Discounts", "优惠(￥)");
                 nameList.Add("dep_name", "成交部门");
                 nameList.Add("emp_name", "成交人");
                 nameList.Add("Order_date", "成交时间");
@@ -308,7 +318,7 @@ namespace XHD.View.Product
             string fname = "总部出库" + outid;
             if (string.IsNullOrWhiteSpace(titles))
             {
-                 titles=fname;
+                titles = fname;
             }
             string where = $" outid='{PageValidate.InputText(outid, 36)}' and outType=0 ";
             DataSet ds = new BLL.Product_outDetail().GetList2(where);
@@ -359,7 +369,7 @@ namespace XHD.View.Product
             DataSet ds = new BLL.Product_outDetail().GetList2(where);
             if (ds != null && ds.Tables[0].Rows != null && ds.Tables[0].Rows.Count > 0)
             {
-                
+
 
                 Dictionary<string, string> nameList = new Dictionary<string, string>();
                 nameList.Add("BarCode", "条形码");
@@ -407,7 +417,7 @@ namespace XHD.View.Product
             DataSet ds = new BLL.Product_allotDetail().GetListView(where);
             if (ds != null && ds.Tables[0].Rows != null && ds.Tables[0].Rows.Count > 0)
             {
-               
+
 
                 Dictionary<string, string> nameList = new Dictionary<string, string>();
                 nameList.Add("BarCode", "条形码");

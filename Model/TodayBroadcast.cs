@@ -44,7 +44,7 @@ namespace XHD.Model
             get { return _todayglodprice; }
         }
         /// <summary>
-        /// 非黄金报价
+        ///首饰金
         /// </summary>
         public decimal TodayOtherPrice1
         {
@@ -52,20 +52,20 @@ namespace XHD.Model
             get { return _todayotherprice1; }
         }
         /// <summary>
-        /// 非黄金报价
+        ///   铂金 
+        /// </summary>
+        public decimal TodayOtherPrice3
+        {
+            set { _todayotherprice3= value; }
+            get { return _todayotherprice3; }
+        }
+        /// <summary>
+        /// 回购金价
         /// </summary>
         public decimal TodayOtherPrice2
         {
             set { _todayotherprice2 = value; }
             get { return _todayotherprice2; }
-        }
-        /// <summary>
-        /// 非黄金报价
-        /// </summary>
-        public decimal TodayOtherPrice3
-        {
-            set { _todayotherprice3 = value; }
-            get { return _todayotherprice3; }
         }
         /// <summary>
         /// 非黄金报价

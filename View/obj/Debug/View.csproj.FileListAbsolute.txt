@@ -328,7 +328,6 @@ F:\Visual Studio 2013\XHDCRM\XHDCRM2\View\obj\Debug\XHD.View.dll
 F:\Visual Studio 2013\XHDCRM\XHDCRM2\View\obj\Debug\XHD.View.pdb
 F:\Visual Studio 2013\XHDCRM\XHDCRM2\View\bin\XHD.Service.dll
 F:\Visual Studio 2013\XHDCRM\XHDCRM2\View\bin\XHD.Service.pdb
-F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\View\bin\XHD.Server.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\View\bin\XHD.View.dll.config
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\View\bin\XHD.View.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\View\bin\XHD.View.pdb
@@ -346,6 +345,7 @@ F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\View\bin\XHD.Common.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\View\bin\XHD.Controller.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\View\bin\XHD.DBUtility.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\View\bin\XHD.Model.dll
+F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\View\bin\XHD.Server.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\View\bin\XHD.SMS.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\View\bin\XHD.DAL.dll
 F:\临时文件\个人项目\CRM\XHDCRM2\XHDCRM2\View\bin\OpenSmtp.dll

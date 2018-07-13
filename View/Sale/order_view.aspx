@@ -58,40 +58,45 @@
                             obj[n] = "";
                     }
                     var rows = [];
-
+                    var dname = obj.dep_name;
                     var customer_id = obj.Customer_id || getparastr("customer_id");
                     if (!customer_id) {
                         rows.push([{ display: "客户", name: "T_customer", validate: "{required:true}", width: 465 }]);
                     }
 
                     rows.push(
-                             [
-                                { display: "会员卡号", name: "T_vipcard", type: "text", initValue: obj.vipcard },
-                                { display: "销售门店", name: "T_dept_id", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'hr_department.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + obj.createdep_id + "'}", validate: "{required:true}" }
-                             ],
-                            [
-                                { display: "成交时间", name: "T_date", type: "date", options: "{width:180}", validate: "{required:true}", initValue: formatTimebytype(obj.Order_date, "yyyy-MM-dd") },
-                                { display: "订单金额", name: "T_amount", type: "text", options: "{width:180,disabled:true,onChangeValue:function(){ getAmount(); }}", validate: "{required:true}", initValue: toMoney(obj.Order_amount) }
-                            ],
-                            [
-                                { display: "订单状态", name: "T_status", type: "select", options: "{width:180,url:'Sys_Param.combo.xhd?type=order_status',value:'" + obj.Order_status_id + "'}", validate: "{required:true}" },
-                                { display: "优惠金额", name: "T_discount", type: "text", options: "{width:180,onChangeValue:function(){ getAmount(); }}", validate: "{required:true}", initValue: toMoney(obj.discount_amount) }
-                            ],
-                            [
-                                { display: "支付方式", name: "T_paytype", type: "select", options: "{width:180,url:'Sys_Param.combo.xhd?type=pay_type',value:'" + obj.pay_type_id + "'}", validate: "{required:true}", initValue: formatTimebytype(obj.import_time, "yyyy-MM-dd") },
-                                { display: "Pos单号", name: "T_PayTheBill", type: "text", options: "{width:180}", validate: "{required:true}", initValue: (obj.PayTheBill) }
-                            ],
-                            [
-                                { display: "应收金额", name: "T_total", type: "text", options: "{width:180,disabled:false}", validate: "{required:true}", initValue: toMoney(obj.total_amount, "") },
-                                { display: "待收金额", name: "T_arrears", type: "text", options: "{width:180,disabled:false}", validate: "{required:true}", initValue: toMoney(obj.arrears_money) }
-                            ],
-                            [
-                                { display: "成交人员", name: "T_emp", validate: "{required:true}", initValue: obj.emp_name },
-                                { display: "收银员", name: "T_cashier", validate: "{required:true}", initValue: obj.cashiername }
-                            ],
-                            [
-                                { display: "备注", name: "T_details", type: "textarea", cols: 73, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.Order_details }
-                            ]
+                        [
+                        { display: "销售门店", name: "T_saledep_id", type: "select", options: "{width:180,treeLeafOnly: false,disabled:true,tree:{url:'hr_department.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false,value:'" + obj.saledep_id + "',emptyText:'" + dname + "'}}", initValue: dname, validate: "{required:true}" },
+                        { display: "成交时间", name: "T_date", type: "date", options: "{width:180}", validate: "{required:true}", initValue: formatTimebytype(obj.Order_date, "yyyy-MM-dd") },
+                        ],
+                        [
+                         { display: "成交人员", name: "T_emp", validate: "{required:true}", initValue: obj.emp_name },
+                         { display: "收银员", name: "T_cashier", validate: "{required:true}", initValue: obj.cashiername }
+                        ],
+                        [
+                         { display: "会员卡类型", name: "T_VipCardType", type: "select", options: "{width:180,data:[{id:0,text:'无'},{id:1,text:'金卡'},{id:2,text:'银卡'},{id:3,text:'员工价'},{id:4,text:'股东价'}],selectBoxHeight:50,value:'" + obj.VipCardType + "'}", validate: "{required:true}" },
+                         { display: "会员卡号", name: "T_vipcard", type: "text", initValue: obj.vipcard },
+                        ],
+                        [
+                         { display: "订单总金额", name: "T_amount", type: "text", options: "{width:180,disabled:true,onChangeValue:function(){ getAmount(); }}", validate: "{required:true}", initValue: toMoney(obj.Order_amount) },
+                         { display: "优惠总金额", name: "T_discount", type: "text", options: "{width:180,disabled:true,onChangeValue:function(){ getAmount(); }}", validate: "{required:true}", initValue: toMoney(obj.discount_amount) }
+                        ],
+
+                        [
+                         { display: "应收金额", name: "T_total", type: "text", options: "{width:180,disabled:false}", validate: "{required:true}", initValue: toMoney(obj.total_amount, "") },
+                         { display: "待收金额", name: "T_arrears", type: "text", options: "{width:180,disabled:false}", validate: "{required:true}", initValue: toMoney(obj.arrears_money) }
+                        ],
+                        [
+                         { display: "订单状态", name: "T_status", type: "select", options: "{width:180,url:'Sys_Param.combo.xhd?type=order_status',value:'" + obj.Order_status_id + "'}", validate: "{required:true}" }
+                        ],
+                        [
+                         { display: "支付方式", name: "T_paytype", type: "select", options: "{width:180,url:'Sys_Param.combo.xhd?type=pay_type',value:'" + obj.pay_type_id + "'}", validate: "{required:true}", initValue: formatTimebytype(obj.import_time, "yyyy-MM-dd") },
+                         { display: "Pos单号", name: "T_PayTheBill", type: "text", options: "{width:180}", initValue: (obj.PayTheBill) }
+                        ],
+
+                        [
+                         { display: "备注", name: "T_details", type: "textarea", cols: 73, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.Order_details }
+                        ]
                         );
 
                     if (!obj.discount_amount)
@@ -143,6 +148,19 @@
                 columns: [
                     { display: '商品名称', name: 'product_name', align: 'left', width: 150 },
                     { display: '商品类别', name: 'category_name', align: 'left', width: 150 },
+                    {
+                        display: '类别属性', width: 100, name: 'cproperty',
+                        render: function (item) {
+                            if (item != null) {
+                                for (var i = 0; i < productCategoryAttr.length; i++) {
+                                    if (productCategoryAttr[i]['id'] == item.cproperty)
+                                        return productCategoryAttr[i]['text']
+                                }
+                            } else {
+                                return "其他";
+                            }
+                        }
+                    },
                     { display: '条形码', name: 'BarCode', align: 'left', width: 180 },
                     {
                         display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {
@@ -155,10 +173,20 @@
                         }
                     },
                     {
-                        display: '销售价格(￥)', name: 'SalesTotalPrice', width: 80, align: 'right', render: function (item) {
-                            return toMoney(item.SalesTotalPrice);
+                        display: '一口价(￥)', name: 'FixedPrice', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.FixedPrice);
                         }
-                    }
+                    },
+                    {
+                        display: '销售总价(￥)', name: 'amount', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.amount);
+                        }
+                    },
+                    {
+                        display: '总优惠(￥)', name: 'Discounts', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.Discounts);
+                        }
+                    },
                 ],
                 allowHideColumn: false,
                 //onAfterEdit: f_onAfterEdit,

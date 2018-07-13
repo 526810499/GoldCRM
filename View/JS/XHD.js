@@ -61,7 +61,74 @@ var productStatus = [
                     { text: '门店调拨', id: '102' },
                     { text: '出库', id: '3' },
                     { text: '门店出库', id: '103' },
-                    { text: '已销售', id: '4' }
+                    { text: '已销售', id: '4' }, { text: '已核销', id: '5' }
+];
+
+///获取分类信息
+function GetCategoryInfo(id) {
+    var rs = null;
+    $.ajax({
+        url: "Product_category.GetCategoryInfo.xhd", type: "POST",
+        data: { id: id, rnd: Math.random() },
+        dataType: 'json',
+        async: false,
+        success: function (result) {
+            if (result != null) {
+                rs = result;
+            }
+        },
+        error: function () {
+
+            rs = null;
+        }
+    });
+
+    return rs;
+}
+
+///获取分类属性
+function GetCategoryAttr(id) {
+    var info = GetCategoryInfo(id);
+    if (info != null) {
+        return info.cproperty;
+    }
+    return 0;
+}
+
+//会员卡类型
+var VIPCardType = [
+    { text: '金卡价', id: 1 },
+    { text: '银卡价', id: 2 },
+    { text: '员工价', id: 3 },
+    { text: '股东价', id: 4 },
+    { text: '无', id: 0 },
+];
+//获取会员卡名称
+function GetVIPCardType(ctype) {
+    var rs = "无";
+    for (var i = 0; i < VIPCardType.length; i++) {
+        var vip = VIPCardType[i];
+        if (vip.id == ctype) {
+            rs = vip.text;
+            return rs;
+        }
+    }
+    return rs;
+}
+
+var productCategoryAttr = [
+    { text: '请选择品类', id: null },
+    { text: '足金类', id: 1 },
+    { text: '硬金类', id: 2 },
+    { text: 'K金类', id: 3 },
+    { text: '钻石类', id: 4 },
+    { text: '彩色宝石类', id: 5 },
+    { text: '翡翠类', id: 6 },
+    { text: '摆件类', id: 7 },
+    { text: '金钞类', id: 8 },
+    { text: '金条类', id: 9 },
+    { text: '铂金类', id: 10 },
+    { text: '其他', id: 0 },
 ];
 
 function GetproductStatus(status) {
@@ -80,6 +147,8 @@ function GetproductStatus(status) {
             return "<span style='color:#009900'> 门店出库 </span>";
         case 4:
             return "<span style='color:#FF3300'> 已销售 </span>";
+        case 5:
+            return "<span style='color:#FC3300'> 已核销 </span>";
     }
 
 }
@@ -409,7 +478,7 @@ urlencode = function (unzipStr) {
 * Url解码 
 **/
 urldecode = function (zipStr) {
-    if (zipStr == null || zipStr == undefined) { return "";}
+    if (zipStr == null || zipStr == undefined) { return ""; }
     var uzipStr = "";
     for (var i = 0; i < zipStr.length; i++) {
         var chr = zipStr.charAt(i);

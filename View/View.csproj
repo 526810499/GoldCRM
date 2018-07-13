@@ -98,7 +98,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\BLL\bin\Debug\XHD.BLL.dll</HintPath>
     </Reference>
-    <Reference Include="XHD.Common">
+    <Reference Include="XHD.Common, Version=3.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\XHD.Common.dll</HintPath>
     </Reference>
     <Reference Include="XHD.DBUtility, Version=3.5.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -883,8 +884,11 @@
     <Content Include="Sale\contract_add.aspx" />
     <Content Include="Sale\contract_atta.aspx" />
     <Content Include="Sale\GetOrder.aspx" />
+    <Content Include="Sale\VerifyOrder_view.aspx" />
+    <Content Include="Sale\printOrder3.aspx" />
     <Content Include="Sale\printOrder2.aspx" />
     <Content Include="Sale\printOrder.aspx" />
+    <Content Include="Sale\VerifySales.aspx" />
     <Content Include="Sale\SalesData.aspx" />
     <Content Include="Sale\order.aspx" />
     <Content Include="Sale\order_view.aspx" />

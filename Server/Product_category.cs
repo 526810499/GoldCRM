@@ -26,6 +26,7 @@ namespace XHD.Server
             model.parentid = PageValidate.InputText(request["T_category_parent_val"], 50);
             model.product_category = PageValidate.InputText(request["T_category_name"], 250);
             model.product_icon = PageValidate.InputText(request["T_category_icon"], 250);
+            model.cproperty = request["category_attr"].CInt(0, false);
             model.CodingBegins = PageValidate.InputText(request["T_CodingBegins"], 50).ToUpper();
             string id = PageValidate.InputText(request["id"], 50);
             string pid = PageValidate.InputText(request["T_category_parent_val"], 50);
@@ -45,6 +46,12 @@ namespace XHD.Server
 
                 if (id == pid)
                     return XhdResult.Error("上级不能是自己，更新失败！").ToString();
+
+                string oldparentid = dr["parentid"].CString("");
+                if (model.parentid != oldparentid && model.parentid != "root")
+                {
+                    model.fparentid = GetParentid(model.parentid).id;
+                }
 
                 category.Update(model);
 
@@ -66,22 +73,18 @@ namespace XHD.Server
                     Log_Content += string.Format("【{0}】{1} → {2} \n", "上级类别", dr["parentid"].ToString(), request["T_category_parent_val"]);
                 if (dr["CodingBegins"].CString("") != request["T_CodingBegins"])
                     Log_Content += string.Format("【{0}】{1} → {2} \n", "CodingBegins", dr["CodingBegins"].ToString(), request["T_CodingBegins"]);
-
+                if (dr["cproperty"].CString("") != request["T_category_attr_val"])
+                    Log_Content += string.Format("【{0}】{1} → {2} \n", "cproperty", dr["cproperty"].ToString(), request["T_category_attr_val"]);
                 if (!string.IsNullOrEmpty(Log_Content))
                     Syslog.Add_log(UserID, UserName, IPStreet, EventTitle, EventType, EventID, Log_Content);
             }
             else
             {
-                if (string.IsNullOrWhiteSpace(model.CodingBegins) && model.parentid != "root")
+                if (model.parentid != "root")
                 {
-                    DataSet ds = category.GetList($" id= '{model.parentid }' ");
-                    if (ds.Tables[0].Rows.Count > 0)
-                    {
-                        DataRow dr = ds.Tables[0].Rows[0];
-                        model.CodingBegins = dr["CodingBegins"].CString("");
-                    }
-                }
 
+                }
+                model.fparentid = GetParentid(model.parentid).id;
                 model.id = Guid.NewGuid().ToString();
                 model.create_id = emp_id;
                 model.create_time = DateTime.Now;
@@ -96,6 +99,23 @@ namespace XHD.Server
             }
 
             return XhdResult.Success().ToString();
+        }
+
+        /// <summary>
+        /// 递归获取父级的父级
+        /// </summary>
+        /// <param name="pid"></param>
+        /// <returns></returns>
+        private Model.Product_category GetParentid(string pid)
+        {
+
+            Model.Product_category nmodel = category.GetModel(pid);
+
+            if (nmodel.parentid.CString("") == "root" || nmodel.parentid.CString("") == "")
+            {
+                return nmodel;
+            }
+            return GetParentid(nmodel.parentid);
         }
 
         public string grid()
@@ -233,6 +253,19 @@ namespace XHD.Server
                 }
             }
             return str[str.Length - 1] == ',' ? str.ToString(0, str.Length - 1) : str.ToString();
+        }
+
+
+        /// <summary>
+        /// 获取分类属性信息
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
+        public string GetCategoryInfo(string ID)
+        {
+            Model.Product_category model = category.GetModel(ID);
+
+            return JsonDyamicHelper.NetJsonConvertObject(model);
         }
     }
 }

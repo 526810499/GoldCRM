@@ -58,7 +58,7 @@ namespace XHD.Server
             model.SupplierID = request["T_SupplierID_val"].CInt(0, false);
             model.Sbarcode = PageValidate.InputText(request["T_Sbarcode"], 255);
             model.remarks = PageValidate.InputText(request["T_Remark"], 255);
-            model.IsGold = (request["T_GType_val"].CInt(0, false));
+            model.IsGold = (request["HT_GType"].CInt(0, false));
             model.BarCode = PageValidate.InputText(request["T_BarCode"], 50);
             model.CertificateNo = PageValidate.InputText(request["T_CertificateNo"], 50);
             model.Circle = PageValidate.InputText(request["T_Circle"], 50);
@@ -88,9 +88,10 @@ namespace XHD.Server
                 int status = dr["status"].CInt(0, false);
                 int authIn = dr["authIn"].CInt(0, false);
                 string oldCode = dr["BarCode"].CString("");
+                if (model.BarCode == "") { model.BarCode = oldCode; }
                 if (oldCode != model.BarCode.Trim().ToUpper())
                 {
-                    if (status != 1)
+                    if (status > 1)
                     {
                         return XhdResult.Error("该商品状态已发生改变,条形码不能修改").ToString();
                     }
@@ -287,13 +288,13 @@ namespace XHD.Server
             //门店入库则状态不能是总部入库或者是已销售的
             if (optype == "mdrk")
             {
-                serchtxt += $" and status not in(1,4) and outStatus<>1 and authIn=0   and indep_id='{ dep_id }' ";
+                serchtxt += $" and status not in(1,4,5) and outStatus<>1 and authIn=0   and indep_id='{ dep_id }' ";
             }
 
             //门店出库则状态不能为总部操作状态，取不能是已销售的
             if (optype == "mdck")
             {
-                serchtxt += $" and status not in(1,2,3,4) and outStatus<>3 and authIn=0 and indep_id='{ dep_id }' ";
+                serchtxt += $" and status not in(1,2,3,4,5) and outStatus<>3 and authIn=0 and indep_id='{ dep_id }' ";
             }
 
             //门店调拨 状态不能为总部操作状态，取不能是已销售的
@@ -302,7 +303,7 @@ namespace XHD.Server
                 //门店调拨需要判断跨门店权限
                 //string depids = TransDepartmentID();
 
-                serchtxt += $" and status not in(1,2,3,4) and authIn=0 and outStatus<>2   ";// and indep_id in({ depids })
+                serchtxt += $" and status not in(1,2,3,4,5) and authIn=0 and outStatus<>2   ";// and indep_id in({ depids })
             }
             //总部出库
             if (optype == "zbck")
@@ -433,7 +434,7 @@ namespace XHD.Server
             {
                 //controll auth
                 var getauth = new GetAuthorityByUid();
-                candel = getauth.GetBtnAuthority(emp_id.ToString(), "C55A626D-1A32-4EDF-832A-19DA1C2A4569");
+                candel = getauth.GetBtnAuthority(emp_id.ToString(), "67455675-6E12-46ED-A1E4-478229AA24F5");
                 if (!candel)
                     return XhdResult.Error("无此权限！").ToString();
             }
@@ -541,30 +542,30 @@ namespace XHD.Server
 
         #region  导入商品
 
-        Dictionary<string, string> dictTs = new Dictionary<string, string>();
+        Dictionary<string, Model.Product_category> dictTs = new Dictionary<string, Model.Product_category>();
         BLL.Product_category cateBll = new BLL.Product_category();
         /// <summary>
         /// 获取分类ID
         /// </summary>
         /// <param name="TypeName"></param>
         /// <returns></returns>
-        private string GetTypeID(string TypeName)
+        private Model.Product_category GetTypeID(string TypeName)
         {
             TypeName = TypeName.Trim();
-            string id = "";
+            Model.Product_category model = new Model.Product_category();
             if (dictTs.ContainsKey(TypeName))
             {
-                id = dictTs[TypeName];
+                model = dictTs[TypeName];
             }
             else {
-                id = cateBll.GetcategoryID(TypeName);
+                model = cateBll.GetcategoryID(TypeName);
                 if (!dictTs.ContainsKey(TypeName))
                 {
-                    dictTs.Add(TypeName, id);
+                    dictTs.Add(TypeName, model);
                 }
             }
 
-            return id;
+            return model;
         }
 
 
@@ -601,7 +602,7 @@ namespace XHD.Server
                         SalesCostsTotal = bqgf.CDecimal(0, false),
                         SalesTotalPrice = bqgf.CDecimal(0, false),
                         BarCode = tm,
-                        IsGold = 1,
+                        IsGold = request["GoldType"].CInt(0, false),
                         StockID = id,
                         status = (isAddTemp == 1 ? -1 : 1),
                         importTagID = importTagID,
@@ -616,12 +617,22 @@ namespace XHD.Server
                     {
                         return "条形码【" + tm + "】已存在";
                     }
-                    pmodel.category_id = GetTypeID(name);
+                    Model.Product_category cmodel = GetTypeID(name);
+
+                    if (cmodel != null)
+                    {
+                        pmodel.category_id = cmodel.id;
+                        pmodel.IsGold = cmodel.cproperty;
+                    }
+                    else {
+                        return "条形码【" + tm + "】添加失败,未找到分类";
+                    }
                     r = product.Add(pmodel);
                     if (!r)
                     {
                         return "条形码【" + tm + "】添加失败";
                     }
+
                 }
             }
             catch (Exception error)
@@ -677,7 +688,7 @@ namespace XHD.Server
                         SalesCostsTotal = bqgf.CDecimal(0, false),
                         FixedPrice = ykj.CDecimal(0, false),
                         BarCode = tm,
-                        IsGold = 1,
+                        IsGold = request["GoldType"].CInt(0, false),
                         StockID = id,
                         status = (isAddTemp == 1 ? -1 : 1),
                         importTagID = importTagID,
@@ -692,7 +703,16 @@ namespace XHD.Server
                     {
                         return "条形码【" + tm + "】已存在";
                     }
-                    pmodel.category_id = GetTypeID(name);
+                    Model.Product_category cmodel = GetTypeID(name);
+
+                    if (cmodel != null)
+                    {
+                        pmodel.category_id = cmodel.id;
+                        pmodel.IsGold = cmodel.cproperty;
+                    }
+                    else {
+                        return "条形码【" + tm + "】添加失败,未找到分类";
+                    }
                     r = product.Add(pmodel);
                     if (!r)
                     {
@@ -758,7 +778,7 @@ namespace XHD.Server
                         PriceTag = bqj.CDecimal(0, false),
                         SalesTotalPrice = bqj.CDecimal(0, false),
                         BarCode = tm,
-                        IsGold = 0,
+                        IsGold = request["GoldType"].CInt(0, false),
                         StockID = id,
                         status = (isAddTemp == 1 ? -1 : 1),
                         importTagID = importTagID,
@@ -773,7 +793,16 @@ namespace XHD.Server
                     {
                         return "条形码【" + tm + "】已存在";
                     }
-                    pmodel.category_id = GetTypeID(name);
+                    Model.Product_category cmodel = GetTypeID(name);
+
+                    if (cmodel != null)
+                    {
+                        pmodel.category_id = cmodel.id;
+                        pmodel.IsGold = cmodel.cproperty;
+                    }
+                    else {
+                        return "条形码【" + tm + "】添加失败,未找到分类";
+                    }
                     r = product.Add(pmodel);
                     if (!r)
                     {
