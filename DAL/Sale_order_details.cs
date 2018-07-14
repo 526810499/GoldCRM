@@ -23,9 +23,9 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Sale_order_details(");
-            strSql.Append("order_id,product_id,agio,quantity,amount,BarCode,DiscountType,DiscountCount,Discounts,SaleType)");
+            strSql.Append("order_id,product_id,agio,quantity,amount,BarCode,DiscountType,DiscountCount,Discounts,SaleType,SalesUnitPrice,RealTotal)");
             strSql.Append(" values (");
-            strSql.Append("@order_id,@product_id,@agio,@quantity,@amount,@BarCode,@DiscountType,@DiscountCount,@Discounts,@SaleType); ");
+            strSql.Append("@order_id,@product_id,@agio,@quantity,@amount,@BarCode,@DiscountType,@DiscountCount,@Discounts,@SaleType,@SalesUnitPrice,@RealTotal); ");
             strSql.AppendLine(" update Product set status=4,OutStatus=4 where id=@product_id; ");
             SqlParameter[] parameters = {
                     new SqlParameter("@order_id", SqlDbType.VarChar,250) { Value=model.order_id},
@@ -38,6 +38,8 @@ namespace XHD.DAL
                     new SqlParameter("@DiscountCount", SqlDbType.Decimal,9){ Value=model.DiscountCount},
                     new SqlParameter("@Discounts", SqlDbType.Decimal,9){ Value=model.Discounts},
                     new SqlParameter("@SaleType", SqlDbType.Int,9){ Value=model.SaleType},
+                    new SqlParameter("@RealTotal", SqlDbType.Decimal,9){ Value=model.RealTotal},
+                    new SqlParameter("@SalesUnitPrice", SqlDbType.Decimal,9){ Value=model.SalesUnitPrice},
             };
 
 
@@ -61,7 +63,7 @@ namespace XHD.DAL
             strSql.Append("product_id=@product_id,");
             strSql.Append("agio=@agio,");
             strSql.Append("quantity=@quantity,");
-            strSql.Append("amount=@amount,DiscountType=@DiscountType,DiscountCount=@DiscountCount,Discounts=@Discounts,SaleType=@SaleType ");
+            strSql.Append("amount=@amount,DiscountType=@DiscountType,DiscountCount=@DiscountCount,Discounts=@Discounts,SaleType=@SaleType,SalesUnitPrice=@SalesUnitPrice,RealTotal=@RealTotal ");
             strSql.Append(" where order_id=@order_id and product_id=@product_id  ");
             SqlParameter[] parameters = {
                    new SqlParameter("@order_id", SqlDbType.VarChar,250) { Value=model.order_id},
@@ -74,6 +76,8 @@ namespace XHD.DAL
                     new SqlParameter("@DiscountCount", SqlDbType.Decimal,9){ Value=model.DiscountCount},
                     new SqlParameter("@Discounts", SqlDbType.Decimal,9){ Value=model.Discounts},
                     new SqlParameter("@SaleType", SqlDbType.Int,9){ Value=model.SaleType},
+                    new SqlParameter("@RealTotal", SqlDbType.Decimal,9){ Value=model.RealTotal},
+                    new SqlParameter("@SalesUnitPrice", SqlDbType.Decimal,9){ Value=model.SalesUnitPrice},
             };
 
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
@@ -158,7 +162,7 @@ namespace XHD.DAL
             strSql.Append("      , isnull(Product.SalesCostsTotal,0) as SalesCostsTotal ");
             strSql.Append("      , isnull(Product.SalesTotalPrice,0 ) as SalesTotalPrice");
             strSql.Append("      , Product.Weight,Product.CostsTotal ");
-            strSql.Append("      ,Product_category.product_category as category_name,Sale_order_details.DiscountType,Sale_order_details.DiscountCount,Sale_order_details.Discounts,Sale_order_details.SaleType,Product_category.cproperty ");
+            strSql.Append("      ,Product_category.product_category as category_name,Sale_order_details.DiscountType,Sale_order_details.DiscountCount,Sale_order_details.Discounts,Sale_order_details.SaleType,Product_category.cproperty,SalesUnitPrice,RealTotal ");
             strSql.Append("  FROM[dbo].[Sale_order_details](nolock) ");
             strSql.Append("  INNER JOIN Product(nolock) ON Product.id = Sale_order_details.product_id ");
             strSql.Append("  INNER JOIN Product_category(nolock) ON Product.category_id = Product_category.id ");

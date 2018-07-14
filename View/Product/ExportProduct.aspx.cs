@@ -194,6 +194,8 @@ namespace XHD.View.Product
                 nameList.Add("SalesCostsTotal", "销售工费(￥)");
                 nameList.Add("amount", "销售总价(￥)");
                 nameList.Add("Discounts", "优惠(￥)");
+                nameList.Add("RealTotal", "实时总价(￥)");
+                nameList.Add("SalesUnitPrice", "实时价(￥)");
                 nameList.Add("dep_name", "成交部门");
                 nameList.Add("emp_name", "成交人");
                 nameList.Add("Order_date", "成交时间");

@@ -205,9 +205,10 @@ namespace XHD.Server
                     modeldel.product_id = pdata.id;
                 else if (PageValidate.checkID(pdata.product_id))
                     modeldel.product_id = pdata.product_id;
-
+                modeldel.agio = 0;
                 modeldel.quantity = pdata.Quantity;
-                modeldel.agio = pdata.agio;
+                modeldel.SalesUnitPrice = pdata.SalesUnitPrice;
+                modeldel.RealTotal = pdata.RealTotal;
                 modeldel.amount = pdata.Amount;
                 modeldel.BarCode = pdata.BarCode;
                 modeldel.SaleType = pdata.SaleType;
@@ -623,7 +624,7 @@ namespace XHD.Server
         {
             public string id { get; set; }
             public string product_id { get; set; }
-            public decimal agio { get; set; }
+           
             public int Quantity { get; set; }
             public decimal Amount { get; set; }
             public string __status { get; set; }
@@ -641,6 +642,16 @@ namespace XHD.Server
             public int SaleType { get; set; }
 
             public string BarCode { get; set; }
+
+            /// <summary>
+            /// 实时计算价
+            /// </summary>
+            public decimal RealTotal { get; set; }
+
+            /// <summary>
+            /// 实时销售单价
+            /// </summary>
+            public decimal SalesUnitPrice { get; set; }
         }
     }
 }

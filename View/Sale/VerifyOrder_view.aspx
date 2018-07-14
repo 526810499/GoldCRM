@@ -171,6 +171,15 @@
                         display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
                             return toMoney(item.SalesCostsTotal);
                         }
+                    }, {
+                        display: '实时价(￥)', name: 'SalesUnitPrice', width: 80, align: 'left', render: function (item) {
+                            return toMoney(item.SalesUnitPrice);
+                        }
+                    },
+                    {
+                        display: '实时总价(￥)', name: 'RealTotal', width: 80, align: 'left', render: function (item) {
+                            return toMoney(item.RealTotal);
+                        }
                     },
                     {
                         display: '一口价(￥)', name: 'FixedPrice', width: 80, align: 'right', render: function (item) {

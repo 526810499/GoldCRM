@@ -29,12 +29,13 @@
             XHD.validate($(form1));
             orderid = getparastr("id", "");
             loadForm(orderid);
-
+            GetsysSalePrice();
         });
 
         function GetsysSalePrice() {
             var prices = getCookie("this_broadcast", "");
             sysSalePrice = prices.split(',');
+
         }
 
         function f_save() {
@@ -267,6 +268,16 @@
                         }
                     },
                     {
+                        display: '实时价(￥)', name: 'SalesUnitPrice', width: 80, align: 'left', render: function (item) {
+                            return toMoney(item.SalesUnitPrice);
+                        }
+                    },
+                    {
+                        display: '实时总价(￥)', name: 'RealTotal', width: 80, align: 'left', render: function (item) {
+                            return toMoney(item.RealTotal);
+                        }
+                    },
+                    {
                         display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
                             return toMoney(item.SalesCostsTotal);
                         }
@@ -363,7 +374,7 @@
                     rows[i].DiscountType = 0;
                     rows[i].DiscountCount = 0;
                     rows[i].Discounts = 0;
-                    rows[i].agio = 0;
+                    rows[i].RealTotal = 0;
                     rows[i].SalesUnitPrice = 0;
                     var add = 1;
                     for (var j = 0; j < data.length; j++) {
@@ -403,9 +414,8 @@
             row.SaleType = categoryAttr;
 
             //没有会员卡直接返回
-            if (cardType == null || cardType == NaN || cardType==0){
-                row.amount = SalesCostsTotal + SalesTotalPrice;
-                return row;
+            if (cardType == null || cardType == NaN) {
+                cardType = 0;
             }
 
             //1 现货金条  2首饰黄金
@@ -446,7 +456,7 @@
                         amount = FixedPrice * 0.8;
                         break;
                 }
-                amount =  parseFloat(amount.toFixed(2));
+                amount = parseFloat(amount.toFixed(2));
                 Discounts = (FixedPrice - amount);
                 //硬金不再享受工费和黄金满减
                 if (category_name.indexOf("硬金") >= 0 || categoryAttr == 2) {
@@ -483,16 +493,22 @@
                             amount = SalesTotalPrice * 0.5;
                             break;
                     }
-                    amount =  parseFloat(amount.toFixed(2));
+                    amount = parseFloat(amount.toFixed(2));
                     Discounts = (SalesTotalPrice - amount);
 
                 }
-                else if (categoryAttr == 1 || categoryAttr == 2) {//黄金类
+                else if (categoryAttr == 1 || categoryAttr == 2 || ctype == 1 || ctype == 2) {//黄金类
                     //现货金条
                     if (ctype == 1) {
-                        SalesTotalPrice = parseFloat(sysSalePrice[0]) * parseFloat(row.Weight);
+                        var uprs = parseFloat(sysSalePrice[0])
+                        row.SalesUnitPrice = uprs;
+                        SalesTotalPrice = uprs * parseFloat(row.Weight);
+                        row.RealTotal = SalesTotalPrice;
                     } else if (ctype == 2) {//首饰金
-                        SalesTotalPrice = parseFloat(sysSalePrice[1]) * parseFloat(row.Weight);
+                        var uprs = parseFloat(sysSalePrice[1])
+                        row.SalesUnitPrice = uprs;
+                        SalesTotalPrice = uprs * parseFloat(row.Weight);
+                        row.RealTotal = SalesTotalPrice;
                     }
                     // 每克减多少 工费打折
                     switch (cardType) {
@@ -522,7 +538,6 @@
                     }
                     amount = parseFloat(amount.toFixed(2));
                     Discounts = parseFloat(SalesTotalPrice - amount);
-                    row.agio = Discounts;
                 }
             }
 
@@ -531,7 +546,7 @@
             var CostsTotal = 0;
             switch (cardType) {
                 case 0://没有会员卡
-                    CostsTotal = 0;
+                    CostsTotal = SalesCostsTotal;
                     break;
                 case 1://金卡
                     CostsTotal = (SalesCostsTotal * 0.9);
@@ -546,11 +561,15 @@
                     CostsTotal = (SalesCostsTotal * 0.8);
                     break;
             }
-            if (CostsTotal > 0) {
-                CostsTotal = parseFloat(CostsTotal.toFixed(2));
+            CostsTotal = parseFloat(CostsTotal.toFixed(2));
+            //有会员卡才做优惠计算
+            if (cardType > 0) {
                 Discounts = Discounts + (SalesCostsTotal - CostsTotal);
+                Discounts = parseFloat(Discounts.toFixed(2));
+            } else {
+                Discounts = 0;
             }
-            Discounts = parseFloat(Discounts.toFixed(2));
+
             row.amount = (amount + CostsTotal + Discounts);
 
             row.Discounts = Discounts;
@@ -564,11 +583,9 @@
             var manager = $("#maingrid4").ligerGetGridManager();
             if (manager == null) { return; }
             var data = manager.getData();
-            console.log(data);
             for (var i = 0; i < data.length; i++) {
-                var row = data[i]; console.log(row);
+                var row = data[i];
                 row = GetSaleDiscounts(row);
-                console.log(row);
                 manager.updateRow(manager.getRow(i), row);
             }
             $("#T_amount").val(toMoney(manager.getColumnDateByType('amount', 'sum') * 1.0));

@@ -59,6 +59,15 @@
                         display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {
                             return toMoney(item.Weight);
                         }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='Weight'>" + item.sum + "</span>"; } }
+                    }, {
+                        display: '实时价(￥)', name: 'SalesUnitPrice', width: 80, align: 'left', render: function (item) {
+                            return toMoney(item.SalesUnitPrice);
+                        }
+                    },
+                    {
+                        display: '实时总价(￥)', name: 'RealTotal', width: 80, align: 'left', render: function (item) {
+                            return toMoney(item.RealTotal);
+                        }
                     },
                     {
                         display: '销售总价', name: 'amount', width: 80, align: 'right', render: function (item) {

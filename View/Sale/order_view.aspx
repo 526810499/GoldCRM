@@ -166,6 +166,15 @@
                         display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {
                             return toMoney(item.Weight);
                         }
+                    }, {
+                        display: '实时价(￥)', name: 'SalesUnitPrice', width: 80, align: 'left', render: function (item) {
+                            return toMoney(item.SalesUnitPrice);
+                        }
+                    },
+                    {
+                        display: '实时总价(￥)', name: 'RealTotal', width: 80, align: 'left', render: function (item) {
+                            return toMoney(item.RealTotal);
+                        }
                     },
                     {
                         display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {

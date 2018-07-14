@@ -34,6 +34,17 @@ namespace XHD.Model
         /// 折扣 DiscountType 1 时对应的折扣比
         /// </summary>
         public decimal DiscountCount { get; set; }
+
+        /// <summary>
+        /// 实时计算金额
+        /// </summary>
+        public decimal RealTotal { get; set; }
+
+        /// <summary>
+        /// 实时销售单价
+        /// </summary>
+        public decimal SalesUnitPrice { get; set; }
+
         /// <summary>
         /// 商品条形码
         /// </summary>
