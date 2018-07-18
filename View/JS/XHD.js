@@ -176,7 +176,10 @@ function toMoney(num, defaults) {
             num = num.substring(0, num.length - (4 * i + 3)) + ',' +
                 num.substring(num.length - (4 * i + 3));
 
-        return (((sign) ? '' : '-') + num + '.' + cents);
+        var rsr = (((sign) ? '' : '-') + num + '.' + cents);
+        if (rsr == null || rsr == undefined || rsr == "null") { return 0; } else {
+            return rsr;
+        }
     }
 }
 
@@ -854,7 +857,32 @@ function f_openWindow2(url, title, width, height, buttons, zindex, showmax, clos
 
     activeDialog2 = top.jQuery.ligerDialog.open(dialogOptions);
 }
+var activeDialog21 = null;
+function f_openWindow21(url, title, width, height, buttons, id) {
+    var z_index = 9000;
+    var showMax = false;
+    if (buttons == null) {
+        buttons = [];
+    }
 
+    buttons.push({ text: '关闭', onclick: function (item, dialog) { dialog.close(); } });
+
+    var dialogOptions = {
+        zindex: z_index,
+        width: width,
+        height: height,
+        title: title,
+        url: url,
+        buttons: buttons,
+        isResize: false,
+        showToggle: false,
+        showMax: showMax,
+        timeParmName: 'a',
+        id: id
+    };
+
+    activeDialog21 = top.jQuery.ligerDialog.open(dialogOptions);
+}
 
 var activeDialog3 = null;
 function f_openWindowNotClose(url, title, width, height, buttons, zindex, showmax) {

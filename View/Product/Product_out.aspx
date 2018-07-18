@@ -96,9 +96,9 @@
                                 },
                                 { display: 'Ò»¿Ú¼Û', name: 'FixedPrice', width: 120, render: function (item) { if (item.FixedPrice == null) { return '0'; } else { return toMoney(item.FixedPrice); } } },
                             ],
-                            usePager: false,
                             checkbox: false,
-
+                            pageSize: 20,
+                            pageSizeOptions: [10, 20, 30, 40, 50, 60, 80, 100, 120],
                             url: "Product_out.gridDetail.xhd?outid=" + r.id,
                             width: '99%', height: '180',
                             heightDiff: 0

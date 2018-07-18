@@ -10,7 +10,7 @@
     <link href="../CSS/input.css" rel="stylesheet" type="text/css" />
     <script src="../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
-    <script src="../JS/XHD.js?v=6" type="text/javascript"></script>
+    <script src="../JS/XHD.js?v=61" type="text/javascript"></script>
     <script src="../lib/jquery.form.js" type="text/javascript"></script>
 
     <script type="text/javascript">
@@ -65,12 +65,12 @@
                        display: '附石数', name: 'AttStoneNumber', width: 50, align: 'right', render: function (item) {
                            return toMoney(item.AttStoneNumber);
                        }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='AttStoneNumber'>" + toMoney(item.sum) + "</span>"; } }
-                   },
-                   {
-                       display: '石价(￥)', name: 'StonePrice', width: 80, align: 'right', render: function (item) {
-                           return toMoney(item.StonePrice);
-                       }, totalSummary: { type: 'sum', render: function (item, i) { return "￥<span id='StonePrice'>" + toMoney(item.sum) + "</span>"; } }
-                   },
+                   }
+                    , {
+                        display: '单价(￥)', name: 'price', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.price);
+                        }
+                    },
                    {
                        display: '金价小计(￥)', name: 'GoldTotal', width: 120, align: 'right', render: function (item) {
                            return toMoney(item.GoldTotal);
@@ -271,7 +271,7 @@
             var manager = $("#maingrid4").ligerGetGridManager();
             var rows = manager.getSelectedRow();
             if (rows && rows != undefined) {
-                f_openWindow('product/product_add.aspx?pid=' + rows.id, "查看商品", 700, 580);
+                f_openWindow('product/product_add.aspx?pid=' + rows.id, "查看商品", 700, 720);
             }
             else {
                 $.ligerDialog.warn('请选择商品！');
@@ -279,7 +279,7 @@
         }
         function add() {
 
-            // f_openWindow('product/product_add.aspx?categoryid=', "新增商品", 700, 580, f_save);
+            // f_openWindow('product/product_add.aspx?categoryid=', "新增商品", 700, 720, f_save);
         }
         function del() {
             var manager = $("#maingrid4").ligerGetGridManager();

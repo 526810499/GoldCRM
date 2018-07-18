@@ -46,9 +46,9 @@ namespace XHD.BLL
         /// <summary>
         /// 删除一条数据
         /// </summary>
-        public bool Delete(string order_id, string product_id)
+        public bool Delete(string order_id, string product_id, bool isHQ)
         {
-            return dal.Delete(order_id, product_id);
+            return dal.Delete(order_id, product_id,isHQ);
         }
         public int GetDetailCount(string OrderID)
         {

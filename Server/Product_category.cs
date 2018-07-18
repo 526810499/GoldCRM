@@ -48,9 +48,15 @@ namespace XHD.Server
                     return XhdResult.Error("上级不能是自己，更新失败！").ToString();
 
                 string oldparentid = dr["parentid"].CString("");
-                if (model.parentid != oldparentid && model.parentid != "root")
+                if (model.parentid != oldparentid||string .IsNullOrWhiteSpace(dr["fparentid"].CString("")) )
                 {
-                    model.fparentid = GetParentid(model.parentid).id;
+                    if (model.parentid == "root" || model.parentid == "")
+                    {
+                        model.fparentid = model.id;
+                    }
+                    else {
+                        model.fparentid = GetParentid(model.parentid).id;
+                    }
                 }
 
                 category.Update(model);
@@ -80,12 +86,15 @@ namespace XHD.Server
             }
             else
             {
-                if (model.parentid != "root")
-                {
-
-                }
-                model.fparentid = GetParentid(model.parentid).id;
                 model.id = Guid.NewGuid().ToString();
+                if (model.parentid == "root" || model.parentid == "")
+                {
+                    model.fparentid = model.id;
+                }
+                else {
+                    model.fparentid = GetParentid(model.parentid).id;
+                }
+              
                 model.create_id = emp_id;
                 model.create_time = DateTime.Now;
 

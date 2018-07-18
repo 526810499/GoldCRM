@@ -116,13 +116,19 @@ namespace XHD.DAL
         /// <summary>
         /// 删除一条数据
         /// </summary>
-        public bool Delete(string order_id, string product_id)
+        public bool Delete(string order_id, string product_id,bool isHQ)
         {
 
             StringBuilder strSql = new StringBuilder();
             strSql.Append("delete from Sale_order_details where order_id=@order_id and  product_id=@product_id; ");
-            strSql.AppendLine(" update Product set status=3,OutStatus=3 where id=@product_id; ");
-
+            //是否总部
+            if (isHQ)
+            {
+                strSql.AppendLine(" update Product set status=1,OutStatus=1,authIn=0 where id=@product_id; ");
+            }
+            else {
+                strSql.AppendLine(" update Product set status=101,OutStatus=1,authIn=0 where id=@product_id; ");
+            }
 
             SqlCommand cmd = new SqlCommand();
             cmd.CommandText = strSql.ToString();
@@ -162,7 +168,7 @@ namespace XHD.DAL
             strSql.Append("      , isnull(Product.SalesCostsTotal,0) as SalesCostsTotal ");
             strSql.Append("      , isnull(Product.SalesTotalPrice,0 ) as SalesTotalPrice");
             strSql.Append("      , Product.Weight,Product.CostsTotal ");
-            strSql.Append("      ,Product_category.product_category as category_name,Sale_order_details.DiscountType,Sale_order_details.DiscountCount,Sale_order_details.Discounts,Sale_order_details.SaleType,Product_category.cproperty,SalesUnitPrice,RealTotal ");
+            strSql.Append("      ,Product_category.product_category as category_name,Sale_order_details.DiscountType,Sale_order_details.DiscountCount,Sale_order_details.Discounts,Sale_order_details.SaleType,Product_category.cproperty,SalesUnitPrice,RealTotal,Product.category_id ");
             strSql.Append("  FROM[dbo].[Sale_order_details](nolock) ");
             strSql.Append("  INNER JOIN Product(nolock) ON Product.id = Sale_order_details.product_id ");
             strSql.Append("  INNER JOIN Product_category(nolock) ON Product.category_id = Product_category.id ");

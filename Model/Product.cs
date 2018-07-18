@@ -27,6 +27,10 @@ namespace XHD.Model
         /// 导入标签ID
         /// </summary>
         public string importTagID { get; set; }
+        /// <summary>
+        /// 其他参数
+        /// </summary>
+        public string Others { get; set; }
 
         private string _id;
         private string _product_name;

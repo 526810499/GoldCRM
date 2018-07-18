@@ -15,7 +15,7 @@
     <script src="../lib/jquery-validation/messages_cn.js" type="text/javascript"></script>
     <script src="../lib/ligerUI/js/common.js" type="text/javascript"></script>
     <script src="../lib/jquery.form.js" type="text/javascript"></script>
-    <script src="../JS/XHD.js?v=112" type="text/javascript"></script>
+    <script src="../JS/XHD.js?v=1121" type="text/javascript"></script>
 
     <script type="text/javascript">
         var sid = "";
@@ -95,7 +95,7 @@
             });
         }
         function ViewModel(id) {
-            f_openWindow('product/product_add.aspx?pid=' + id, "修改商品", 700, 580, f_addsave, 9004);
+            f_openWindow('product/product_add.aspx?pid=' + id, "修改商品", 700, 720, f_addsave, 9004);
         }
 
 
@@ -116,6 +116,14 @@
                     {
                         display: '重量(克)', name: 'Weight', width: 50, align: 'left', render: function (item) {
                             return toMoney(item.Weight);
+                        }
+                    }, {
+                        display: '进货金价(￥)', name: 'StockPrice', width: 80, align: 'left', render: function (item) {
+                            return toMoney(item.StockPrice);
+                        }
+                    }, {
+                        display: '单价(￥)', name: 'price', width: 80, align: 'right', render: function (item) {
+                            return toMoney(item.price);
                         }
                     },
                     {
@@ -200,7 +208,7 @@
 
         function add() {
 
-            f_openWindow("product/product_add.aspx", "手动添加商品", 1000, 600, f_addsave, 9003);
+            f_openWindow("product/product_add.aspx", "手动添加商品", 1000, 720, f_addsave, 9003);
 
         }
         function f_addbatchsave(item, dialog) {
@@ -213,7 +221,7 @@
             var rows = manager.getSelectedRow();
             var rows = manager.getSelectedRow();
             if (rows && rows != undefined) {
-                f_openWindow('product/product_add.aspx?pid=' + rows.id, "修改商品", 1000, 700, f_addsave, 9004);
+                f_openWindow('product/product_add.aspx?pid=' + rows.id, "修改商品", 1000, 720, f_addsave, 9004);
             }
             else {
                 $.ligerDialog.warn('请选择商品！');

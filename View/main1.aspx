@@ -15,7 +15,7 @@
     <script src="lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
     <script src="JS/jquery.jclock.js" type="text/javascript"></script>
-    <script src="JS/XHD.js" type="text/javascript"></script>
+    <script src="JS/XHD.js?v1" type="text/javascript"></script>
     <style>
         .scroll_div {
             width: 400px;
@@ -469,7 +469,6 @@
             scroll_div.onmouseover = function () { clearInterval(MyMar); }
             scroll_div.onmouseout = function () { MyMar = setInterval(Marquee, speed); }
         }
-
     </script>
 
 </body>

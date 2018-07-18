@@ -33,6 +33,10 @@ namespace XHD.Server
 
         public string save()
         {
+
+            //是否提交确认保存订单 1是 0 否 
+            int saveorder = request["save"].CInt(0, false);
+
             //是否可以家积分 0 不可以 1可以 -1 扣积分
             int canAddIntegal = 0;
             model.Customer_id = PageValidate.InputText(request["T_Customer_val"], 50);
@@ -61,14 +65,16 @@ namespace XHD.Server
             model.DiscountType = request["T_DiscountType_val"].CInt(0, false);
             model.SaleType = request["T_SaleType_val"].CInt(0, false);
             model.DiscountCount = request["T_DiscountCount"].CDecimal(0, false);
-
+            model.VerifyStatus = (saveorder == 1 ? 0 : -1);
             if (string.IsNullOrWhiteSpace(model.saledep_id))
             {
                 model.saledep_id = dep_id;
             }
             model.createdep_id = dep_id;
             string id = PageValidate.InputText(request["id"], 50);
-
+            decimal oldtotal_amount = 0;
+            int oldVerifyStatus = 0;
+            decimal jf = 0;
             if (PageValidate.checkID(id))
             {
                 model.id = id;
@@ -77,7 +83,9 @@ namespace XHD.Server
                     return XhdResult.Error("参数不正确，更新失败！").ToString();
 
                 DataRow dr = ds.Tables[0].Rows[0];
-
+                model.Customer_id = dr["Customer_id"].CString("");
+                oldVerifyStatus = dr["VerifyStatus"].CInt(-2, false);
+                oldtotal_amount = dr["total_amount"].CDecimal(0, false);
                 order.Update(model);
                 //context.Response.Write(model.id );
 
@@ -136,9 +144,11 @@ namespace XHD.Server
 
                 if (!string.IsNullOrEmpty(Log_Content))
                     Syslog.Add_log(UserID, UserName, IPStreet, EventTitle, EventType, EventID, Log_Content);
-
+                jf = model.total_amount.CDecimal(0, false) - oldtotal_amount;
                 if (model.Order_status_id != "5587BCED-0A36-4EDF-9562-F962A9B1913C" && dr["Order_status_id"].CString("") == "5587BCED-0A36-4EDF-9562-F962A9B1913C")
                 {
+                    //支付变未支付扣掉相应的
+                    jf = -model.total_amount.CDecimal(0, false);
                     canAddIntegal = -1;
                 }
 
@@ -146,7 +156,27 @@ namespace XHD.Server
                 {
                     canAddIntegal = 1;
                 }
+                //已支付的
+                if (model.Order_status_id == "5587BCED-0A36-4EDF-9562-F962A9B1913C" && dr["Order_status_id"].CString("") == "5587BCED-0A36-4EDF-9562-F962A9B1913C")
+                {
+                    if (jf > 0)
+                    {
+                        canAddIntegal = 1;
+                    }
+                    else {
+                        canAddIntegal = -1;
+                    }
+                }
 
+                if (model.VerifyStatus != 0)
+                {
+                    canAddIntegal = 0;
+                }
+                else if (model.VerifyStatus == 0 && oldVerifyStatus == -1)
+                {
+                    canAddIntegal = 1;
+                }
+ 
                 ////更新发票，收款
                 //order.UpdateInvoice(id);
 
@@ -162,14 +192,10 @@ namespace XHD.Server
                 model.arrears_invoice = model.Order_amount;
                 model.invoice_money = 0;
                 model.Serialnumber = GetOrderID();
-                if (model.DiscountType == 1)
+                canAddIntegal = 0;
+                if (model.Order_status_id == "5587BCED-0A36-4EDF-9562-F962A9B1913C" && model.VerifyStatus == 0)
                 {
-                    model.DiscountCount = model.discount_amount.CDecimal(0, false);
-                    model.discount_amount = model.Order_amount - model.total_amount;
-                }
-
-                if (model.Order_status_id == "5587BCED-0A36-4EDF-9562-F962A9B1913C")
-                {
+                    jf = model.total_amount.CDecimal(0, false); ;
                     canAddIntegal = 1;
                 }
                 order.Add(model);
@@ -178,7 +204,10 @@ namespace XHD.Server
             //用户积分修改
             if (canAddIntegal != 0)
             {
-                customerBll.UpdateIntegral(model.Customer_id, (canAddIntegal * model.total_amount).CInt(0, false));
+                if (jf != 0)
+                {
+                    customerBll.UpdateIntegral(model.Customer_id, jf.CInt(0, false));
+                }
             }
 
 
@@ -194,7 +223,7 @@ namespace XHD.Server
             {
                 order_id = id,
             };
-
+            bool isHQ = dep_id == "7C881F36-3597-483B-BC71-EB5D7CFDA2C7";
             bool rs = true;
             //cod.Delete($" order_id= '{modeldel.order_id}'");
             for (int i = 0; i < postdata.Length; i++)
@@ -225,7 +254,8 @@ namespace XHD.Server
                 }
                 else if (pdata.__status == "delete")
                 {
-                    rs = cod.Delete(modeldel.order_id, modeldel.product_id);
+
+                    rs = cod.Delete(modeldel.order_id, modeldel.product_id, isHQ);
                 }
             }
             if (rs)
@@ -331,6 +361,12 @@ namespace XHD.Server
             {
                 serchtxt += $" and verifystatus = {verifystatus }";
             }
+            //是否只取确认提交保存的数据 1是
+            int saveorder = request["saveorder"].CInt(0, false);
+            if (saveorder == 1)
+            {
+                serchtxt += $" and verifystatus <>-1 ";
+            }
             //财务核销 1 是 0 否
             int cwVerify = request["cwVerify"].CInt(0, false);
             if (cwVerify == 0)
@@ -393,6 +429,12 @@ namespace XHD.Server
             if (verifystatus > -1 && !string.IsNullOrWhiteSpace(request["vstatus"]))
             {
                 serchtxt += $" and verifystatus = {verifystatus }";
+            }
+            //是否只取确认提交保存的数据 1是
+            int saveorder = request["saveorder"].CInt(0, false);
+            if (saveorder == 1)
+            {
+                serchtxt += $" and verifystatus <>-1 ";
             }
             //财务核销 1 是 0 否
             int cwVerify = request["cwVerify"].CInt(0, false);
@@ -525,19 +567,31 @@ namespace XHD.Server
             {
                 return XhdResult.Error("参数不正确，更新失败！").ToString();
             }
+            string logs = "";
             DataRow dr = ds.Tables[0].Rows[0];
-
-            if (dr["Order_status_id"].CString("") == "5587BCED-0A36-4EDF-9562-F962A9B1913C")
+            int VerifyStatus = dr["VerifyStatus"].CInt(0, false);
+            string Order_status_id = dr["Order_status_id"].CString("");
+            if (Order_status_id == "5587BCED-0A36-4EDF-9562-F962A9B1913C" && VerifyStatus != -1 && !CheckIsAdmin())
             {
                 return XhdResult.Error("已支付订单不允许删除！").ToString();
             }
+            logs += "状态:" + Order_status_id;
+            var cod = new BLL.Sale_order_details();
+            DataSet odds = cod.GetList($"order_id='{id}'");
 
-            int rows = new BLL.Sale_order_details().GetDetailCount(id);
-
-            if (rows > 0)
+            if (odds != null)
             {
-                return XhdResult.Error("此订单下含有商品,如果要删除请先移除商品后在操作！").ToString();
+                bool isHQ = dep_id == "7C881F36-3597-483B-BC71-EB5D7CFDA2C7";
+                DataTable tables = odds.Tables[0];
+                foreach (DataRow rows in tables.Rows)
+                {
+                    string product_id = rows["product_id"].CString("");
+                    string BarCode = rows["BarCode"].CString("");
+                    logs += $";BarCode={BarCode},productid={product_id},orderid={id}";
+                    cod.Delete(id, product_id, isHQ);
+                }
             }
+
 
             bool candel = true;
             if (uid != "admin")
@@ -549,10 +603,21 @@ namespace XHD.Server
             }
 
             bool isdel = order.Delete(id);
-            var cod = new BLL.Sale_order_details();
+
             cod.Delete($"order_id = '{id}'");
 
             if (!isdel) return XhdResult.Error().ToString();
+
+            //已支付的需要扣除相应的积分
+            if (Order_status_id == "5587BCED-0A36-4EDF-9562-F962A9B1913C")
+            {
+                decimal oldtotal_amount = dr["total_amount"].CDecimal(0, false);
+                string Customer_id = dr["Customer_id"].CString("");
+                if (oldtotal_amount >= 1)
+                {
+                    customerBll.UpdateIntegral(Customer_id, -oldtotal_amount.CInt(0, false));
+                }
+            }
 
             //日志
             string EventType = "订单删除";
@@ -563,7 +628,7 @@ namespace XHD.Server
             string EventID = id;
             string EventTitle = ds.Tables[0].Rows[0]["Serialnumber"].ToString();
 
-            Syslog.Add_log(UserID, UserName, IPStreet, EventTitle, EventType, EventID, null);
+            Syslog.Add_log(UserID, UserName, IPStreet, EventTitle, EventType, EventID, logs);
 
             return XhdResult.Success().ToString();
 
@@ -624,7 +689,7 @@ namespace XHD.Server
         {
             public string id { get; set; }
             public string product_id { get; set; }
-           
+
             public int Quantity { get; set; }
             public decimal Amount { get; set; }
             public string __status { get; set; }

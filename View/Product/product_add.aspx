@@ -48,10 +48,10 @@
                 //    $.ligerDialog.warn('进货金价不能为小于0！');
                 //    return false;
                 //}
-                if (T_Weight <= 0) {
-                    $.ligerDialog.warn('重量不能为小于0！');
-                    return false;
-                }
+                //if (T_Weight <= 0) {
+                //    $.ligerDialog.warn('重量不能为小于0！');
+                //    return false;
+                //}
 
                 //var sct = parseFloat($("#T_SalesCostsTotal").val().replace(/\$|\,/g, ''));
                 //var stp = parseFloat($("#T_SalesTotalPrice").val().replace(/\$|\,/g, ''));
@@ -110,6 +110,10 @@
                                     { display: "进货金价", name: "T_StockPrice", type: "text", options: "{width:180,onChangeValue:function(value){ $('#T_StockPrice').val(toMoney(value));SetT_GoldTotal(); }}", validate: "{required:true}", initValue: toMoney(obj.StockPrice, "") },
                                     { display: "重量(克)", name: "T_Weight", type: "text", options: "{width:180,onChangeValue:function(value){ $('#T_Weight').val(toMoney(value)); SetT_GoldTotal();  }}", validate: "{required:true}", initValue: toMoney(obj.Weight, "") }
                                    ],
+                                    [{ display: "单价", name: "T_price", type: "text", options: "{width:180}", validate: "{required:false}", initValue: toMoney(obj.price, "") },
+                                    { display: "配件/规格", name: "T_specifications", type: "text", options: "{width:180}", validate: "{required:false}", initValue: (obj.specifications) },
+
+                                    ],
                                    [
                                     { display: "附工费", name: "T_AttCosts", type: "text", options: "{width:180,onChangeValue:function(value){ $('#T_AttCosts').val(toMoney(value));SetT_CostsTotal(); }}", validate: "{required:true}", initValue: toMoney(obj.AttCosts, "") },
                                     { display: "主石重", name: "T_MainStoneWeight", type: "text", options: "{width:180,onChangeValue:function(value){ $('#T_MainStoneWeight').val(toMoney(value)); }}", validate: "{required:false}", initValue: toMoney(obj.MainStoneWeight) }
@@ -157,8 +161,12 @@
                                     { display: "证书编号", name: "T_CertificateNo", type: "text", options: "{width:180}", validate: "{required:false}", initValue: (obj.CertificateNo) },
                                     { display: "圈号手寸", name: "T_Circle", type: "text", options: "{width:180}", validate: "{required:false}", initValue: (obj.Circle) }
                                  ],
+
+                                    [
+                                     { display: "其他参数", name: "T_Others", type: "textarea", cols: 73, rows: 3, width: 465, cssClass: "l-textarea", initValue: (obj.Others) }
+                                    ],
                                    [
-                                    { display: "备注", name: "T_Remark", type: "textarea", cols: 73, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.remarks }
+                                    { display: "备注", name: "T_Remark", type: "textarea", cols: 73, rows:3, width: 465, cssClass: "l-textarea", initValue: obj.remarks }
                                    ]
                                 ]
                             }

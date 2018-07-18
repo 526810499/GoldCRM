@@ -69,7 +69,7 @@ namespace XHD.Model
         public string saledep_id { get; set; }
 
         /// <summary>
-        ///财务核销状态 1 已销售 2核销
+        ///财务核销状态 -1 未提交保存 0 已销售 1核销
         /// </summary>
         public int VerifyStatus { get; set; }
 

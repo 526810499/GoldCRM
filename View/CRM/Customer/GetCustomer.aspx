@@ -28,14 +28,14 @@
                             return "【" + item.department + "】" + item.employee;
                         }
                     },
-
-                    {
-                        display: '最后跟进', name: 'lastfollow', width: 90, render: function (item) {
-                            return formatTimebytype(item.lastfollow, 'yyyy-MM-dd');
-                        }
-                    },
-                    { display: '电话', name: 'cus_tel', width: 150 }
-
+                    { display: '电话', name: 'cus_tel', width: 150 },
+                {
+                    display: '客源状态', name: 'isPrivate', width: 60, render: function (item, i) {
+                    if (item.isPrivate == 1) return "公客";
+                    else
+                        return "私客";
+                            }
+                 }
                 ],
                 onAfterShowData: function (grid) {
                     $("tr[rowtype='已成交']").addClass("l-treeleve2").removeClass("l-grid-row-alt");

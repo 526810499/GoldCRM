@@ -42,7 +42,10 @@ namespace XHD.Server
 
             model.category_id = PageValidate.InputText(request["T_product_category_val"], 50);
             model.product_name = PageValidate.InputText(request["T_product_name"], 255);
+            model.Others = PageValidate.InputText(request["T_Others"], 250);
+            model.specifications = PageValidate.InputText(request["T_specifications"], 250);
             model.StockPrice = request["T_StockPrice"].CDecimal(0, false);
+            model.price = request["T_price"].CDecimal(0, false);
             model.Weight = request["T_Weight"].CDecimal(0, false);
             model.AttCosts = request["T_AttCosts"].CDecimal(0, false);
             model.MainStoneWeight = request["T_MainStoneWeight"].CDecimal(0, false);
@@ -170,43 +173,58 @@ namespace XHD.Server
                 model.create_id = emp_id;
                 model.createdep_id = dep_id;
                 model.status = (isAddTemp == 1 ? -1 : 1);
-                //批量循环加入
-                while (BatchNumber > 0)
+                if (!string.IsNullOrWhiteSpace(model.BarCode))
                 {
-                    try
+                    BatchNumber = 1;
+
+                    string id = product.GetProductIdByCode(model.BarCode);
+                    if (!string.IsNullOrWhiteSpace(id))
                     {
-                        model.create_time = DateTime.Now;
-                        model.id = Guid.NewGuid().ToString();
-                        model.BarCode = GetBarCode(model.category_id);
-                        product.Add(model);
+                        return XhdResult.Error("该条形码已存在,请更换").ToString();
                     }
-                    catch (Exception error)
+                    model.create_time = DateTime.Now;
+                    model.id = Guid.NewGuid().ToString();
+                    product.Add(model);
+                }
+                else {
+                    //批量循环加入
+                    while (BatchNumber > 0)
                     {
-                        SoftLog.LogStr(error, "Product");
-                        if (error.Message.IndexOf("不能在具有唯一索引") > -1)
+                        try
                         {
-                            int t = 3;
-                            while (t > 0)
+                            model.create_time = DateTime.Now;
+                            model.id = Guid.NewGuid().ToString();
+                            model.BarCode = GetBarCode(model.category_id);
+                            product.Add(model);
+                        }
+                        catch (Exception error)
+                        {
+                            SoftLog.LogStr(error, "Product");
+                            if (error.Message.IndexOf("不能在具有唯一索引") > -1)
                             {
-                                try
+                                int t = 3;
+                                while (t > 0)
                                 {
-                                    model.BarCode = GetBarCode(model.category_id);
-                                    bool r = product.Add(model);
-                                    if (r) { t = -1; break; }
-                                    t++;
-                                }
-                                catch (Exception err1)
-                                {
-                                    SoftLog.LogStr(err1, "Product");
-                                    return XhdResult.Error("添加失败,请重新添加！").ToString();
+                                    try
+                                    {
+                                        model.BarCode = GetBarCode(model.category_id);
+                                        bool r = product.Add(model);
+                                        if (r) { t = -1; break; }
+                                        t++;
+                                    }
+                                    catch (Exception err1)
+                                    {
+                                        SoftLog.LogStr(err1, "Product");
+                                        return XhdResult.Error("添加失败,请重新添加！").ToString();
+                                    }
                                 }
                             }
+                            else {
+                                return XhdResult.Error("添加失败,请重新添加！").ToString();
+                            }
                         }
-                        else {
-                            return XhdResult.Error("添加失败,请重新添加！").ToString();
-                        }
+                        BatchNumber--;
                     }
-                    BatchNumber--;
                 }
             }
             //添加临时单的返回添加后修改的记录
@@ -567,7 +585,88 @@ namespace XHD.Server
 
             return model;
         }
+        /// <summary>
+        /// 翡翠类导入
+        /// </summary>
+        /// <param name="rows"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private string FCImport(DataRow rows, string id, int index, int isAddTemp, string importTagID, ref bool IsEnd)
+        {
+            //序号	品名	类别	配件	质地	成本价	标签价	条形码
 
+
+            try
+            {
+                string name = rows["品名"].CString("").Trim();
+                string lb = rows["类别"].CString("").Trim();
+                string PJ = rows["配件"].CString("").Trim();
+                string ZD = rows["质地"].CString("").Trim();
+                string cb = rows["成本价"].CString("").Trim();
+                string bqgf = rows["标签价"].CString("").Trim();
+                string tm = rows["条码"].CString("").Trim();
+
+
+                if (string.IsNullOrWhiteSpace(name) && string.IsNullOrWhiteSpace(tm))
+                {
+                    IsEnd = true;
+                }
+                else {
+                    Model.Product pmodel = new Model.Product(isAddTemp)
+                    {
+                        product_name = name,
+                        Weight = 0,
+                        price = 0,
+                        specifications = PJ,
+                        Totals = cb.CDecimal(0, false),
+                        SalesCostsTotal = bqgf.CDecimal(0, false),
+                        SalesTotalPrice = bqgf.CDecimal(0, false),
+                        BarCode = tm,
+                        IsGold = request["GoldType"].CInt(0, false),
+                        StockID = id,
+                        status = (isAddTemp == 1 ? -1 : 1),
+                        importTagID = importTagID,
+                        createdep_id = dep_id,
+                        indep_id = dep_id,
+                        create_id = emp_id,
+                        create_time = DateTime.Now,
+                        AuthIn = 0,
+                        id = Guid.NewGuid().ToString(),
+                        Others = "质地:" + ZD,
+                    };
+                    bool r = string.IsNullOrWhiteSpace(product.GetProductIdByCode(tm));
+                    if (!r)
+                    {
+                        return "条形码【" + tm + "】已存在";
+                    }
+                    Model.Product_category cmodel = GetTypeID(lb);
+
+                    if (cmodel != null)
+                    {
+                        pmodel.category_id = cmodel.id;
+                        pmodel.IsGold = cmodel.cproperty;
+                    }
+                    else {
+                        return "条形码【" + tm + "】添加失败,未找到分类";
+                    }
+                    r = product.Add(pmodel);
+                    if (!r)
+                    {
+                        return "条形码【" + tm + "】添加失败";
+                    }
+
+                }
+            }
+            catch (Exception error)
+            {
+                SoftLog.LogStr(error, "HJImportProduct");
+
+                return "第【" + index + "】行添加异常";
+            }
+
+
+            return "";
+        }
 
         /// <summary>
         /// K金类导入
@@ -597,9 +696,9 @@ namespace XHD.Server
                     {
                         product_name = name,
                         Weight = kz.CDecimal(0, false),
-                        StockPrice = jhjz.CDecimal(0, false),
+                        price = jhjz.CDecimal(0, false),
                         Totals = cb.CDecimal(0, false),
-                        SalesCostsTotal = bqgf.CDecimal(0, false),
+                        // SalesCostsTotal = bqgf.CDecimal(0, false),
                         SalesTotalPrice = bqgf.CDecimal(0, false),
                         BarCode = tm,
                         IsGold = request["GoldType"].CInt(0, false),
@@ -607,6 +706,7 @@ namespace XHD.Server
                         status = (isAddTemp == 1 ? -1 : 1),
                         importTagID = importTagID,
                         createdep_id = dep_id,
+                        indep_id = dep_id,
                         create_id = emp_id,
                         create_time = DateTime.Now,
                         AuthIn = 0,
@@ -690,6 +790,7 @@ namespace XHD.Server
                         BarCode = tm,
                         IsGold = request["GoldType"].CInt(0, false),
                         StockID = id,
+                        indep_id = dep_id,
                         status = (isAddTemp == 1 ? -1 : 1),
                         importTagID = importTagID,
                         createdep_id = dep_id,
@@ -773,11 +874,12 @@ namespace XHD.Server
                         Circle = sc,
                         MainStoneWeight = zsarys[0].CDecimal(0, false),
                         AttStoneNumber = fss,
-                        remarks = "净度：" + jd + ",颜色:" + ys,
+                        Others = "净度：" + jd + "  颜色:" + ys,
                         Totals = cb.CDecimal(0, false),
                         PriceTag = bqj.CDecimal(0, false),
                         SalesTotalPrice = bqj.CDecimal(0, false),
                         BarCode = tm,
+                        indep_id = dep_id,
                         IsGold = request["GoldType"].CInt(0, false),
                         StockID = id,
                         status = (isAddTemp == 1 ? -1 : 1),
@@ -871,6 +973,9 @@ namespace XHD.Server
                             break;
                         case 2:
                             msg = KJImport(rows, id, index, isAddTemp, importTagID, ref IsEnd);
+                            break;
+                        case 3:
+                            msg = FCImport(rows, id, index, isAddTemp, importTagID, ref IsEnd);
                             break;
                     }
                     if (!string.IsNullOrWhiteSpace(msg)) { logs.AppendLine(msg + Environment.NewLine); }

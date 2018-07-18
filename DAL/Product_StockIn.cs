@@ -279,6 +279,7 @@ namespace XHD.DAL
 
             return DbHelperSQL.ExecuteScalar(sql, parameters).CString("");
         }
+ 
 
         /// <summary>
         /// 门店入库审核

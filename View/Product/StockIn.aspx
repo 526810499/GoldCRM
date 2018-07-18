@@ -10,7 +10,7 @@
     <link href="../../CSS/input.css" rel="stylesheet" type="text/css" />
     <script src="../../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="../../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
-    <script src="../../JS/XHD.js?v=9" type="text/javascript"></script>
+    <script src="../../JS/XHD.js?v=91" type="text/javascript"></script>
     <script src="../../lib/jquery.form.js" type="text/javascript"></script>
 
     <script type="text/javascript">
@@ -112,8 +112,8 @@
                                }
                            },
                            {
-                               display: '石价(￥)', name: 'StonePrice', width: 80, align: 'right', render: function (item) {
-                                   return toMoney(item.StonePrice);
+                               display: '单价(￥)', name: 'price', width: 80, align: 'right', render: function (item) {
+                                   return toMoney(item.price);
                                }
                            },
                            {
@@ -131,6 +131,11 @@
                                    return toMoney(item.Totals);
                                }
                            },
+                            {
+                                display: '单价(￥)', name: 'price', width: 80, align: 'right', render: function (item) {
+                                    return toMoney(item.price);
+                                }
+                            },
                            {
                                display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
                                    return toMoney(item.SalesCostsTotal);
@@ -199,7 +204,7 @@
         });
 
         function ViewModel(tag, id) {
-            f_openWindow('product/product_add.aspx?pid=' + id, "修改商品", 700, 580, product_save);
+            f_openWindow('product/product_add.aspx?pid=' + id, "修改商品", 700, 720, product_save);
         }
 
         function toolbar() {

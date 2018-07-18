@@ -73,10 +73,6 @@
     <Reference Include="XHD.BLL">
       <HintPath>..\BLL\bin\Debug\XHD.BLL.dll</HintPath>
     </Reference>
-    <Reference Include="XHD.Common, Version=3.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\XHD.Common.dll</HintPath>
-    </Reference>
     <Reference Include="XHD.DBUtility, Version=3.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DBUtility\bin\Debug\XHD.DBUtility.dll</HintPath>
@@ -169,6 +165,10 @@
     <Compile Include="xhd_Service.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{e3d8759a-c5eb-402d-9f10-f5c6029a8d1a}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Controller\Controller.csproj">
       <Project>{0dba2f27-f052-4ec8-9881-98825fa926be}</Project>
       <Name>Controller</Name>

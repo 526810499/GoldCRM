@@ -66,23 +66,23 @@
                     {
                         display: '销售工费(￥)', name: 'SalesCostsTotal', width: 80, align: 'right', render: function (item) {
                             return toMoney(item.SalesCostsTotal);
-                        }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='SalesCostsTotal'>" + item.sum + "</span>"; } }
+                        }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='SalesCostsTotal'>" + toMoney(item.sum) + "</span>"; } }
                     },
                     {
                         display: '销售总价', name: 'amount', width: 80, align: 'right', render: function (item) {
                             return toMoney(item.amount);
-                        }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='amount'>" + item.sum + "</span>"; } }
+                        }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='amount'>" + toMoney(item.sum) + "</span>"; } }
                     },
                     {
                         display: '优惠(￥)', name: 'Discounts', width: 80, align: 'right', render: function (item) {
                             return toMoney(item.Discounts);
-                        }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='Discounts'>" + item.sum + "</span>"; } }
+                        }, totalSummary: { type: 'sum', render: function (item, i) { return "<span id='Discounts'>" + toMoney(item.sum) + "</span>"; } }
                     },
                     { display: '成交部门', name: 'F_dep_id', width: 80, render: function (item, i) { return item.dep_name; } },
                     { display: '成交人员', name: 'emp_id', width: 80, render: function (item, i) { return item.emp_name; } }
                 ],
                 dataAction: 'server', pageSize: 30, pageSizeOptions: [10, 20, 30, 40, 50, 60, 80, 100, 120],
-                url: "Sale_order.gridData.xhd?user=" + user + "&datacount=1&rnd=" + Math.random() + "&startdate=<%=DateTime.Now.AddDays(-1).Date%>",
+                url: "Sale_order.gridData.xhd?saveorder=1&user=" + user + "&datacount=1&rnd=" + Math.random() + "&startdate=<%=DateTime.Now.AddDays(-1).Date%>",
                 width: '100%', height: '100%',
                 heightDiff: -10,
                 onSuccess: function (data, grid) {
@@ -225,7 +225,7 @@
 
         function exports() {
 
-            var sendtxt = "&etype=1&datacount=1&rnd=" + Math.random();
+            var sendtxt = "&saveorder=1&etype=1&datacount=1&rnd=" + Math.random();
             var serchtxt = $("#serchform :input").fieldSerialize() + sendtxt;
 
             var url = ("../Product/ExportProduct.aspx?" + serchtxt);

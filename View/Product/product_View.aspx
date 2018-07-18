@@ -78,15 +78,35 @@
                                     { display: "供应商", name: "T_SupplierID", type: "select", options: "{width:180,treeLeafOnly: false,tree:{url:'Product_supplier.tree.xhd?qxz=1',idFieldName: 'id',checkbox: false},value:'" + obj.SupplierID + "'}", validate: "{required:false}" },
                                     { display: "出厂码", name: "T_Sbarcode", type: "text", options: "{width:180}", validate: "{required:false}", initValue: (obj.Sbarcode) },
                                 ],
-                                   [{ display: "条形码", name: "T_BarCode", type: "text", options: "{width:180,disabled:true}", validate: "{required:false}", initValue: (obj.BarCode) },
-                                    { display: "是否黄金类", name: "T_GType", type: "select", options: "{width:180,,data:[{id:0,text:'否'},{id:1,text:'是'}],selectBoxHeight:50, value:" + obj.IsGold + "}", validate: "{required:true}" }
+                                   [
+                                     { display: "条形码", name: "T_BarCode", type: "text", options: "{width:180;}", validate: "{required:false}", initValue: (obj.BarCode) },
+                                     {
+                                         display: "品类", name: "T_IsGold", type: "select", options: "{width:180;data:" + productCategoryAttr + ",valueField:'id',textField:'text'}", validate: "{required:false}", initValue: (obj.IsGold), render: function (item) {
+                                             if (item != null) {
+                                                 for (var i = 0; i < productCategoryAttr.length; i++) {
+                                                     if (productCategoryAttr[i]['id'] == item.IsGold)
+                                                         return productCategoryAttr[i]['text']
+                                                 }
+                                             } else {
+                                                 return "其他";
+                                             }
+                                         }
+                                     },
                                    ],
-                                  [
+                                 [
                                     { display: "证书编号", name: "T_CertificateNo", type: "text", options: "{width:180}", validate: "{required:false}", initValue: (obj.CertificateNo) },
                                     { display: "圈号手寸", name: "T_Circle", type: "text", options: "{width:180}", validate: "{required:false}", initValue: (obj.Circle) }
-                                  ],
+                                 ],
+                                 [{ display: "单价", name: "T_price", type: "text", options: "{width:180}", validate: "{required:false}", initValue: toMoney(obj.price, "") },
+                                    { display: "配件/规格", name: "T_specifications", type: "text", options: "{width:180}", validate: "{required:false}", initValue: (obj.specifications) },
+
+                                 ],
+
+                                    [
+                                     { display: "其他参数", name: "T_Others", type: "textarea", cols: 73, rows: 3, width: 465, cssClass: "l-textarea", initValue: (obj.Others) }
+                                    ],
                                    [
-                                    { display: "备注", name: "T_Remark", type: "textarea", cols: 73, rows: 4, width: 465, cssClass: "l-textarea", initValue: obj.Remark }
+                                    { display: "备注", name: "T_Remark", type: "textarea", cols: 73, rows: 3, width: 465, cssClass: "l-textarea", initValue: obj.remarks }
                                    ]
                                 ]
                             }

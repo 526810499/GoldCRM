@@ -83,7 +83,7 @@
                     }
                     rows.push(
                               [
-                                 { display: "会员卡类型", name: "T_VipCardType", type: "select", options: "{width:180,onChangeValue:function(){ newTotalAmount(); },data:[{id:0,text:'无'},{id:1,text:'金卡'},{id:2,text:'银卡'},{id:3,text:'员工价'},{id:4,text:'股东价'}],selectBoxHeight:50,value:'" + obj.VipCardType + "'}", validate: "{required:true}" },
+                                 { display: "会员卡类型", name: "T_VipCardType", type: "select", options: "{width:180,onChangeValue:function(){ newTotalAmount(); },data:[{id:0,text:'无'},{id:1,text:'金卡'},{id:2,text:'银卡'},{id:3,text:'员工价'},{id:4,text:'股东价'}],selectBoxHeight:50,value:'" + obj.VipCardType + "'}"  },
                                 { display: "会员卡号", name: "T_vipcard", type: "text", initValue: obj.vipcard },
                               ],
                                [
@@ -313,8 +313,15 @@
         }
 
         function f_loaded() {
-            if ($("#btn_add").length > 0)
+            if ($("#btn_add").length > 0) {
+                $(".l-grid-loading").fadeOut();
                 return;
+            }
+            var ads = getparastr("ads", 0);
+            if (ads == 0) {
+                $(".l-grid-loading").fadeOut();
+                return;
+            }
 
             $(".l-panel-header").append("<div style='width:150px;float:right'><div id = 'btn_add' style='margin-top:2px;'></div><div id = 'btn_del' style='margin-top:2px;'></div></div>");
             $(".l-grid-loading").fadeOut();
@@ -412,9 +419,12 @@
             //销售价格
             var SalesTotalPrice = parseFloat(row.SalesTotalPrice);
             row.SaleType = categoryAttr;
+            if (isNaN(SalesCostsTotal)) { SalesCostsTotal = 0; }
+            if (isNaN(SalesTotalPrice)) { SalesTotalPrice = 0; }
+            if (isNaN(FixedPrice)) { FixedPrice = 0; }
 
             //没有会员卡直接返回
-            if (cardType == null || cardType == NaN) {
+            if (cardType == null || isNaN(cardType) || cardType == undefined) {
                 cardType = 0;
             }
 
@@ -432,9 +442,7 @@
             //有一口价按一口价销售
             if (FixedPrice > 0) {
                 switch (cardType) {
-                    case 0://没有会员卡
-                        amount = FixedPrice;
-                        break;
+
                     case 1://金卡
                         row.DiscountType = 1;
                         row.DiscountCount = 9;
@@ -455,6 +463,9 @@
                         row.DiscountCount = 8;
                         amount = FixedPrice * 0.8;
                         break;
+                    default://没有会员卡
+                        amount = FixedPrice;
+                        break;
                 }
                 amount = parseFloat(amount.toFixed(2));
                 Discounts = (FixedPrice - amount);
@@ -469,9 +480,7 @@
                 //K金类
                 if (categoryAttr == 3 || category_name.indexOf("18K") >= 0) {
                     switch (cardType) {
-                        case 0://没有会员卡
-                            amount = SalesTotalPrice;
-                            break;
+
                         case 1://金卡
                             row.DiscountType = 1;
                             row.DiscountCount = 8;
@@ -492,6 +501,9 @@
                             row.DiscountCount = 5;
                             amount = SalesTotalPrice * 0.5;
                             break;
+                        default://没有会员卡
+                            amount = SalesTotalPrice;
+                            break;
                     }
                     amount = parseFloat(amount.toFixed(2));
                     Discounts = (SalesTotalPrice - amount);
@@ -500,12 +512,14 @@
                 else if (categoryAttr == 1 || categoryAttr == 2 || ctype == 1 || ctype == 2) {//黄金类
                     //现货金条
                     if (ctype == 1) {
-                        var uprs = parseFloat(sysSalePrice[0])
+                        var uprs = parseFloat(sysSalePrice[0]);
+                        if (isNaN(uprs)) { uprs = 0; }
                         row.SalesUnitPrice = uprs;
                         SalesTotalPrice = uprs * parseFloat(row.Weight);
                         row.RealTotal = SalesTotalPrice;
                     } else if (ctype == 2) {//首饰金
-                        var uprs = parseFloat(sysSalePrice[1])
+                        var uprs = parseFloat(sysSalePrice[1]);
+                        if (isNaN(uprs)) { uprs = 0;}
                         row.SalesUnitPrice = uprs;
                         SalesTotalPrice = uprs * parseFloat(row.Weight);
                         row.RealTotal = SalesTotalPrice;
@@ -545,9 +559,7 @@
             // 工费打折
             var CostsTotal = 0;
             switch (cardType) {
-                case 0://没有会员卡
-                    CostsTotal = SalesCostsTotal;
-                    break;
+
                 case 1://金卡
                     CostsTotal = (SalesCostsTotal * 0.9);
                     break;
@@ -559,6 +571,9 @@
                     break;
                 case 4://股东
                     CostsTotal = (SalesCostsTotal * 0.8);
+                    break;
+                default://没有会员卡
+                    CostsTotal = SalesCostsTotal;
                     break;
             }
             CostsTotal = parseFloat(CostsTotal.toFixed(2));

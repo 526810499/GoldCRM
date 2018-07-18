@@ -39,9 +39,9 @@ namespace XHD.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into Sale_order(");
-            strSql.Append("id,Serialnumber,Customer_id,Order_date,pay_type_id,Order_status_id,Order_amount,discount_amount,total_amount,emp_id,receive_money,arrears_money,invoice_money,arrears_invoice,Order_details,create_id,create_time,cashier_id,vipcard,createdep_id,PayTheBill,saledep_id, VipCardType, DiscountType, SaleType, DiscountCount)");
+            strSql.Append("id,Serialnumber,Customer_id,Order_date,pay_type_id,Order_status_id,Order_amount,discount_amount,total_amount,emp_id,receive_money,arrears_money,invoice_money,arrears_invoice,Order_details,create_id,create_time,cashier_id,vipcard,createdep_id,PayTheBill,saledep_id, VipCardType, DiscountType, SaleType, DiscountCount,VerifyStatus)");
             strSql.Append(" values (");
-            strSql.Append("@id,@Serialnumber,@Customer_id,@Order_date,@pay_type_id,@Order_status_id,@Order_amount,@discount_amount,@total_amount,@emp_id,@receive_money,@arrears_money,@invoice_money,@arrears_invoice,@Order_details,@create_id,@create_time,@cashier_id,@vipcard,@createdep_id,@PayTheBill,@saledep_id,@VipCardType, @DiscountType, @SaleType, @DiscountCount)");
+            strSql.Append("@id,@Serialnumber,@Customer_id,@Order_date,@pay_type_id,@Order_status_id,@Order_amount,@discount_amount,@total_amount,@emp_id,@receive_money,@arrears_money,@invoice_money,@arrears_invoice,@Order_details,@create_id,@create_time,@cashier_id,@vipcard,@createdep_id,@PayTheBill,@saledep_id,@VipCardType, @DiscountType, @SaleType, @DiscountCount,@VerifyStatus)");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@Serialnumber", SqlDbType.VarChar,250),
@@ -69,6 +69,7 @@ namespace XHD.DAL
                     new SqlParameter("@DiscountType",SqlDbType.Int),
                     new SqlParameter("@SaleType",SqlDbType.Int),
                     new SqlParameter("@DiscountCount",SqlDbType.Decimal),
+                            new SqlParameter("@VerifyStatus",SqlDbType.Int),
             };
             parameters[0].Value = model.id;
             parameters[1].Value = model.Serialnumber;
@@ -96,6 +97,7 @@ namespace XHD.DAL
             parameters[23].Value = model.DiscountType;
             parameters[24].Value = model.SaleType;
             parameters[25].Value = model.DiscountCount;
+            parameters[26].Value = model.VerifyStatus;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {
@@ -126,7 +128,7 @@ namespace XHD.DAL
             strSql.Append("vipcard=@vipcard,");
             strSql.Append("receive_money=@receive_money,");
             strSql.Append("arrears_money=@arrears_money,");
-            strSql.Append("PayTheBill=@PayTheBill,saledep_id=@saledep_id, VipCardType=@VipCardType, DiscountType=@DiscountType, SaleType=@SaleType, DiscountCount=@DiscountCount  ");// createdep_id=@createdep_id,
+            strSql.Append("PayTheBill=@PayTheBill,saledep_id=@saledep_id, VipCardType=@VipCardType, DiscountType=@DiscountType, SaleType=@SaleType, DiscountCount=@DiscountCount,VerifyStatus=@VerifyStatus  ");// createdep_id=@createdep_id,
             strSql.Append(" where id=@id ");
             SqlParameter[] parameters = {
                     new SqlParameter("@Order_date", SqlDbType.DateTime),
@@ -149,6 +151,7 @@ namespace XHD.DAL
                     new SqlParameter("@DiscountType",SqlDbType.Int),
                     new SqlParameter("@SaleType",SqlDbType.Int),
                     new SqlParameter("@DiscountCount",SqlDbType.Decimal),
+                    new SqlParameter("@VerifyStatus",SqlDbType.Int)
                };
             parameters[0].Value = model.Order_date;
             parameters[1].Value = model.pay_type_id;
@@ -170,6 +173,7 @@ namespace XHD.DAL
             parameters[17].Value = model.DiscountType;
             parameters[18].Value = model.SaleType;
             parameters[19].Value = model.DiscountCount;
+            parameters[20].Value = model.VerifyStatus;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {

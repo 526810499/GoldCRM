@@ -577,7 +577,7 @@ namespace XHD.Common
                                     e.EvaluateInCell(cell);
                                     dataRow[j] = cell.ToString();
                                 }
-                                catch
+                                catch(Exception error)
                                 {
                                     if (DateUtil.IsCellDateFormatted(cell))//日期
                                     {

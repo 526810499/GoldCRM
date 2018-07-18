@@ -142,7 +142,7 @@
 
         function doChangeSearch() {
             var v = $("#scode").val();
-            if (v != undefined && v.length == 7) {
+            if (v != undefined && v.length >= 7) {
                 doserch();
             }
         }

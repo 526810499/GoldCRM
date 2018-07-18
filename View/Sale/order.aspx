@@ -13,8 +13,9 @@
     <script src="../lib/jquery/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="../lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
     <script src="../lib/jquery.form.js" type="text/javascript"></script>
-    <script src="../JS/XHD.js?v=1" type="text/javascript"></script>
+    <script src="../JS/XHD.js?v=2.1" type="text/javascript"></script>
     <script type="text/javascript">
+
         $(function () {
             initLayout();
             $(window).resize(function () {
@@ -55,22 +56,22 @@
                     {
                         display: '订单总金额（￥）', name: 'Order_amount', width: 100, align: 'right', render: function (item) {
                             return "<div style='color:#135294'>" + toMoney(item.Order_amount) + "</div>";
-                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥" + item.sum; } }
+                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥" + toMoney(item.sum); } }
                     },
                     {
                         display: '优惠金额（￥）', name: 'discount_amount', width: 100, align: 'right', render: function (item) {
                             return "<div style='color:#135294'>" + toMoney(item.discount_amount) + "</div>";
-                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥" + item.sum; } }
+                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥" + toMoney(item.sum); } }
                     },
                     {
                         display: '已收金额（￥）', name: 'receive_money', width: 100, align: 'right', render: function (item) {
                             return "<div style='color:#135294'>" + toMoney(item.receive_money) + "</div>";
-                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥" + item.sum; } }
+                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥" + toMoney(item.sum); } }
                     },
                     {
                         display: '未收余额（￥）', name: 'arrears_money', width: 100, align: 'right', render: function (item) {
                             return "<div style='color:#135294'>" + toMoney(item.arrears_money) + "</div>";
-                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥" + item.sum; } }
+                        }, totalSummary: { type: 'sum', render: function (item, i) { return "￥" + toMoney(item.sum); } }
                     },
                     {
                         display: '成交时间', name: 'Order_date', width: 150, render: function (item) {
@@ -249,14 +250,34 @@
 
 
         function add() {
-            f_openWindow("sale/order_add.aspx", "新增订单", 1200, 700, f_save);
+            var buttons = [];
+
+            buttons.push({ text: '保存并提交', onclick: ConfirmSubmitSave });
+            buttons.push({ text: '保存', onclick: SubmitSave });
+
+            f_openWindow21("sale/order_add.aspx?ads=1", "新增订单", 1200, 700, buttons, "soiddiv");
         }
 
         function edit() {
             var manager = $("#maingrid4").ligerGetGridManager();
             var row = manager.getSelectedRow();
             if (row) {
-                f_openWindow('sale/order_add.aspx?id=' + row.id, "修改订单" + row.Serialnumber, 1200, 700, f_save);
+                var isadmin = ("<%=(XHD.Common.CookieHelper.GetValue("xhdcrm_uid"))%>" == "admin");
+                var buttons = [];
+                var ads = 0;
+                if (row.VerifyStatus == -1) {
+                    ads = 1;
+                    buttons.push({ text: '保存', onclick: SubmitSave });
+                    buttons.push({ text: '保存并提交', onclick: ConfirmSubmitSave });
+                } else if (row.Order_status != "已支付") {
+                    buttons.push({ text: '保存', onclick: SubmitSave2 });
+                    ads = 1;
+                } else if (isadmin) {
+                    ads = 1;
+                    buttons.push({ text: '保存', onclick: SubmitSave2 });
+                }
+
+                f_openWindow21('sale/order_add.aspx?id=' + row.id + "&ads=" + ads, "修改订单" + row.Serialnumber, 1200, 700, buttons, "soiddiv");
             }
             else {
                 $.ligerDialog.warn('请选择订单！');
@@ -309,7 +330,22 @@
 
             setTimeout(function (item, dialog) { f_save(item, dialog) }, 100);
         }
-        function f_save(item, dialog) {
+
+        function ConfirmSubmitSave(item, dialog) {
+            var save = 0;
+            top.jQuery.ligerDialog.confirm("保存并提交后订单信息将不能在修改,确认保存并提交？", function (yes) {
+                if (yes) { save = 1; }
+                f_save(item, dialog, save);
+            });
+
+        }
+        function SubmitSave(item, dialog) {
+            f_save(item, dialog, 0);
+        }
+        function SubmitSave2(item, dialog) {
+            f_save(item, dialog, 1);
+        }
+        function f_save(item, dialog, save) {
             var issave = dialog.frame.f_save();
 
             if (!issave) {
@@ -319,7 +355,7 @@
             dialog.close();
             $.ligerDialog.waitting('数据保存中,请稍候...');
             $.ajax({
-                url: "Sale_order.save.xhd", type: "POST",
+                url: "Sale_order.save.xhd?save=" + save, type: "POST",
                 data: issave,
                 dataType: 'json',
                 success: function (result) {
@@ -352,7 +388,7 @@
                 window.open("printOrder.aspx?id=" + row.id);
             }
             else {
-                $.ligerDialog.warn("请选择数据");
+                $.ligerDialog.warn("请选择订单");
             }
 
         }
