@@ -599,7 +599,7 @@ namespace XHD.Server
             try
             {
                 string name = rows["品名"].CString("").Trim();
-                string lb = rows["类别"].CString("").Trim();
+                //string lb = rows["类别"].CString("").Trim();
                 string PJ = rows["配件"].CString("").Trim();
                 string ZD = rows["质地"].CString("").Trim();
                 string cb = rows["成本价"].CString("").Trim();
@@ -639,7 +639,7 @@ namespace XHD.Server
                     {
                         return "条形码【" + tm + "】已存在";
                     }
-                    Model.Product_category cmodel = GetTypeID(lb);
+                    Model.Product_category cmodel = GetTypeID(name);
 
                     if (cmodel != null)
                     {
