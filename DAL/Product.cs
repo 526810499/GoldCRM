@@ -223,14 +223,14 @@ namespace XHD.DAL
             parameters[15].Value = model.AttStoneWeight;
             parameters[16].Value = model.AttStoneNumber;
             parameters[17].Value = model.StonePrice;
-            parameters[18].Value = model.GoldTotal;
-            parameters[19].Value = model.CostsTotal;
-            parameters[20].Value = model.Totals;
+            parameters[18].Value = Math.Round(model.GoldTotal.CDecimal(0,false));
+            parameters[19].Value = Math.Round(model.CostsTotal.CDecimal(0,false));
+            parameters[20].Value = Math.Round(model.Totals.CDecimal(0,false));
             parameters[21].Value = model.Sbarcode;
             parameters[22].Value = model.depopbefwid;
             parameters[23].Value = model.OutStatus;
-            parameters[24].Value = model.SalesTotalPrice;
-            parameters[25].Value = model.SalesCostsTotal;
+            parameters[24].Value = Math.Round(model.SalesTotalPrice.CDecimal(0,false));
+            parameters[25].Value = Math.Round(model.SalesCostsTotal.CDecimal(0,false));
             parameters[26].Value = model.id;
             parameters[27].Value = model.BarCode;
             parameters[28].Value = model.IsGold;
@@ -238,8 +238,8 @@ namespace XHD.DAL
 
             parameters[30].Value = model.CertificateNo;
             parameters[31].Value = model.Circle;
-            parameters[32].Value = model.PriceTag;
-            parameters[33].Value = model.FixedPrice;
+            parameters[32].Value = Math.Round(model.PriceTag);
+            parameters[33].Value =Math.Round(model.FixedPrice);
 
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)

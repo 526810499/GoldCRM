@@ -99,9 +99,9 @@
                                 }, { display: '一口价', name: 'FixedPrice', width: 120, render: function (item) { if (item.FixedPrice == null) { return '0'; } else { return toMoney(item.FixedPrice); } } },
                                { display: '备注', name: 'remark', align: 'left', width: 180 }
                             ],
-                            usePager: false,
                             checkbox: false,
-
+                            pageSize: 20,
+                            pageSizeOptions: [10, 20, 30, 40, 50, 60, 80, 100, 120],
                             url: "Product_StockIn.gridDetail.xhd?stockid=" + r.id,
                             width: '99%', height: '180',
                             heightDiff: 0

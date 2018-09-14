@@ -71,7 +71,7 @@
             toolbar();
         });
         function toolbar() {
-            $.get("toolbar.GetSys.xhd?mid=product_category&rnd=" + Math.random(), function (data, textStatus) {
+            $.get("toolbar.GetSys.xhd?mid=product_type&rnd=" + Math.random(), function (data, textStatus) {
                 var data = eval('(' + data + ')');
                 //alert(data);
                 var items = [];
@@ -95,9 +95,11 @@
 
 
         function add() {
-            f_openWindow("product/product_category_add.aspx", "新增类别", 480, 500, f_save);
+            f_openWindow("product/product_category_add.aspx", "新增类别", 680, 500, f_save);
         }
-
+        function addBatch() {
+            f_openWindow("product/product_category_addBatch.aspx", "批量加入类别", 680, 700, f_save);
+        }
         function edit() {
             var manager = $("#maingrid4").ligerGetGridManager();
             var row = manager.getSelectedRow();

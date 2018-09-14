@@ -30,6 +30,7 @@
                 { text: '黄金类', id: '1' },
                 { text: 'K金类', id: '2' },
                 { text: '翡翠类', id: '3' },
+                { text: '促品类', id: '4' },
                 ], valueFieldID: 'simtypes', initValue: ''
             });
             $("#ctlBtn").click(function () { startup(); });
@@ -95,7 +96,8 @@
                         <a href="../file/template/珠宝类_入库模板.xlsx" target="_blank" style="padding-right: 10px">珠宝类</a>
                         <a href="../file/template/黄金类_入库模板.xlsx" target="_blank" style="padding-right: 10px">黄金类</a>
                         <a href="../file/template/K金类_入库模板.xlsx" target="_blank" style="padding-right: 10px">K金类</a>
-                            <a href="../file/template/翡翠类_入库模板.xlsx" target="_blank" style="padding-right: 10px">翡翠类</a>
+                        <a href="../file/template/翡翠类_入库模板.xlsx" target="_blank" style="padding-right: 10px">翡翠类</a>
+                        <a href="../file/template/促品类_入库模板.xlsx" target="_blank" style="padding-right: 10px">促品类</a>
                     </td>
                 </tr>
                 <tr>

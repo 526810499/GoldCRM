@@ -119,7 +119,7 @@ namespace XHD.DAL
             parameters[27].Value = (model.birthday.HasValue && model.birthday != DateTime.MaxValue ? (model.birthday.CDateTime(DateTime.Now, false).Month).CInt(0, false) : 0);
             parameters[28].Value = (model.birthday.HasValue && model.birthday != DateTime.MaxValue ? (model.birthday.CDateTime(DateTime.Now, false).Year).CInt(0, false) : 0);
             parameters[29].Value = model.createdep_id;
-            parameters[29].Value = model.emp_depid;
+            parameters[30].Value = model.emp_depid;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {

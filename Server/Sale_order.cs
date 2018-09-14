@@ -20,14 +20,15 @@ namespace XHD.Server
 
         public Sale_order(HttpContext context) : base(context)
         {
+            //1 为数据汇总
             if (request["datacount"].CInt(0, false) == 0)
             {
                 allDataBtnid = "4C2A57BB-94A5-401A-82AA-24DE1F5DE4DB";
                 depDataBtnid = "1F5A29CE-CE24-4A96-9B98-D72D5AF9B924";
             }
             else {
-                allDataBtnid = "4C25245E-9253-4D72-890F-5A28FB144998";
-                depDataBtnid = "6D813763-3863-4128-ACC3-E76DC1127A8E";
+                allDataBtnid = "3D873EDF-658B-459A-8944-F75745AF106A";
+                depDataBtnid = "570B94D6-A8A2-4D99-B645-EFDEE5149005";
             }
         }
 
@@ -176,7 +177,7 @@ namespace XHD.Server
                 {
                     canAddIntegal = 1;
                 }
- 
+
                 ////更新发票，收款
                 //order.UpdateInvoice(id);
 
@@ -371,8 +372,8 @@ namespace XHD.Server
             int cwVerify = request["cwVerify"].CInt(0, false);
             if (cwVerify == 0)
             {
-                string temp = GetSQLCreateIDWhere(serchtxt, true);
-                serchtxt = temp.Replace("create_id", " Sale_order.create_id");
+                string temp = GetSQLCreateIDWhere(serchtxt, true, "Sale_order");
+
             }
             else {
                 serchtxt += $" and Sale_order.Order_status_id = '5587BCED-0A36-4EDF-9562-F962A9B1913C' ";
@@ -440,7 +441,7 @@ namespace XHD.Server
             int cwVerify = request["cwVerify"].CInt(0, false);
             if (cwVerify == 0)
             {
-                serchtxt = GetSQLCreateIDWhere(serchtxt, true);
+                string temp = GetSQLCreateIDWhere(serchtxt, true);
             }
             else {
                 serchtxt += $" and  Order_status_id = '5587BCED-0A36-4EDF-9562-F962A9B1913C' ";

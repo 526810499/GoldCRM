@@ -162,7 +162,7 @@
         }
         function f_selectCustomer() {
             $.ligerDialog.open({
-                zindex: 9005, title: '选择客户', width: 650, height: 300, url: '../crm/customer/getCustomer.aspx', buttons: [
+                zindex: 9005, title: '选择客户', width: 650, height: 300, url: '../crm/customer/getCustomer.aspx?saleselect=1', buttons: [
                      { text: '确定', onclick: f_selectCustomerOK },
                      { text: '取消', onclick: function (item, dialog) { dialog.close(); } }
                 ]

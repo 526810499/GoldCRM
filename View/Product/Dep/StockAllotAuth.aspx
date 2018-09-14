@@ -116,8 +116,9 @@
 
 
                             ],
-                            usePager: false,
                             checkbox: false,
+                            pageSize: 20,
+                            pageSizeOptions: [10, 20, 30, 40, 50, 60, 80, 100, 120],
 
                             url: "Product_allot.gridDetail.xhd?allotid=" + r.id,
                             width: '99%', height: '180',

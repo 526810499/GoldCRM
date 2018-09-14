@@ -33,7 +33,7 @@
 
         $(function () {
 
-            var id = getparastr("id", "");
+            var id = getparastr("id", "")
 
             loadForm();
 
@@ -53,7 +53,7 @@
                             $("#oday").text(formatTimebytype(result.create_time, "yyyy-MM-dd"));
                             $("#otime").text(formatTimebytype(result.create_time, "yyyy-MM-dd hh:mm:ss"));
                             $("#semp_name").text(result.emp_name);
-                           
+                            $("#fkfs").text(result.pay_type);
                             $("#yyy").text(result.emp_name);
                             $("#syy").text(result.cashiername);
                             $("#atotla").text(toMoney(result.total_amount));
@@ -76,24 +76,21 @@
                             var detail = result.Rows;
                             var datas = "<table>";
                             var datas2 = "";
-                            var Discounts = 0;
                             $(detail).each(function (i, v) {
                                 datas += "<tr>";
                                 datas += "<td style='width:130px'>" + v.BarCode + "</td>";
                                 datas += "<td style='width:265px;padding-left:20px'>" + v.product_name + "</td>";
                                 datas += "<td style='width:110px'>1</td>";
                                 datas += "<td style='width:150px'>" + toMoney(v.amount) + "</td>";
-                                Discounts += v.Discounts;
+
                                 datas += "</tr>";
                             });
                             datas2 = datas;
                             datas += "</table>";
                             $("#odetail").append(datas);
-                            $("#fkfs").html(data.pay_type + "<span style='padding-left:300px'> </span>折扣：" + toMoney(Discounts));
+
                             datas2 += "<tr>";
-                            datas2 += "<td  colspan='4'><div style='padding-top:10px'>销售时间：" + $("#otime").text() + "<span style='padding-left:30px'> </span>销售门店：" + $("#semp_name").text() + "<span style='padding-left:30px'> </span>付款方式：" + $("#fkfs").text() + "</div></td></tr>";
-                            datas2 += "<tr>";
-                            datas2 += "<td  colspan='4'><div style='padding-top:10px'>销售人：" + $("#yyy").text() + "<span style='padding-left:30px'> </span>折扣：" + toMoney(Discounts) + "<span style='padding-left:30px'> </span>折后总价：" + $("#atotla").text() + "<span style='padding-left:30px'> </span>收银员：" + $("#syy").text() + "</div></td></tr>";
+                            datas2 += "<td  colspan='4'><div style='padding-top:10px'>销售人：" + $("#yyy").text() + "<span style='padding-left:30px'> </span>总金额：" + $("#atotla").text() + "<span style='padding-left:30px'> </span>收银员：" + $("#syy").text() + "</div></td></tr>";
 
                             datas2 += "</table>";
                             $("#other1").append(datas2);
@@ -188,12 +185,12 @@
                                 <div id="syy"></div>
                             </td>
                         </tr>
-                        <tr style="height: 5px">
+                        <tr style="height: 15px">
                             <td colspan="2">
                                 <div id="jl"></div>
                             </td>
                         </tr>
-                        <tr style="height: 10px">
+                        <tr style="height: 15px">
                             <td colspan="2">
                                 <div id="dwjg"></div>
                             </td>
@@ -237,10 +234,10 @@
     <script>
         $(document).ready(function () {
             PageSetup_Null();
-           // $("#divprint").printArea();
+            $("#divprint").printArea();
             PageSetup_Null();
             window.setTimeout(function () {
-              //  window.close();
+                window.close();
             }, 1000);
         });
 

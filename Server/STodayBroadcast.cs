@@ -32,6 +32,17 @@ namespace XHD.Server
         }
 
         /// <summary>
+        ///播报价格设置到cookie
+        /// </summary>
+        /// <param name="model"></param>
+        private void SetCookiePrice(Model.TodayBroadcast model)
+        {
+            if (model == null) { return; }
+            //价格设置到cookie里
+            CookieHelper.Add("this_broadcast", $"{model.TodayGlodPrice},{model.TodayOtherPrice1},{model.TodayOtherPrice2},{model.TodayOtherPrice3}");
+        }
+
+        /// <summary>
         /// 获取今日轮播
         /// </summary>
         /// <returns></returns>
@@ -39,7 +50,7 @@ namespace XHD.Server
         {
             Model.TodayBroadcast model = new Model.TodayBroadcast();
             model = bll.GetBannerTodayBroadcast();
-            if (model == null) { return null; }
+            SetCookiePrice(model);
             return (JsonDyamicHelper.NetJsonConvertObject(model));
         }
 
@@ -127,9 +138,7 @@ namespace XHD.Server
             Model.TodayBroadcast model = new Model.TodayBroadcast();
             model = bll.GetTodayBroadcast();
             if (model == null) { model = new Model.TodayBroadcast(); }
-            //价格设置到cookie里
-            CookieHelper.Add("this_broadcast", $"{model.TodayGlodPrice},{model.TodayOtherPrice1},{model.TodayOtherPrice2},{model.TodayOtherPrice3}");
-
+ 
             return (JsonDyamicHelper.NetJsonConvertObject(model));
         }
     }

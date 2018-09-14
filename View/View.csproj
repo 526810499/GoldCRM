@@ -854,6 +854,7 @@
     <Content Include="Product\AllStock.aspx" />
     <Content Include="Product\PrintOutProduct.aspx" />
     <Content Include="Product\PrintProduct.aspx" />
+    <Content Include="Product\product_category_addBatch.aspx" />
     <Content Include="Product\product_excel_add.aspx" />
     <Content Include="Product\product_View.aspx" />
     <Content Include="Product\StockIn.aspx" />
@@ -880,6 +881,7 @@
     <Content Include="Sale\contract_add.aspx" />
     <Content Include="Sale\contract_atta.aspx" />
     <Content Include="Sale\GetOrder.aspx" />
+    <Content Include="Sale\printOrder4.aspx" />
     <Content Include="Sale\VerifyOrder_view.aspx" />
     <Content Include="Sale\printOrder3.aspx" />
     <Content Include="Sale\printOrder2.aspx" />
@@ -990,6 +992,7 @@
     <Content Include="file\template\珠宝类_入库模板.xlsx" />
     <Content Include="file\template\黄金类_入库模板.xlsx" />
     <Content Include="file\template\翡翠类_入库模板.xlsx" />
+    <Content Include="file\template\促品类_入库模板.xlsx" />
     <None Include="JS\DragFlow\jquery-1.4.1-vsdoc.js" />
     <Content Include="JS\DragFlow\jquery-1.4.1.js" />
     <Content Include="JS\DragFlow\jquery-1.4.1.min.js" />

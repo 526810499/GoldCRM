@@ -16,8 +16,10 @@
     <script src="../../lib/jquery.form.js" type="text/javascript"></script>
     <script src="../../JS/XHD.js" type="text/javascript"></script>
     <script type="text/javascript">
+        var saleselect = 0;
         $(function () {
             var str1 = getparastr("rid");
+            saleselect = getparastr("saleselect",0);
             $("#maingrid4").ligerGrid({
                 columns: [
                     { display: '序号', width: 50, render: function (item, i) { return item.n; } },
@@ -44,7 +46,7 @@
                 dataAction: 'server',
                 pageSize: 30,
                 pageSizeOptions: [20, 30, 50, 100],
-                url: "CRM_Customer.grid.xhd?rnd=" + Math.random(),
+                url: "CRM_Customer.grid.xhd?rnd=" + Math.random() + "&saleselect=" + saleselect,
                 width: '100%',
                 height: '100%',
                 title: "客户列表",
@@ -132,7 +134,7 @@
         }
 
         function doserch() {
-            var sendtxt = "&rnd=" + Math.random();
+            var sendtxt = "&rnd=" + Math.random() + "&saleselect=" + saleselect;
             var serchtxt = $("#form1 :input").fieldSerialize() + sendtxt;
             $.ligerDialog.waitting('数据查询中,请稍候...');
             var manager = $("#maingrid4").ligerGetGridManager();

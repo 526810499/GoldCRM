@@ -19,8 +19,16 @@ namespace XHD.Server
 
         public CRM_Customer(HttpContext context) : base(context)
         {
-            allDataBtnid = "ED2E90BC-2618-49B9-B93A-6C4468E27738";
-            depDataBtnid = "62735B9F-00B7-439C-93E3-5104D65DF5BE";
+            ///开单销售选择客户
+            if (context.Request["saleselect"].CInt(0, false) == 1)
+            {
+                allDataBtnid = "4C2A57BB-94A5-401A-82AA-24DE1F5DE4DB";
+                depDataBtnid = "1F5A29CE-CE24-4A96-9B98-D72D5AF9B924";
+            }
+            else {
+                allDataBtnid = "ED2E90BC-2618-49B9-B93A-6C4468E27738";
+                depDataBtnid = "62735B9F-00B7-439C-93E3-5104D65DF5BE";
+            }
         }
 
         public string grid()

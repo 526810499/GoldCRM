@@ -585,6 +585,86 @@ namespace XHD.Server
 
             return model;
         }
+
+        /// <summary>
+        /// 促销品类导入
+        /// </summary>
+        /// <param name="rows"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private string CPImport(DataRow rows, string id, int index, int isAddTemp, string importTagID, ref bool IsEnd)
+        {
+            //序号	品名	类别	配件	质地	成本价	标签价	条形码
+
+
+            try
+            {
+
+                string name = rows["品名"].CString("").Trim();
+                string cb = rows["成本"].CString("").Trim();
+                string bqgf = rows["标签价"].CString("").Trim();
+                string tm = rows["条码"].CString("").Trim();
+
+                if (string.IsNullOrWhiteSpace(name) && string.IsNullOrWhiteSpace(tm))
+                {
+                    IsEnd = true;
+                }
+                else {
+                    Model.Product pmodel = new Model.Product(isAddTemp)
+                    {
+                        product_name = name,
+                        Weight =0,
+                        price = 0,
+                        Totals = cb.CDecimal(0, false),
+                        // SalesCostsTotal = bqgf.CDecimal(0, false),
+                        SalesTotalPrice = bqgf.CDecimal(0, false),
+                        BarCode = tm,
+                        StockID = id,
+                        status = (isAddTemp == 1 ? -1 : 1),
+                        importTagID = importTagID,
+                        createdep_id = dep_id,
+                        indep_id = dep_id,
+                        create_id = emp_id,
+                        create_time = DateTime.Now,
+                        AuthIn = 0,
+                        id = Guid.NewGuid().ToString(),
+                    };
+                    bool r = string.IsNullOrWhiteSpace(product.GetProductIdByCode(tm));
+                    if (!r)
+                    {
+                        return "条形码【" + tm + "】已存在";
+                    }
+                    Model.Product_category cmodel = GetTypeID(name);
+
+                    if (cmodel != null)
+                    {
+                        pmodel.category_id = cmodel.id;
+                        pmodel.IsGold = cmodel.cproperty;
+                    }
+                    else {
+                        return "条形码【" + tm + "】添加失败,未找到分类";
+                    }
+                    r = product.Add(pmodel);
+                    if (!r)
+                    {
+                        return "条形码【" + tm + "】添加失败";
+                    }
+
+                }
+            }
+            catch (Exception error)
+            {
+                SoftLog.LogStr(error, "CPImport");
+
+                return "第【" + index + "】行添加异常";
+            }
+
+
+
+            return "";
+        }
+
+
         /// <summary>
         /// 翡翠类导入
         /// </summary>
@@ -976,6 +1056,9 @@ namespace XHD.Server
                             break;
                         case 3:
                             msg = FCImport(rows, id, index, isAddTemp, importTagID, ref IsEnd);
+                            break;
+                        case 4:
+                            msg = CPImport(rows, id, index, isAddTemp, importTagID, ref IsEnd);
                             break;
                     }
                     if (!string.IsNullOrWhiteSpace(msg)) { logs.AppendLine(msg + Environment.NewLine); }

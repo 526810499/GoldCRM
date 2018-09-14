@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Data;
+using System.IO;
 using System.Text;
 using System.Web;
 using XHD.Common;
@@ -34,6 +35,18 @@ namespace XHD.Server
             {
                 model.parentid = "root";
             }
+
+            if (string.IsNullOrWhiteSpace(model.product_category))
+            {
+                return XhdResult.Error("分类名称不能为空！").ToString();
+            }
+
+            Model.Product_category categoryOldModel = category.GetcategoryID(model.product_category);
+            if (categoryOldModel != null && !string.IsNullOrWhiteSpace(categoryOldModel.id) && categoryOldModel.id != id)
+            {
+                return XhdResult.Error("当前分类名称已存在请确认！").ToString();
+            }
+
             if (PageValidate.checkID(id))
             {
                 model.id = id;
@@ -48,7 +61,7 @@ namespace XHD.Server
                     return XhdResult.Error("上级不能是自己，更新失败！").ToString();
 
                 string oldparentid = dr["parentid"].CString("");
-                if (model.parentid != oldparentid||string .IsNullOrWhiteSpace(dr["fparentid"].CString("")) )
+                if (model.parentid != oldparentid || string.IsNullOrWhiteSpace(dr["fparentid"].CString("")))
                 {
                     if (model.parentid == "root" || model.parentid == "")
                     {
@@ -94,7 +107,7 @@ namespace XHD.Server
                 else {
                     model.fparentid = GetParentid(model.parentid).id;
                 }
-              
+
                 model.create_id = emp_id;
                 model.create_time = DateTime.Now;
 
@@ -264,6 +277,133 @@ namespace XHD.Server
             return str[str.Length - 1] == ',' ? str.ToString(0, str.Length - 1) : str.ToString();
         }
 
+
+        /// <summary>
+        /// 批量导入
+        /// </summary>
+        /// <returns></returns>
+        public string ImportCategory()
+        {
+            //品名	克重	单价	成本	标签价	条码
+            string msg = "";
+            try
+            {
+                string pid = request["pid"].CString("");
+                pid = PageValidate.InputText(pid, 50);
+                HttpPostedFile uploadFile = request.Files[0];
+                if (uploadFile == null || string.IsNullOrWhiteSpace(pid))
+                {
+                    return XhdResult.Error("确认参数是否正常").ToString();
+                }
+                string filename = uploadFile.FileName;
+                ExcelExtension ension = ExcelExtension.XLS;
+                if (filename.LastIndexOf(".xlsx") > -1)
+                {
+                    ension = ExcelExtension.XLSX;
+                }
+                Stream stream = uploadFile.InputStream;
+
+                DataTable table = ExportHelper.ReadExcelToDataTable(stream, ension);
+                if (table == null || table.Rows.Count <= 0)
+                {
+                    return XhdResult.Error("表格数据未读到").ToString();
+                }
+                if (!table.Columns.Contains("分类名称"))
+                {
+                    return XhdResult.Error("请确认导入的Excel 模板格式是否正确").ToString();
+                }
+
+
+
+                Model.Product_category pmodel = category.GetModel(pid);
+                if (pmodel == null || string.IsNullOrWhiteSpace(pmodel.id))
+                {
+                    return XhdResult.Error("参数不正确，更新失败！").ToString();
+                }
+
+                int cproperty = pmodel.cproperty;
+                string fparentid = pmodel.fparentid;
+                string oldparentid = pmodel.parentid;
+                if (string.IsNullOrWhiteSpace(fparentid))
+                {
+                    if (pmodel.parentid == "root" || pmodel.parentid == "")
+                    {
+                        fparentid = model.id;
+                    }
+                    else {
+                        fparentid = GetParentid(model.parentid).id;
+                    }
+                }
+
+
+                int index = 1;
+                int rs = 0;
+                int continueCount = 0;
+
+                foreach (DataRow rows in table.Rows)
+                {
+                    try
+                    {
+                        string name = rows["分类名称"].CString("").Trim();
+                        name = PageValidate.InputText(name, 150);
+
+                        Model.Product_category categoryOldModel = category.GetcategoryID(name);
+                        if (categoryOldModel != null && !string.IsNullOrWhiteSpace(categoryOldModel.id))
+                        {
+                            msg += $"第{index}行,分类名称【{name}】已存在" + Environment.NewLine;
+                            continue;
+                        }
+
+                        if (string.IsNullOrWhiteSpace(name))
+                        {
+                            continueCount++;
+                            //连续3行空白结束
+                            if (continueCount > 3)
+                            {
+                                break;
+                            }
+                            continue;
+                        }
+
+                        Model.Product_category addmodel = new Model.Product_category()
+                        {
+                            id = Guid.NewGuid().ToString(),
+                            create_id = emp_id,
+                            create_time = DateTime.Now,
+                            product_category = name,
+                            parentid = pid,
+                            fparentid = fparentid,
+                            product_icon = "",
+                            cproperty = cproperty,
+                            CodingBegins = "",
+                        };
+                        bool r = category.Add(addmodel);
+                        if (r) { rs++; }
+                        else {
+                            msg += $"第{index}行,分类名称【{name}】添加失败" + Environment.NewLine;
+                        }
+                        continueCount = 0;
+                    }
+                    catch (Exception err)
+                    {
+                        SoftLog.LogStr(err, "ImportCategory");
+                        msg += $"第{index}行,添加异常" + Environment.NewLine;
+                    }
+
+                    index++;
+                }
+                msg = $"成功加入{rs} 行数据 " + Environment.NewLine + msg;
+
+            }
+            catch (Exception error)
+            {
+                msg += "异常：" + error.ToString();
+                SoftLog.LogStr(error, "ImportCategory");
+            }
+
+            return XhdResult.Success(msg).ToString();
+
+        }
 
         /// <summary>
         /// 获取分类属性信息
