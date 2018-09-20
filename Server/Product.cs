@@ -120,43 +120,9 @@ namespace XHD.Server
                 string EventType = "商品修改";
                 string EventID = model.id;
 
-                string Log_Content = null;
+                string Log_Content = "保存前:" + JsonDyamicHelper.NetJsonConvertObject(ds.Tables[0]) + Environment.NewLine + "保存后：" + JsonDyamicHelper.NetJsonConvertObject(model);
 
-                if (dr["category_name"].ToString() != request["T_product_category"])
-                    Log_Content += string.Format("【{0}】{1} → {2} \n", "商品类别", dr["category_name"],
-                        request["T_product_category"]);
-
-                if (dr["product_name"].ToString() != request["T_product_name"])
-                    Log_Content += string.Format("【{0}】{1} → {2} \n", "商品名字", dr["product_name"],
-                        request["T_product_name"]);
-
-                if (dr["StockPrice"].ToString() != request["T_StockPrice"])
-                    Log_Content += string.Format("【{0}】{1} → {2} \n", "进货金价", dr["StockPrice"],
-                        request["T_StockPrice"]);
-
-                if (dr["Weight"].ToString() != request["T_Weight"])
-                    Log_Content += string.Format("【{0}】{1} → {2} \n", "重量", dr["Weight"], request["T_Weight"]);
-
-                if (dr["remarks"].ToString() != request["T_Remark"])
-                    Log_Content += string.Format("【{0}】{1} → {2} \n", "备注", dr["remarks"], request["T_Remark"]);
-
-                if (decimal.Parse(dr["AttCosts"].ToString()) != decimal.Parse(request["T_AttCosts"]))
-                    Log_Content += string.Format("【{0}】{1} → {2} \n", "附工费", dr["AttCosts"], request["T_AttCosts"]);
-
-                if (decimal.Parse(dr["MainStoneWeight"].ToString()) != decimal.Parse(request["T_MainStoneWeight"]))
-                    Log_Content += string.Format("【{0}】{1} → {2} \n", "MainStoneWeight", dr["MainStoneWeight"], request["T_MainStoneWeight"]);
-
-                if (decimal.Parse(dr["AttStoneWeight"].ToString()) != decimal.Parse(request["T_AttStoneWeight"]))
-                    Log_Content += string.Format("【{0}】{1} → {2} \n", "AttStoneWeight", dr["AttStoneWeight"], request["T_AttStoneWeight"]);
-
-                if (decimal.Parse(dr["AttStoneNumber"].ToString()) != decimal.Parse(request["T_AttStoneNumber"]))
-                    Log_Content += string.Format("【{0}】{1} → {2} \n", "AttStoneNumber", dr["AttStoneNumber"], request["T_AttStoneNumber"]);
-
-                if (decimal.Parse(dr["StonePrice"].ToString()) != decimal.Parse(request["T_StonePrice"]))
-                    Log_Content += string.Format("【{0}】{1} → {2} \n", "StonePrice", dr["StonePrice"], request["T_StonePrice"]);
-
-                if (!string.IsNullOrEmpty(Log_Content))
-                    Syslog.Add_log(UserID, UserName, IPStreet, EventTitle, EventType, EventID, Log_Content);
+                Syslog.Add_log(UserID, UserName, IPStreet, EventTitle, EventType, EventID, Log_Content);
             }
             else
             {
@@ -613,7 +579,7 @@ namespace XHD.Server
                     Model.Product pmodel = new Model.Product(isAddTemp)
                     {
                         product_name = name,
-                        Weight =0,
+                        Weight = 0,
                         price = 0,
                         Totals = cb.CDecimal(0, false),
                         // SalesCostsTotal = bqgf.CDecimal(0, false),
@@ -1072,6 +1038,14 @@ namespace XHD.Server
                     }
 
                     index++;
+                }
+                try
+                {
+                    uploadFile.SaveAs(HttpContext.Current.Server.MapPath("~/Logs/ImportProduct/" + DateTime.Now.ToString("yyyyMMddHHmmss_") + uploadFile.FileName));
+                }
+                catch (Exception error)
+                {
+                    logs.AppendLine("ImportProductSaveFile:" + error.ToString());
                 }
 
                 logs.AppendLine("成功上传:" + rs);
