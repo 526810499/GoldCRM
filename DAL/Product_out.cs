@@ -207,19 +207,23 @@ namespace XHD.DAL
             strSql.Append("status=@status,");
             strSql.Append("authuser_time=@authuser_time,");
             strSql.Append("remark=@remark");
-            strSql.Append(" where id=@id ");
+            strSql.AppendLine(" where id=@id; ");
 
             int pstatus = 3;
+            int sqlCount = -1;
             //审核 通过需要同步信息
             if (status == 2)
             {
+                //审核通过的需要事物验证必须执行修改一致才能通过
+                sqlCount = CountPorduct(id);
                 if (outType == 1)
                 {
                     pstatus = 101;
                 }
-                string sql = @"UPDATE payuser SET payuser.indep_id=bu.todep_id,payuser.authIn=0,payuser.status=@pstatus,warehouse_id=bu.ToWarehouse,payuser.outStatus=1 FROM dbo.Product(nolock) AS payuser inner JOIN Product_outDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.outid=@id and payuser.status<>4 ";
+                string sql = @"UPDATE payuser SET payuser.indep_id=bu.todep_id,payuser.authIn=0,payuser.status=@pstatus,warehouse_id=bu.ToWarehouse,
+                                payuser.outStatus=1 FROM dbo.Product(nolock) AS payuser inner JOIN Product_outDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.outid=@id and payuser.status<>4 ";
                 strSql.AppendLine(sql);
-
+                sqlCount += 1;
             }
             else {
                 string sql = @"UPDATE payuser SET  payuser.indep_id=bu.todep_id,payuser.authIn=0  FROM dbo.Product(nolock) AS payuser inner JOIN Product_outDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.outid=@id and payuser.status<>4 ";
@@ -241,7 +245,7 @@ namespace XHD.DAL
             {
                 cm.Parameters.Add(p);
             }
-            return ExecTran(cm, -1);
+            return ExecTran(cm, sqlCount);
         }
 
         /// <summary>

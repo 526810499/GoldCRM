@@ -502,10 +502,15 @@ namespace XHD.Server
                 nameList.Add("Weight", "重量(克)");
                 nameList.Add("GoldTotal", "金价小计(￥)");
                 nameList.Add("CostsTotal", "工费小计(￥)");
+                if (request["depdata"].CInt(0, false) != 1)
+                {
+                    nameList.Add("Totals", "成本总价(￥)");
+                }
+                nameList.Add("FixedPrice", "一口价(￥)");
                 nameList.Add("SalesCostsTotal", "销售工费(￥)");
                 nameList.Add("SalesTotalPrice", "销售价格(￥)");
                 nameList.Add("indep_name", "关联门店");
-                nameList.Add("FixedPrice", "一口价(￥)");
+
                 nameList.Add("remarks", "备注");
                 List<string> list = new List<string>();
                 foreach (string s in nameList.Keys)
@@ -992,8 +997,17 @@ namespace XHD.Server
                 {
                     ension = ExcelExtension.XLSX;
                 }
-                Stream stream = uploadFile.InputStream;
+                try
+                {
 
+                    request.Files[0].SaveAs(HttpContext.Current.Server.MapPath("~/Logs/ImportProduct/" + DateTime.Now.ToString("yyyyMMddHHmmss_") + uploadFile.FileName));
+                }
+                catch (Exception error)
+                {
+                    logs.AppendLine("ImportProductSaveFile:" + error.ToString());
+                }
+
+                Stream stream = uploadFile.InputStream;
                 DataTable table = ExportHelper.ReadExcelToDataTable(stream, ension);
                 if (table == null || table.Rows.Count <= 0)
                 {
@@ -1039,14 +1053,7 @@ namespace XHD.Server
 
                     index++;
                 }
-                try
-                {
-                    uploadFile.SaveAs(HttpContext.Current.Server.MapPath("~/Logs/ImportProduct/" + DateTime.Now.ToString("yyyyMMddHHmmss_") + uploadFile.FileName));
-                }
-                catch (Exception error)
-                {
-                    logs.AppendLine("ImportProductSaveFile:" + error.ToString());
-                }
+
 
                 logs.AppendLine("成功上传:" + rs);
 

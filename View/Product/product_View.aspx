@@ -101,7 +101,14 @@
                                     { display: "配件/规格", name: "T_specifications", type: "text", options: "{width:180}", validate: "{required:false}", initValue: (obj.specifications) },
 
                                  ],
-
+                                                                  [
+                                        { display: "销售价格", name: "T_SalesTotalPrice", type: "text", options: "{width:180,disabled:true,onChangeValue:function(value){   $('#T_SalesTotalPrice').val(toMoney(value));  ; }}", validate: "{required:true}", initValue: toMoney(obj.SalesTotalPrice) },
+                                        { display: "销售工费", name: "T_SalesCostsTotal", type: "text", options: "{width:180,disabled:true,onChangeValue:function(value){ $('#T_SalesCostsTotal').val(toMoney(value)); }}", validate: "{required:true}", initValue: toMoney(obj.SalesCostsTotal) }
+                                                                  ],
+                                [
+                                      { display: "标签价格", name: "T_PriceTag", type: "text", options: "{width:180,disabled:true,onChangeValue:function(value){   $('#T_PriceTag').val(toMoney(value));  ; }}", validate: "{required:true}", initValue: toMoney(obj.PriceTag) },
+                                      { display: "一口价", name: "T_FixedPrice", type: "text", options: "{width:180,disabled:true,onChangeValue:function(value){ $('#T_FixedPrice').val(toMoney(value)); }}", validate: "{required:true}", initValue: toMoney(obj.FixedPrice) }
+                                ],
                                     [
                                      { display: "其他参数", name: "T_Others", type: "textarea", cols: 73, rows: 3, width: 465, cssClass: "l-textarea", initValue: (obj.Others) }
                                     ],

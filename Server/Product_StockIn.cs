@@ -270,7 +270,7 @@ namespace XHD.Server
             if (string.IsNullOrEmpty(sortname))
                 sortname = " create_time";
             if (string.IsNullOrEmpty(sortorder))
-                sortorder = "asc";
+                sortorder = " desc ";
 
             string sorttext = " " + sortname + " " + sortorder;
             int inType = request["inType"].CInt(0, false);

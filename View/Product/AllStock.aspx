@@ -266,6 +266,9 @@
         }
 
 
+        function Update() {
+            f_openWindow('product/product_update.aspx?pid=' + rows.id, "ÐÞ¸ÄÉÌÆ·", 700, 720);
+        }
 
         function edit() {
             var manager = $("#maingrid4").ligerGetGridManager();

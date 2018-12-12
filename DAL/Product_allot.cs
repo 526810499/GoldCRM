@@ -148,20 +148,27 @@ namespace XHD.DAL
             strSql.Append("remark=@remark");
             strSql.Append(" where id=@id ");
        
-            //门店调拨 
+            //门店调拨 审核通过
             if (status == 2)
             {
+                //总部
                 if (allotType == 0)
                 {
                     strSql.Append(@"UPDATE payuser SET   payuser.indep_id=bu.todep_id,payuser.status=101,payuser.authIn=0,payuser.warehouse_id =bu.ToWarehouse,OutStatus =1 FROM dbo.Product(nolock) AS payuser inner JOIN Product_allotDetail(nolock) AS bu ON payuser.barcode = bu.barcode WHERE bu.allotid = @id  ");
                 }
-                else {
+                else {//门店
                     strSql.Append(@"UPDATE payuser SET   payuser.status=101,authIn=0,payuser.indep_id=@indep_id, payuser.warehouse_id =bu.ToWarehouse,OutStatus =1 FROM dbo.Product(nolock) AS payuser inner JOIN Product_allotDetail(nolock) AS bu ON payuser.barcode = bu.barcode WHERE bu.allotid = @id  ");
                 }
             }
             else {
-                string sql = @"UPDATE payuser SET authIn=0  FROM dbo.Product(nolock) AS payuser inner JOIN Product_outDetail(nolock) AS bu ON payuser.barcode=bu.barcode WHERE bu.outid=@id and payuser.status<>4 ";
-                strSql.AppendLine(sql);
+                //总部
+                if (allotType == 0)
+                {
+                    strSql.Append(@"UPDATE payuser SET    payuser.authIn=0,OutStatus =1 FROM dbo.Product(nolock) AS payuser inner JOIN Product_allotDetail(nolock) AS bu ON payuser.barcode = bu.barcode WHERE bu.allotid = @id  ");
+                }
+                else {//门店
+                    strSql.Append(@"UPDATE payuser SET    payuser.authIn=0,OutStatus =1 FROM dbo.Product(nolock) AS payuser inner JOIN Product_allotDetail(nolock) AS bu ON payuser.barcode = bu.barcode WHERE bu.allotid = @id  ");
+                }
             }
 
 

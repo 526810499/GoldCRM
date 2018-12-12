@@ -113,7 +113,11 @@ namespace XHD.Common
                     string ColumnName = column.ColumnName;
 
                     ICell celltemp = dataRow.CreateCell(column.Ordinal);
-
+                    if (ColumnName == "条形码" || ColumnName == "条码")
+                    {
+                        celltemp.SetCellValue(Values);
+                        continue;
+                    }
                     switch (column.DataType.ToString())
                     {
                         case "System.String"://字符串类型   
@@ -307,7 +311,7 @@ namespace XHD.Common
                                 break;
                             case "System.DateTime"://日期类型   
                                 celltemp.CellStyle = dateStyle;
-                                DateTime dateV= Values.CDateTime(DateTime.Now,false);
+                                DateTime dateV = Values.CDateTime(DateTime.Now, false);
                                 celltemp.SetCellValue(dateV);
                                 break;
                             case "System.Boolean"://布尔型   
@@ -577,7 +581,7 @@ namespace XHD.Common
                                     e.EvaluateInCell(cell);
                                     dataRow[j] = cell.ToString();
                                 }
-                                catch(Exception error)
+                                catch (Exception error)
                                 {
                                     if (DateUtil.IsCellDateFormatted(cell))//日期
                                     {

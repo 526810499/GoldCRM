@@ -107,8 +107,8 @@ namespace XHD.View.Product
                 nameList.Add("product_name", "商品名称");
                 nameList.Add("category_name", "商品分类");
                 nameList.Add("Weight", "重量(克)");
-                nameList.Add("GoldTotal", "金价小计(￥)");
-                nameList.Add("CostsTotal", "工费小计(￥)");
+                //nameList.Add("GoldTotal", "金价小计(￥)");
+                //nameList.Add("CostsTotal", "工费小计(￥)");
                 //nameList.Add("Totals", "成本总价(￥)");
                 nameList.Add("SalesCostsTotal", "销售工费(￥)");
                 nameList.Add("SalesTotalPrice", "销售价格(￥)");
@@ -199,6 +199,7 @@ namespace XHD.View.Product
                 nameList.Add("dep_name", "成交部门");
                 nameList.Add("emp_name", "成交人");
                 nameList.Add("Order_date", "成交时间");
+                nameList.Add("create_time", "创建时间");
                 nameList.Add("cus_name", "客户");
                 nameList.Add("cus_tel", "客户电话");
                 nameList.Add("Remark", "备注");
@@ -419,9 +420,14 @@ namespace XHD.View.Product
             DataSet ds = new BLL.Product_allotDetail().GetListView(where);
             if (ds != null && ds.Tables[0].Rows != null && ds.Tables[0].Rows.Count > 0)
             {
-
-
+                bool right = true;
+                //判断是否能读取成本信息
+                if (employee.uid != "admin")
+                {
+                    right = new BLL.Sys_role_emp().CheckUserRoleRight(employee.id, "9A513452-7CD6-4A80-AC47-53493DF86DB9");
+                }
                 Dictionary<string, string> nameList = new Dictionary<string, string>();
+                //nameList.Add("create_time", "调拨时间");
                 nameList.Add("BarCode", "条形码");
                 nameList.Add("product_name", "商品名称");
                 nameList.Add("category_name", "商品分类");
@@ -431,6 +437,10 @@ namespace XHD.View.Product
                 nameList.Add("SalesCostsTotal", "销售工费(￥)");
                 nameList.Add("SalesTotalPrice", "销售价格(￥)");
                 nameList.Add("FixedPrice", "一口价(￥)");
+                if (right)
+                {
+                    nameList.Add("Totals", "成本总价(￥)");
+                }
                 nameList.Add("remarks", "备注");
 
                 ExportHelper.ExportDataTableToExcel(ds.Tables[0], nameList, nameList.Keys.ToArray(), DateTime.Now.ToString("MMddHHmmss"), fname, null, null, true, true, titles);

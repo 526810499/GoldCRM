@@ -52,8 +52,8 @@
                      //{ display: '调拨至仓库', name: 'NowWarehouseName', align: 'left', width: 120 },
                     { display: '创建人', name: 'CreateName', align: 'left', width: 160 },
                     {
-                        display: '创建时间', name: 'create_time', width: 50, align: 'left', render: function (item) {
-                            return toMoney(item.Weight);
+                        display: '创建时间', name: 'create_time', width: 150, align: 'left', render: function (item) {
+                            return formatTime(item.create_time, 'yyyy-MM-dd HH:mm:ss');
                         }
                     },
                     {
