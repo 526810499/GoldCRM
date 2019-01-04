@@ -351,7 +351,7 @@
         }
 
         function add() {
-            f_openWindow("product/GetProduct2.aspx?depdata=1&status=1,101", "选择商品", 1000, 600, f_getpost, 9003);
+            f_openWindow("product/GetProduct2.aspx?depdata=1&status=1,101&optype=mdxs", "选择商品", 1000, 600, f_getpost, 9003);
         }
         function pro_remove() {
             var manager = $("#maingrid4").ligerGetGridManager();

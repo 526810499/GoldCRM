@@ -261,7 +261,7 @@
         function ExcelDC() {
             var serchtxt = GetSearchWhere();
 
-            location.href = "Product.ExoportHQStock.xhd?etype=7" + serchtxt;
+            location.href = "Product.ExoportHQStock.xhd?etype=7&" + serchtxt;
 
         }
 

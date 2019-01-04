@@ -24,6 +24,11 @@ namespace XHD.BLL
             return dal.Add(model);
         }
 
+        public string GetOrderID(string BarCode)
+        {
+            return dal.GetOrderID(BarCode);
+        }
+
         /// <summary>
         /// 更新一条数据
         /// </summary>
@@ -67,7 +72,7 @@ namespace XHD.BLL
         /// <returns></returns>
         public int VerifySave(string orderid, string Order_details, string VerifyUID, int status)
         {
-            return dal.VerifySave(orderid,   Order_details,   VerifyUID,   status);
+            return dal.VerifySave(orderid, Order_details, VerifyUID, status);
         }
 
         /// <summary>

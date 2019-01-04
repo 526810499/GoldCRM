@@ -46,7 +46,7 @@ namespace XHD.Server
         /// <summary>
         /// 调拨发到门店审核
         /// </summary>
-        private string OutSendDepAuth()
+        private string OutSendDepAuth(string Remark)
         {
             Model.Product_out omodel = new Model.Product_out()
             {
@@ -62,9 +62,12 @@ namespace XHD.Server
             {
                 return "";
             }
-
+            if (string.IsNullOrWhiteSpace(Remark))
+            {
+                Remark = "【门店调拨】";
+            }
             //通知到门店
-            outBll.SendDepStockIn(omodel, RKID, "门店调拨", 1);
+            outBll.SendDepStockIn(omodel, RKID, Remark, 1);
 
             return RKID;
         }
@@ -148,7 +151,7 @@ namespace XHD.Server
                     //提交审核的
                     if (model.status == 1)
                     {
-                        RKID = OutSendDepAuth();
+                        RKID = OutSendDepAuth(model.Remark);
                     }
                 }
                 else
@@ -204,7 +207,7 @@ namespace XHD.Server
                 }
                 if (isAdd && model.status == 1)
                 {
-                    RKID = OutSendDepAuth();
+                    RKID = OutSendDepAuth(model.Remark);
                 }
 
             }
@@ -348,7 +351,7 @@ namespace XHD.Server
                 return XhdResult.Error("您没有该操作权限,请确认后在操作！").ToString();
             }
             id = PageValidate.InputText(request["id"], 50);
-            string remark = PageValidate.InputText(request["remark"], 250);
+            string remark = PageValidate.InputText(request["T_Remark"], 250);
             if (PageValidate.checkID(id, false))
             {
                 DataSet ds = allotBll.GetList($" id= '{id}' ");

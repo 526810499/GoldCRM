@@ -454,7 +454,7 @@ namespace XHD.Server
                 return XhdResult.Error("您没有该操作权限,请确认后在操作！").ToString();
             }
             id = PageValidate.InputText(request["id"], 50);
-            string remark = PageValidate.InputText(request["remark"], 250);
+            string remark = PageValidate.InputText(request["T_Remark"], 250);
             if (!PageValidate.checkID(id, false))
             {
                 return XhdResult.Error("参数有误,请确认后在操作！").ToString();

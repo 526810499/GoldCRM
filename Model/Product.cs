@@ -323,7 +323,7 @@ namespace XHD.Model
             get { return _salestotalprice; }
         }
         /// <summary>
-        /// 销售价格
+        /// 销售工费
         /// </summary>
         public decimal? SalesCostsTotal
         {

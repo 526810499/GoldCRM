@@ -97,7 +97,7 @@ namespace XHD.Server
         /// <param name="adminReturnEmpty">如果是管理员是否也要加入创建者id</param>
         /// <param name="right">权限，拥有权限时也可以查看全部</param>
         /// <returns></returns>
-        protected string GetSQLCreateIDWhere(string where, bool adminReturnEmpty, string tableName = null)
+        protected string GetSQLCreateIDWhere(string where, bool adminReturnEmpty, string tableName = null,string columnName= "createdep_id")
         {
             if (CheckIsAdmin() && adminReturnEmpty)
             {
@@ -121,10 +121,10 @@ namespace XHD.Server
                 }
                 if (string.IsNullOrWhiteSpace(tableName))
                 {
-                    where += $"  createdep_id='{ dep_id }'";
+                    where += $"  {columnName}='{ dep_id }' ";
                 }
                 else {
-                    where += $"  {tableName}.createdep_id='{ dep_id }'";
+                    where += $"  {tableName}.{columnName}='{ dep_id }' ";
                 }
 
                 return where;
@@ -136,10 +136,10 @@ namespace XHD.Server
             }
             if (string.IsNullOrWhiteSpace(tableName))
             {
-                where += $"  create_id='{ emp_id }'";
+                where += $"  {columnName}='{ emp_id }' ";
             }
             else {
-                where += $"  {tableName}.create_id='{ emp_id }'";
+                where += $"  {tableName}.{columnName}='{ emp_id }' ";
             }
 
             return where;

@@ -362,6 +362,7 @@ namespace XHD.Server
             {
                 serchtxt += $" and verifystatus = {verifystatus }";
             }
+           
             //是否只取确认提交保存的数据 1是
             int saveorder = request["saveorder"].CInt(0, false);
             if (saveorder == 1)
@@ -372,7 +373,7 @@ namespace XHD.Server
             int cwVerify = request["cwVerify"].CInt(0, false);
             if (cwVerify == 0)
             {
-                string temp = GetSQLCreateIDWhere(serchtxt, true, "Sale_order");
+                serchtxt = GetSQLCreateIDWhere(serchtxt, true, "Sale_order");
 
             }
             else {
@@ -441,7 +442,7 @@ namespace XHD.Server
             int cwVerify = request["cwVerify"].CInt(0, false);
             if (cwVerify == 0)
             {
-                string temp = GetSQLCreateIDWhere(serchtxt, true);
+                serchtxt = GetSQLCreateIDWhere(serchtxt, true);
             }
             else {
                 serchtxt += $" and  Order_status_id = '5587BCED-0A36-4EDF-9562-F962A9B1913C' ";
@@ -476,6 +477,12 @@ namespace XHD.Server
                 sortname = " create_time";
             if (string.IsNullOrEmpty(sortorder))
                 sortorder = "desc";
+
+            string barCode = request["barcode"].CString("");
+            if (!string.IsNullOrWhiteSpace(barCode))
+            {
+
+            }
 
             string sorttext = $" { sortname } { sortorder}";
 

@@ -30,6 +30,15 @@ namespace XHD.DAL
             return DbHelperSQL.Exists(strSql.ToString(), parameters);
         }
 
+        public string GetOrderID(string BarCode) {
+            string sql = "select order_id  from Sale_order_details(nolock) where BarCode=@BarCode";
+
+            SqlParameter[] parameters = {
+                    new SqlParameter("@BarCode", SqlDbType.VarChar,50)           };
+            parameters[0].Value = BarCode;
+
+            return DbHelperSQL.ExecuteScalar(sql.ToString(), parameters).CString("");
+        }
 
 
         /// <summary>

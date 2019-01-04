@@ -120,7 +120,7 @@
                 return false;
             }
             var manager = $("#maingrid4").ligerGetGridManager();
-            var serchtxt = "depdata=" + getparastr("depdata", "") + "&status=" + status + "&scode=" + scode + "&SupplierID=" + SupplierID + "&rnd=" + Math.random() + "&sindep_id=" + getparastr("depid", "");
+            var serchtxt = "islike=0&depdata=" + getparastr("depdata", "") + "&status=" + status + "&scode=" + scode + "&SupplierID=" + SupplierID + "&rnd=" + Math.random() + "&sindep_id=" + getparastr("depid", "");
             serchtxt += "&optype=" + getparastr("optype", "");
             var url = ("Product.grid.xhd?" + serchtxt);
 
@@ -132,10 +132,10 @@
                 } else {
                     var rows = data.Rows;
                     $(rows).each(function (i, v) {
-
                         v.quantity = 1;
-                        manager.addRow(v);
+ 
                         if (itemsCode.indexOf(scode) <= -1) {
+                            manager.addRow(v);
                             itemsCode.push(scode);
                         }
                         //if (v.status != 1) {

@@ -237,8 +237,17 @@ namespace XHD.Server
                 serchtxt += $" and product_name like N'%{ PageValidate.InputText(request["stext"], 50) }%'";
 
             if (!string.IsNullOrEmpty(request["scode"]))
-                serchtxt += $" and BarCode like N'{ PageValidate.InputText(request["scode"], 50) }%'";
+            {
+                int isLike = request["islike"].CInt(1, false);
+                if (isLike == 1)
+                {
+                    serchtxt += $" and BarCode like N'{ PageValidate.InputText(request["scode"], 50) }%'";
+                }
+                else {
+                    serchtxt += $" and BarCode='{ PageValidate.InputText(request["scode"], 50) }'";
+                }
 
+            }
             if (!string.IsNullOrEmpty(request["status"]))
                 serchtxt += $" and status in({request["status"].CString("1").Trim(',')}) ";
 
@@ -295,6 +304,11 @@ namespace XHD.Server
                 serchtxt += $" and status=1 and authIn=0     ";// and indep_id in({ depids })
             }
 
+            //门店销售的必须是入库状态的才能销售
+            if (optype == "mdxs")
+            {
+                serchtxt += $" and OutStatus=1 and  authIn=0 ";
+            }
             //是否要取门店的
             if (string.IsNullOrWhiteSpace(optype))
             {
@@ -304,7 +318,14 @@ namespace XHD.Server
                 }
                 else {
                     //权限
-                    serchtxt = GetSQLCreateIDWhere(serchtxt, true);
+                    //总部人员查看
+                    if (dep_id == "7C881F36-3597-483B-BC71-EB5D7CFDA2C7")
+                    {
+                        serchtxt = GetSQLCreateIDWhere(serchtxt, true);
+                    }
+                    else {
+                        serchtxt = GetSQLCreateIDWhere(serchtxt, true, null, "indep_id");
+                    }
                 }
             }
 

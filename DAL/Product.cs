@@ -85,6 +85,38 @@ namespace XHD.DAL
                       new SqlParameter("@Others", SqlDbType.NVarChar,250),
 
             };
+            //进货金价
+            decimal StockPrice = model.StockPrice.CDecimal(0, false);
+            //销售工费
+            decimal SalesCostsTotal = model.SalesCostsTotal.CDecimal(0, false);
+            //销售价格
+            decimal SalesTotalPrice = model.SalesTotalPrice.CDecimal(0, false);
+            //工费小计
+            decimal CostsTotal = model.CostsTotal.CDecimal(0, false);
+            //附工费
+            decimal AttCosts = model.AttCosts.CDecimal(0, false);
+            //金价小计
+            decimal GoldTotal = model.GoldTotal.CDecimal(0, false);
+            //成本总价
+            decimal Totals = model.Totals.CDecimal(0, false);
+            //一口价
+            decimal FixedPrice = model.FixedPrice.CDecimal(0, false);
+            //标签工费
+            decimal PriceTag = model.PriceTag.CDecimal(0, false);
+
+            //一口价
+            FixedPrice = Math.Round(FixedPrice, 0);
+            //标签价
+            PriceTag = Math.Round(PriceTag, 0);
+            SalesCostsTotal = Math.Round(SalesCostsTotal, 0);
+
+            StockPrice = Math.Round(StockPrice, 2);
+            AttCosts = Math.Round(AttCosts, 2);
+            CostsTotal = Math.Round(CostsTotal, 2);
+            Totals = Math.Round(Totals, 2);
+            SalesTotalPrice = Math.Round(SalesTotalPrice, 2);
+            GoldTotal = Math.Round(GoldTotal, 2);
+
             parameters[0].Value = model.id;
             parameters[1].Value = model.product_name;
             parameters[2].Value = model.category_id;
@@ -98,29 +130,29 @@ namespace XHD.DAL
             parameters[10].Value = model.specifications;
             parameters[11].Value = model.create_id;
             parameters[12].Value = model.create_time;
-            parameters[13].Value = model.AttCosts;
-            parameters[14].Value = model.StockPrice;
+            parameters[13].Value = AttCosts;
+            parameters[14].Value = StockPrice;
             parameters[15].Value = model.MainStoneWeight;
             parameters[16].Value = model.AttStoneWeight;
             parameters[17].Value = model.AttStoneNumber;
             parameters[18].Value = model.StonePrice;
-            parameters[19].Value = model.GoldTotal;
-            parameters[20].Value = model.CostsTotal;
-            parameters[21].Value = model.Totals;
+            parameters[19].Value = GoldTotal;
+            parameters[20].Value = CostsTotal;
+            parameters[21].Value = Totals;
             parameters[22].Value = model.Sbarcode;
             parameters[23].Value = model.depopbefwid;
             parameters[24].Value = model.BarCode;
             parameters[25].Value = model.OutStatus.CInt(0, false);
-            parameters[26].Value = model.SalesTotalPrice;
-            parameters[27].Value = model.SalesCostsTotal;
+            parameters[26].Value = SalesTotalPrice;
+            parameters[27].Value = SalesCostsTotal;
             parameters[28].Value = model.IsGold;
             parameters[29].Value = model.SupplierID;
             parameters[30].Value = model.createdep_id;
             parameters[31].Value = model.CertificateNo;
             parameters[32].Value = model.Circle;
             parameters[33].Value = model.StockID;
-            parameters[34].Value = model.PriceTag;
-            parameters[35].Value = model.FixedPrice;
+            parameters[34].Value = PriceTag;
+            parameters[35].Value = FixedPrice;
             parameters[36].Value = model.importTagID;
             parameters[37].Value = model.Others;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
@@ -223,14 +255,14 @@ namespace XHD.DAL
             parameters[15].Value = model.AttStoneWeight;
             parameters[16].Value = model.AttStoneNumber;
             parameters[17].Value = model.StonePrice;
-            parameters[18].Value = Math.Round(model.GoldTotal.CDecimal(0,false));
-            parameters[19].Value = Math.Round(model.CostsTotal.CDecimal(0,false));
-            parameters[20].Value = Math.Round(model.Totals.CDecimal(0,false));
+            parameters[18].Value = model.GoldTotal;// Math.Round(model.GoldTotal.CDecimal(0, false));
+            parameters[19].Value = model.CostsTotal;// Math.Round(model.CostsTotal.CDecimal(0, false));
+            parameters[20].Value = model.Totals;// Math.Round(model.Totals.CDecimal(0, false));
             parameters[21].Value = model.Sbarcode;
             parameters[22].Value = model.depopbefwid;
             parameters[23].Value = model.OutStatus;
-            parameters[24].Value = Math.Round(model.SalesTotalPrice.CDecimal(0,false));
-            parameters[25].Value = Math.Round(model.SalesCostsTotal.CDecimal(0,false));
+            parameters[24].Value = model.SalesTotalPrice;// Math.Round(model.SalesTotalPrice.CDecimal(0, false));
+            parameters[25].Value = model.SalesCostsTotal;// Math.Round(model.SalesCostsTotal.CDecimal(0, false));
             parameters[26].Value = model.id;
             parameters[27].Value = model.BarCode;
             parameters[28].Value = model.IsGold;
@@ -238,8 +270,8 @@ namespace XHD.DAL
 
             parameters[30].Value = model.CertificateNo;
             parameters[31].Value = model.Circle;
-            parameters[32].Value = Math.Round(model.PriceTag);
-            parameters[33].Value =Math.Round(model.FixedPrice);
+            parameters[32].Value = model.PriceTag;// Math.Round(model.PriceTag);
+            parameters[33].Value = model.FixedPrice;// Math.Round(model.FixedPrice);
 
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
